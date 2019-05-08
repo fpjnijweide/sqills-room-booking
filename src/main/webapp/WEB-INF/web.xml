@@ -5,8 +5,6 @@
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <display-name>di.bookQuote</display-name>
-
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
@@ -15,14 +13,12 @@
         <welcome-file>default.htm</welcome-file>
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
-    <servlet>
-        <description>nl.utwente.api.room.Test Servlet</description>
-        <display-name>nl.utwente.api.room.Test</display-name>
-        <servlet-name>Test</servlet-name>
-        <servlet-class>nl.utwente.api.room.Test</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Test</servlet-name>
-        <url-pattern>/room</url-pattern>
-    </servlet-mapping>
+
+	<servlet>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
 </web-app>
