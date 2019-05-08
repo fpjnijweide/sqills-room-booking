@@ -1,0 +1,7 @@
+{
+  "name": "project-mod4",
+  "version": "1.0.0",
+  "dependencies": {
+    "axios": "latest"
+  }
+}
