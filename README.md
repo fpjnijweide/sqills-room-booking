@@ -1,2 +1,2 @@
-# MOD4 programming lab
+# MOD4 Project
 
