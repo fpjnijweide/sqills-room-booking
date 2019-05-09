@@ -1,4 +1,4 @@
-document.onload = getData()
+document.onload = getData();
 
 function getData() {
     let roomNumber = 1;
@@ -8,18 +8,22 @@ function getData() {
 }
 
 function generateTable(tableData) {
-    let table = document.getElementById("room-bookings")
-    let txt = ""
+    let content = document.getElementById("content");
+    let tableContent = `<table class="table" id="room-bookings">
+                        <tr>
+                         <th>Start Time</th>   
+                         <th>End Time</th>   
+                        </tr>`;
     for (let x in tableData) {
-        txt += `<tr> 
-            <td> ${tableData[x].roomNumber} </td> 
+        tableContent += `<tr> 
             <td> ${tableData[x].startTime} </td> 
             <td> ${tableData[x].endTime} </td> 
         </tr>`
     }
-    table.innerHTML = txt;
+    tableContent += `</table>`;
+    content.innerHTML = tableContent;
     setInterval(() => {
-        getData()
-    }, 1)
+        getData();
+    }, 30000)
 }
 
