@@ -1,5 +1,5 @@
-import axios from 'axios'
-var myObj
+import axios from 'axios';
+var myObj;
 
 function test() {
     axios.get()
