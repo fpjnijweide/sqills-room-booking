@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/room")
@@ -30,7 +29,7 @@ public class Room {
 
         ObjectNode booking1 = factory.objectNode();
         booking1.put("roomNumber", roomNumber);
-        booking1.put("startTime", "12:00");
+        booking1.put("startTime", "12:30");
         booking1.put("endTime", "13:00");
         bookings.add(booking1);
 
