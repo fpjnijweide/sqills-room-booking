@@ -20,9 +20,17 @@
 
     <body>
         <h1>Sqills Project</h1>
+        <form id="input-form">
+            <label for="room-input">Input room below</label>
+            <input type="text" maxlength="5" id="room-input" name="room-input">
+            <button onclick="selectRoom()" type="button">Select room</button>
+        </form>
         <table class="table" id="room-bookings">
 
         </table>
 
+    <div id="room-status"></div>
     </body>
+
+
 </html>
