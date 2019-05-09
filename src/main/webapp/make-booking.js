@@ -9,13 +9,13 @@ function showMakeBooking() {
 function makeBooking(response) {
     let duration = document.getElementById(`content`).value;
     alert(`Trying to make booking for: ${duration}`);
-    axios.post(`/api/room/${1}`,{query:{"startTime": new Data(), "endTime": new Data()}}).then((reponse) => {
+    //TODO make less terrible also make it add the duration
+    axios.post(`/api/room/${1}/?startTime=${new Date().toLocaleDateString()}&endTime=${new Date().toLocaleDateString()}`).then((reponse) => {
         displayBooked();
     });
 }
 
 
-function
 
 function displayBooked() {
     document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
