@@ -3,11 +3,11 @@ package nl.utwente.api.room;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.json.JSONObject;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/room")
@@ -21,7 +21,7 @@ public class Room {
     @GET
     @Path("/{roomNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String get(
+    public String getBookingsForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
         @Context UriInfo uriInfo
     ) {
@@ -48,5 +48,21 @@ public class Room {
 
 
         return bookings.toString();
+    }
+
+    @POST
+    @Path("/{roomNumber}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String createBookingForSpecificRoom (
+        @PathParam("roomNumber") Integer roomNumber,
+        @QueryParam("startTime") String startTime,
+        @QueryParam("endTime") String endTime,
+        @Context UriInfo uriInfo
+    ) {
+        System.out.println("Create booking at " + roomNumber + "from " + startTime + " to " + endTime + ".");
+        final JsonNodeFactory factory = JsonNodeFactory.instance;
+        ObjectNode success = factory.objectNode();
+        success.put("success", true);
+        return success.toString();
     }
 }
