@@ -5,19 +5,26 @@ function selectRoom() {
 
 function getData(roomNumber) {
     axios.get(`/api/room/${roomNumber}`).then((response) => {
-        if (!isRoomFree(response.data)) {
+        let roomStartTime = isRoomFree(response.data)
+        if (!roomStartTime) {
             generateTable(response.data, roomNumber);
             displayRoomIsBooked(roomNumber);
         } else {
-            displayRoomIsFree(roomNumber);
-            showMakeBooking();
+            displayRoomIsFree(roomNumber,roomStartTime);
+
+            showMakeBooking(roomNumber);
         }
     });
 }
 
-function displayRoomIsFree(roomNumber) {
+function checkUntilWhenRoomIsFree(tableData,roomNumber) {
+
+}
+
+function displayRoomIsFree(roomNumber,roomStartTime) {
     let roomStatus = document.getElementById("room-status");
-    roomStatus.innerHTML = "<h3>Room " + roomNumber + " is free!</h3>"
+    roomStatus.innerHTML = "<h3>Room " + roomNumber + " is free until " +
+        roomStartTime.getHours() + ":" + roomStartTime.getMinutes() + "!</h3>"
 }
 
 function displayRoomIsBooked(roomNumber) {
@@ -26,6 +33,8 @@ function displayRoomIsBooked(roomNumber) {
 }
 
 function isRoomFree(tableData) {
+    let earliestStartTime = new Date()
+    earliestStartTime.setDate(earliestStartTime.getDate()+1)
     for (let x in tableData) {
         let startTimeSplit = tableData[x].startTime.split(":")
         let endTimeSplit = tableData[x].endTime.split(":")
@@ -36,9 +45,13 @@ function isRoomFree(tableData) {
         endDateTime.setHours(endTimeSplit[0], endTimeSplit[1])
         if (startDateTime < currentDate && currentDate < endDateTime) {
             return false;
+        } else {
+            if (startDateTime < earliestStartTime && startDateTime > currentDate){
+                earliestStartTime=startDateTime
+            }
         }
     }
-    return true;
+    return earliestStartTime;
 
 }
 

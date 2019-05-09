@@ -29,7 +29,7 @@ public class Room {
 
         ObjectNode booking1 = factory.objectNode();
         booking1.put("roomNumber", roomNumber);
-        booking1.put("startTime", "12:30");
+        booking1.put("startTime", "11:30");
         booking1.put("endTime", "13:00");
         bookings.add(booking1);
 
