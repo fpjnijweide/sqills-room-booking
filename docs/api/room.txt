@@ -1,0 +1,15 @@
+/api/room/{roomNumber}
+Returns all the bookings for this specific room for today. The room is specified by a room number.
+
+"bookings": [
+    {
+        "roomNumber": {number},
+        "startTime": {startTime},
+        "endTime": {endTime}
+    },
+    {
+        "roomNumber": {number},
+        "startTime": {startTime},
+        "endTime": {endTime}
+    }
+]
