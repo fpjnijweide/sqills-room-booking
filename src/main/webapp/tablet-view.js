@@ -1,25 +1,46 @@
-document.onload = getData();
+// import axios from 'axios'
 
-function getData() {
-    let roomNumber = 1;
-    axios.get(`/api/room/${roomNumber}`).then((response) => {
-        generateTable(response.data);
+var myObj
+
+// document.onload = getData()
+function selectRoom(){
+    let inputfield = document.getElementById("room-input")
+    let roomnr = inputfield.value
+    let roomNumber = roomnr
+    let inputform = document.getElementById("input-form")
+    // inputform.innerHTML=""
+    getData(roomNumber)
+}
+
+function getData(roomNumber){
+
+    axios.get(`/api/room/${roomNumber}`).then((response)=>{
+        generateTable(response.data,roomNumber);
     })
 }
 
 function roomIsFree(roomNumber){
-    console.log("room is free")
+    let roomStatus = document.getElementById("room-status")
+    roomStatus.innerHTML="<h3>Room " + roomNumber + " is free!</h3>"
+    // roomStatus.style.color="green"
 }
 
-function roomIsBooked(roomNumber){
-    alert("room is booked")
+function roomIsBooked(roomNumber) {
+    let roomStatus = document.getElementById("room-status")
+    roomStatus.innerHTML="<h3>Room " + roomNumber + " is booked right now</h3>"
+    // roomStatus.style.color="red"
 }
 
-function generateTable(tableData){
+function generateTable(tableData,roomNumber){
     let foundCurrentBooking = false
-    let table = document.getElementById("room-bookings")
+    let content = document.getElementById("content");
     let currentDate = new Date()
-    let txt = ""
+    let tableContent = `<table class="table" id="room-bookings">
+                        <tr>
+                         <th>Start Time</th>   
+                         <th>End Time</th>   
+                        </tr>`;
+
     for (let x in tableData) {
         let startTimeSplit = tableData[x].startTime.split(":")
         let endTimeSplit = tableData[x].endTime.split(":")
@@ -37,18 +58,21 @@ function generateTable(tableData){
 
 
 
-        txt += "<tr>" +
-            "<td>" + tableData[x].roomNumber + "</td>" +
-            "<td>" + tableData[x].startTime + "</td>" +
-            "<td>" + tableData[x].endTime + "</td>" +
-        "</tr>"
+        tableContent += `<tr> 
+            <td> ${tableData[x].startTime} </td> 
+            <td> ${tableData[x].endTime} </td> 
+        </tr>`
     }
 
-    table.innerHTML = txt
+    tableContent += `</table>`;
+    content.innerHTML = tableContent;
     if (!foundCurrentBooking){
         roomIsFree(roomNumber)
     } else {
         roomIsBooked(roomNumber)
     }
+    setInterval(() => {
+        getData(roomNumber);
+    }, 30000)
 }
 
