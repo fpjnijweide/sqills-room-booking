@@ -25,9 +25,14 @@ function roomIsBooked(roomNumber) {
 
 function generateTable(tableData,roomNumber){
     let foundCurrentBooking = false
-    let table = document.getElementById("room-bookings")
+    let content = document.getElementById("content");
     let currentDate = new Date()
-    let txt = ""
+    let tableContent = `<table class="table" id="room-bookings">
+                        <tr>
+                         <th>Start Time</th>   
+                         <th>End Time</th>   
+                        </tr>`;
+
     for (let x in tableData) {
         let startTimeSplit = tableData[x].startTime.split(":")
         let endTimeSplit = tableData[x].endTime.split(":")
@@ -45,18 +50,21 @@ function generateTable(tableData,roomNumber){
 
 
 
-        txt += "<tr>" +
-            "<td>" + tableData[x].roomNumber + "</td>" +
-            "<td>" + tableData[x].startTime + "</td>" +
-            "<td>" + tableData[x].endTime + "</td>" +
-        "</tr>"
+        tableContent += `<tr> 
+            <td> ${tableData[x].startTime} </td> 
+            <td> ${tableData[x].endTime} </td> 
+        </tr>`
     }
 
-    table.innerHTML = txt
+    tableContent += `</table>`;
+    content.innerHTML = tableContent;
     if (!foundCurrentBooking){
         roomIsFree(roomNumber)
     } else {
         roomIsBooked(roomNumber)
     }
+    setInterval(() => {
+        getData(roomNumber);
+    }, 30000)
 }
 
