@@ -4,16 +4,18 @@ function showMakeBooking() {
                id="booking-duration">
         <button onclick="makeBooking()" class="btn btn-primary">Book</button>
     `;
-
 }
 
 function makeBooking(response) {
     let duration = document.getElementById(`content`).value;
     alert(`Trying to make booking for: ${duration}`);
-    axios.post(`/api/room/${1}`).then((reponse) => {
+    axios.post(`/api/room/${1}`,{query:{"startTime": new Data(), "endTime": new Data()}}).then((reponse) => {
         displayBooked();
     });
 }
+
+
+function
 
 function displayBooked() {
     document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
