@@ -3,6 +3,14 @@
 var myObj
 
 // document.onload = getData()
+function selectRoom(){
+    let inputfield = document.getElementById("room-input")
+    let roomnr = inputfield.value
+    let roomNumber = roomnr
+    let inputform = document.getElementById("input-form")
+    // inputform.innerHTML=""
+    getData(roomNumber)
+}
 
 function getData(roomNumber){
 
