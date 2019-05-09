@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/room")
@@ -51,7 +50,7 @@ public class Room {
     }
 
     @POST
-    @Path("/{roomNumber}")
+    @Path("/{roomNumber}/create")
     @Produces(MediaType.APPLICATION_JSON)
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
