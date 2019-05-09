@@ -15,7 +15,7 @@ function makeBooking(response) {
 }
 
 
-function
+
 
 function displayBooked() {
     document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
