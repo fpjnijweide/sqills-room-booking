@@ -1,0 +1,47 @@
+GET /api/booking/{bookingID}
+Returns a booking with a specified bookingID
+{
+    "bookingID": {bookingID}
+    "roomNumber": {number},
+    "startTime": {startTime},
+    "endTime": {endTime}
+    "date": {date}
+}
+
+POST /api/booking/create
+Creates a booking with for a specified room
+BODY:
+{
+    "roomNumber": {number},
+    "date": {date},
+    "startTime": {startTime},
+    "endTime": {endTime}
+}
+
+Returns
+{
+    "success": [true|false],
+    "bookingID": {bookingID},
+}
+
+PUT /api/booking/{bookingID}/update
+Updates a specific booking
+BODY:
+{
+    "roomNumber": {number},
+    "date": {date},
+    "startTime": {startTime},
+    "endTime": {endTime}
+}
+
+Returns:
+{
+    "success": [true|false],
+}
+
+DELETE /api/booking/{bookingID}/delete
+Deletes a specific booking
+Returns:
+{
+    "success": [true|false]
+}
