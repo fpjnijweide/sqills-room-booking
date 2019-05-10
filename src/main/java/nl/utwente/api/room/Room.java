@@ -4,10 +4,14 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import nl.utwente.model.Booking;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.sql.Time;
+import java.util.List;
 
 @Path("/room")
 public class Room {
@@ -25,45 +29,38 @@ public class Room {
             @Context UriInfo uriInfo
     ) {
         final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ArrayNode bookings = factory.arrayNode();
-        if (roomNumber != 2) {
+        ArrayNode bookingsNode = factory.arrayNode();
 
-            ObjectNode booking1 = factory.objectNode();
-            booking1.put("roomNumber", roomNumber);
-            booking1.put("startTime", "11:30");
-            booking1.put("endTime", "13:00");
-            bookings.add(booking1);
+        List<Booking> bookings = Booking.getBookingsForRoomToday(roomNumber);
 
-            ObjectNode booking2 = factory.objectNode();
-            booking2.put("roomNumber", roomNumber);
-            booking2.put("startTime", "9:00");
-            booking2.put("endTime", "11:00");
-            bookings.add(booking2);
-
-            ObjectNode booking3 = factory.objectNode();
-            booking3.put("roomNumber", roomNumber);
-            booking3.put("startTime", "15:00");
-            booking3.put("endTime", "17:00");
-            bookings.add(booking3);
+        for (Booking booking : bookings) {
+            bookingsNode.add(booking.toJSONNode());
         }
 
-
-        return bookings.toString();
+        return bookingsNode.toString();
     }
 
     @POST
-    @Path("/{roomNumber}")
+    @Path("/{roomNumber}/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public String createBookingForSpecificRoom(
-            @PathParam("roomNumber") Integer roomNumber,
-            @QueryParam("startTime") String startTime,
-            @QueryParam("endTime") String endTime,
-            @Context UriInfo uriInfo
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String createBookingForSpecificRoom (
+        @PathParam("roomNumber") Integer roomNumber,
+        TimeSlot timeSlot,
+        @Context UriInfo uriInfo
     ) {
-        System.out.println("Create booking at " + roomNumber + " from " + startTime + " to " + endTime + ".");
+        Time startTime = Time.valueOf(timeSlot.getStartTime());
+        Time endTime = Time.valueOf(timeSlot.getEndTime());
+        boolean valid = nl.utwente.model.Room.isValidRoomID(roomNumber) &&
+            Booking.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
+
+        if (valid) {
+            Booking.insertBookingToday(roomNumber, startTime, endTime);
+        }
+
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
-        success.put("success", true);
+        success.put("success", valid);
         return success.toString();
     }
 }

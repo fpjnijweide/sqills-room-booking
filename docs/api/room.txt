@@ -1,6 +1,5 @@
 GET /api/room/{roomNumber}
 Returns all the bookings for this specific room for today. The room is specified by a room number.
-
 [
     {
         "roomNumber": {number},
@@ -14,7 +13,7 @@ Returns all the bookings for this specific room for today. The room is specified
     }
 ]
 
-POST /api/room/{roomNumber}
+POST /api/room/{roomNumber}/create
 BODY:
 {
     "startTime": {startTime},
