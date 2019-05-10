@@ -10,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.sql.Time;
 import java.util.List;
 
 @Path("/room")
@@ -42,16 +43,25 @@ public class Room {
     @POST
     @Path("/{roomNumber}/create")
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
-        @QueryParam("startTime") String startTime,
-        @QueryParam("endTime") String endTime,
+        TimeSlot timeSlot,
         @Context UriInfo uriInfo
     ) {
-        System.out.println("Create booking at " + roomNumber + "from " + startTime + " to " + endTime + ".");
+        Time startTime = Time.valueOf(timeSlot.getStartTime());
+        Time endTime = Time.valueOf(timeSlot.getEndTime());
+        boolean valid = Booking.isValidBookingToday(
+            roomNumber,
+            startTime,
+            endTime
+        );
+
+        Booking.insertBookingToday(roomNumber, startTime, endTime);
+
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
-        success.put("success", true);
+        success.put("success", valid);
         return success.toString();
     }
 }
