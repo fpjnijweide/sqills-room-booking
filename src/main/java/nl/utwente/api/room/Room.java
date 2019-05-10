@@ -24,9 +24,9 @@ public class Room {
     @GET
     @Path("/{roomNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getBookingsForSpecificRoom (
-        @PathParam("roomNumber") Integer roomNumber,
-        @Context UriInfo uriInfo
+    public String getBookingsForSpecificRoom(
+            @PathParam("roomNumber") Integer roomNumber,
+            @Context UriInfo uriInfo
     ) {
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ArrayNode bookingsNode = factory.arrayNode();
