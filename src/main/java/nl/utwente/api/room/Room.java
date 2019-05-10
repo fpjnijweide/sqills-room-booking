@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import nl.utwente.model.Booking;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 @Path("/room")
 public class Room {
@@ -25,28 +28,15 @@ public class Room {
         @Context UriInfo uriInfo
     ) {
         final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ArrayNode bookings = factory.arrayNode();
+        ArrayNode bookingsNode = factory.arrayNode();
 
-        ObjectNode booking1 = factory.objectNode();
-        booking1.put("roomNumber", roomNumber);
-        booking1.put("startTime", "12:00");
-        booking1.put("endTime", "13:00");
-        bookings.add(booking1);
+        List<Booking> bookings = Booking.getBookingsForRoomToday(roomNumber);
 
-        ObjectNode booking2 = factory.objectNode();
-        booking2.put("roomNumber", roomNumber);
-        booking2.put("startTime", "9:00");
-        booking2.put("endTime", "11:00");
-        bookings.add(booking2);
+        for (Booking booking : bookings) {
+            bookingsNode.add(booking.toJSONNode());
+        }
 
-        ObjectNode booking3 = factory.objectNode();
-        booking3.put("roomNumber", roomNumber);
-        booking3.put("startTime", "15:00");
-        booking3.put("endTime", "17:00");
-        bookings.add(booking3);
-
-
-        return bookings.toString();
+        return bookingsNode.toString();
     }
 
     @POST
