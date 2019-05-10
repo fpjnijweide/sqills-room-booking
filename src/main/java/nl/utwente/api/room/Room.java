@@ -58,7 +58,7 @@ public class Room {
         @QueryParam("endTime") String endTime,
         @Context UriInfo uriInfo
     ) {
-        System.out.println("Create booking at " + roomNumber + "from " + startTime + " to " + endTime + ".");
+        System.out.println("Create booking at " + roomNumber + " from " + startTime + " to " + endTime + ".");
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
         success.put("success", true);
