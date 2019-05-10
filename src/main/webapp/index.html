@@ -24,24 +24,41 @@
     <script src="tablet-controller.js"></script>
     <script src="tablet-view.js"></script>
     <script src="make-booking.js"></script>
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+          integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 </head>
 
 <body>
-        <h1>Sqills Project</h1>
-        <form id="input-form">
-            <label for="room-input">Input room below</label>
-            <input type="text" maxlength="5" id="room-input" name="room-input">
-            <button onclick="selectRoom()" type="button">Select room</button>
-        </form>
+<header>
+    <div class="header-logo">
+        <img src="/assets/sqills-logo.svg" alt="sqills logo"/>
+    </div>
+</header>
 <div class="container-fluid">
-    <div id="content">
 
+    <div id="content">
+        <div class="row">
+
+            <div class="col-sm">
+                <form id="input-form">
+                    <ul class="input-form-select-room">
+                        <li>
+                            <input type="text" class="form-control" maxlength="5" placeholder="Room Number" id="room-input"
+                                   name="room-input">
+                        </li>
+                        <li>
+                            <button onclick="selectRoom()" class="btn btn-primary" type="button"><i
+                                    class="fas fa-rocket"></i></button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-    <div id="book-now"></div>
-    <div id="room-status"></div>
+<div id="book-now"></div>
+<div id="room-status"></div>
 </body>
 
 
