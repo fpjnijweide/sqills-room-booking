@@ -6,6 +6,7 @@ import nl.utwente.db.DatabaseConnectionFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Booking {
@@ -47,6 +48,54 @@ public class Booking {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static void insertBookingToday(int roomID, Time startTime, Time endTime) {
+        try {
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            String query = "INSERT INTO sqills.Booking (" +
+                "roomID," +
+                "startTime," +
+                "endtime," +
+                "bookingdate" +
+            ") VALUES (" +
+                "?," +
+                "?," +
+                "?," +
+                "CURRENT_DATE" +
+            ")";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, roomID);
+            statement.setTime(2, startTime);
+            statement.setTime(3, endTime);
+            statement.execute();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean isValidBooking(int roomID, Time startTime, Time endTime, Date date) {
+        return false;
+    }
+
+    public static boolean isValidBookingToday(int roomID, Time startTime, Time endTime) {
+        return true;
+//        List<Booking> bookings = Booking.getBookingsForRoomToday(roomID);
+//
+//        for (Booking booking : bookings) {
+//            if (isNoOverlap(startTime, endTime, booking.startTime, booking.endTime)){
+//                return false;
+//            }
+//        }
+//
+//        return true;
+    }
+
+    private static boolean isNoOverlap (Time startTime1, Time endTime1, Time startTime2, Time endTime2) {
+        return endTime1.compareTo(startTime2) <= 0
+            && startTime1.compareTo(endTime2) >= 0;
     }
 
     public Time getStartTime() {
