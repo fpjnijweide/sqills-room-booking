@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.db.DatabaseConnectionFactory;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -76,26 +78,41 @@ public class Booking {
         }
     }
 
-    public static boolean isValidBooking(int roomID, Time startTime, Time endTime, Date date) {
-        return false;
+    public static boolean isValidBookingToday(int roomID, String startTime, String endTime){
+        boolean isValid = true;
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "SELECT starttime, endtime, bookingdate from Sqills.booking where roomID = ? and bookingdate = CURRENT_DATE ";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, roomID);
+            ResultSet result = statement.executeQuery();
+            while(result.next()){
+                Time start = Time.valueOf(result.getString("starttime"));
+                Time end = Time.valueOf(result.getString("endtime"));
+                Time wantedStart = Time.valueOf(startTime);
+                Time wantedEnd = Time.valueOf(endTime);
+                if (wantedStart.compareTo(start) > 0 && wantedStart.compareTo(end) < 0
+                    || wantedEnd.compareTo(start) > 0 && wantedEnd.compareTo(end) < 0
+                    || wantedStart.compareTo(start) <= 0 && wantedEnd.compareTo(end) >= 0){
+                    isValid = false;
+                }
+            }
+        } catch(SQLException e){
+            System.err.println(e);
+            return false;
+        }
+        return isValid;
     }
 
-    public static boolean isValidBookingToday(int roomID, Time startTime, Time endTime) {
-        return true;
-//        List<Booking> bookings = Booking.getBookingsForRoomToday(roomID);
-//
-//        for (Booking booking : bookings) {
-//            if (isNoOverlap(startTime, endTime, booking.startTime, booking.endTime)){
-//                return false;
-//            }
-//        }
-//
-//        return true;
-    }
-
-    private static boolean isNoOverlap (Time startTime1, Time endTime1, Time startTime2, Time endTime2) {
-        return endTime1.compareTo(startTime2) <= 0
-            && startTime1.compareTo(endTime2) >= 0;
+    public static java.sql.Date fromStringToDate(String stringDate){
+        java.sql.Date sqlDate = null;
+        try {
+            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
+            sqlDate = new java.sql.Date(date.getTime());
+        } catch (ParseException e){
+            System.err.println(e);
+        }
+        return sqlDate;
     }
 
     public Time getStartTime() {

@@ -51,13 +51,12 @@ public class Room {
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());
-        boolean valid = Booking.isValidBookingToday(
-            roomNumber,
-            startTime,
-            endTime
-        );
+        boolean valid = nl.utwente.model.Room.isValidRoomID(roomNumber) &&
+            Booking.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
 
-        Booking.insertBookingToday(roomNumber, startTime, endTime);
+        if (valid) {
+            Booking.insertBookingToday(roomNumber, startTime, endTime);
+        }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
