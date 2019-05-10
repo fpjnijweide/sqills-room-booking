@@ -1,100 +1,26 @@
-// TODO remove this hardcoded variable later
-var totalNumberOfRooms = 5;
-var refreshSet = false;
-var currentRoomNumber;
-function selectRoom() {
-    currentRoomNumber = document.getElementById("room-input").value
-    getData(currentRoomNumber);
-    if(!refreshSet){
-        setInterval(() => {
-            getData(currentRoomNumber);
-        }, 30000);
-        refreshSet = true;
-    }
-}
-
-function getData(roomNumberInput, checkingForCurrentRoom) {
-    if (typeof checkingForCurrentRoom === 'undefined') checkingForCurrentRoom = true;
-    axios.get(`/api/room/${roomNumberInput}`).then((response) => {
-        let roomStartTime = isRoomFree(response.data);
-        if (checkingForCurrentRoom) {
-            if (!roomStartTime) { // room is booked
-                generateTable(response.data);
-                displayRoomIsBooked();
-                checkIfOtherRoomsAreBooked()
-            } else {
-                displayRoomIsFree(roomStartTime);
-
-                showMakeBooking();
-            }
-        } else {
-            displayOtherFreeRooms(roomStartTime, roomNumberInput);
-        }
-    });
-}
-
-function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
-    if (roomStartTime) {
-        let roomStatus = document.getElementById("room-status");
-        let currentTime = new Date();
-        if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
-            roomStatus.innerHTML += `<h4>But, room   ${roomNumberInput}  is free until 
-                ${roomStartTime.getHours()}: ${roomStartTime.getMinutes()}!</h4>`;
-        } else {
-            roomStatus.innerHTML += `<h4>But, room ${roomNumberInput}  is free for the whole day!</h4>`;
-        }
-
-    }
-}
-
-function checkIfOtherRoomsAreBooked() {
-    for (let i = 0; i < totalNumberOfRooms; i++) { // TODO change these numbers to loop through actual rooms yes.
-        if (i !== currentRoomNumber) {
-            getData(i, false);
-        }
-    }
-}
-
 function displayRoomIsFree(roomStartTime) {
+    // Prints the fact that the room is free in the room-status div.
     let roomStatus = document.getElementById("room-status");
     let currentTime = new Date();
     if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
+        // If the booking time is not now, print until when room is free
         roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free until " +
             roomStartTime.getHours() + ":" + roomStartTime.getMinutes() + "!</h3>"
     } else {
+        // If booking time is now, earliestStartTime wasn't reset in isRoomFree()
+        // This means that there are no bookings for today. Print this fact.
         roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free for the whole day!</h3>"
     }
 }
 
 function displayRoomIsBooked() {
+    // Prints the fact that room is booked
     let roomStatus = document.getElementById("room-status");
     roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is booked right now</h3>"
 }
 
-function isRoomFree(tableData) {
-    let earliestStartTime = new Date();
-    earliestStartTime.setDate(earliestStartTime.getDate() + 1);
-    for (let x in tableData) {
-        let startTimeSplit = tableData[x].startTime.split(":");
-        let endTimeSplit = tableData[x].endTime.split(":");
-        let currentDate = new Date(), startDateTime = new Date(), endDateTime = new Date();
-
-        startDateTime.setHours(startTimeSplit[0], startTimeSplit[1]);
-        endDateTime.setHours(endTimeSplit[0], endTimeSplit[1]);
-
-        if (startDateTime < currentDate && currentDate < endDateTime) {
-            return false
-        } else {
-            if (startDateTime < earliestStartTime && startDateTime > currentDate) {
-                earliestStartTime = startDateTime
-            }
-        }
-    }
-    return earliestStartTime
-
-}
-
-function generateTable(tableData) {
+function displayTable(tableData) {
+    // Prints a table of bookings
     let content = document.getElementById("content");
     let tableContent = `<table class="table" id="room-bookings">
                         <tr>
@@ -112,3 +38,20 @@ function generateTable(tableData) {
 
 }
 
+function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
+    // Called from getData() when checkingForCurrentRoom is false
+
+    if (roomStartTime) { // If the room is not currently booked
+        // Basically do the same as in displayRoomIsFree() except for that it doesn't reset the room-status div contents
+        // Instead, add new lines
+        let roomStatus = document.getElementById("room-status");
+        let currentTime = new Date();
+        if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
+            roomStatus.innerHTML += `<h4>But, room   ${roomNumberInput}  is free until 
+                ${roomStartTime.getHours()}: ${roomStartTime.getMinutes()}!</h4>`;
+        } else {
+            roomStatus.innerHTML += `<h4>But, room ${roomNumberInput}  is free for the whole day!</h4>`;
+        }
+
+    }
+}
