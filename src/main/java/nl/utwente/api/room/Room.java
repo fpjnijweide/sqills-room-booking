@@ -16,15 +16,14 @@ import java.util.List;
 @Path("/room")
 public class Room {
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String sayHi() {
-        return "hi";
-    }
-
-    @GET
     @Path("/{roomNumber}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getBookingsForSpecificRoom (
+    /**
+     * Returns all of today's bookings for a specific room.
+     * @param roomNumber Number specifying the room
+     * @return JSON object containing all of today's bookings for a specific room
+     */
+    public String getBookingsForSpecificRoomToday (
         @PathParam("roomNumber") Integer roomNumber,
         @Context UriInfo uriInfo
     ) {
@@ -44,6 +43,12 @@ public class Room {
     @Path("/{roomNumber}/create")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    /**
+     * Create a booking for a specific room for today.
+     * @param roomNumber specifies the room
+     * @param timeSlot startTime and endTime specifying the times of the booking
+     * @return JSON object containing a "success" boolean value
+     */
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
         TimeSlot timeSlot,
