@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import nl.utwente.model.Booking;
+import nl.utwente.model.BookingModel;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -30,10 +30,10 @@ public class Room {
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ArrayNode bookingsNode = factory.arrayNode();
 
-        List<Booking> bookings = Booking.getBookingsForRoomToday(roomNumber);
+        List<BookingModel> bookingModels = BookingModel.getBookingsForRoomToday(roomNumber);
 
-        for (Booking booking : bookings) {
-            bookingsNode.add(booking.toJSONNode());
+        for (BookingModel bookingModel : bookingModels) {
+            bookingsNode.add(bookingModel.toJSONNode());
         }
 
         return bookingsNode.toString();
@@ -57,10 +57,10 @@ public class Room {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());
         boolean valid = nl.utwente.model.Room.isValidRoomID(roomNumber) &&
-            Booking.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
+            BookingModel.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
 
         if (valid) {
-            Booking.insertBookingToday(roomNumber, startTime, endTime);
+            BookingModel.insertBookingToday(roomNumber, startTime, endTime);
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
