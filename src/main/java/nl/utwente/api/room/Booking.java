@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/booking")
 public class Booking {
     /**
-     * Returns a specific booking.
+     * Returns a specific booking from the database.
      * @param bookingID ID of booking to be returned
      * @return JSON Object for the requested booking
      */
