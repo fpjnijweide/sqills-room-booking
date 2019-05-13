@@ -25,6 +25,132 @@ public class Booking {
     }
 
     /**
+     * Returns a booking with a certain booking id.
+     * @param bookingID booking ID of booking to be returned
+     * @return returns booking with specified ID or null if the booking does not exist.
+     */
+    public static Booking getSpecificBooking(int bookingID) {
+        Booking booking = null;
+        try {
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            String query = "SELECT * FROM sqills.Booking WHERE bookingID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, bookingID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Time startTime = resultSet.getTime("startTime");
+                Time endTime = resultSet.getTime("endTime");
+                Date date = resultSet.getDate("bookingdate");
+                int roomID = resultSet.getInt("roomID");
+
+                booking = new Booking(startTime, endTime, roomID, date);
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return booking;
+    }
+
+    /**
+     * Creates a new booking entry in the database.
+     * @param startTime start time of booking entry
+     * @param endTime end time of booking entry
+     * @param date date of booking entry
+     * @param roomID room id specifying room of booking entry
+     * @return whether the booking was successfully created
+     */
+    public static boolean createBooking(Time startTime, Time endTime, Date date, int roomID) {
+        boolean successful = false;
+        try {
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID" +
+                ") VALUES (?, ?, ?, ?);";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setTime(1, startTime);
+            statement.setTime(2, endTime);
+            statement.setDate(3, date);
+            statement.setInt(4, roomID);
+
+            int updatedRows = statement.executeUpdate();
+            successful = updatedRows > 0;
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return successful;
+    }
+
+    /**
+     * Deletes a booking with a specified bookingID
+     * @param bookingID specifies the booking to be deleted
+     * @return whether the deletion was successful
+     */
+    public static boolean deleteBooking(int bookingID) {
+        boolean successful = false;
+
+        try {
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            String query = "DELETE FROM sqills.Booking WHERE bookingID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, bookingID);
+
+            int updatedRows = statement.executeUpdate();
+            successful = updatedRows > 0;
+
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return successful;
+    }
+
+    /**
+     * Updates a specific booking.
+     * @param bookingID specifies the booking to be updated
+     * @param newStart new start time
+     * @param newEnd new end time
+     * @param newDate new date
+     * @param newRoom new room id
+     * @return whether the update was successful
+     */
+    public static boolean updateBooking(int bookingID, Time newStart, Time newEnd, Date newDate, int newRoom) {
+        boolean successful = false;
+
+        try {
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            String query = "UPDATE sqills.Booking " +
+                "SET startTime = ?, endTime = ?, bookingdate = ?, roomID = ?" +
+                "WHERE bookingID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setTime(1, newStart);
+            statement.setTime(2, newEnd);
+            statement.setDate(3, newDate);
+            statement.setInt(4, newRoom);
+            statement.setInt(5, bookingID);
+
+            int updatedRows = statement.executeUpdate();
+            successful = updatedRows > 0;
+
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return successful;
+    }
+
+    /**
      * Returns a list of today's Bookings for a specified room
      * @param roomID RoomID of room whose bookings will be returned
      * @return Today's bookings for the specified room
@@ -151,9 +277,11 @@ public class Booking {
     }
 
     public static void main(String[] args) {
-        List<Booking> bookings = getBookingsForRoomToday(1);
-        for (Booking b : bookings) {
-            System.out.println(b.toJSONNode().toString());
-        }
+        boolean result = updateBooking(11,
+            Time.valueOf("08:40:00"),
+            Time.valueOf("09:00:00"),
+            Date.valueOf("2019-05-14"),
+            1);
+        System.out.println(result);
     }
 }
