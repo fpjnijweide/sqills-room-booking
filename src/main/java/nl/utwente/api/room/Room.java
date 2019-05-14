@@ -51,7 +51,7 @@ public class Room {
      */
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
-        TimeSlot timeSlot,
+        TimeSlotBean timeSlot,
         @Context UriInfo uriInfo
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());

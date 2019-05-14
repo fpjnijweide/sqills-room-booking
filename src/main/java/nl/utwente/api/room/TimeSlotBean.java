@@ -1,6 +1,6 @@
 package nl.utwente.api.room;
 
-public class TimeSlot {
+public class TimeSlotBean {
     String startTime;
     String endTime;
 

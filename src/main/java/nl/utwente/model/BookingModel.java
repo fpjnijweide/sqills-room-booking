@@ -8,6 +8,7 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class BookingModel {
@@ -203,13 +204,20 @@ public class BookingModel {
         }
     }
 
-    public static boolean isValidBookingToday(int roomID, String startTime, String endTime){
+    public static boolean isValidBookingToday(int roomID, String startTime, String endTime) {
+        Calendar currenttime = Calendar.getInstance();
+        Date sqldate = new Date((currenttime.getTime()).getTime());
+        return isValidBooking(roomID, startTime, endTime, sqldate.toString());
+    }
+
+    public static boolean isValidBooking(int roomID, String startTime, String endTime, String date) {
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT starttime, endtime, bookingdate from Sqills.booking where roomID = ? and bookingdate = CURRENT_DATE ";
+            String query = "SELECT starttime, endtime, bookingdate FROM Sqills.booking WHERE roomID = ? AND bookingdate = ? ";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
+            statement.setDate(2, Date.valueOf(date));
             ResultSet result = statement.executeQuery();
             while(result.next()){
                 Time start = Time.valueOf(result.getString("starttime"));
@@ -222,22 +230,14 @@ public class BookingModel {
                     isValid = false;
                 }
             }
+            result.close();
+            statement.close();
+            connection.close();
         } catch(SQLException e){
-            System.err.println(e);
+            e.printStackTrace();
             return false;
         }
         return isValid;
-    }
-
-    public static java.sql.Date fromStringToDate(String stringDate){
-        java.sql.Date sqlDate = null;
-        try {
-            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(stringDate);
-            sqlDate = new java.sql.Date(date.getTime());
-        } catch (ParseException e){
-            System.err.println(e);
-        }
-        return sqlDate;
     }
 
     public Time getStartTime() {
