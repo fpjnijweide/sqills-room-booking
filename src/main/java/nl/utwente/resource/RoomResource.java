@@ -1,6 +1,5 @@
 package nl.utwente.resource;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -30,9 +29,7 @@ public class RoomResource {
         @PathParam("roomNumber") Integer roomNumber,
         @Context UriInfo uriInfo
     ) {
-        List<Booking> bookings = BookingDao.getBookingsForRoomToday(roomNumber);
-
-        return bookings;
+        return BookingDao.getBookingsForRoomToday(roomNumber);
     }
 
 

@@ -33,12 +33,7 @@ public class BookingResource {
     @Path("/create")
     // Todo: Add validity check
     public String createBooking(Booking booking) {
-        boolean result = BookingDao.createBooking(
-            booking.getStartTime(),
-            booking.getEndTime(),
-            booking.getDate(),
-            booking.getRoomNumber()
-        );
+        boolean result = BookingDao.createBooking(booking);
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
@@ -60,13 +55,7 @@ public class BookingResource {
         @PathParam("bookingID") int bookingID,
         Booking booking
     ) {
-        boolean result = BookingDao.updateBooking(
-            bookingID,
-            booking.getStartTime(),
-            booking.getEndTime(),
-            booking.getDate(),
-            booking.getRoomNumber()
-        );
+        boolean result = BookingDao.updateBooking(bookingID, booking);
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
