@@ -26,8 +26,7 @@ public class RoomResource {
      * @return JSON object containing all of today's bookings for a specific room
      */
     public List<Booking> getBookingsForSpecificRoomToday (
-        @PathParam("roomNumber") Integer roomNumber,
-        @Context UriInfo uriInfo
+        @PathParam("roomNumber") Integer roomNumber
     ) {
         return BookingDao.getBookingsForRoomToday(roomNumber);
     }
@@ -45,8 +44,7 @@ public class RoomResource {
      */
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
-        TimeSlot timeSlot,
-        @Context UriInfo uriInfo
+        TimeSlot timeSlot
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());
