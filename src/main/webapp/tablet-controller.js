@@ -21,13 +21,13 @@ function updatePage(roomNumberInput) {
         let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
             if (!roomStartTime) {
                 // If room start time is null then it's not free
-                displayTable(response.data);
+                displayTableOfBookings(response.data);
                 displayRoomIsBooked();
                 checkIfOtherRoomsAreBooked()
             } else {
                 // If room is free, show that it can be booked
                 displayRoomIsFree(roomStartTime);
-                showMakeBooking();
+                displayMakeBooking();
             }
     });
 }
