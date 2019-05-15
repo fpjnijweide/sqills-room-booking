@@ -1,4 +1,4 @@
-package nl.utwente.api.room;
+package nl.utwente.api;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

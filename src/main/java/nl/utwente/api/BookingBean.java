@@ -1,4 +1,4 @@
-package nl.utwente.api.room;
+package nl.utwente.api;
 
 import java.sql.Date;
 import java.sql.Time;
