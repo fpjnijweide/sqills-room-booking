@@ -59,23 +59,19 @@ public class BookingDao {
 
     /**
      * Creates a new booking entry in the database.
-     * @param startTime start time of booking entry
-     * @param endTime end time of booking entry
-     * @param date date of booking entry
-     * @param roomID room id specifying room of booking entry
      * @return whether the booking was successfully created
      */
-    public static boolean createBooking(Time startTime, Time endTime, Date date, int roomID) {
+    public static boolean createBooking(Booking booking) {
         boolean successful = false;
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID" +
                 ") VALUES (?, ?, ?, ?);";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setTime(1, startTime);
-            statement.setTime(2, endTime);
-            statement.setDate(3, date);
-            statement.setInt(4, roomID);
+            statement.setTime(1, booking.getStartTime());
+            statement.setTime(2, booking.getEndTime());
+            statement.setDate(3, booking.getDate());
+            statement.setInt(4, booking.getRoomNumber());
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
@@ -116,13 +112,9 @@ public class BookingDao {
     /**
      * Updates a specific booking.
      * @param bookingID specifies the booking to be updated
-     * @param newStart new start time
-     * @param newEnd new end time
-     * @param newDate new date
-     * @param newRoom new room id
      * @return whether the update was successful
      */
-    public static boolean updateBooking(int bookingID, Time newStart, Time newEnd, Date newDate, int newRoom) {
+    public static boolean updateBooking(int bookingID, Booking booking) {
         boolean successful = false;
 
         try {
@@ -132,10 +124,10 @@ public class BookingDao {
                 "WHERE bookingID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
-            statement.setTime(1, newStart);
-            statement.setTime(2, newEnd);
-            statement.setDate(3, newDate);
-            statement.setInt(4, newRoom);
+            statement.setTime(1, booking.getStartTime());
+            statement.setTime(2, booking.getEndTime());
+            statement.setDate(3, booking.getDate());
+            statement.setInt(4, booking.getRoomNumber());
             statement.setInt(5, bookingID);
 
             int updatedRows = statement.executeUpdate();
