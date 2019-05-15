@@ -18,6 +18,18 @@ import java.util.List;
 @Path("/room")
 public class RoomResource {
     @GET
+    @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    /**
+     * Returns all of today's bookings for a specific room.
+     * @param roomNumber Number specifying the room
+     * @return JSON object containing all of today's bookings for a specific room
+     */
+    public List<String> getRoomList () {
+        return RoomDao.getAllRooms();
+    }
+
+    @GET
     @Path("/{roomNumber}")
     @Produces(MediaType.APPLICATION_JSON)
     /**
