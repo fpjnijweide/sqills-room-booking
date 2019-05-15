@@ -15,4 +15,19 @@ body {
 .header-logo{
     text-align: center;
     margin: auto;
+    padding: 20px;
+}
+
+.btn-primary{
+    background-color: #73007A;
+    border-color: #73007A;
+}
+
+.btn-primary:hover{
+    background-color: rgba(115, 0, 122, 0.71);
+    border-color: rgba(115, 0, 122, 0.71);
+}
+
+input[type=range] + .thumb {
+    background-color: #dedede;
 }

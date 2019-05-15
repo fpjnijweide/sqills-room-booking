@@ -27,9 +27,31 @@
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.github.warmuuh</groupId>
+				<artifactId>libsass-maven-plugin</artifactId>
+				<version>0.2.10-libsass_3.5.3</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<inputPath>/src/main/webapp/sass</inputPath>
+					<outputPath>/target/sqillsRoomBooking/css</outputPath>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>com.github.warmuuh</groupId>
+			<artifactId>libsass-maven-plugin</artifactId>
+			<version>0.2.10-libsass_3.5.3</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
