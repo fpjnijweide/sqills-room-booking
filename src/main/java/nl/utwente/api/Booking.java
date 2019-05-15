@@ -1,4 +1,4 @@
-package nl.utwente.api.room;
+package nl.utwente.api;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;

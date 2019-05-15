@@ -31,8 +31,4 @@ public class Room {
             return false;
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println(isValidRoomID(3));
-    }
 }
