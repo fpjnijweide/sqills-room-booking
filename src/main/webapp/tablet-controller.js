@@ -64,8 +64,8 @@ function getEarliestStartTime(bookings) {
         let currentDate = new Date(), startDateTime = new Date(), endDateTime = new Date();
 
         // Set the start time, end time objects' time to the numbers that we found in the HTTP response
-        startDateTime.setHours(startTimeSplit[0], startTimeSplit[1]);
-        endDateTime.setHours(endTimeSplit[0], endTimeSplit[1]);
+        startDateTime.setHours(startTimeSplit[0], startTimeSplit[1],0,0);
+        endDateTime.setHours(endTimeSplit[0], endTimeSplit[1],0,0);
 
         if (startDateTime < currentDate && currentDate < endDateTime) {
             // If the current time is between the times found, the room is booked! Return null
