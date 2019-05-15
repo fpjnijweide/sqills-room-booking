@@ -1,11 +1,11 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.model.Booking;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoomDao {
     /**
@@ -30,5 +30,27 @@ public class RoomDao {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static List<String> getAllRooms() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            String query = "SELECT roomid FROM sqills.room";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String queriedRoomID = resultSet.getString("roomid");
+                result.add(queriedRoomID);
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
