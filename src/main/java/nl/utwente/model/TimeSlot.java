@@ -1,6 +1,6 @@
-package nl.utwente.api;
+package nl.utwente.model;
 
-public class TimeSlotBean {
+public class TimeSlot {
     String startTime;
     String endTime;
 

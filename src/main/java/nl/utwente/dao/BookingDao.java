@@ -1,23 +1,22 @@
-package nl.utwente.model;
+package nl.utwente.dao;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.model.Booking;
 
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class BookingModel {
+public class BookingDao {
     private Time startTime;
     private Time endTime;
     private int roomID;
     private Date date;
 
-    public BookingModel(Time startTime, Time endTime, int roomID, Date date) {
+    public BookingDao(Time startTime, Time endTime, int roomID, Date date) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.roomID = roomID;
@@ -29,8 +28,8 @@ public class BookingModel {
      * @param bookingID booking ID of booking to be returned
      * @return returns booking with specified ID or null if the booking does not exist.
      */
-    public static BookingModel getSpecificBooking(int bookingID) {
-        BookingModel bookingModel = null;
+    public static Booking getSpecificBooking(int bookingID) {
+        Booking booking = null;
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * FROM sqills.Booking WHERE bookingID = ?";
@@ -45,7 +44,7 @@ public class BookingModel {
                 Date date = resultSet.getDate("bookingdate");
                 int roomID = resultSet.getInt("roomID");
 
-                bookingModel = new BookingModel(startTime, endTime, roomID, date);
+                booking = new Booking(startTime, endTime, roomID, date);
             }
 
             resultSet.close();
@@ -55,7 +54,7 @@ public class BookingModel {
             e.printStackTrace();
         }
 
-        return bookingModel;
+        return booking;
     }
 
     /**
@@ -155,8 +154,8 @@ public class BookingModel {
      * @param roomID RoomID of room whose bookings will be returned
      * @return Today's bookings for the specified room
      */
-    public static List<BookingModel> getBookingsForRoomToday(int roomID) {
-        ArrayList<BookingModel> result = new ArrayList<>();
+    public static List<Booking> getBookingsForRoomToday(int roomID) {
+        ArrayList<Booking> result = new ArrayList<>();
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT startTime, endTime, bookingdate, roomID FROM sqills.booking WHERE roomID = ? AND bookingdate = CURRENT_DATE";
@@ -170,7 +169,7 @@ public class BookingModel {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int queriedRoomID = resultSet.getInt("roomID");
-                result.add(new BookingModel(startTime, endTime, queriedRoomID, date));
+                result.add(new Booking(startTime, endTime, queriedRoomID, date));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -258,7 +257,7 @@ public class BookingModel {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("BookingModel from: ");
+        sb.append("BookingDao from: ");
         sb.append(startTime);
         sb.append("-");
         sb.append(endTime);
@@ -273,14 +272,5 @@ public class BookingModel {
         bookingJsonNode.put("endTime", String.valueOf(this.endTime));
         bookingJsonNode.put("date", String.valueOf(this.date));
         return bookingJsonNode;
-    }
-
-    public static void main(String[] args) {
-        boolean result = updateBooking(11,
-            Time.valueOf("08:40:00"),
-            Time.valueOf("09:00:00"),
-            Date.valueOf("2019-05-14"),
-            1);
-        System.out.println(result);
     }
 }

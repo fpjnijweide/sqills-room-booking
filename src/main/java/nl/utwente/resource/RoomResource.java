@@ -1,10 +1,13 @@
-package nl.utwente.api;
+package nl.utwente.resource;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import nl.utwente.model.BookingModel;
+import nl.utwente.dao.BookingDao;
+import nl.utwente.dao.RoomDao;
+import nl.utwente.model.Booking;
+import nl.utwente.model.TimeSlot;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -14,7 +17,7 @@ import java.sql.Time;
 import java.util.List;
 
 @Path("/room")
-public class Room {
+public class RoomResource {
     @GET
     @Path("/{roomNumber}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -23,24 +26,18 @@ public class Room {
      * @param roomNumber Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public String getBookingsForSpecificRoomToday (
+    public List<Booking> getBookingsForSpecificRoomToday (
         @PathParam("roomNumber") Integer roomNumber,
         @Context UriInfo uriInfo
     ) {
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ArrayNode bookingsNode = factory.arrayNode();
+        List<Booking> bookings = BookingDao.getBookingsForRoomToday(roomNumber);
 
-        List<BookingModel> bookingModels = BookingModel.getBookingsForRoomToday(roomNumber);
-
-        for (BookingModel bookingModel : bookingModels) {
-            bookingsNode.add(bookingModel.toJSONNode());
-        }
-
-        return bookingsNode.toString();
+        return bookings;
     }
 
+
     @POST
-    @Path("/{roomNumber}/create")
+    @Path("/{roomNumber}/book")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     /**
@@ -51,16 +48,16 @@ public class Room {
      */
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
-        TimeSlotBean timeSlot,
+        TimeSlot timeSlot,
         @Context UriInfo uriInfo
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());
-        boolean valid = nl.utwente.model.Room.isValidRoomID(roomNumber) &&
-            BookingModel.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
+        boolean valid = RoomDao.isValidRoomID(roomNumber) &&
+            BookingDao.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
 
         if (valid) {
-            BookingModel.insertBookingToday(roomNumber, startTime, endTime);
+            BookingDao.insertBookingToday(roomNumber, startTime, endTime);
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;

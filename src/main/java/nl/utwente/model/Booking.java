@@ -1,13 +1,20 @@
-package nl.utwente.api;
+package nl.utwente.model;
 
 import java.sql.Date;
 import java.sql.Time;
 
-public class BookingBean {
-    int roomNumber;
-    Date date;
-    Time startTime;
-    Time endTime;
+public class Booking {
+    private int roomNumber;
+    private Date date;
+    private Time startTime;
+    private Time endTime;
+
+    public Booking(Time startTime, Time endTime, int roomNumber, Date date) {
+        this.roomNumber = roomNumber;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     public int getRoomNumber() {
         return roomNumber;
