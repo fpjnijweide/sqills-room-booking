@@ -16,6 +16,10 @@ public class Booking {
         this.endTime = endTime;
     }
 
+    public Booking(){
+
+    }
+
     public int getRoomNumber() {
         return roomNumber;
     }
@@ -46,5 +50,10 @@ public class Booking {
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber();
     }
 }
