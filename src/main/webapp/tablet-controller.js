@@ -1,28 +1,24 @@
 // TODO remove this hardcoded variable later
 var totalNumberOfRooms = 4; // Total number of rooms, a fake temporary variable used in checkIfOtherRoomsAreBooked()
-var refreshSet = false; // Global boolean used to check whether the getData method is being called every X seconds
+var refreshSet = false; // Global boolean used to check whether the updatePage method is being called every X seconds
 var currentRoomNumber; // Global variable used for storing room number to be used in methods
 
 function selectRoom() { // Called when "select room" button is pressed
     currentRoomNumber = document.getElementById("room-input").value
-    getData(currentRoomNumber); // Call the main method
-    if(!refreshSet){ // If we do not already have the getData method being checked every X seconds
+    updatePage(currentRoomNumber); // Call the main method
+    if(!refreshSet){ // If we do not already have the updatePage method being checked every X seconds
         // Use setInterval to make sure it is called every X seconds, and set refreshSet to true
         setInterval(() => {
-            getData(currentRoomNumber);
+            updatePage(currentRoomNumber);
         }, 30000);
         refreshSet = true;
     }
 }
 
-function getData(roomNumberInput, checkingForCurrentRoom) {
-    if (typeof checkingForCurrentRoom === 'undefined') checkingForCurrentRoom = true; // Set this var to true if not defined
+//TODO refactor
+function updatePage(roomNumberInput) {
     axios.get(`/api/room/${roomNumberInput}`).then((response) => { // GET request
-        let roomStartTime = isRoomFree(response.data); // Check if room is free, and get the time of the next booking
-
-        if (checkingForCurrentRoom) { // If we are checking for the room in the textbox, go into this block of code
-                                      // else, we are checking from checkIfOtherRoomsAreBooked() and we do not want
-                                      // to print stuff and generate tables
+        let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
             if (!roomStartTime) {
                 // If room start time is null then it's not free
                 displayTable(response.data);
@@ -33,30 +29,30 @@ function getData(roomNumberInput, checkingForCurrentRoom) {
                 displayRoomIsFree(roomStartTime);
                 showMakeBooking();
             }
-        } else {
-            // We are checking from checkIfOtherRoomsAreBooked(), so we do not generate tables but print a line instead
-            displayOtherFreeRooms(roomStartTime, roomNumberInput);
-        }
     });
 }
 
 function checkIfOtherRoomsAreBooked() {
     for (let i = 0; i < totalNumberOfRooms; i++) { // TODO change these numbers to loop through actual rooms yes.
         if (i !== currentRoomNumber) { // Don't check for current room, obviously
-            getData(i, false);
+            axios.get(`/api/room/${i}`).then(response => { // GET request
+                let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
+                displayOtherFreeRooms(roomStartTime, roomNumberInput);
+            });
         }
+
     }
 }
 
-function isRoomFree(tableData) {
+function getEarliestStartTime(bookings) {
     let earliestStartTime = new Date();
     // Set the earliest booking found to tomorrow, so all new bookings we find come before it
     earliestStartTime.setDate(earliestStartTime.getDate() + 1);
 
-    for (let x in tableData) { // Loop through all bookings found
+    for (let x in bookings) { // Loop through all bookings found
         // Split the start time and end time of this booking into a list of numbers
-        let startTimeSplit = tableData[x].startTime.split(":");
-        let endTimeSplit = tableData[x].endTime.split(":");
+        let startTimeSplit = bookings[x].startTime.split(":");
+        let endTimeSplit = bookings[x].endTime.split(":");
 
 
         // Generate date-time objects for the current time, start time of booking, end time of booking

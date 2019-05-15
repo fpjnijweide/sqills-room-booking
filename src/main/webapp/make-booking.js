@@ -35,6 +35,6 @@ function addMinutes(date, minutes) {
 function displayBooked() {
     document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
     setTimeout(() => {
-        getData(currentRoomNumber);
+        updatePage(currentRoomNumber);
     }, 5000);
 }
