@@ -21,7 +21,9 @@ function selectHowLong(value) {
 function makeBooking() {
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    axios.post(`/api/room/${currentRoomNumber}/?startTime=${new Date().getHours()}:${new Date().getMinutes()}&endTime=${endTime.getHours()}:${endTime.getMinutes()}`).then((reponse) => {
+    let jsonBody = { startTime: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, endTime: `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}` };
+    console.log(jsonBody);
+    axios.post(`/api/room/${currentRoomNumber}/create`, jsonBody).then((reponse) => {
         displayBooked();
     });
 }
