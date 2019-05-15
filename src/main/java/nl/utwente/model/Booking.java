@@ -16,6 +16,10 @@ public class Booking {
         this.endTime = endTime;
     }
 
+    public Booking() {
+
+    }
+
     public int getRoomNumber() {
         return roomNumber;
     }
