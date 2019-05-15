@@ -13,7 +13,7 @@ Returns all the bookings for this specific room for today. The room is specified
     }
 ]
 
-POST /api/room/{roomNumber}/create
+POST /api/room/{roomNumber}/book
 BODY:
 {
     "startTime": {startTime},

@@ -1,4 +1,4 @@
-package nl.utwente.model;
+package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
 
@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Room {
+public class RoomDao {
     /**
      * Returns whether a roomID belongs to a room.
      * @param roomID The roomID which validity will be checked
