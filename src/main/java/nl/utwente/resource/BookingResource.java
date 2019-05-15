@@ -33,6 +33,9 @@ public class BookingResource {
     @Path("/create")
     // Todo: Add validity check
     public String createBooking(Booking booking) {
+
+        System.out.println(booking.toString());
+
         boolean result = BookingDao.createBooking(booking);
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
