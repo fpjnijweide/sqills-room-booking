@@ -1,5 +1,5 @@
 // TODO remove this hardcoded variable later
-var totalNumberOfRooms = 5; // Total number of rooms, a fake temporary variable used in checkIfOtherRoomsAreBooked()
+var totalNumberOfRooms = 4; // Total number of rooms, a fake temporary variable used in checkIfOtherRoomsAreBooked()
 var refreshSet = false; // Global boolean used to check whether the getData method is being called every X seconds
 var currentRoomNumber; // Global variable used for storing room number to be used in methods
 
