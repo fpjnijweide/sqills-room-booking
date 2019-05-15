@@ -1,9 +1,8 @@
-// TODO remove this hardcoded variable later
-var totalNumberOfRooms = 4; // Total number of rooms, a fake temporary variable used in checkIfOtherRoomsAreBooked()
 var refreshSet = false; // Global boolean used to check whether the updatePage method is being called every X seconds
 var currentRoomNumber; // Global variable used for storing room number to be used in methods
 
 function selectRoom() { // Called when "select room" button is pressed
+    // TODO have client-side check if room nr is valid
     currentRoomNumber = document.getElementById("room-input").value
     updatePage(currentRoomNumber); // Call the main method
     if(!refreshSet){ // If we do not already have the updatePage method being checked every X seconds
@@ -33,15 +32,21 @@ function updatePage(roomNumberInput) {
 }
 
 function checkIfOtherRoomsAreBooked() {
-    for (let i = 0; i < totalNumberOfRooms; i++) { // TODO change these numbers to loop through actual rooms yes.
-        if (i !== currentRoomNumber) { // Don't check for current room, obviously
-            axios.get(`/api/room/${i}`).then(response => { // GET request
-                let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
-                displayOtherFreeRooms(roomStartTime, i);
-            });
-        }
+    // TODO use GET Request to /api/room/list to get list of rooms here
+    axios.get(`/api/room/list`).then((response) => { // GET request
+        let listOfRoomIDs = response.data
+        for(let id of listOfRoomIDs) {
 
-    }
+
+            if (id != currentRoomNumber) { // Don't check for current room, obviously
+                axios.get(`/api/room/${id}`).then(response => { // GET request
+                    let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
+                    displayOtherFreeRooms(roomStartTime, id);
+                });
+            }
+        }
+    });
+
 }
 
 function getEarliestStartTime(bookings) {
