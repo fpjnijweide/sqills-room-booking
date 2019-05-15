@@ -19,6 +19,7 @@ BODY:
 }
 
 Returns
+// Todo: return booking id
 {
     "success": [true|false],
     "bookingID": {bookingID},
