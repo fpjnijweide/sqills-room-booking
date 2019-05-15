@@ -1,107 +1,57 @@
-import axios from 'axios'
-var myObj
-
-function test() {
-    axios.get()
+function displayRoomIsFree(roomStartTime) {
+    // Prints the fact that the room is free in the room-status div.
+    let roomStatus = document.getElementById("room-status");
+    let currentTime = new Date();
+    if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
+        // If the booking time is not now, print until when room is free
+        roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free until " +
+            roomStartTime.getHours() + ":" + roomStartTime.getMinutes() + "!</h3>"
+    } else {
+        // If booking time is now, earliestStartTime wasn't reset in isRoomFree()
+        // This means that there are no bookings for today. Print this fact.
+        roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free for the whole day!</h3>"
+    }
 }
 
+function displayRoomIsBooked() {
+    // Prints the fact that room is booked
+    let roomStatus = document.getElementById("room-status");
+    roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is booked right now</h3>"
+}
 
-function loadBooks(event) {
-
-
-    if (event.key == "Enter") {
-        let search = document.getElementById("search")
-
-        let items = document.getElementById("items")
-        var xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                if (this.status == 200) {
-                    myObj = JSON.parse(this.responseText)
-                    let txt = "<table border='1'>"
-                    for (x in myObj) {
-                        txt += "<tr>" +
-                            "<td>" + myObj[x].shortDescription + "</td>" +
-                            "<td>" + myObj[x].cost + "</td>" +
-                            "<td><button id=\"" + myObj[x].itemID + "\" onclick=\"addToCart(myObj[" + x +
-                            "])\">Add to cart</button></td>"
-                        "</tr>"
-                    }
-                    txt += "</table>"
-                    items.innerHTML = txt
-                } else {
-                    items.innerHTML = ""
-                }
-            }
-
-        }
-
-
-        // xhr.open("POST",) 2isgyhfiewiueiew abbb ab ab ab
-        xhr.open("GET", "./rest/" + search.value, true)
-        xhr.send()
-        search.value = ""
-
+function displayTable(tableData) {
+    // Prints a table of bookings
+    let content = document.getElementById("content");
+    let tableContent = `<table class="table" id="room-bookings">
+                        <tr>
+                         <th>Start Time</th>   
+                         <th>End Time</th>   
+                        </tr>`
+    for (let x in tableData) {
+        tableContent += `<tr> 
+            <td> ${tableData[x].startTime} </td> 
+            <td> ${tableData[x].endTime} </td> 
+        </tr>`
     }
-
+    tableContent += `</table>`;
+    content.innerHTML = tableContent;
 
 }
 
+function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
+    // Called from getData() when checkingForCurrentRoom is false
 
-function showCart() {
-
-    let costs = document.getElementById("costs")
-
-    let cartcontents = document.getElementById("cartcontents")
-    let xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            if (this.status == 200) {
-                let myObj = JSON.parse(this.responseText)
-                let txt = "<table border='1'>"
-                let totcosts = 0
-                for (x in myObj) {
-                    totcosts += myObj[x].item.cost * myObj[x].numItems
-                    txt += "<tr>" +
-                        "<td>" + myObj[x].item.shortDescription + "</td>" +
-                        "<td>" + myObj[x].item.cost + "</td>" +
-                        "<td>" + myObj[x].numItems + "</td>" +
-                        "</tr>"
-                }
-                txt += "</table>"
-                cartcontents.innerHTML = txt
-                costs.innerHTML = "Total costs = " + totcosts + " Euros"
-            } else {
-                cartcontents.innerHTML = ""
-                costs.innerHTML = "Total costs = 0.0 Euros"
-            }
+    if (roomStartTime) { // If the room is not currently booked
+        // Basically do the same as in displayRoomIsFree() except for that it doesn't reset the room-status div contents
+        // Instead, add new lines
+        let roomStatus = document.getElementById("room-status");
+        let currentTime = new Date();
+        if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
+            roomStatus.innerHTML += `<h4>But, room   ${roomNumberInput}  is free until 
+                ${roomStartTime.getHours()}: ${roomStartTime.getMinutes()}!</h4>`;
+        } else {
+            roomStatus.innerHTML += `<h4>But, room ${roomNumberInput}  is free for the whole day!</h4>`;
         }
 
     }
-    xhr.open("GET", "./rest/cart", true)
-    xhr.send()
-
-}
-
-function addToCart(object) {
-    let new_object = [{
-        item: object,
-        numItems: 1
-    }]
-
-
-    let object_string = JSON.stringify(new_object)
-    let xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            if (this.status == 204) {
-                showCart()
-            }
-        }
-    }
-    xhr.open("POST", "./rest/cart/", true)
-    xhr.setRequestHeader("Content-Type", "application/json")
-    xhr.send(object_string)
-
-
 }

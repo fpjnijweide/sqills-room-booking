@@ -1,0 +1,27 @@
+GET /api/room/{roomNumber}
+Returns all the bookings for this specific room for today. The room is specified by a room number.
+[
+    {
+        "roomNumber": {number},
+        "startTime": {startTime},
+        "endTime": {endTime}
+    },
+    {
+        "roomNumber": {number},
+        "startTime": {startTime},
+        "endTime": {endTime}
+    }
+]
+
+POST /api/room/{roomNumber}/create
+BODY:
+{
+    "startTime": {startTime},
+    "endTime": {endTime}
+}
+Creates a booking for a specific room specified by the roomNumber from the URI.
+The start and end time are specified by parameters in the request body.
+Returns:
+{
+    success: [true|false]
+}
