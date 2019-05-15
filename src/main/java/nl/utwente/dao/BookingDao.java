@@ -63,6 +63,7 @@ public class BookingDao {
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,6 +90,7 @@ public class BookingDao {
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
 
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,6 +123,7 @@ public class BookingDao {
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
 
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -151,6 +154,10 @@ public class BookingDao {
                 int queriedRoomID = resultSet.getInt("roomID");
                 result.add(new Booking(startTime, endTime, queriedRoomID, date));
             }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -177,6 +184,7 @@ public class BookingDao {
             statement.setTime(2, startTime);
             statement.setTime(3, endTime);
             statement.execute();
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
