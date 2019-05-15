@@ -4,7 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * The DatabaseConnectionFactory is responsible for returning connections to our SQL database.
+ */
 public class DatabaseConnectionFactory {
+    /**
+     * Returns a connection to the SQL database.
+     * @return connection object to the database
+     *         null if no connection could be established
+     */
     public static Connection getConnection(){
         try {
             Class.forName("org.postgresql.Driver");
