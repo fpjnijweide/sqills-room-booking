@@ -1,4 +1,4 @@
-package nl.utwente.api.room;
+package nl.utwente.model;
 
 public class TimeSlot {
     String startTime;
