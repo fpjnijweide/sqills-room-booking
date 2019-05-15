@@ -37,7 +37,7 @@ function checkIfOtherRoomsAreBooked() {
         if (i !== currentRoomNumber) { // Don't check for current room, obviously
             axios.get(`/api/room/${i}`).then(response => { // GET request
                 let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
-                displayOtherFreeRooms(roomStartTime, roomNumberInput);
+                displayOtherFreeRooms(roomStartTime, i);
             });
         }
 
