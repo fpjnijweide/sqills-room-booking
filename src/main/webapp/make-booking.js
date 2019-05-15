@@ -1,5 +1,5 @@
 //Shows the duration form used top make a booking
-function showMakeBooking() {
+function displayMakeBooking() {
     document.getElementById(`content`).innerHTML = `
         <div class="row">
             <div class="col-sm-8">
@@ -21,7 +21,9 @@ function selectHowLong(value) {
 function makeBooking() {
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    axios.post(`/api/room/${currentRoomNumber}/?startTime=${new Date().getHours()}:${new Date().getMinutes()}&endTime=${endTime.getHours()}:${endTime.getMinutes()}`).then((reponse) => {
+    let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}` };
+    console.log(jsonBody);
+    axios.post(`/api/booking/create`, jsonBody).then((reponse) => {
         displayBooked();
     });
 }
@@ -29,10 +31,15 @@ function makeBooking() {
 function addMinutes(date, minutes) {
     return new Date(date.getTime() + minutes * 60000);
 }
+
+function formatDate(){
+    //TODO shorten the above
+}
+
 //display that the booking is complete
 function displayBooked() {
     document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
     setTimeout(() => {
-        getData(currentRoomNumber);
+        updatePage(currentRoomNumber);
     }, 5000);
 }
