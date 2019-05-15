@@ -19,7 +19,7 @@ function displayRoomIsBooked() {
     roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is booked right now</h3>"
 }
 
-function displayTable(tableData) {
+function displayTableOfBookings(tableData) {
     // Prints a table of bookings
     let content = document.getElementById("content");
     let tableContent = `<table class="table" id="room-bookings">

@@ -1,5 +1,5 @@
 //Shows the duration form used top make a booking
-function showMakeBooking() {
+function displayMakeBooking() {
     document.getElementById(`content`).innerHTML = `
         <div class="row">
             <div class="col-sm-8">
