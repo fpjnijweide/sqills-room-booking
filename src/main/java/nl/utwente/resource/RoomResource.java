@@ -18,6 +18,18 @@ import java.util.List;
 @Path("/room")
 public class RoomResource {
     @GET
+    @Path("/list")
+    @Produces(MediaType.APPLICATION_JSON)
+    /**
+     * Returns all of today's bookings for a specific room.
+     * @param roomNumber Number specifying the room
+     * @return JSON object containing all of today's bookings for a specific room
+     */
+    public List<String> getRoomList () {
+        return RoomDao.getAllRooms();
+    }
+
+    @GET
     @Path("/{roomNumber}")
     @Produces(MediaType.APPLICATION_JSON)
     /**
@@ -26,8 +38,7 @@ public class RoomResource {
      * @return JSON object containing all of today's bookings for a specific room
      */
     public List<Booking> getBookingsForSpecificRoomToday (
-        @PathParam("roomNumber") Integer roomNumber,
-        @Context UriInfo uriInfo
+        @PathParam("roomNumber") Integer roomNumber
     ) {
         return BookingDao.getBookingsForRoomToday(roomNumber);
     }
@@ -45,8 +56,7 @@ public class RoomResource {
      */
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
-        TimeSlot timeSlot,
-        @Context UriInfo uriInfo
+        TimeSlot timeSlot
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());

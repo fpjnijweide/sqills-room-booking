@@ -11,18 +11,6 @@ import java.util.Calendar;
 import java.util.List;
 
 public class BookingDao {
-    private Time startTime;
-    private Time endTime;
-    private int roomID;
-    private Date date;
-
-    public BookingDao(Time startTime, Time endTime, int roomID, Date date) {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.roomID = roomID;
-        this.date = date;
-    }
-
     /**
      * Returns a booking with a certain booking id.
      * @param bookingID booking ID of booking to be returned
@@ -75,6 +63,7 @@ public class BookingDao {
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,6 +90,7 @@ public class BookingDao {
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
 
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,6 +123,7 @@ public class BookingDao {
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
 
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,6 +154,10 @@ public class BookingDao {
                 int queriedRoomID = resultSet.getInt("roomID");
                 result.add(new Booking(startTime, endTime, queriedRoomID, date));
             }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -189,6 +184,7 @@ public class BookingDao {
             statement.setTime(2, startTime);
             statement.setTime(3, endTime);
             statement.execute();
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -196,9 +192,9 @@ public class BookingDao {
     }
 
     public static boolean isValidBookingToday(int roomID, String startTime, String endTime) {
-        Calendar currenttime = Calendar.getInstance();
-        Date sqldate = new Date((currenttime.getTime()).getTime());
-        return isValidBooking(roomID, startTime, endTime, sqldate.toString());
+        Calendar currentTime = Calendar.getInstance();
+        Date sqlDate = new Date((currentTime.getTime()).getTime());
+        return isValidBooking(roomID, startTime, endTime, sqlDate.toString());
     }
 
     public static boolean isValidBooking(int roomID, String startTime, String endTime, String date) {
@@ -217,7 +213,7 @@ public class BookingDao {
                 Time wantedEnd = Time.valueOf(endTime);
                 if (wantedStart.compareTo(start) > 0 && wantedStart.compareTo(end) < 0
                     || wantedEnd.compareTo(start) > 0 && wantedEnd.compareTo(end) < 0
-                    || wantedStart.compareTo(start) <= 0 && wantedEnd.compareTo(end) >= 0){
+                    || wantedStart.compareTo(start) <= 0 && wantedEnd.compareTo(end) >= 0) {
                     isValid = false;
                 }
             }
@@ -229,40 +225,5 @@ public class BookingDao {
             return false;
         }
         return isValid;
-    }
-
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public Time getEndTime() {
-        return endTime;
-    }
-
-    public int getRoomID() {
-        return roomID;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("BookingDao from: ");
-        sb.append(startTime);
-        sb.append("-");
-        sb.append(endTime);
-        return sb.toString();
-    }
-
-    public ObjectNode toJSONNode() {
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ObjectNode bookingJsonNode = factory.objectNode();
-        bookingJsonNode.put("roomNumber", this.roomID);
-        bookingJsonNode.put("startTime", String.valueOf(this.startTime));
-        bookingJsonNode.put("endTime", String.valueOf(this.endTime));
-        bookingJsonNode.put("date", String.valueOf(this.date));
-        return bookingJsonNode;
     }
 }
