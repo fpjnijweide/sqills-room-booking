@@ -10,7 +10,7 @@ function selectRoom() { // Called when "select room" button is pressed
         // Use setInterval to make sure it is called every X seconds, and set refreshSet to true
         setInterval(() => {
             getData(currentRoomNumber);
-        }, 30000);
+        }, 10000);
         refreshSet = true;
     }
 }
