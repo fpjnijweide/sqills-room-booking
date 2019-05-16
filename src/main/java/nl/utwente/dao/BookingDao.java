@@ -1,7 +1,5 @@
 package nl.utwente.dao;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.model.Booking;
 
@@ -13,6 +11,7 @@ import java.util.List;
 public class BookingDao {
     /**
      * Returns a booking with a certain booking id.
+     *
      * @param bookingID booking ID of booking to be returned
      * @return returns booking with specified ID or null if the booking does not exist.
      */
@@ -31,8 +30,10 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int roomID = resultSet.getInt("roomID");
+                // TODO maybe get email here instead of user ID
+                String userID = resultSet.getString("userID");
 
-                booking = new Booking(startTime, endTime, roomID, date);
+                booking = new Booking(startTime, endTime, roomID, date, userID);
             }
 
             resultSet.close();
@@ -47,19 +48,27 @@ public class BookingDao {
 
     /**
      * Creates a new booking entry in the database.
+     *
      * @return whether the booking was successfully created
      */
     public static boolean createBooking(Booking booking) {
         boolean successful = false;
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
-            String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID" +
-                ") VALUES (?, ?, ?, ?);";
+
+//            String findUserIdQuery = "SELECT userID FROM sqills.user WHERE email = ?";
+
+
+            String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID," +
+                "SELECT ?, ?, ?, ?, userID" +
+                "FROM sqills.user" +
+                "WHERE email = ?;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
             statement.setInt(4, booking.getRoomNumber());
+            statement.setString(5, booking.getEmail());
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
@@ -74,6 +83,7 @@ public class BookingDao {
 
     /**
      * Deletes a booking with a specified bookingID
+     *
      * @param bookingID specifies the booking to be deleted
      * @return whether the deletion was successful
      */
@@ -101,6 +111,7 @@ public class BookingDao {
 
     /**
      * Updates a specific booking.
+     *
      * @param bookingID specifies the booking to be updated
      * @return whether the update was successful
      */
@@ -134,6 +145,7 @@ public class BookingDao {
 
     /**
      * Returns a list of today's Bookings for a specified room
+     *
      * @param roomID RoomID of room whose bookings will be returned
      * @return Today's bookings for the specified room
      */
@@ -141,7 +153,7 @@ public class BookingDao {
         ArrayList<Booking> result = new ArrayList<>();
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
-            String query = "SELECT startTime, endTime, bookingdate, roomID FROM sqills.booking WHERE roomID = ? AND bookingdate = CURRENT_DATE";
+            String query = "SELECT startTime, endTime, bookingdate, roomID, userID FROM sqills.booking WHERE roomID = ? AND bookingdate = CURRENT_DATE";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
 
@@ -152,7 +164,9 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int queriedRoomID = resultSet.getInt("roomID");
-                result.add(new Booking(startTime, endTime, queriedRoomID, date));
+                // TODO Maybe get email here instead of user id
+                Integer userID = resultSet.getInt("userID");
+                result.add(new Booking(startTime, endTime, queriedRoomID, date,userID.toString()));
             }
 
             resultSet.close();
@@ -172,12 +186,12 @@ public class BookingDao {
                 "startTime," +
                 "endtime," +
                 "bookingdate" +
-            ") VALUES (" +
+                ") VALUES (" +
                 "?," +
                 "?," +
                 "?," +
                 "CURRENT_DATE" +
-            ")";
+                ")";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
@@ -206,7 +220,7 @@ public class BookingDao {
             statement.setInt(1, roomID);
             statement.setDate(2, Date.valueOf(date));
             ResultSet result = statement.executeQuery();
-            while(result.next()){
+            while (result.next()) {
                 Time start = Time.valueOf(result.getString("starttime"));
                 Time end = Time.valueOf(result.getString("endtime"));
                 Time wantedStart = Time.valueOf(startTime);
@@ -221,7 +235,7 @@ public class BookingDao {
             result.close();
             statement.close();
             connection.close();
-        } catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

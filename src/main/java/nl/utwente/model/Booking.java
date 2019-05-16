@@ -8,12 +8,14 @@ public class Booking {
     private Date date;
     private Time startTime;
     private Time endTime;
+    private String email;
 
-    public Booking(Time startTime, Time endTime, int roomNumber, Date date) {
+    public Booking(Time startTime, Time endTime, int roomNumber, Date date, String email) {
         this.roomNumber = roomNumber;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.email = email;
     }
 
     public Booking() {
@@ -52,8 +54,27 @@ public class Booking {
         this.endTime = endTime;
     }
 
+
+    /**
+     * Gets email
+     *
+     * @return value of email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets email to email
+     *
+     * @param email new value of email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
-        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber();
+        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber() + " email: " + this.email;
     }
 }
