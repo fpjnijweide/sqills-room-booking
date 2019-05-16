@@ -213,7 +213,8 @@ public class BookingDao {
                 Time wantedEnd = Time.valueOf(endTime);
                 if (wantedStart.compareTo(start) > 0 && wantedStart.compareTo(end) < 0
                     || wantedEnd.compareTo(start) > 0 && wantedEnd.compareTo(end) < 0
-                    || wantedStart.compareTo(start) <= 0 && wantedEnd.compareTo(end) >= 0) {
+                    || wantedStart.compareTo(start) <= 0 && wantedEnd.compareTo(end) >= 0
+                    || startTime.compareTo(endTime) >= 0) {
                     isValid = false;
                 }
             }
