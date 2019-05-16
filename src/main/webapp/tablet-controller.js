@@ -4,14 +4,25 @@ var currentRoomNumber; // Global variable used for storing room number to be use
 function selectRoom() { // Called when "select room" button is pressed
     // TODO have client-side check if room nr is valid
     currentRoomNumber = document.getElementById("room-input").value
-    updatePage(currentRoomNumber); // Call the main method
-    if(!refreshSet){ // If we do not already have the updatePage method being checked every X seconds
-        // Use setInterval to make sure it is called every X seconds, and set refreshSet to true
-        setInterval(() => {
-            updatePage(currentRoomNumber);
-        }, 30000);
-        refreshSet = true;
-    }
+    axios.get(`/api/room/list`).then((response) => { // GET request
+        let listOfRoomIDs = response.data
+        if (listOfRoomIDs.includes(currentRoomNumber)){
+            updatePage(currentRoomNumber); // Call the main method
+            if(!refreshSet){ // If we do not already have the updatePage method being checked every X seconds
+                // Use setInterval to make sure it is called every X seconds, and set refreshSet to true
+                setInterval(() => {
+                    updatePage(currentRoomNumber);
+                }, 30000);
+                refreshSet = true;
+            }
+        } else{
+            let roomstatus = document.getElementById("room-status")
+            roomstatus.innerHTML="<h3>This room does not exist</h3>"
+            console.log("doesnt exist")
+        }
+    });
+
+
 }
 
 //TODO refactor
@@ -32,7 +43,7 @@ function updatePage(roomNumberInput) {
 }
 
 function checkIfOtherRoomsAreBooked() {
-    // TODO use GET Request to /api/room/list to get list of rooms here
+
     axios.get(`/api/room/list`).then((response) => { // GET request
         let listOfRoomIDs = response.data
         for(let id of listOfRoomIDs) {
