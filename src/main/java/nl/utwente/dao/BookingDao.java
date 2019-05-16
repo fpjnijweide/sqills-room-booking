@@ -51,6 +51,11 @@ public class BookingDao {
      */
     public static boolean createBooking(Booking booking) {
         boolean successful = false;
+
+        if (!isValidBooking(booking)) {
+            return false;
+        }
+
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID" +
@@ -226,5 +231,12 @@ public class BookingDao {
             return false;
         }
         return isValid;
+    }
+
+    public static boolean isValidBooking(Booking booking) {
+        return isValidBooking(booking.getRoomNumber(),
+            booking.getStartTime().toString(),
+            booking.getEndTime().toString(),
+            booking.getDate().toString());
     }
 }
