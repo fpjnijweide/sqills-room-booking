@@ -1,8 +1,8 @@
 package nl.utwente.model;
 
 public class TimeSlot {
-    String startTime;
-    String endTime;
+    private String startTime;
+    private String endTime;
 
     public String getStartTime() {
         return startTime;

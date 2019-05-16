@@ -19,8 +19,7 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
     public Booking getSpecificBooking(@PathParam("bookingID") int bookingID) {
-        Booking booking = BookingDao.getSpecificBooking(bookingID);
-        return booking;
+        return BookingDao.getSpecificBooking(bookingID);
     }
 
     /**
