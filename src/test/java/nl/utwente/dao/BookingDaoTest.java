@@ -137,4 +137,69 @@ public class BookingDaoTest {
         assertFalse(result6);
         assertTrue(result7);
     }
+
+    @Test
+    public void testCreateBooking() {
+        try {
+            Booking booking = new Booking("11:00:00", "12:00:00", 1, "2020-12-12");
+            BookingDao.createBooking(booking);
+
+            // Check whether the booking was actually created
+            String query = "SELECT * FROM sqills.booking WHERE " +
+                "bookingdate = '2020-12-12' " +
+                "AND startTime = '11:00:00' " +
+                "AND endTime = '12:00:00' " +
+                "AND roomid = 1";
+
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            assertTrue(rs.next());
+            int id = rs.getInt("bookingid");
+            rs.close();
+            statement.close();
+
+            String deleteQuery = "DELETE FROM sqills.booking WHERE bookingid = ?";
+            PreparedStatement ps = connection.prepareStatement(deleteQuery);
+            ps.setInt(1, id);
+            ps.execute();
+            ps.close();
+
+        } catch (SQLException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testCreateBookingInvalidBooking() {
+        try {
+            // insert first booking
+            Booking firstBooking = new Booking("11:00:00", "12:00:00", 1, "1999-12-12");
+            BookingDao.createBooking(firstBooking);
+
+            Booking overlappingBooking = new Booking("10:30:00", "13:00:00", 1, "1999-12-12");
+            assertFalse(BookingDao.isValidBooking(overlappingBooking));
+            BookingDao.createBooking(overlappingBooking);
+
+            // Check whether the booking was actually created
+            String query = "SELECT * FROM sqills.booking WHERE " +
+                "bookingdate = '1999-12-12' " +
+                "AND startTime = '10:30:00' " +
+                "AND endTime = '13:00:00' " +
+                "AND roomid = 1";
+
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            assertFalse(rs.next());
+            rs.close();
+            statement.close();
+
+            String deleteQuery = "DELETE FROM sqills.booking WHERE bookingdate = '1999-12-12'";
+            Statement statement2 = connection.createStatement();
+            statement2.execute(deleteQuery);
+            statement2.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 }

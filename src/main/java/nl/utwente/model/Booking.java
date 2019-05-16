@@ -16,6 +16,13 @@ public class Booking {
         this.endTime = endTime;
     }
 
+    public Booking(String startTime, String endTime, int roomNumber, String date) {
+        this.roomNumber = roomNumber;
+        this.startTime = Time.valueOf(startTime);
+        this.endTime = Time.valueOf(endTime);
+        this.date = Date.valueOf(date);
+    }
+
     public Booking() {
 
     }
