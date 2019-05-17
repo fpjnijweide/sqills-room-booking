@@ -20,6 +20,10 @@ public class BookingDao {
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * FROM sqills.Booking WHERE bookingID = ?";
+//            String query = "SELECT *" +
+//                " FROM sqills.Booking B " +
+//                "JOIN sqills.user U ON B.userid = U.userid" +
+//                "WHERE B.bookingID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, bookingID);
 
@@ -30,7 +34,7 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int roomID = resultSet.getInt("roomID");
-                // TODO maybe get email here instead of user ID
+                // TODO maybe get name here instead of user ID
                 String userID = resultSet.getString("userID");
 
                 booking = new Booking(startTime, endTime, roomID, date, userID);
@@ -164,9 +168,9 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int queriedRoomID = resultSet.getInt("roomID");
-                // TODO Maybe get email here instead of user id
+                // TODO Maybe get name here instead of user id
                 Integer userID = resultSet.getInt("userID");
-                result.add(new Booking(startTime, endTime, queriedRoomID, date,userID.toString()));
+                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID.toString()));
             }
 
             resultSet.close();
