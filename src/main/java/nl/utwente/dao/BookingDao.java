@@ -112,6 +112,10 @@ public class BookingDao {
     public static boolean updateBooking(int bookingID, Booking booking) {
         boolean successful = false;
 
+        if (!isValidBooking(booking)) {
+            return false;
+        }
+
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "UPDATE sqills.Booking " +
@@ -170,6 +174,10 @@ public class BookingDao {
     }
 
     public static void insertBookingToday(int roomID, Time startTime, Time endTime) {
+        if (isValidBookingToday(roomID, startTime.toString(), endTime.toString())) {
+            return;
+        }
+
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "INSERT INTO sqills.Booking (" +

@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.*;
+import java.util.List;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.*;
@@ -199,6 +200,94 @@ public class BookingDaoTest {
             statement2.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testUpdateBooking() {
+        try {
+            String query = "INSERT INTO  sqills.booking  (bookingid, starttime, endtime, roomid, bookingdate)" +
+                "VALUES (-1, '11:00:00', '12:00:00', 1, '1999-12-12');";
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+
+
+            Booking updatedBooking = new Booking("12:00:00", "13:00:00", 2, "1999-12-12");
+            BookingDao.updateBooking(-1, updatedBooking);
+
+            Booking result = BookingDao.getSpecificBooking(-1);
+            assertEquals(2, updatedBooking.getRoomNumber());
+            assertEquals(result.getStartTime().toString(), updatedBooking.getStartTime().toString());
+
+            String deleteQuery = "DELETE FROM sqills.booking WHERE bookingdate = '1999-12-12'";
+            Statement statement2 = connection.createStatement();
+            statement2.execute(deleteQuery);
+            statement2.close();
+        } catch (SQLException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testUpdateBookingInvalidBooking() {
+        try {
+            String query = "INSERT INTO  sqills.booking  (bookingid, starttime, endtime, roomid, bookingdate)" +
+                "VALUES (-1, '11:00:00', '12:00:00', 1, '1999-12-12');";
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            statement.close();
+
+            String query2 = "INSERT INTO  sqills.booking  (bookingid, starttime, endtime, roomid, bookingdate)" +
+                "VALUES (-2, '14:00:00', '15:00:00', 1, '1999-12-12');";
+            Statement statement2 = connection.createStatement();
+            statement2.execute(query2);
+
+            Booking booking = new Booking("13:30:00", "16:00:00", 1, "1999-12-12");
+            boolean result = BookingDao.updateBooking(-1, booking);
+
+            String deleteQuery = "DELETE FROM sqills.booking WHERE bookingdate = '1999-12-12'";
+            Statement statement3 = connection.createStatement();
+            statement3.execute(deleteQuery);
+            statement3.close();
+
+            assertFalse(result);
+        } catch (SQLException e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void testGetBookingsForRoomToday() {
+        try {
+            String query = "INSERT INTO  sqills.booking  (bookingid, starttime, endtime, roomid, bookingdate)" +
+                "VALUES (-1, '11:00:00', '12:00:00', 1, CURRENT_DATE);";
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            statement.close();
+
+            String query2 = "INSERT INTO  sqills.booking  (bookingid, starttime, endtime, roomid, bookingdate)" +
+                "VALUES (-2, '14:00:00', '15:00:00', 1, CURRENT_DATE);";
+            Statement statement2 = connection.createStatement();
+            statement2.execute(query2);
+            statement2.close();
+
+            List<Booking> bookings = BookingDao.getBookingsForRoomToday(1);
+
+            String deleteQuery = "DELETE FROM sqills.booking WHERE bookingid < 0";
+            Statement statement3 = connection.createStatement();
+            statement3.execute(deleteQuery);
+            statement3.close();
+
+            for (Booking booking : bookings) {
+                assertEquals(booking.getRoomNumber(), 1);
+                assertTrue(booking.getStartTime().toString().equals("11:00:00") ||
+                    booking.getStartTime().toString().equals("14:00:00"));
+
+                assertTrue(booking.getEndTime().toString().equals("12:00:00") ||
+                    booking.getEndTime().toString().equals("15:00:00"));
+            }
+        } catch (SQLException e) {
             fail();
         }
     }
