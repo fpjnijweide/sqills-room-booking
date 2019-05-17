@@ -17,9 +17,10 @@ function displayMakeBooking() {
 
                 
             <div class="col-sm-2">
-              <button onclick="makeBooking()" class="btn btn-primary"><i class="fas fa-rocket"></i></button> 
+             
             </div>
             </div> 
+             <button onclick="makeBooking()" class="btn btn-primary"><i class="fas fa-rocket"></i></button> 
         </div>
     `;
 }
@@ -29,13 +30,14 @@ function selectHowLong(value) {
 }
 //Makes booked based upon selection
 function makeBooking() {
-    let email = document.getElementById(`e-mail`);
+    let email = document.getElementById(`e-mail`).value;
+    console.log(email)
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
     if (validEmail(email)){
-        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email};
-        axios.post(`/api/booking/create`, jsonBody).then((reponse) => {
-            displayBooked();
+        let jsonBody = { "roomNumber": currentRoomNumber, "date": new   Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email};
+        axios.post(`/api/booking/create`, jsonBody).then(response => {
+            displayBooked(response.data);
         });
     } else {
         invalidEmailMessage();
@@ -44,7 +46,7 @@ function makeBooking() {
 }
 
 function validEmail(emailParam){
-    let email = emailParam.value;
+    let email = emailParam;
     console.log(email.length != 0 && email.includes("@") && email.includes("."));
     return email.length != 0 && email.includes("@") && email.includes(".");
 }
@@ -55,8 +57,13 @@ function addMinutes(date, minutes) {
 
 
 //display that the booking is complete
-function displayBooked() {
-    document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
+function displayBooked(data) {
+    if (data.success){
+        document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
+    } else {
+        document.getElementById(`book-now`).innerHTML = `<h3> Booking failed </h3>`;
+    }
+
     setTimeout(() => {
         updatePage(currentRoomNumber);
     }, 5000);
