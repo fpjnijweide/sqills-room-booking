@@ -174,34 +174,10 @@ public class BookingDao {
     }
 
     public static void insertBookingToday(int roomID, Time startTime, Time endTime) {
-        if (isValidBookingToday(roomID, startTime.toString(), endTime.toString())) {
-            return;
-        }
-
-        try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
-            String query = "INSERT INTO sqills.Booking (" +
-                "roomID," +
-                "startTime," +
-                "endtime," +
-                "bookingdate" +
-            ") VALUES (" +
-                "?," +
-                "?," +
-                "?," +
-                "CURRENT_DATE" +
-            ")";
-
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roomID);
-            statement.setTime(2, startTime);
-            statement.setTime(3, endTime);
-            statement.execute();
-            statement.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Calendar currentTime = Calendar.getInstance();
+        Date sqlDate = new Date((currentTime.getTime()).getTime());
+        Booking booking = new Booking(startTime, endTime, roomID, sqlDate);
+        createBooking(booking);
     }
 
     public static boolean isValidBookingToday(int roomID, String startTime, String endTime) {
