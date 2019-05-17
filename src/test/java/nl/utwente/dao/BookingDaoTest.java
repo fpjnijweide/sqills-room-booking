@@ -291,4 +291,25 @@ public class BookingDaoTest {
             fail();
         }
     }
+
+    @Test
+    public void testInsertBookingToday() {
+        try {
+            Time startTime = Time.valueOf("01:00:00");
+            Time endTime = Time.valueOf("02:00:00");
+
+            BookingDao.insertBookingToday(-1, startTime, endTime);
+
+            List<Booking> bookings = BookingDao.getBookingsForRoomToday(-1);
+            assertEquals(bookings.get(0).getStartTime(), startTime);
+            assertEquals(bookings.get(0).getEndTime(), endTime);
+
+            String deleteQuery = "DELETE FROM sqills.booking WHERE roomid < 0";
+            Statement statement3 = connection.createStatement();
+            statement3.execute(deleteQuery);
+            statement3.close();
+        } catch (SQLException e) {
+            fail();
+        }
+    }
 }
