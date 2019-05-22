@@ -9,13 +9,15 @@ public class Booking {
     private Time startTime;
     private Time endTime;
     private String email;
+    private boolean isPrivate;
 
-    public Booking(Time startTime, Time endTime, int roomNumber, Date date, String email) {
+    public Booking(Time startTime, Time endTime, int roomNumber, Date date, String email, boolean isPrivate) {
         this.roomNumber = roomNumber;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.email = email;
+        this.isPrivate = isPrivate;
     }
 
     public Booking() {
@@ -73,8 +75,26 @@ public class Booking {
         this.email = email;
     }
 
+    /**
+     * Gets isPrivate
+     *
+     * @return value of isPrivate
+     */
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    /**
+     * Sets isPrivate to aPrivate
+     *
+     * @param aPrivate new value of isPrivate
+     */
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
     @Override
     public String toString() {
-        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber() + " email: " + this.email;
+        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber() + " email: " + this.email + "private: " + this.isPrivate;
     }
 }

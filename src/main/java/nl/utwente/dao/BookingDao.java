@@ -36,8 +36,8 @@ public class BookingDao {
                 int roomID = resultSet.getInt("roomID");
                 // TODO maybe get name here instead of user ID
                 String userID = resultSet.getString("userID");
-
-                booking = new Booking(startTime, endTime, roomID, date, userID);
+                boolean isprivate = resultSet.getBoolean("private");
+                booking = new Booking(startTime, endTime, roomID, date, userID,isprivate);
             }
 
             resultSet.close();
@@ -64,17 +64,18 @@ public class BookingDao {
 //            String findUserIdQuery = "SELECT userID FROM sqills.user WHERE email = ?";
 
 
-                String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID)\n" +
+                String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID, private)\n" +
                     "                VALUES ( ?, ?, ?, ?, \n" +
                     "(SELECT sqills.users.userID\n" +
                     "FROM sqills.users\n" +
-                    "WHERE email = ?));";
+                    "WHERE email = ?), ?);";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
             statement.setInt(4, booking.getRoomNumber());
             statement.setString(5, booking.getEmail());
+            statement.setBoolean(6, booking.isPrivate());
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
@@ -180,8 +181,11 @@ public class BookingDao {
                 Date date = resultSet.getDate("bookingdate");
                 int queriedRoomID = resultSet.getInt("roomID");
                 // TODO Maybe get name here instead of user id
+                // TODO maybe change booking object because right now we are putting stuff in email field that is not an email
                 Integer userID = resultSet.getInt("userID");
-                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID.toString()));
+                boolean isPrivate = resultSet.getBoolean("private");
+
+                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID.toString(), isPrivate));
             }
 
             resultSet.close();
@@ -193,7 +197,9 @@ public class BookingDao {
         return result;
     }
 
+    // TODO Freek: don't touch this, add parameters when merging with Marten
     public static void insertBookingToday(int roomID, Time startTime, Time endTime) {
+
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "INSERT INTO sqills.Booking (" +
@@ -240,6 +246,7 @@ public class BookingDao {
                 Time end = Time.valueOf(result.getString("endtime"));
                 Time wantedStart = Time.valueOf(startTime);
                 Time wantedEnd = Time.valueOf(endTime);
+                // TODO add email checking to this
                 if (wantedStart.compareTo(start) > 0 && wantedStart.compareTo(end) < 0
                     || wantedEnd.compareTo(start) > 0 && wantedEnd.compareTo(end) < 0
                     || wantedStart.compareTo(start) <= 0 && wantedEnd.compareTo(end) >= 0
