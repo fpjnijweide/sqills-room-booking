@@ -15,6 +15,10 @@ public class BookingResource {
      * @param bookingID ID of booking to be returned
      * @return JSON Object for the requested booking
      */
+
+    public BookingResource(){
+
+    }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
