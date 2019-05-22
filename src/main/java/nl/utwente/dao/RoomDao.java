@@ -14,8 +14,9 @@ public class RoomDao {
      * @return Whether the provided roomID is valid
      */
     public static boolean isValidRoomID(int roomID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT * FROM sqills.Room WHERE roomID = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -29,13 +30,20 @@ public class RoomDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public static List<String> getAllRooms() {
+    public static List<String> getAllRoomsIDs() {
         ArrayList<String> result = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT roomid FROM sqills.room";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -50,6 +58,12 @@ public class RoomDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
