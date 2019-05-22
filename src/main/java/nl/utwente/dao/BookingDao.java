@@ -17,8 +17,8 @@ public class BookingDao {
      */
     public static Booking getSpecificBooking(int bookingID) {
         Booking booking = null;
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * FROM sqills.Booking WHERE bookingID = ?";
 //            String query = "SELECT *" +
 //                " FROM sqills.Booking B " +
@@ -51,6 +51,12 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return booking;
@@ -67,6 +73,7 @@ public class BookingDao {
         if (!isValidBooking(booking)) {
             return false;
         }
+        Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
 
@@ -115,9 +122,9 @@ public class BookingDao {
      */
     public static boolean deleteBooking(int bookingID) {
         boolean successful = false;
-
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "DELETE FROM sqills.Booking WHERE bookingID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
@@ -130,6 +137,12 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return successful;
@@ -148,9 +161,10 @@ public class BookingDao {
         if (!isValidBooking(booking)) {
             return false;
         }
+        Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "UPDATE sqills.Booking " +
                 "SET startTime = ?, endTime = ?, bookingdate = ?, roomID = ?" +
                 "WHERE bookingID = ?";
@@ -169,6 +183,12 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return successful;
@@ -182,8 +202,9 @@ public class BookingDao {
      */
     public static List<Booking> getBookingsForRoomToday(int roomID) {
         ArrayList<Booking> result = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT startTime, endTime, bookingdate, roomID, userID FROM sqills.booking WHERE roomID = ? AND bookingdate = CURRENT_DATE";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
@@ -215,15 +236,21 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
 
-    // TODO Freek: don't touch this, add parameters when merging with Marten
-    public static void insertBookingToday(int roomID, Time startTime, Time endTime) {
+
+    public static void insertBookingToday(int roomID, Time startTime, Time endTime, String email, boolean isPrivate) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
-        Booking booking = new Booking(startTime, endTime, roomID, sqlDate);
+        Booking booking = new Booking(startTime, endTime, roomID, sqlDate,email, isPrivate );
         createBooking(booking);
     }
 
@@ -261,6 +288,12 @@ public class BookingDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return isValid;
     }
@@ -275,6 +308,7 @@ public class BookingDao {
     // Todo: test
     public List<Integer> getCurrentlyAvailableRooms() {
         List<Integer> ids = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT roomid FROM sqills.room " +
                 "WHERE roomid NOT IN (" +
@@ -283,7 +317,7 @@ public class BookingDao {
                 "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
                 ") " +
                 "AND roomid > 0;";
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
@@ -293,6 +327,12 @@ public class BookingDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return ids;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return ids;
     }

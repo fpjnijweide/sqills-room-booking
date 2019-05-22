@@ -54,7 +54,7 @@ public class RoomResource {
      */
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
-        TimeSlot timeSlot
+        TimeSlot timeSlot, String email, boolean isPrivate
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());
@@ -62,7 +62,7 @@ public class RoomResource {
             BookingDao.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
 
         if (valid) {
-            BookingDao.insertBookingToday(roomNumber, startTime, endTime);
+            BookingDao.insertBookingToday(roomNumber, startTime, endTime, email, isPrivate);
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
