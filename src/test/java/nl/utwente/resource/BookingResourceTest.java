@@ -18,9 +18,12 @@ public class BookingResourceTest extends JerseyTest {
 
     @Test
     public void bookingIDBooking(){
-        Response res = target().path("/booking/bookingID").request().get();
-        assertEquals("Should return status 200", 200, res.getStatus());
-        assertEquals(BookingDao.getSpecificBooking(1).toString().replaceAll("\\s",""), res.readEntity(String.class));
+        for (int i=0; i < 10; i++) {
+            Response res = target().path("/booking/bookingID").request().get();
+            assertEquals("Should return status 200", 200, res.getStatus());
+            assertEquals(BookingDao.getSpecificBooking(i).toString().replaceAll("\\s",""), res.readEntity(String.class));
+        }
+
     }
 
 }
