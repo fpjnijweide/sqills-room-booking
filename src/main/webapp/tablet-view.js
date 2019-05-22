@@ -35,7 +35,7 @@ function displayTableOfBookings(tableData) {
     }
     tableContent += `</table>`;
     content.innerHTML = tableContent;
-
+//<td> ${tableData[x].email}</td>
 }
 
 function displayOtherFreeRooms(roomStartTime, roomNumberInput) {

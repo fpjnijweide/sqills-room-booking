@@ -1,5 +1,11 @@
 //Shows the duration form used top make a booking
-function displayMakeBooking() {
+function displayMakeBooking(update) {
+    console.log(update)
+    if (!update){
+
+        document.getElementById(`emailinput`).innerHTML = `
+        <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">`
+    }
     document.getElementById(`content`).innerHTML = `
         <div class="row">
             <div class="col-sm-5 offset-sm-2">
@@ -11,7 +17,7 @@ function displayMakeBooking() {
                    id="booking-duration">
                 <br>
                 <br>
-                <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">
+                
             </div>
             <div class="col-sm-1" id="booking-duration-value">
 
@@ -22,6 +28,7 @@ function displayMakeBooking() {
             </div> 
         </div>
     `;
+
 }
 //Shows the currently selected duration of the meeting to be booked
 function selectHowLong(value) {
@@ -32,7 +39,7 @@ function makeBooking() {
     let email = document.getElementById(`e-mail`);
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    if (validEmail(email)){
+    if (validEmail(email) || email.value == ""){
         let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email};
         axios.post(`/api/booking/create`, jsonBody).then((reponse) => {
             displayBooked();
