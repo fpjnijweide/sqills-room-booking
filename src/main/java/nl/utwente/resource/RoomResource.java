@@ -2,16 +2,13 @@ package nl.utwente.resource;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.model.Booking;
 import nl.utwente.model.TimeSlot;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import java.sql.Time;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class RoomResource {
      * @param roomNumber Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<String> getRoomList () {
+    public List<Integer> getRoomList () {
         return RoomDao.getAllRooms();
     }
 
@@ -71,5 +68,9 @@ public class RoomResource {
         ObjectNode success = factory.objectNode();
         success.put("success", valid);
         return success.toString();
+    }
+
+    public RoomResource(){
+
     }
 }
