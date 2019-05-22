@@ -12,7 +12,7 @@ function displayMakeBooking() {
                 <br>
                 <br>
                 <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">
-                <input type="checkbox" name="private" value="private"> private meeting <br>
+                <input type="checkbox" name="private" value="private" id="private"> private meeting <br>
             </div>
             <div class="col-sm-1" id="booking-duration-value">
 
@@ -32,12 +32,13 @@ function selectHowLong(value) {
 }
 //Makes booked based upon selection
 function makeBooking() {
+    let private = document.getElementById(`private`).checked;
     let email = document.getElementById(`e-mail`).value;
     console.log(email)
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
     if (validEmail(email) || email.value == ""){
-        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email};
+        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private};
         axios.post(`/api/booking/create`, jsonBody).then((reponse) => {
             displayBooked();
         });
