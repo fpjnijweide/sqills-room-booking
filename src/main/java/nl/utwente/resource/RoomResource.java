@@ -9,9 +9,7 @@ import nl.utwente.model.Booking;
 import nl.utwente.model.TimeSlot;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import java.sql.Time;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class RoomResource {
      * @return JSON object containing all of today's bookings for a specific room
      */
     public List<String> getRoomList () {
-        return RoomDao.getAllRooms();
+        return RoomDao.getAllRoomsIDs();
     }
 
     @GET

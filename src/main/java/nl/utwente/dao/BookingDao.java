@@ -63,7 +63,11 @@ public class BookingDao {
      */
     public static boolean createBooking(Booking booking) {
         boolean successful = false;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+
+        if (!isValidBooking(booking)) {
+            return false;
+        }
+
         try {
 
 
@@ -141,6 +145,10 @@ public class BookingDao {
     public static boolean updateBooking(int bookingID, Booking booking) {
         boolean successful = false;
 
+        if (!isValidBooking(booking)) {
+            return false;
+        }
+
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "UPDATE sqills.Booking " +
@@ -213,31 +221,10 @@ public class BookingDao {
 
     // TODO Freek: don't touch this, add parameters when merging with Marten
     public static void insertBookingToday(int roomID, Time startTime, Time endTime) {
-
-        try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
-            String query = "INSERT INTO sqills.Booking (" +
-                "roomID," +
-                "startTime," +
-                "endtime," +
-                "bookingdate" +
-                ") VALUES (" +
-                "?," +
-                "?," +
-                "?," +
-                "CURRENT_DATE" +
-                ")";
-
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roomID);
-            statement.setTime(2, startTime);
-            statement.setTime(3, endTime);
-            statement.execute();
-            statement.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Calendar currentTime = Calendar.getInstance();
+        Date sqlDate = new Date((currentTime.getTime()).getTime());
+        Booking booking = new Booking(startTime, endTime, roomID, sqlDate);
+        createBooking(booking);
     }
 
     public static boolean isValidBookingToday(int roomID, String startTime, String endTime) {
@@ -276,5 +263,37 @@ public class BookingDao {
             return false;
         }
         return isValid;
+    }
+
+    public static boolean isValidBooking(Booking booking) {
+        return isValidBooking(booking.getRoomNumber(),
+            booking.getStartTime().toString(),
+            booking.getEndTime().toString(),
+            booking.getDate().toString());
+    }
+
+    // Todo: test
+    public List<Integer> getCurrentlyAvailableRooms() {
+        List<Integer> ids = new ArrayList<>();
+        try {
+            String query = "SELECT roomid FROM sqills.room " +
+                "WHERE roomid NOT IN (" +
+                "    SELECT roomid FROM sqills.booking " +
+                "    WHERE bookingdate = CURRENT_DATE " +
+                "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
+                ") " +
+                "AND roomid > 0;";
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("roomid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ids;
+        }
+        return ids;
     }
 }
