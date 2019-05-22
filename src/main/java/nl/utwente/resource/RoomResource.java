@@ -22,7 +22,7 @@ public class RoomResource {
      * @param roomNumber Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<String> getRoomList () {
+    public List<Integer> getRoomList () {
         return RoomDao.getAllRoomsIDs();
     }
 
