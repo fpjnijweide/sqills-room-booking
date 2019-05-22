@@ -43,7 +43,7 @@ function updatePage(roomNumberInput, update) {
 }
 
 function checkIfOtherRoomsAreBooked() {
-    // TODO use GET Request to /api/room/list to get list of rooms here
+
     axios.get(`/api/room/list`).then((response) => { // GET request
         let listOfRoomIDs = response.data
         for(let id of listOfRoomIDs) {
