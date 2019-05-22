@@ -95,6 +95,6 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber() + " email: " + this.email + "private: " + this.isPrivate;
+        return "date: "+ this.date + " endTime:" + this.endTime + " startTime: " + this.startTime + " roomNumber: " + this.getRoomNumber() + " email: " + this.email + " isPrivate: " + this.isPrivate;
     }
 }
