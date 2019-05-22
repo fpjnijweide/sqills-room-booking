@@ -25,7 +25,7 @@ public class RoomResourceTest extends JerseyTest {
         Response res = target().path("/room/list").request().get();
         assertEquals("Should return status 200", 200, res.getStatus());
         assertNotNull(res);
-        assertEquals(RoomDao.getAllRooms().toString().replaceAll("\\s",""), res.readEntity(String.class));
+        assertEquals(RoomDao.getAllRoomsIDs().toString().replaceAll("\\s",""), res.readEntity(String.class));
     }
 
     @Test
