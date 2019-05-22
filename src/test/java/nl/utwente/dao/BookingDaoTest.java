@@ -298,7 +298,7 @@ public class BookingDaoTest {
             Time startTime = Time.valueOf("01:00:00");
             Time endTime = Time.valueOf("02:00:00");
 
-            BookingDao.insertBookingToday(-1, startTime, endTime);
+            BookingDao.insertBookingToday(-1, startTime, endTime,"antoniaheath@gmail.com",false);
 
             List<Booking> bookings = BookingDao.getBookingsForRoomToday(-1);
             assertEquals(bookings.get(0).getStartTime(), startTime);
@@ -318,11 +318,11 @@ public class BookingDaoTest {
         try {
             Time startTime0 = Time.valueOf("00:30:00");
             Time endTime0 = Time.valueOf("01:30:00");
-            BookingDao.insertBookingToday(-1, startTime0, endTime0);
+            BookingDao.insertBookingToday(-1, startTime0, endTime0,"antoniaheath@gmail.com",false);
 
             Time startTime = Time.valueOf("01:00:00");
             Time endTime = Time.valueOf("02:00:00");
-            BookingDao.insertBookingToday(-1, startTime, endTime);
+            BookingDao.insertBookingToday(-1, startTime, endTime,"antoniaheath@gmail.com",false);
 
             List<Booking> bookings = BookingDao.getBookingsForRoomToday(-1);
             assertEquals(bookings.get(0).getStartTime(), startTime0);
