@@ -53,4 +53,59 @@ public class RoomDao {
         }
         return result;
     }
+
+    // Todo: test
+    public static List<Integer> getCurrentlyAvailableRooms() {
+        List<Integer> ids = new ArrayList<>();
+        try {
+            String query = "SELECT roomid FROM sqills.room " +
+                "WHERE roomid NOT IN (" +
+                "    SELECT roomid FROM sqills.booking " +
+                "    WHERE bookingdate = CURRENT_DATE " +
+                "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
+                ") " +
+                "AND roomid > 0;";
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("roomid"));
+            }
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ids;
+        }
+        return ids;
+    }
+
+    public static Time getFreeUntil(int roomID) {
+        Time result = null;
+
+        try {
+            String query = "SELECT MIN(starttime) FROM sqills.booking " +
+                "WHERE roomid = ? " +
+                "AND bookingdate = CURRENT_DATE " +
+                "AND starttime > CURRENT_TIME;";
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, roomID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                result = resultSet.getTime(1);
+            }
+
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return result;
+        }
+        return result;
+    }
 }
