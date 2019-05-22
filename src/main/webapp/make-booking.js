@@ -12,6 +12,7 @@ function displayMakeBooking() {
                 <br>
                 <br>
                 <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">
+                <input type="checkbox" name="private" value="private"> private meeting <br>
             </div>
             <div class="col-sm-1" id="booking-duration-value">
 
@@ -22,6 +23,7 @@ function displayMakeBooking() {
             </div> 
              <button onclick="makeBooking()" class="btn btn-primary"><i class="fas fa-rocket"></i></button> 
         </div>
+        <div id="emailerror"></div>
     `;
 }
 //Shows the currently selected duration of the meeting to be booked
@@ -34,10 +36,10 @@ function makeBooking() {
     console.log(email)
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    if (validEmail(email)){
-        let jsonBody = { "roomNumber": currentRoomNumber, "date": new   Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email};
-        axios.post(`/api/booking/create`, jsonBody).then(response => {
-            displayBooked(response.data);
+    if (validEmail(email) || email.value == ""){
+        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email};
+        axios.post(`/api/booking/create`, jsonBody).then((reponse) => {
+            displayBooked();
         });
     } else {
         invalidEmailMessage();
@@ -70,13 +72,8 @@ function displayBooked(data) {
 }
 
 function invalidEmailMessage(){
-    var newDiv = document.createElement("div");
-    newDiv.className = "emailError";
-    // and give it some content
-    var newContent = document.createTextNode("You entered an invalid email address");
-    // add the text node to the newly created div
-    newDiv.appendChild(newContent);
+    let newDiv = document.getElementById("emailerror");
+    newDiv.innerHTML = `<b>invalid email</b>`
 
-    // add the newly created element and its content into the DOM
-    document.body.appendChild(newDiv);
+
 }
