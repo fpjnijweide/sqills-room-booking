@@ -36,7 +36,7 @@ public class BookingDao {
                 int roomID = resultSet.getInt("roomID");
                 // TODO maybe get name here instead of user ID
                 String userID = resultSet.getString("userID");
-                boolean isprivate = resultSet.getBoolean("private");
+                boolean isprivate = resultSet.getBoolean("isPrivate");
                 booking = new Booking(startTime, endTime, roomID, date, userID,isprivate);
             }
 
@@ -64,7 +64,7 @@ public class BookingDao {
 //            String findUserIdQuery = "SELECT userID FROM sqills.user WHERE email = ?";
 
 
-                String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID, private)\n" +
+                String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID, isPrivate)\n" +
                     "                VALUES ( ?, ?, ?, ?, \n" +
                     "(SELECT sqills.users.userID\n" +
                     "FROM sqills.users\n" +
@@ -131,6 +131,7 @@ public class BookingDao {
      * @param bookingID specifies the booking to be updated
      * @return whether the update was successful
      */
+    // TODO Update this function with private, email fields
     public static boolean updateBooking(int bookingID, Booking booking) {
         boolean successful = false;
 
@@ -183,7 +184,7 @@ public class BookingDao {
                 // TODO Maybe get name here instead of user id
                 // TODO maybe change booking object because right now we are putting stuff in email field that is not an email
                 Integer userID = resultSet.getInt("userID");
-                boolean isPrivate = resultSet.getBoolean("private");
+                boolean isPrivate = resultSet.getBoolean("isPrivate");
 
                 result.add(new Booking(startTime, endTime, queriedRoomID, date, userID.toString(), isPrivate));
             }

@@ -25,8 +25,6 @@ function checkIfRoomTaken(roomNumberInput, data){
     return roomStartTime;
 }
 
-
-//TODO refactor
 function updatePage(roomNumberInput, update) {
     data = getRoomData(roomNumberInput)
     if(!checkIfRoomTaken(roomNumberInput, data)){
