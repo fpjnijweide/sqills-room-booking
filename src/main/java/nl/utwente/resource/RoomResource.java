@@ -9,9 +9,7 @@ import nl.utwente.model.Booking;
 import nl.utwente.model.TimeSlot;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import java.sql.Time;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class RoomResource {
      * @return JSON object containing all of today's bookings for a specific room
      */
     public List<String> getRoomList () {
-        return RoomDao.getAllRooms();
+        return RoomDao.getAllRoomsIDs();
     }
 
     @GET
@@ -56,7 +54,7 @@ public class RoomResource {
      */
     public String createBookingForSpecificRoom (
         @PathParam("roomNumber") Integer roomNumber,
-        TimeSlot timeSlot
+        TimeSlot timeSlot, String email, boolean isPrivate
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());
@@ -64,7 +62,7 @@ public class RoomResource {
             BookingDao.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
 
         if (valid) {
-            BookingDao.insertBookingToday(roomNumber, startTime, endTime);
+            BookingDao.insertBookingToday(roomNumber, startTime, endTime, email, isPrivate);
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;

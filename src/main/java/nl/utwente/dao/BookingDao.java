@@ -17,8 +17,8 @@ public class BookingDao {
      */
     public static Booking getSpecificBooking(int bookingID) {
         Booking booking = null;
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * FROM sqills.Booking WHERE bookingID = ?";
 //            String query = "SELECT *" +
 //                " FROM sqills.Booking B " +
@@ -34,9 +34,15 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int roomID = resultSet.getInt("roomID");
-                // TODO maybe get name here instead of user ID
-                String userID = resultSet.getString("userID");
+
                 boolean isprivate = resultSet.getBoolean("isPrivate");
+                String userID;
+                if (isprivate){
+                    userID = "PRIVATE";
+                } else {
+                    userID = resultSet.getString("userID");
+                }
+
                 booking = new Booking(startTime, endTime, roomID, date, userID,isprivate);
             }
 
@@ -45,6 +51,12 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return booking;
@@ -57,7 +69,12 @@ public class BookingDao {
      */
     public static boolean createBooking(Booking booking) {
         boolean successful = false;
+
+        if (!isValidBooking(booking)) {
+            return false;
+        }
         Connection connection = DatabaseConnectionFactory.getConnection();
+
         try {
 
 
@@ -105,9 +122,9 @@ public class BookingDao {
      */
     public static boolean deleteBooking(int bookingID) {
         boolean successful = false;
-
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "DELETE FROM sqills.Booking WHERE bookingID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
@@ -120,6 +137,12 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return successful;
@@ -135,8 +158,13 @@ public class BookingDao {
     public static boolean updateBooking(int bookingID, Booking booking) {
         boolean successful = false;
 
+        if (!isValidBooking(booking)) {
+            return false;
+        }
+        Connection connection = DatabaseConnectionFactory.getConnection();
+
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "UPDATE sqills.Booking " +
                 "SET startTime = ?, endTime = ?, bookingdate = ?, roomID = ?" +
                 "WHERE bookingID = ?";
@@ -155,6 +183,12 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return successful;
@@ -168,8 +202,9 @@ public class BookingDao {
      */
     public static List<Booking> getBookingsForRoomToday(int roomID) {
         ArrayList<Booking> result = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT startTime, endTime, bookingdate, roomID, userID FROM sqills.booking WHERE roomID = ? AND bookingdate = CURRENT_DATE";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
@@ -181,12 +216,19 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int queriedRoomID = resultSet.getInt("roomID");
-                // TODO Maybe get name here instead of user id
-                // TODO maybe change booking object because right now we are putting stuff in email field that is not an email
-                Integer userID = resultSet.getInt("userID");
-                boolean isPrivate = resultSet.getBoolean("isPrivate");
 
-                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID.toString(), isPrivate));
+                // TODO maybe change booking object because right now we are putting stuff in email field that is not an email
+                boolean isprivate = resultSet.getBoolean("isPrivate");
+
+                String userID;
+                if (isprivate){
+                    userID = "PRIVATE";
+                } else {
+                    userID = resultSet.getString("userID");
+                }
+
+
+                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID, isprivate));
             }
 
             resultSet.close();
@@ -194,37 +236,22 @@ public class BookingDao {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
 
-    // TODO Freek: don't touch this, add parameters when merging with Marten
-    public static void insertBookingToday(int roomID, Time startTime, Time endTime) {
 
-        try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
-            String query = "INSERT INTO sqills.Booking (" +
-                "roomID," +
-                "startTime," +
-                "endtime," +
-                "bookingdate" +
-                ") VALUES (" +
-                "?," +
-                "?," +
-                "?," +
-                "CURRENT_DATE" +
-                ")";
-
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roomID);
-            statement.setTime(2, startTime);
-            statement.setTime(3, endTime);
-            statement.execute();
-            statement.close();
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void insertBookingToday(int roomID, Time startTime, Time endTime, String email, boolean isPrivate) {
+        Calendar currentTime = Calendar.getInstance();
+        Date sqlDate = new Date((currentTime.getTime()).getTime());
+        Booking booking = new Booking(startTime, endTime, roomID, sqlDate,email, isPrivate );
+        createBooking(booking);
     }
 
     public static boolean isValidBookingToday(int roomID, String startTime, String endTime) {
@@ -261,7 +288,52 @@ public class BookingDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return isValid;
+    }
+
+    public static boolean isValidBooking(Booking booking) {
+        return isValidBooking(booking.getRoomNumber(),
+            booking.getStartTime().toString(),
+            booking.getEndTime().toString(),
+            booking.getDate().toString());
+    }
+
+    // Todo: test
+    public List<Integer> getCurrentlyAvailableRooms() {
+        List<Integer> ids = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "SELECT roomid FROM sqills.room " +
+                "WHERE roomid NOT IN (" +
+                "    SELECT roomid FROM sqills.booking " +
+                "    WHERE bookingdate = CURRENT_DATE " +
+                "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
+                ") " +
+                "AND roomid > 0;";
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("roomid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ids;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return ids;
     }
 }
