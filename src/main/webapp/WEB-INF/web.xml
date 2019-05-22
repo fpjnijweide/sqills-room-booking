@@ -19,7 +19,11 @@
 	</servlet>
     <servlet>
         <servlet-name>Desktop Servlet</servlet-name>
-        <servlet-class>nl.utwente.servlet.DesktopInterfaceServlet</servlet-class>
+        <servlet-class>nl.utwente.servlet.desktopInterface.DesktopServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Room Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.desktopInterface.RoomServlet</servlet-class>
     </servlet>
     
 	<servlet-mapping>
@@ -29,5 +33,9 @@
     <servlet-mapping>
         <servlet-name>Desktop Servlet</servlet-name>
         <url-pattern>/desktop/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Room Servlet</servlet-name>
+        <url-pattern>/desktop/room/*</url-pattern>
     </servlet-mapping>
 </web-app>
