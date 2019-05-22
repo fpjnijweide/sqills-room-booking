@@ -33,9 +33,12 @@ function updatePage(roomNumberInput, update) {
         displayTableOfBookings(data);
         displayRoomIsBooked();
         checkIfOtherRoomsAreBooked();
-    } else {
-        displayRoomIsFree(checkIfRoomTaken(roomNumberInput,data));
-        displayMakeBooking(update);
+    }
+    else {
+        if (!update) {
+            displayRoomIsFree(checkIfRoomTaken(roomNumberInput, data));
+            displayMakeBooking();
+        }
     }
 }
 

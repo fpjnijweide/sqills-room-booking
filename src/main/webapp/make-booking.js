@@ -1,11 +1,5 @@
 //Shows the duration form used top make a booking
-function displayMakeBooking(update) {
-    console.log(update)
-    if (!update){
-
-        document.getElementById(`emailinput`).innerHTML = `
-        <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">`
-    }
+function displayMakeBooking() {
     document.getElementById(`content`).innerHTML = `
         <div class="row">
             <div class="col-sm-5 offset-sm-2">
@@ -17,7 +11,8 @@ function displayMakeBooking(update) {
                    id="booking-duration">
                 <br>
                 <br>
-                
+                <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">
+                <input type="checkbox" name="private" value="private"> private meeting <br>
             </div>
             <div class="col-sm-1" id="booking-duration-value">
 
@@ -27,8 +22,8 @@ function displayMakeBooking(update) {
             </div>
             </div> 
         </div>
+        <div id="emailerror"></div>
     `;
-
 }
 //Shows the currently selected duration of the meeting to be booked
 function selectHowLong(value) {
@@ -70,13 +65,8 @@ function displayBooked() {
 }
 
 function invalidEmailMessage(){
-    var newDiv = document.createElement("div");
-    newDiv.className = "emailError";
-    // and give it some content
-    var newContent = document.createTextNode("You entered an invalid email address");
-    // add the text node to the newly created div
-    newDiv.appendChild(newContent);
+    let newDiv = document.getElementById("emailerror");
+    newDiv.innerHTML = `<b>invalid email</b>`
 
-    // add the newly created element and its content into the DOM
-    document.body.appendChild(newDiv);
+
 }

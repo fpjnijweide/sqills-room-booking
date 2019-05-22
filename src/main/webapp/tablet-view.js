@@ -30,7 +30,7 @@ function displayTableOfBookings(tableData) {
     for (let x in tableData) {
         tableContent += `<tr> 
             <td> ${tableData[x].startTime} </td> 
-            <td> ${tableData[x].endTime} </td> 
+            <td> ${tableData[x].endTime} </td>
         </tr>`
     }
     tableContent += `</table>`;
