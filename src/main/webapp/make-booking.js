@@ -38,7 +38,8 @@ function makeBooking() {
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
     if (validEmail(email) || email.value == ""){
-        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private};
+        // TODO find out why this only accepts "private" even though it's called isPrivate on the back-end
+        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "private": private};
         axios.post(`/api/booking/create`, jsonBody).then((reponse) => {
             displayBooked();
         });
