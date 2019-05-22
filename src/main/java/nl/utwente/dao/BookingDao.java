@@ -223,4 +223,29 @@ public class BookingDao {
             booking.getEndTime().toString(),
             booking.getDate().toString());
     }
+
+    // Todo: test
+    public List<Integer> getCurrentlyAvailableRooms() {
+        List<Integer> ids = new ArrayList<>();
+        try {
+            String query = "SELECT roomid FROM sqills.room " +
+                "WHERE roomid NOT IN (" +
+                "    SELECT roomid FROM sqills.booking " +
+                "    WHERE bookingdate = CURRENT_DATE " +
+                "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
+                ") " +
+                "AND roomid > 0;";
+            Connection connection = DatabaseConnectionFactory.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                ids.add(resultSet.getInt("roomid"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return ids;
+        }
+        return ids;
+    }
 }
