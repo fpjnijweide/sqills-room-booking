@@ -34,9 +34,15 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int roomID = resultSet.getInt("roomID");
-                // TODO maybe get name here instead of user ID
-                String userID = resultSet.getString("userID");
+
                 boolean isprivate = resultSet.getBoolean("isPrivate");
+                String userID;
+                if (isprivate){
+                    userID = "PRIVATE";
+                } else {
+                    userID = resultSet.getString("userID");
+                }
+
                 booking = new Booking(startTime, endTime, roomID, date, userID,isprivate);
             }
 
@@ -181,12 +187,19 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
                 int queriedRoomID = resultSet.getInt("roomID");
-                // TODO Maybe get name here instead of user id
-                // TODO maybe change booking object because right now we are putting stuff in email field that is not an email
-                Integer userID = resultSet.getInt("userID");
-                boolean isPrivate = resultSet.getBoolean("isPrivate");
 
-                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID.toString(), isPrivate));
+                // TODO maybe change booking object because right now we are putting stuff in email field that is not an email
+                boolean isprivate = resultSet.getBoolean("isPrivate");
+
+                String userID;
+                if (isprivate){
+                    userID = "PRIVATE";
+                } else {
+                    userID = resultSet.getString("userID");
+                }
+
+
+                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID, isprivate));
             }
 
             resultSet.close();
