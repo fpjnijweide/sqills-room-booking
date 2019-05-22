@@ -38,8 +38,8 @@ public class RoomDao {
         }
     }
 
-    public static List<String> getAllRoomsIDs() {
-        ArrayList<String> result = new ArrayList<>();
+    public static List<Integer> getAllRoomsIDs() {
+        ArrayList<Integer> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
