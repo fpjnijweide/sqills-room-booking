@@ -32,7 +32,7 @@ public class RoomDao {
         }
     }
 
-    public static List<String> getAllRooms() {
+    public static List<String> getAllRoomsIDs() {
         ArrayList<String> result = new ArrayList<>();
         try {
             Connection connection = DatabaseConnectionFactory.getConnection();
