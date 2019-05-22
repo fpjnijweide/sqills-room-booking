@@ -9,6 +9,7 @@ function selectRoom() { // Called when "select room" button is pressed
         // Use setInterval to make sure it is called every X seconds, and set refreshSet to true
         setInterval(() => {
             updatePage(currentRoomNumber, true);
+            console.log("update")
         }, 30000);
         refreshSet = true;
     }
@@ -16,23 +17,23 @@ function selectRoom() { // Called when "select room" button is pressed
 
 function getRoomData(roomNumberInput){
     axios.get(`/api/room/${roomNumberInput}`).then((response) => { // GET request
+        console.log(response.data)
         return response.data;
     });
 }
 
-function checkIfRoomTaken(roomNumberInput, data){
+function checkIfRoomTaken(data){
     let roomStartTime = getEarliestStartTime(data); // Check if room is free, and get the time of the next booking
     return roomStartTime;
 }
 
 function updatePage(roomNumberInput, update) {
-    data = getRoomData(roomNumberInput)
-    if(!checkIfRoomTaken(roomNumberInput, data)){
+    let data = getRoomData(roomNumberInput)
+    if(!checkIfRoomTaken(data)){
         displayTableOfBookings(data);
         displayRoomIsBooked();
         checkIfOtherRoomsAreBooked();
-    }
-    else {
+    } else {
         if (!update) {
             displayRoomIsFree(checkIfRoomTaken(roomNumberInput, data));
             displayMakeBooking();
@@ -41,7 +42,6 @@ function updatePage(roomNumberInput, update) {
 }
 
 function checkIfOtherRoomsAreBooked() {
-
     axios.get(`/api/room/list`).then((response) => { // GET request
         let listOfRoomIDs = response.data
         for(let id of listOfRoomIDs) {
