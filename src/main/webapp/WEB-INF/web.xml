@@ -17,8 +17,17 @@
 	<servlet>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
 	</servlet>
+    <servlet>
+        <servlet-name>Desktop Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.DesktopInterfaceServlet</servlet-class>
+    </servlet>
+    
 	<servlet-mapping>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Desktop Servlet</servlet-name>
+        <url-pattern>/desktop/</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -70,4 +70,22 @@ public class RoomResource {
         success.put("success", valid);
         return success.toString();
     }
+
+    @GET
+    @Path("/available")
+    @Produces(MediaType.APPLICATION_JSON)
+    /**
+     * Returns a list of all currently available rooms.
+     */
+    public List<Integer> getAvailableRooms() {
+        return RoomDao.getCurrentlyAvailableRooms();
+    }
+
+    @GET
+    @Path("/{roomID}/availableUntil")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Time getAvailableUntil(@PathParam("roomID") int roomID) {
+        System.out.println(RoomDao.getFreeUntil(roomID));
+        return RoomDao.getFreeUntil(roomID);
+    }
 }
