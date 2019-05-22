@@ -57,16 +57,18 @@ public class BookingDao {
      */
     public static boolean createBooking(Booking booking) {
         boolean successful = false;
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
 
 //            String findUserIdQuery = "SELECT userID FROM sqills.user WHERE email = ?";
 
 
-            String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID," +
-                "SELECT ?, ?, ?, ?, userID" +
-                "FROM sqills.user" +
-                "WHERE email = ?;";
+                String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID)\n" +
+                    "                VALUES ( ?, ?, ?, ?, \n" +
+                    "(SELECT sqills.users.userID\n" +
+                    "FROM sqills.users\n" +
+                    "WHERE email = ?));";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
@@ -76,10 +78,19 @@ public class BookingDao {
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
+            // TODO maybe have a nice error if e-mail is not found in database
             statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+
+
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return successful;
