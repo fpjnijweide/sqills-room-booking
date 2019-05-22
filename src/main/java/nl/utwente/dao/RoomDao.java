@@ -1,7 +1,6 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
-import nl.utwente.model.Booking;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class RoomDao {
 
             while (resultSet.next()) {
                 String queriedRoomID = resultSet.getString("roomid");
-                result.add(queriedRoomID);
+                result.add(Integer.parseInt(queriedRoomID));
             }
 
             resultSet.close();

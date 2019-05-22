@@ -2,7 +2,6 @@ package nl.utwente.resource;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.model.Booking;
@@ -69,5 +68,9 @@ public class RoomResource {
         ObjectNode success = factory.objectNode();
         success.put("success", valid);
         return success.toString();
+    }
+
+    public RoomResource(){
+
     }
 }
