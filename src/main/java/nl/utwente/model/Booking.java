@@ -8,12 +8,23 @@ public class Booking {
     private Date date;
     private Time startTime;
     private Time endTime;
+    private String email;
+    private boolean isPrivate;
 
-    public Booking(Time startTime, Time endTime, int roomNumber, Date date) {
+    public Booking(Time startTime, Time endTime, int roomNumber, Date date, String email, boolean isPrivate) {
         this.roomNumber = roomNumber;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.email = email;
+        this.isPrivate = isPrivate;
+    }
+
+    public Booking(String startTime, String endTime, int roomNumber, String date) {
+        this.roomNumber = roomNumber;
+        this.startTime = Time.valueOf(startTime);
+        this.endTime = Time.valueOf(endTime);
+        this.date = Date.valueOf(date);
     }
 
     public Booking() {
@@ -52,8 +63,45 @@ public class Booking {
         this.endTime = endTime;
     }
 
+
+    /**
+     * Gets email
+     *
+     * @return value of email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets email to email
+     *
+     * @param email new value of email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Gets isPrivate
+     *
+     * @return value of isPrivate
+     */
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    /**
+     * Sets isPrivate to aPrivate
+     *
+     * @param aPrivate new value of isPrivate
+     */
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
     @Override
     public String toString() {
-        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber();
+        return "date: "+ this.date + " endTime:" + this.endTime + " startTime: " + this.startTime + " roomNumber: " + this.getRoomNumber() + " email: " + this.email + " isPrivate: " + this.isPrivate;
     }
 }
