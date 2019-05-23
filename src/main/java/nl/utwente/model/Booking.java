@@ -3,7 +3,7 @@ package nl.utwente.model;
 import java.sql.Date;
 import java.sql.Time;
 
-public class Booking {
+public class Booking extends SimpleBooking{
     private int roomNumber;
     private Date date;
     private Time startTime;
@@ -20,11 +20,13 @@ public class Booking {
         this.isPrivate = isPrivate;
     }
 
-    public Booking(String startTime, String endTime, int roomNumber, String date) {
+    public Booking(String startTime, String endTime, int roomNumber, String date, String email, boolean isPrivate) {
         this.roomNumber = roomNumber;
         this.startTime = Time.valueOf(startTime);
         this.endTime = Time.valueOf(endTime);
         this.date = Date.valueOf(date);
+        this.email = email;
+        this.isPrivate = isPrivate;
     }
 
     public Booking() {
