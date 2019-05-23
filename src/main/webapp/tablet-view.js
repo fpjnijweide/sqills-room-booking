@@ -4,19 +4,19 @@ function displayRoomIsFree(roomStartTime) {
     let currentTime = new Date();
     if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
         // If the booking time is not now, print until when room is free
-        roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free until " +
+        roomStatus.innerHTML = "<h3>Room " + currentroomID + " is free until " +
             roomStartTime.getHours() + ":" + roomStartTime.getMinutes() + "!</h3>"
     } else {
         // If booking time is now, earliestStartTime wasn't reset in getEarliestStartTime()
         // This means that there are no bookings for today. Print this fact.
-        roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free for the whole day!</h3>"
+        roomStatus.innerHTML = "<h3>Room " + currentroomID + " is free for the whole day!</h3>"
     }
 }
 
 function displayRoomIsBooked() {
     // Prints the fact that room is booked
     let roomStatus = document.getElementById("room-status");
-    roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is booked right now</h3>"
+    roomStatus.innerHTML = "<h3>Room " + currentroomID + " is booked right now</h3>"
 }
 
 function displayTableOfBookings(tableData) {
@@ -38,7 +38,7 @@ function displayTableOfBookings(tableData) {
 //<td> ${tableData[x].email}</td>
 }
 
-function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
+function displayOtherFreeRooms(roomStartTime, roomIDInput) {
     // Called from updatePage() when checkingForCurrentRoom is false
 
     if (roomStartTime) { // If the room is not currently booked
@@ -47,10 +47,10 @@ function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
         let roomStatus = document.getElementById("room-status");
         let currentTime = new Date();
         if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
-            roomStatus.innerHTML += `<h4>But, room   ${roomNumberInput}  is free until 
+            roomStatus.innerHTML += `<h4>But, room   ${roomIDInput}  is free until 
                 ${roomStartTime.getHours()}: ${roomStartTime.getMinutes()}!</h4>`;
         } else {
-            roomStatus.innerHTML += `<h4>But, room ${roomNumberInput}  is free for the whole day!</h4>`;
+            roomStatus.innerHTML += `<h4>But, room ${roomIDInput}  is free for the whole day!</h4>`;
         }
 
     }

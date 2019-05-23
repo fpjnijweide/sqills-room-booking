@@ -3,28 +3,15 @@ package nl.utwente.model;
 import java.sql.Date;
 import java.sql.Time;
 
-public class Booking extends SimpleBooking{
-    private int roomNumber;
-    private Date date;
-    private Time startTime;
-    private Time endTime;
-    private String email;
-    private boolean isPrivate;
+public class Booking {
+    protected Time startTime;
+    protected Time endTime;
+    protected String email;
+    protected boolean isPrivate;
 
-    public Booking(Time startTime, Time endTime, int roomNumber, Date date, String email, boolean isPrivate) {
-        this.roomNumber = roomNumber;
-        this.date = date;
+    public Booking(Time startTime, Time endTime, String email, boolean isPrivate) {
         this.startTime = startTime;
         this.endTime = endTime;
-        this.email = email;
-        this.isPrivate = isPrivate;
-    }
-
-    public Booking(String startTime, String endTime, int roomNumber, String date, String email, boolean isPrivate) {
-        this.roomNumber = roomNumber;
-        this.startTime = Time.valueOf(startTime);
-        this.endTime = Time.valueOf(endTime);
-        this.date = Date.valueOf(date);
         this.email = email;
         this.isPrivate = isPrivate;
     }
@@ -33,13 +20,7 @@ public class Booking extends SimpleBooking{
 
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
-    }
 
-    public Date getDate() {
-        return date;
-    }
 
     public Time getStartTime() {
         return startTime;
@@ -49,13 +30,6 @@ public class Booking extends SimpleBooking{
         return endTime;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public void setStartTime(Time startTime) {
         this.startTime = startTime;
@@ -104,6 +78,6 @@ public class Booking extends SimpleBooking{
 
     @Override
     public String toString() {
-        return "date: "+ this.date + " endTime:" + this.endTime + " startTime: " + this.startTime + " roomNumber: " + this.getRoomNumber() + " email: " + this.email + " isPrivate: " + this.isPrivate;
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " isPrivate: " + this.isPrivate;
     }
 }
