@@ -11,7 +11,7 @@ function displayMakeBooking() {
                    id="booking-duration">
                 <br>
                 <br>
-                <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">
+                <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail" onkeyup="autoComplete()">
                 <input type="checkbox" name="private" value="private" id="private"> private meeting <br>
             </div>
             <div class="col-sm-1" id="booking-duration-value">
@@ -39,8 +39,8 @@ function makeBooking() {
     let endTime = addMinutes(new Date(), duration);
     if (validEmail(email) || email.value == ""){
         // TODO find out why this only accepts "private" even though it's called isPrivate on the back-end
-        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "private": private};
-        axios.post(`/api/booking/create`, jsonBody).then((response) => {
+        let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private};
+        axios.post(`/api/room/` + currentRoomNumber + `/book`, jsonBody).then((response) => {
             displayBooked(response.data);
         });
     } else {
@@ -77,6 +77,20 @@ function displayBooked(data) {
 function invalidEmailMessage(){
     let newDiv = document.getElementById("emailerror");
     newDiv.innerHTML = `<b>invalid email</b>`
+}
 
-
+function autoComplete(){
+    axios.get(`/api/user/list`).then((response) => { // GET request
+        let candidates = [];
+        let emails = response.data
+        let currentvalue = document.getElementById("e-mail").value;
+        for(let i = 0; i < emails.length; i++){
+            if (emails[i].includes(currentvalue) && emails[i].indexOf(currentvalue) == 0){
+                candidates.push(emails[i]);
+            }
+        }
+        if (candidates.length == 1){
+            document.getElementById("e-mail").value = candidates[0];
+        }
+    });
 }

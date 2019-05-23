@@ -1,0 +1,33 @@
+body {
+  height: 100%
+}
+.input-form-select-room{
+  text-align: center;
+  vertical-align: middle;
+  margin: auto;
+  margin-top: 20%;
+}
+.input-form-select-room ul, .input-form-select-room li {
+  display: inline-block;
+
+}
+
+.header-logo{
+  text-align: center;
+  margin: auto;
+  padding: 20px;
+}
+
+.btn-primary{
+  background-color: #73007A;
+  border-color: #73007A;
+}
+
+.btn-primary:hover{
+  background-color: rgba(115, 0, 122, 0.71);
+  border-color: rgba(115, 0, 122, 0.71);
+}
+
+input[type=range] + .thumb {
+  background-color: #dedede;
+}
