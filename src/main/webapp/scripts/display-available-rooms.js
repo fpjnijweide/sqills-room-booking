@@ -9,8 +9,8 @@ function displayAvailableRooms(IDs) {
     let table = document.getElementById("available-ids");
 
     for (let i = 0; i < IDs.length; i++) {
-        table.innerHTML += "<tr>" +
-            "<td class='room-name'>Room " + IDs[i] + "</td>" +
+        table.innerHTML += "<tr class='clickable-row' data-href='desktop/room/" + IDs[i] + "'>" +
+            "<td class='room-name'><a href='/desktop/room/" + IDs[i] + "'>Room " + IDs[i] + "</a></td>" +
             "<td class='available' id='time-" + IDs[i] + "'>" + "</td>" +
             "<tr>";
     }
