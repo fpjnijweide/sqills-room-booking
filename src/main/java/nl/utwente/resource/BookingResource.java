@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.model.Booking;
+import nl.utwente.model.SpecifiedBooking;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -35,7 +36,7 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
     // Todo: Add validity check
-    public String createBooking(Booking booking) {
+    public String createBooking(SpecifiedBooking booking) {
 
         System.out.println(booking.toString());
 
@@ -59,7 +60,7 @@ public class BookingResource {
     // Todo: Add validity check
     public String createBooking(
         @PathParam("bookingID") int bookingID,
-        Booking booking
+        SpecifiedBooking booking
     ) {
         boolean result = BookingDao.updateBooking(bookingID, booking);
 
