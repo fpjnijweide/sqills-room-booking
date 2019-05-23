@@ -42,6 +42,23 @@ function makeBooking() {
         let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private};
         axios.post(`/api/room/` + currentRoomNumber + `/book`, jsonBody).then((response) => {
             displayBooked(response.data);
+        }).catch((error) => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                alert(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                alert(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                alert('Error', error.message);
+            }
+            console.log(error.config);
         });
     } else {
         invalidEmailMessage();
@@ -70,7 +87,8 @@ function displayBooked(data) {
     }
 
     setTimeout(() => {
-        updatePage(currentRoomNumber);
+        updatePage(currentRoomNumber, true);
+        document.getElementById(`book-now`).innerHTML = ``;
     }, 5000);
 }
 
@@ -92,5 +110,22 @@ function autoComplete(){
         if (candidates.length == 1){
             document.getElementById("e-mail").value = candidates[0];
         }
+    }).catch((error) => {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            alert(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            alert(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            alert('Error', error.message);
+        }
+        console.log(error.config);
     });
 }
