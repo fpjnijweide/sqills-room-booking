@@ -14,6 +14,9 @@ import java.util.List;
 
 @Path("/room")
 public class RoomResource {
+    public RoomResource(){ }
+
+
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
@@ -40,7 +43,6 @@ public class RoomResource {
         return BookingDao.getBookingsForRoomToday(roomNumber);
     }
 
-
     @POST
     @Path("/{roomNumber}/book")
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,14 +54,16 @@ public class RoomResource {
      * @return JSON object containing a "success" boolean value
      */
     public String createBookingForSpecificRoom (
-        @PathParam("roomNumber") Integer roomNumber,
-        TimeSlot timeSlot, String email, boolean isPrivate
+            @PathParam("roomNumber") Integer roomNumber,
+            TimeSlot timeSlot
     ) {
         Time startTime = Time.valueOf(timeSlot.getStartTime());
         Time endTime = Time.valueOf(timeSlot.getEndTime());
+        String email = timeSlot.getEmail();
+        boolean isPrivate = timeSlot.isPrivate();
+        System.out.println(startTime +  " " +  endTime + " " + email + " " + isPrivate);
         boolean valid = RoomDao.isValidRoomID(roomNumber) &&
             BookingDao.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
-
         if (valid) {
             BookingDao.insertBookingToday(roomNumber, startTime, endTime, email, isPrivate);
         }
@@ -68,9 +72,5 @@ public class RoomResource {
         ObjectNode success = factory.objectNode();
         success.put("success", valid);
         return success.toString();
-    }
-
-    public RoomResource(){
-
     }
 }
