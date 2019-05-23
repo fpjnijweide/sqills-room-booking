@@ -6,6 +6,23 @@ var rooms;
 function getRooms(){
     axios.get(`/api/room/list`).then((response) => { // GET request
         rooms = response.data;
+    }).catch((error) => {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            alert(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            alert(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            alert('Error', error.message);
+        }
+        console.log(error.config);
     });
 }
 
@@ -41,31 +58,84 @@ function updatePage(roomNumberInput, update) {
         let data = response.data;
         if(!checkIfRoomTaken(data)){
             showing = false;
-            displayTableOfBookings(data); // remove this one
+            displayTableOfBookings(data);
             displayRoomIsBooked();
             checkIfOtherRoomsAreBooked();
         } else {
             if (!update || !showing && checkIfRoomTaken(data)) {
                 showing = true;
-                // console.log(data)
                 displayRoomIsFree(checkIfRoomTaken(data));
                 displayMakeBooking();
             }
         }
+    }).catch((error) => {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            alert(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            alert(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            alert('Error', error.message);
+        }
+        console.log(error.config);
     });
 }
 
+function callDisplayFreeRooms(id){
+    axios.get(`/api/room/${id}`).then(response => { // GET request
+        let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
+        displayOtherFreeRooms(roomStartTime, id);
+    }).catch((error) => {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            alert(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            alert(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            alert('Error', error.message);
+        }
+        console.log(error.config);
+    });
+}
 function checkIfOtherRoomsAreBooked() {
     axios.get(`/api/room/list`).then((response) => { // GET request
         let listOfRoomIDs = response.data
         for(let id of listOfRoomIDs) {
             if (id != currentRoomNumber) { // Don't check for current room, obviously
-                axios.get(`/api/room/${id}`).then(response => { // GET request
-                    let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
-                    displayOtherFreeRooms(roomStartTime, id);
-                });
+                callDisplayFreeRooms(id)
             }
         }
+    }).catch((error) => {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            // console.log(error.response.data);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+        }
+        console.log(error.config);
     });
 
 }
