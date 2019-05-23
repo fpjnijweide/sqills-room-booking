@@ -20,6 +20,7 @@ public class RoomServlet extends HttpServlet {
             req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
         } else {
             req.setAttribute("id", roomID);
+            req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomID));
             req.getRequestDispatcher("/desktop/room.jsp").forward(req, res);
         }
     }
