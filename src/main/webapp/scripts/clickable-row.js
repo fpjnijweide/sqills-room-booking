@@ -1,6 +1,12 @@
-jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        console.log("hi");
-        window.location = $(this).data("href");
-    });
+
+
+$(document).ready(() =>  {
+    let elems = document.getElementsByClassName("clickable-row");
+    console.log(elems);
+    for (let i = 0; i < elems.length; i++) {
+        let elem = elems[i];
+        elem.addEventListener("onclick", () => {
+            console.log('hi');
+        }, false);
+    }
 });
