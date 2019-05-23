@@ -2,6 +2,7 @@ package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.model.Booking;
+import nl.utwente.model.SpecifiedBooking;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class BookingDao {
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("bookingdate");
-                int roomID = resultSet.getInt("roomID");
+                String roomID = resultSet.getString("roomID");
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
                 String userID;
@@ -43,7 +44,7 @@ public class BookingDao {
                     userID = resultSet.getString("userID");
                 }
 
-                booking = new Booking(startTime, endTime, roomID, date, userID,isprivate);
+                booking = new SpecifiedBooking(startTime, endTime, roomID, date, userID,isprivate);
             }
 
             resultSet.close();
@@ -67,7 +68,7 @@ public class BookingDao {
      *
      * @return whether the booking was successfully created
      */
-    public static boolean createBooking(Booking booking) {
+    public static boolean createBooking(SpecifiedBooking booking) {
         boolean successful = false;
 
         if (!isValidBooking(booking)) {
@@ -90,7 +91,7 @@ public class BookingDao {
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
-            statement.setInt(4, booking.getRoomNumber());
+            statement.setInt(4, Integer.parseInt(booking.getRoomID())); // TODO This should be a string with a subquery for the roomID later
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.isPrivate());
 
@@ -155,7 +156,7 @@ public class BookingDao {
      * @return whether the update was successful
      */
     // TODO Update this function with private, email fields
-    public static boolean updateBooking(int bookingID, Booking booking) {
+    public static boolean updateBooking(int bookingID, SpecifiedBooking booking) {
         boolean successful = false;
 
         if (!isValidBooking(booking)) {
@@ -173,7 +174,7 @@ public class BookingDao {
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
-            statement.setInt(4, booking.getRoomNumber());
+            statement.setInt(4, Integer.parseInt(booking.getRoomID())); // TODO idem (see above)
             statement.setInt(5, bookingID);
 
             int updatedRows = statement.executeUpdate();
@@ -200,8 +201,8 @@ public class BookingDao {
      * @param roomID RoomID of room whose bookings will be returned
      * @return Today's bookings for the specified room
      */
-    public static List<Booking> getBookingsForRoomToday(int roomID) {
-        ArrayList<Booking> result = new ArrayList<>();
+    public static List<SpecifiedBooking> getBookingsForRoomToday(int roomID) {
+        ArrayList<SpecifiedBooking> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
@@ -228,7 +229,7 @@ public class BookingDao {
                 }
 
 
-                result.add(new Booking(startTime, endTime, queriedRoomID, date, userID, isprivate));
+                result.add(new SpecifiedBooking(startTime, endTime, String.valueOf(queriedRoomID), date, userID, isprivate));
             }
 
             resultSet.close();
@@ -250,35 +251,35 @@ public class BookingDao {
     public static void insertBookingToday(int roomID, Time startTime, Time endTime, String email, boolean isPrivate) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
-        Booking booking = new Booking(startTime, endTime, roomID, sqlDate,email, isPrivate );
+        SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, String.valueOf(roomID), sqlDate,email, isPrivate );
         createBooking(booking);
     }
 
-    public static boolean isValidBookingToday(int roomID, String startTime, String endTime) {
+    public static boolean isValidBookingToday(int roomID, Time startTime, Time endTime) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
-        return isValidBooking(roomID, startTime, endTime, sqlDate.toString());
+        return isValidBooking(roomID, startTime, endTime, sqlDate);
     }
 
-    public static boolean isValidBooking(int roomID, String startTime, String endTime, String date) {
+    public static boolean isValidBooking(int roomID, Time wantedStart, Time wantedEnd, Date date) {
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT starttime, endtime, bookingdate FROM Sqills.booking WHERE roomID = ? AND bookingdate = ? ";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
-            statement.setDate(2, Date.valueOf(date));
+            statement.setDate(2, date);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                Time start = Time.valueOf(result.getString("starttime"));
-                Time end = Time.valueOf(result.getString("endtime"));
-                Time wantedStart = Time.valueOf(startTime);
-                Time wantedEnd = Time.valueOf(endTime);
+                Time bookingStart = Time.valueOf(result.getString("starttime"));
+                Time bookingEnd = Time.valueOf(result.getString("endtime"));
+//                Time wantedStart = Time.valueOf(startTime);
+//                Time wantedEnd = Time.valueOf(endTime);
                 // TODO add email checking to this
-                if (wantedStart.compareTo(start) > 0 && wantedStart.compareTo(end) < 0
-                    || wantedEnd.compareTo(start) > 0 && wantedEnd.compareTo(end) < 0
-                    || wantedStart.compareTo(start) <= 0 && wantedEnd.compareTo(end) >= 0
-                    || startTime.compareTo(endTime) >= 0) {
+                if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
+                    || wantedEnd.compareTo(bookingStart) > 0 && wantedEnd.compareTo(bookingEnd) < 0
+                    || wantedStart.compareTo(bookingStart) <= 0 && wantedEnd.compareTo(bookingEnd) >= 0
+                    ) {
                     isValid = false;
                 }
             }
@@ -298,11 +299,11 @@ public class BookingDao {
         return isValid;
     }
 
-    public static boolean isValidBooking(Booking booking) {
-        return isValidBooking(booking.getRoomNumber(),
-            booking.getStartTime().toString(),
-            booking.getEndTime().toString(),
-            booking.getDate().toString());
+    public static boolean isValidBooking(SpecifiedBooking booking) {
+        return isValidBooking(Integer.parseInt(booking.getRoomID()),
+            booking.getStartTime(),
+            booking.getEndTime(),
+            booking.getDate());
     }
 
     // Todo: test
