@@ -25,6 +25,10 @@
         <servlet-name>Room Servlet</servlet-name>
         <servlet-class>nl.utwente.servlet.desktopInterface.RoomServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Room Overview Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.desktopInterface.RoomOverviewServlet</servlet-class>
+    </servlet>
     
 	<servlet-mapping>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
@@ -37,5 +41,9 @@
     <servlet-mapping>
         <servlet-name>Room Servlet</servlet-name>
         <url-pattern>/desktop/room/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Room Overview Servlet</servlet-name>
+        <url-pattern>/desktop/rooms</url-pattern>
     </servlet-mapping>
 </web-app>
