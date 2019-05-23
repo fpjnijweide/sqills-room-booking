@@ -8,18 +8,23 @@
     <jsp:include page="nav.jsp"/>
     <div class="container">
         <div class="row">
-            <div class="col-md-3"></div>
-
-            <div class="col-md-6">
-                <ul>
-                <% List<String> roomIDs = (List<String>) request.getAttribute("roomIDs"); %>
-                <% for (String id : roomIDs) { %>
-                    <li><a href="/desktop/room/<%= id %>">Room <%= id %></a></li>
-                <% } %>
-                </ul>
+            <% List<String> roomIDs = (List<String>) request.getAttribute("roomIDs");
+               List<String> availableRoomIDs = (List<String>) request.getAttribute("availableRoomIDs"); %>
+            <% for (String id : roomIDs) { %>
+            <div class="col-md-3">
+                <a href="/desktop/room/1" class="room-card-link">
+                    <div class="room-card-container">
+                        <div class="room-title">Room <%= id %></div>
+                        <% if (availableRoomIDs.contains(id)) { %>
+                            <div class="room-state free">Currently Available!</div>
+                        <% } else { %>
+                            <div class="room-state taken">Currently booked!</div>
+                        <% } %>
+                        <div class="time-info">Free for the entire day</div>
+                    </div>
+                </a>
             </div>
-
-            <div class="col-md-3"></div>
+            <% } %>
         </div>
     </div>
 </body>
