@@ -88,4 +88,11 @@ public class RoomResource {
         System.out.println(RoomDao.getFreeUntil(roomID));
         return RoomDao.getFreeUntil(roomID);
     }
+
+    @GET
+    @Path("/{roomID}/week")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Booking> getBookingsForThisWeek(@PathParam("roomID") int roomID) {
+        return RoomDao.getBookingsForThisWeek(roomID);
+    }
 }

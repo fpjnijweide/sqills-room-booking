@@ -108,4 +108,40 @@ public class RoomDao {
         }
         return result;
     }
+
+    public static List<Booking> getBookingsForThisWeek(int roomID) {
+        List<Booking> result = new ArrayList<>();
+        String query = "SELECT starttime, endtime, bookingdate " +
+            "FROM sqills.booking " +
+            "WHERE EXTRACT(WEEK FROM bookingdate) = EXTRACT(WEEK FROM CURRENT_DATE)" +
+            "AND roomid = ? " +
+            "ORDER BY bookingdate ASC;";
+
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, roomID);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Time startTime = resultSet.getTime("starttime");
+                Time endTime = resultSet.getTime("endtime");
+                Date date = resultSet.getDate("bookingdate");
+
+                Booking booking = new Booking(startTime, endTime, roomID, date);
+                result.add(booking);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return result;
+    }
 }
