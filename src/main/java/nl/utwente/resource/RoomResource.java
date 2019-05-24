@@ -14,6 +14,9 @@ import java.util.List;
 
 @Path("/room")
 public class RoomResource {
+    public RoomResource(){ }
+
+
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
@@ -39,7 +42,6 @@ public class RoomResource {
     ) {
         return BookingDao.getBookingsForRoomToday(roomID);
     }
-
 
     @POST
     @Path("/{roomID}/book")
@@ -68,9 +70,5 @@ public class RoomResource {
         ObjectNode success = factory.objectNode();
         success.put("success", valid);
         return success.toString();
-    }
-
-    public RoomResource(){
-
     }
 }

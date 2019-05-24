@@ -11,7 +11,7 @@ function displayMakeBooking() {
                    id="booking-duration">
                 <br>
                 <br>
-                <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail">
+                <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail" onkeyup="autoComplete()">
                 <input type="checkbox" name="private" value="private" id="private"> private meeting <br>
             </div>
             <div class="col-sm-1" id="booking-duration-value">
@@ -39,9 +39,26 @@ function makeBooking() {
     let endTime = addMinutes(new Date(), duration);
     if (validEmail(email) || email.value == ""){
         // TODO find out why this only accepts "private" even though it's called isPrivate on the back-end
-        let jsonBody = { "roomNumber": currentRoomNumber, "date": new Date().toISOString().split('T')[0], "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "private": private};
-        axios.post(`/api/booking/create`, jsonBody).then((reponse) => {
-            displayBooked();
+        let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private};
+        axios.post(`/api/room/` + currentRoomNumber + `/book`, jsonBody).then((response) => {
+            displayBooked(response.data);
+        }).catch((error) => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.log(error.response.data);
+                alert(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                alert(error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                alert('Error', error.message);
+            }
+            console.log(error.config);
         });
     } else {
         invalidEmailMessage();
@@ -62,6 +79,7 @@ function addMinutes(date, minutes) {
 
 //display that the booking is complete
 function displayBooked(data) {
+    console.log("here")
     if (data.success){
         document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
     } else {
@@ -69,13 +87,45 @@ function displayBooked(data) {
     }
 
     setTimeout(() => {
-        updatePage(currentRoomNumber);
+        updatePage(currentRoomNumber, true);
+        document.getElementById(`book-now`).innerHTML = ``;
     }, 5000);
 }
 
 function invalidEmailMessage(){
     let newDiv = document.getElementById("emailerror");
     newDiv.innerHTML = `<b>invalid email</b>`
+}
 
-
+function autoComplete(){
+    axios.get(`/api/user/list`).then((response) => { // GET request
+        let candidates = [];
+        let emails = response.data
+        let currentvalue = document.getElementById("e-mail").value;
+        for(let i = 0; i < emails.length; i++){
+            if (emails[i].includes(currentvalue) && emails[i].indexOf(currentvalue) == 0){
+                candidates.push(emails[i]);
+            }
+        }
+        if (candidates.length == 1){
+            document.getElementById("e-mail").value = candidates[0];
+        }
+    }).catch((error) => {
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            alert(error.response.status);
+            console.log(error.response.headers);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            alert(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            alert('Error', error.message);
+        }
+        console.log(error.config);
+    });
 }

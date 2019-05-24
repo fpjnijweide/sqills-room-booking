@@ -54,7 +54,6 @@ public class RoomDao {
 
             resultSet.close();
             statement.close();
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
