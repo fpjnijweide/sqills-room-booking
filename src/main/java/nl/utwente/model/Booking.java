@@ -4,36 +4,23 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class Booking {
-    private int roomNumber;
-    private Date date;
-    private Time startTime;
-    private Time endTime;
+    protected Time startTime;
+    protected Time endTime;
+    protected String email;
+    protected boolean isPrivate;
 
-    public Booking(Time startTime, Time endTime, int roomNumber, Date date) {
-        this.roomNumber = roomNumber;
-        this.date = date;
+    public Booking(Time startTime, Time endTime, String email, boolean isPrivate) {
         this.startTime = startTime;
         this.endTime = endTime;
-    }
-
-    public Booking(String startTime, String endTime, int roomNumber, String date) {
-        this.roomNumber = roomNumber;
-        this.startTime = Time.valueOf(startTime);
-        this.endTime = Time.valueOf(endTime);
-        this.date = Date.valueOf(date);
+        this.email = email;
+        this.isPrivate = isPrivate;
     }
 
     public Booking() {
 
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
-    }
 
-    public Date getDate() {
-        return date;
-    }
 
     public Time getStartTime() {
         return startTime;
@@ -43,13 +30,6 @@ public class Booking {
         return endTime;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public void setStartTime(Time startTime) {
         this.startTime = startTime;
@@ -59,8 +39,45 @@ public class Booking {
         this.endTime = endTime;
     }
 
+
+    /**
+     * Gets email
+     *
+     * @return value of email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets email to email
+     *
+     * @param email new value of email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Gets getIsPrivate
+     *
+     * @return value of getIsPrivate
+     */
+    public boolean getIsPrivate() {
+        return isPrivate;
+    }
+
+    /**
+     * Sets getIsPrivate to aPrivate
+     *
+     * @param aPrivate new value of getIsPrivate
+     */
+    public void setIsPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
     @Override
     public String toString() {
-        return "date: "+ this.date + "endTime:" + this.endTime + " startTime" + this.startTime + " roomNumber: " + this.getRoomNumber();
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate;
     }
 }

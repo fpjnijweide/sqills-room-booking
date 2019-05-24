@@ -1,7 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
-import nl.utwente.model.Booking;
+import nl.utwente.model.SpecifiedBooking;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,8 +14,9 @@ public class RoomDao {
      * @return Whether the provided roomID is valid
      */
     public static boolean isValidRoomID(int roomID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT * FROM sqills.Room WHERE roomID = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -29,27 +30,39 @@ public class RoomDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public static List<String> getAllRoomsIDs() {
-        ArrayList<String> result = new ArrayList<>();
+    public static List<Integer> getAllRoomsIDs() {
+        ArrayList<Integer> result = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT roomid FROM sqills.room";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 String queriedRoomID = resultSet.getString("roomid");
-                result.add(queriedRoomID);
+                result.add(Integer.parseInt(queriedRoomID));
             }
 
             resultSet.close();
             statement.close();
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
@@ -109,8 +122,8 @@ public class RoomDao {
         return result;
     }
 
-    public static List<Booking> getBookingsForThisWeek(int roomID) {
-        List<Booking> result = new ArrayList<>();
+    public static List<SpecifiedBooking> getBookingsForThisWeek(int roomID) {
+        List<SpecifiedBooking> result = new ArrayList<>();
         String query = "SELECT starttime, endtime, bookingdate " +
             "FROM sqills.booking " +
             "WHERE EXTRACT(WEEK FROM bookingdate) = EXTRACT(WEEK FROM CURRENT_DATE)" +
@@ -127,8 +140,10 @@ public class RoomDao {
                 Time startTime = resultSet.getTime("starttime");
                 Time endTime = resultSet.getTime("endtime");
                 Date date = resultSet.getDate("bookingdate");
+                String email = resultSet.getString("email");
+                boolean isPrivate = resultSet.getBoolean("isPrivate");
 
-                Booking booking = new Booking(startTime, endTime, roomID, date);
+                SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, String.valueOf(roomID), date, email, isPrivate);
                 result.add(booking);
             }
         } catch (SQLException e) {
