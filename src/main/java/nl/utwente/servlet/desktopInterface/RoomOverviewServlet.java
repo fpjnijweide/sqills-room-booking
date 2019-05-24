@@ -14,9 +14,6 @@ public class RoomOverviewServlet extends HttpServlet {
         throws ServletException, IOException {
         req.setAttribute("roomIDs", RoomDao.getAllRoomsIDs());
         req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRooms());
-        for (String key : RoomDao.getCurrentlyAvailableRooms()) {
-            System.out.println(key);
-        }
         req.getRequestDispatcher("/desktop/roomOverview.jsp").forward(req, res);
     }
 }

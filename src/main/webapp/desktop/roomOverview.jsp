@@ -20,6 +20,7 @@
                         <% } else { %>
                             <div class="room-state taken">Currently booked!</div>
                         <% } %>
+                        <%-- Todo: Implement --%>
                         <%--<div class="time-info">Free for the entire day</div>--%>
                     </div>
                 </a>
