@@ -3,15 +3,12 @@ package nl.utwente.model;
 import java.sql.Date;
 import java.sql.Time;
 
-public class Booking {
-    protected Time startTime;
-    protected Time endTime;
+public class Booking extends TimeSlot{
     protected String email;
     protected boolean isPrivate;
 
     public Booking(Time startTime, Time endTime, String email, boolean isPrivate) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+        super(startTime, endTime);
         this.email = email;
         this.isPrivate = isPrivate;
     }
@@ -19,26 +16,6 @@ public class Booking {
     public Booking() {
 
     }
-
-
-
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public Time getEndTime() {
-        return endTime;
-    }
-
-
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-
 
     /**
      * Gets email

@@ -5,10 +5,10 @@ import java.sql.Date;
 
 public class SpecifiedBooking extends Booking {
 
-    private String roomID;
+    private int roomID;
     private Date date;
 
-    public SpecifiedBooking(Time startTime, Time endTime, String roomID, Date date, String email, boolean isPrivate) {
+    public SpecifiedBooking(Time startTime, Time endTime, int roomID, Date date, String email, boolean isPrivate) {
         super(startTime, endTime, email, isPrivate);
         this.roomID = roomID;
         this.date = date;
@@ -23,7 +23,7 @@ public class SpecifiedBooking extends Booking {
      *
      * @return value of roomID
      */
-    public String getRoomID() {
+    public int getRoomID() {
         return roomID;
     }
 
@@ -32,7 +32,7 @@ public class SpecifiedBooking extends Booking {
      *
      * @param roomID new value of roomID
      */
-    public void setRoomID(String roomID) {
+    public void setRoomID(int roomID) {
         this.roomID = roomID;
     }
 
@@ -54,5 +54,8 @@ public class SpecifiedBooking extends Booking {
         this.date = date;
     }
 
-
+    @Override
+    public String toString() {
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate + " roomID: " + this.roomID + " date: " + this.date;
+    }
 }
