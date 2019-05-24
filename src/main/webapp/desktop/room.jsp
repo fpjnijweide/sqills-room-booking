@@ -108,7 +108,7 @@
         <div class="booking-title">Code Review</div>
         <div class="booking-date">Date: 27-08-2000</div>
         <div class="booking-time">Time: 14:00 - 15:00</div>
-        <div class="booking-owner">Owner: andrewssister@pornhub.com</div>
+        <div class="booking-owner">Owner: platon@enschede.com</div>
     </div>
 </body>
 </html>
