@@ -206,7 +206,7 @@ public class BookingDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT startTime, endTime, date, roomID, fullname, isprivate FROM sqills.booking b JOIN sqills.users u on u.userid = b.userid  WHERE roomID = ? AND date = CURRENT_DATE";
+            String query = "SELECT b.startTime, b.endTime, b.date, b.roomID, u.name, b.isprivate FROM sqills.booking b JOIN sqills.users u on u.userid = b.owner  WHERE roomID = ? AND date = CURRENT_DATE";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
 
@@ -225,7 +225,7 @@ public class BookingDao {
                 if (isprivate){
                     username = "PRIVATE";
                 } else {
-                    username = resultSet.getString("fullname");
+                    username = resultSet.getString("name");
                 }
 
 
