@@ -10,6 +10,6 @@ INSERT INTO sqills.users (userid, name, email, administrator) VALUES (DEFAULT, '
 
 
 INSERT INTO sqills.booking (bookingid, date, starttime, endtime, roomid, owner, isprivate, title) VALUES (2, '2019-05-24', '14:00:00', '15:00:00', 2, 2, true, null);
-INSERT INTO sqills.booking (bookingid, date, starttime, endtime, roomid, owner, isprivate, title) VALUES (DEFAULT, '2019-05-24', '15:00:00', '16:00:00', 1, 3, null, null);
+INSERT INTO sqills.booking (bookingid, date, starttime, endtime, roomid, owner, isprivate, title) VALUES (DEFAULT, '2019-05-24', '15:00:00', '16:00:00', 1, 3, false, null);
 
 INSERT INTO sqills.participants (userid, bookingid) VALUES (2, 2);
