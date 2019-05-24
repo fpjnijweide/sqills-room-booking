@@ -326,7 +326,6 @@ public class BookingDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return ids;
         } finally {
             try {
                 connection.close();
