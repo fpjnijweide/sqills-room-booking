@@ -25,17 +25,19 @@ function displayTableOfBookings(tableData) {
     let tableContent = `<table class="table" id="room-bookings">
                         <tr>
                          <th>Start Time</th>   
-                         <th>End Time</th>   
+                         <th>End Time</th>  
+                         <th>Booked by</th> 
                         </tr>`
     for (let x in tableData) {
         tableContent += `<tr> 
             <td> ${tableData[x].startTime} </td> 
-            <td> ${tableData[x].endTime} </td> 
+            <td> ${tableData[x].endTime} </td>
+            <td> ${tableData[x].email}</td>
         </tr>`
     }
     tableContent += `</table>`;
     content.innerHTML = tableContent;
-
+//<td> ${tableData[x].email}</td>
 }
 
 function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
