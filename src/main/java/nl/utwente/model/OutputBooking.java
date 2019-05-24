@@ -1,0 +1,80 @@
+package nl.utwente.model;
+
+import java.sql.Date;
+import java.sql.Time;
+
+public class OutputBooking extends TimeSlot{
+    protected String userName;
+    private String roomName;
+    private Date date;
+
+    public OutputBooking(Time startTime, Time endTime, String userName, String roomName, Date date) {
+        super(startTime, endTime);
+        this.userName = userName;
+        this.roomName = roomName;
+        this.date = date;
+    }
+
+    public OutputBooking() {
+
+    }
+
+    /**
+     * Gets userName
+     *
+     * @return value of userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * Sets userName to userName
+     *
+     * @param userName new value of userName
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * Gets roomName
+     *
+     * @return value of roomName
+     */
+    public String getRoomName() {
+        return roomName;
+    }
+
+    /**
+     * Sets roomName to roomName
+     *
+     * @param roomName new value of roomName
+     */
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    /**
+     * Gets date
+     *
+     * @return value of date
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * Sets date to date
+     *
+     * @param date new value of date
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " userName: " + this.userName + " roomName: " + this.roomName + " date: " + this.date;
+    }
+}

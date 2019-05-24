@@ -25,12 +25,12 @@ public class RoomResource {
      * @param roomID Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<Integer> getRoomList () {
-        return RoomDao.getAllRoomsIDs();
+    public List<String> getRoomList () {
+        return RoomDao.getAllRoomNames();
     }
 
     @GET
-    @Path("/{roomID}")
+    @Path("/{roomName}")
     @Produces(MediaType.APPLICATION_JSON)
     /**
      * Returns all of today's bookings for a specific room.
@@ -38,13 +38,13 @@ public class RoomResource {
      * @return JSON object containing all of today's bookings for a specific room
      */
     public List<SpecifiedBooking> getBookingsForSpecificRoomToday (
-        @PathParam("roomID") Integer roomID
+        @PathParam("roomName") String roomName
     ) {
-        return BookingDao.getBookingsForRoomToday(roomID);
+        return BookingDao.getBookingsForRoomToday(roomName);
     }
 
     @POST
-    @Path("/{roomID}/book")
+    @Path("/{roomName}/book")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     /**
@@ -54,16 +54,16 @@ public class RoomResource {
      * @return JSON object containing a "success" boolean value
      */
     public String createBookingForSpecificRoom (
-        @PathParam("roomID") Integer roomID,
+        @PathParam("roomName") String roomName,
         Booking booking
     ) {
         Time startTime = booking.getStartTime();
         Time endTime = booking.getEndTime();
-        boolean valid = RoomDao.isValidRoomID(roomID) &&
-            BookingDao.isValidBookingToday(roomID, startTime, endTime);
+        boolean valid = RoomDao.isValidRoomName(roomName) &&
+            BookingDao.isValidBookingToday(roomName, startTime, endTime);
 
         if (valid) {
-            BookingDao.insertBookingToday(roomID, startTime, endTime, booking.getEmail(), booking.getIsPrivate());
+            BookingDao.insertBookingToday(roomName, startTime, endTime, booking.getEmail(), booking.getIsPrivate());
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
@@ -83,17 +83,17 @@ public class RoomResource {
     }
 
     @GET
-    @Path("/{roomID}/availableUntil")
+    @Path("/{roomName}/availableUntil")
     @Produces(MediaType.APPLICATION_JSON)
-    public Time getAvailableUntil(@PathParam("roomID") int roomID) {
-        System.out.println(RoomDao.getFreeUntil(roomID));
-        return RoomDao.getFreeUntil(roomID);
+    public Time getAvailableUntil(@PathParam("roomName") String roomName) {
+        System.out.println(RoomDao.getFreeUntil(roomName));
+        return RoomDao.getFreeUntil(roomName);
     }
 
     @GET
-    @Path("/{roomID}/week")
+    @Path("/{roomName}/week")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SpecifiedBooking> getBookingsForThisWeek(@PathParam("roomID") int roomID) {
-        return RoomDao.getBookingsForThisWeek(roomID);
+    public List<SpecifiedBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
+        return RoomDao.getBookingsForThisWeek(roomName);
     }
 }

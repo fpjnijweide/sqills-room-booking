@@ -36,6 +36,7 @@ public class BookingDao {
                 Date date = resultSet.getDate("date");
                 String roomID = resultSet.getString("roomID");
 
+                // TODO change this to return a name instead of the userID field
                 boolean isprivate = resultSet.getBoolean("getIsPrivate");
                 String userID;
                 if (isprivate){
