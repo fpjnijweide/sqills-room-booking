@@ -82,7 +82,7 @@ public class BookingDao {
 //            String findUserIdQuery = "SELECT userID FROM sqills.user WHERE email = ?";
 
 
-                String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, userID, isPrivate)\n" +
+                    String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, \"owner\", isPrivate)\n" +
                     "                VALUES ( ?, ?, ?, ?, \n" +
                     "(SELECT sqills.users.userID\n" +
                     "FROM sqills.users\n" +
