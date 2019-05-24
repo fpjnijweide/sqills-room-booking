@@ -12,7 +12,7 @@
                List<String> availableRoomIDs = (List<String>) request.getAttribute("availableRoomIDs"); %>
             <% for (String id : roomIDs) { %>
             <div class="col-md-3">
-                <a href="/desktop/room/1" class="room-card-link">
+                <a href="/desktop/room/<%= id %>" class="room-card-link">
                     <div class="room-card-container">
                         <div class="room-title">Room <%= id %></div>
                         <% if (availableRoomIDs.contains(id)) { %>
@@ -20,7 +20,7 @@
                         <% } else { %>
                             <div class="room-state taken">Currently booked!</div>
                         <% } %>
-                        <div class="time-info">Free for the entire day</div>
+                        <%--<div class="time-info">Free for the entire day</div>--%>
                     </div>
                 </a>
             </div>

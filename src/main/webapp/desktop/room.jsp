@@ -5,6 +5,7 @@
     <title>Room <%= request.getAttribute("id") %></title>
     <jsp:include page="head.jsp"/>
     <script src="/scripts/create-booking.js"></script>
+    <script src="/scripts/booking-details.js"></script>
     <script>
         const ROOM_ID = <%= request.getAttribute("id") %>;
     </script>
@@ -24,7 +25,7 @@
                     </tr>
                     <% List<Booking> bookings = (List<Booking>) request.getAttribute("bookings"); %>
                     <% for (int i = 0; i < bookings.size(); i++) { %>
-                    <tr>
+                    <tr onclick="showDetails(1)">
                         <td><%= bookings.get(i).getDate() %></td>
                         <td><%= bookings.get(i).getStartTime() %></td>
                         <td><%= bookings.get(i).getEndTime() %></td>
@@ -100,6 +101,14 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="booking-details" class="booking-details hide">
+        <button class="close-button" onclick="hideDetails()"><i class="fas fa-times"></i></button>
+        <div class="booking-title">Code Review</div>
+        <div class="booking-date">Date: 27-08-2000</div>
+        <div class="booking-time">Time: 14:00 - 15:00</div>
+        <div class="booking-owner">Owner: andrewssister@pornhub.com</div>
     </div>
 </body>
 </html>

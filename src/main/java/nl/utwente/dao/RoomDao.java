@@ -55,8 +55,8 @@ public class RoomDao {
     }
 
     // Todo: test
-    public static List<Integer> getCurrentlyAvailableRooms() {
-        List<Integer> ids = new ArrayList<>();
+    public static List<String> getCurrentlyAvailableRooms() {
+        List<String> ids = new ArrayList<>();
         try {
             String query = "SELECT roomid FROM sqills.room " +
                 "WHERE roomid NOT IN (" +
@@ -70,7 +70,7 @@ public class RoomDao {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                ids.add(resultSet.getInt("roomid"));
+                ids.add(resultSet.getString("roomid"));
             }
 
             statement.close();

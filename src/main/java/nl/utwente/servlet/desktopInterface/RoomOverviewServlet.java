@@ -13,6 +13,10 @@ public class RoomOverviewServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
         req.setAttribute("roomIDs", RoomDao.getAllRoomsIDs());
+        req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRooms());
+        for (String key : RoomDao.getCurrentlyAvailableRooms()) {
+            System.out.println(key);
+        }
         req.getRequestDispatcher("/desktop/roomOverview.jsp").forward(req, res);
     }
 }
