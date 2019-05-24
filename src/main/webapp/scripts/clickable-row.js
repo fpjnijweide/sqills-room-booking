@@ -1,5 +1,4 @@
-
-
+//Todo: fix
 $(document).ready(() =>  {
     let elems = document.getElementsByClassName("clickable-row");
     console.log(elems);
