@@ -33,7 +33,7 @@ public class BookingDao {
             while (resultSet.next()) {
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
-                Date date = resultSet.getDate("bookingdate");
+                Date date = resultSet.getDate("date");
                 String roomID = resultSet.getString("roomID");
 
                 boolean isprivate = resultSet.getBoolean("getIsPrivate");
@@ -82,7 +82,7 @@ public class BookingDao {
 //            String findUserIdQuery = "SELECT userID FROM sqills.user WHERE email = ?";
 
 
-                String query = "INSERT INTO sqills.Booking (startTime, endTime, bookingdate, roomID, userID, isPrivate)\n" +
+                String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, userID, isPrivate)\n" +
                     "                VALUES ( ?, ?, ?, ?, \n" +
                     "(SELECT sqills.users.userID\n" +
                     "FROM sqills.users\n" +
@@ -167,7 +167,7 @@ public class BookingDao {
         try {
 
             String query = "UPDATE sqills.Booking " +
-                "SET startTime = ?, endTime = ?, bookingdate = ?, roomID = ?" +
+                "SET startTime = ?, endTime = ?, date = ?, roomID = ?" +
                 "WHERE bookingID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
@@ -206,7 +206,7 @@ public class BookingDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT startTime, endTime, bookingdate, roomID, fullname, isprivate FROM sqills.booking b JOIN sqills.users u on u.userid = b.userid  WHERE roomID = ? AND bookingdate = CURRENT_DATE";
+            String query = "SELECT startTime, endTime, date, roomID, fullname, isprivate FROM sqills.booking b JOIN sqills.users u on u.userid = b.userid  WHERE roomID = ? AND date = CURRENT_DATE";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
 
@@ -215,7 +215,7 @@ public class BookingDao {
             while (resultSet.next()) {
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
-                Date date = resultSet.getDate("bookingdate");
+                Date date = resultSet.getDate("date");
                 int queriedRoomID = resultSet.getInt("roomID");
 
                 // TODO maybe change booking object because right now we are putting stuff in email field that is not an email
@@ -264,7 +264,7 @@ public class BookingDao {
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT starttime, endtime, bookingdate FROM Sqills.booking WHERE roomID = ? AND bookingdate = ? ";
+            String query = "SELECT starttime, endtime, date FROM Sqills.booking WHERE roomID = ? AND date = ? ";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
             statement.setDate(2, date);
@@ -313,7 +313,7 @@ public class BookingDao {
             String query = "SELECT roomid FROM sqills.room " +
                 "WHERE roomid NOT IN (" +
                 "    SELECT roomid FROM sqills.booking " +
-                "    WHERE bookingdate = CURRENT_DATE " +
+                "    WHERE date = CURRENT_DATE " +
                 "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
                 ") " +
                 "AND roomid > 0;";
