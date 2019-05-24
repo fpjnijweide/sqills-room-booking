@@ -2,8 +2,10 @@ package nl.utwente.resource;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import nl.utwente.dao.BookingDao;
 import nl.utwente.model.Booking;
+import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 
 import javax.ws.rs.*;
@@ -19,7 +21,7 @@ public class BookingResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
-    public Booking getSpecificBooking(@PathParam("bookingID") int bookingID) {
+    public OutputBooking getSpecificBooking(@PathParam("bookingID") int bookingID) {
         return BookingDao.getSpecificBooking(bookingID);
     }
 
@@ -51,7 +53,7 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/update")
     // Todo: Add validity check
-    public String createBooking(
+    public String updateBooking(
         @PathParam("bookingID") int bookingID,
         SpecifiedBooking booking
     ) {
@@ -72,7 +74,7 @@ public class BookingResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/delete")
-    public String createBooking(@PathParam("bookingID") int bookingID) {
+    public String deleteBooking(@PathParam("bookingID") int bookingID) {
         boolean success = BookingDao.deleteBooking(bookingID);
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode node = factory.objectNode();
