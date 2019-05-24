@@ -1,7 +1,6 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
-import nl.utwente.model.Booking;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,8 +13,9 @@ public class RoomDao {
      * @return Whether the provided roomID is valid
      */
     public static boolean isValidRoomID(int roomID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT * FROM sqills.Room WHERE roomID = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -29,27 +29,39 @@ public class RoomDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public static List<String> getAllRooms() {
-        ArrayList<String> result = new ArrayList<>();
+    public static List<Integer> getAllRoomsIDs() {
+        ArrayList<Integer> result = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT roomid FROM sqills.room";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 String queriedRoomID = resultSet.getString("roomid");
-                result.add(queriedRoomID);
+                result.add(Integer.parseInt(queriedRoomID));
             }
 
             resultSet.close();
             statement.close();
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }

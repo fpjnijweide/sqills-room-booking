@@ -1,25 +1,25 @@
-GET /api/room/{roomNumber}
+GET /api/room/{roomID}
 Returns all the bookings for this specific room for today. The room is specified by a room number.
 [
     {
-        "roomNumber": {number},
+        "roomID": {number},
         "startTime": {startTime},
         "endTime": {endTime}
     },
     {
-        "roomNumber": {number},
+        "roomID": {number},
         "startTime": {startTime},
         "endTime": {endTime}
     }
 ]
 
-POST /api/room/{roomNumber}/book
+POST /api/room/{roomID}/book
 BODY:
 {
     "startTime": {startTime},
     "endTime": {endTime}
 }
-Creates a booking for a specific room specified by the roomNumber from the URI.
+Creates a booking for a specific room specified by the roomID from the URI.
 The start and end time are specified by parameters in the request body.
 Returns:
 {

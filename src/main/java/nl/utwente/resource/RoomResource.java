@@ -2,69 +2,68 @@ package nl.utwente.resource;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.model.Booking;
-import nl.utwente.model.TimeSlot;
+import nl.utwente.model.SpecifiedBooking;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 import java.sql.Time;
 import java.util.List;
 
 @Path("/room")
 public class RoomResource {
+    public RoomResource(){ }
+
+
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
     /**
      * Returns all of today's bookings for a specific room.
-     * @param roomNumber Number specifying the room
+     * @param roomID Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<String> getRoomList () {
-        return RoomDao.getAllRooms();
+    public List<Integer> getRoomList () {
+        return RoomDao.getAllRoomsIDs();
     }
 
     @GET
-    @Path("/{roomNumber}")
+    @Path("/{roomID}")
     @Produces(MediaType.APPLICATION_JSON)
     /**
      * Returns all of today's bookings for a specific room.
-     * @param roomNumber Number specifying the room
+     * @param roomID Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<Booking> getBookingsForSpecificRoomToday (
-        @PathParam("roomNumber") Integer roomNumber
+    public List<SpecifiedBooking> getBookingsForSpecificRoomToday (
+        @PathParam("roomID") Integer roomID
     ) {
-        return BookingDao.getBookingsForRoomToday(roomNumber);
+        return BookingDao.getBookingsForRoomToday(roomID);
     }
 
-
     @POST
-    @Path("/{roomNumber}/book")
+    @Path("/{roomID}/book")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     /**
      * Create a booking for a specific room for today.
-     * @param roomNumber specifies the room
-     * @param timeSlot startTime and endTime specifying the times of the booking
+     * @param roomID specifies the room
+     * @param specifiedBooking startTime and endTime specifying the times of the booking
      * @return JSON object containing a "success" boolean value
      */
     public String createBookingForSpecificRoom (
-        @PathParam("roomNumber") Integer roomNumber,
-        TimeSlot timeSlot
+        @PathParam("roomID") Integer roomID,
+        Booking booking
     ) {
-        Time startTime = Time.valueOf(timeSlot.getStartTime());
-        Time endTime = Time.valueOf(timeSlot.getEndTime());
-        boolean valid = RoomDao.isValidRoomID(roomNumber) &&
-            BookingDao.isValidBookingToday(roomNumber, timeSlot.getStartTime(), timeSlot.getEndTime());
+        Time startTime = booking.getStartTime();
+        Time endTime = booking.getEndTime();
+        boolean valid = RoomDao.isValidRoomID(roomID) &&
+            BookingDao.isValidBookingToday(roomID, startTime, endTime);
 
         if (valid) {
-            BookingDao.insertBookingToday(roomNumber, startTime, endTime);
+            BookingDao.insertBookingToday(roomID, startTime, endTime, booking.getEmail(), booking.getIsPrivate());
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
