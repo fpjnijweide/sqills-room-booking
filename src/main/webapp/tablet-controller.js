@@ -1,40 +1,40 @@
 var refreshSet = false; // Global boolean used to check whether the updatePage method is being called every X seconds
-var currentroomID; // Global variable used for storing room number to be used in methods
+var currentRoomNumber; // Global variable used for storing room number to be used in methods
 
 function selectRoom() { // Called when "select room" button is pressed
     // TODO have client-side check if room nr is valid
-    currentroomID = document.getElementById("room-input").value
-    updatePage(currentroomID, false); // Call the main method
+    currentRoomNumber = document.getElementById("room-input").value
+    updatePage(currentRoomNumber, false); // Call the main method
     if(!refreshSet){ // If we do not already have the updatePage method being checked every X seconds
         // Use setInterval to make sure it is called every X seconds, and set refreshSet to true
         setInterval(() => {
-            updatePage(currentroomID, true);
+            updatePage(currentRoomNumber, true);
         }, 30000);
         refreshSet = true;
     }
 }
 
-function getRoomData(roomIDInput){
-    axios.get(`/api/room/${roomIDInput}`).then((response) => { // GET request
+function getRoomData(roomNumberInput){
+    axios.get(`/api/room/${roomNumberInput}`).then((response) => { // GET request
         return response.data;
     });
 }
 
-function checkIfRoomTaken(roomIDInput, data){
+function checkIfRoomTaken(roomNumberInput, data){
     let roomStartTime = getEarliestStartTime(data); // Check if room is free, and get the time of the next booking
     return roomStartTime;
 }
 
-function updatePage(roomIDInput, update) {
-    data = getRoomData(roomIDInput)
-    if(!checkIfRoomTaken(roomIDInput, data)){
+function updatePage(roomNumberInput, update) {
+    data = getRoomData(roomNumberInput)
+    if(!checkIfRoomTaken(roomNumberInput, data)){
         displayTableOfBookings(data);
         displayRoomIsBooked();
         checkIfOtherRoomsAreBooked();
     }
     else {
         if (!update) {
-            displayRoomIsFree(checkIfRoomTaken(roomIDInput, data));
+            displayRoomIsFree(checkIfRoomTaken(roomNumberInput, data));
             displayMakeBooking();
         }
     }
@@ -47,7 +47,7 @@ function checkIfOtherRoomsAreBooked() {
         for(let id of listOfRoomIDs) {
 
 
-            if (id != currentroomID) { // Don't check for current room, obviously
+            if (id != currentRoomNumber) { // Don't check for current room, obviously
                 axios.get(`/api/room/${id}`).then(response => { // GET request
                     let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
                     displayOtherFreeRooms(roomStartTime, id);
