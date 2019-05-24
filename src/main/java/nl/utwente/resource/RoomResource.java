@@ -63,7 +63,7 @@ public class RoomResource {
             BookingDao.isValidBookingToday(roomID, startTime, endTime);
 
         if (valid) {
-            BookingDao.insertBookingToday(roomID, startTime, endTime, booking.getEmail(), booking.isPrivate());
+            BookingDao.insertBookingToday(roomID, startTime, endTime, booking.getEmail(), booking.getIsPrivate());
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;

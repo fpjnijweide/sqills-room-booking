@@ -59,25 +59,25 @@ public class Booking {
     }
 
     /**
-     * Gets isPrivate
+     * Gets getIsPrivate
      *
-     * @return value of isPrivate
+     * @return value of getIsPrivate
      */
-    public boolean isPrivate() {
+    public boolean getIsPrivate() {
         return isPrivate;
     }
 
     /**
-     * Sets isPrivate to aPrivate
+     * Sets getIsPrivate to aPrivate
      *
-     * @param aPrivate new value of isPrivate
+     * @param aPrivate new value of getIsPrivate
      */
-    public void setPrivate(boolean aPrivate) {
+    public void setIsPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
     }
 
     @Override
     public String toString() {
-        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " isPrivate: " + this.isPrivate;
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate;
     }
 }
