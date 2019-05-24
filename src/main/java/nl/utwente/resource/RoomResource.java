@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.model.Booking;
+import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 
 import javax.ws.rs.*;
@@ -37,7 +38,7 @@ public class RoomResource {
      * @param roomID Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<SpecifiedBooking> getBookingsForSpecificRoomToday (
+    public List<OutputBooking> getBookingsForSpecificRoomToday (
         @PathParam("roomName") String roomName
     ) {
         return BookingDao.getBookingsForRoomToday(roomName);
@@ -79,7 +80,7 @@ public class RoomResource {
      * Returns a list of all currently available rooms.
      */
     public List<String> getAvailableRooms() {
-        return RoomDao.getCurrentlyAvailableRoomIDs();
+        return RoomDao.getCurrentlyAvailableRooms();
     }
 
     @GET
@@ -93,7 +94,7 @@ public class RoomResource {
     @GET
     @Path("/{roomName}/week")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SpecifiedBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
+    public List<OutputBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
         return RoomDao.getBookingsForThisWeek(roomName);
     }
 }

@@ -5,12 +5,12 @@ import java.sql.Date;
 
 public class SpecifiedBooking extends Booking {
 
-    private int roomID;
+    private String roomName;
     private Date date;
 
-    public SpecifiedBooking(Time startTime, Time endTime, int roomID, Date date, String email, boolean isPrivate) {
+    public SpecifiedBooking(Time startTime, Time endTime, String roomName, Date date, String email, boolean isPrivate) {
         super(startTime, endTime, email, isPrivate);
-        this.roomID = roomID;
+        this.roomName = roomName;
         this.date = date;
     }
 
@@ -23,17 +23,17 @@ public class SpecifiedBooking extends Booking {
      *
      * @return value of roomID
      */
-    public int getRoomID() {
-        return roomID;
+    public String getRoomName() {
+        return roomName;
     }
 
     /**
      * Sets roomID to roomID
      *
-     * @param roomID new value of roomID
+     * @param roomName new value of roomID
      */
-    public void setRoomID(int roomID) {
-        this.roomID = roomID;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     /**
@@ -56,6 +56,6 @@ public class SpecifiedBooking extends Booking {
 
     @Override
     public String toString() {
-        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate + " roomID: " + this.roomID + " date: " + this.date;
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate + " roomName: " + this.roomName + " date: " + this.date;
     }
 }

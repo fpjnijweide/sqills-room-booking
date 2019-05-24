@@ -44,13 +44,13 @@ public class BookingDao {
                 boolean isprivate = resultSet.getBoolean("b.isPrivate");
 
                 String userName;
-                if (isprivate){
+                if (isprivate) {
                     userName = "PRIVATE";
                 } else {
                     userName = resultSet.getString("u.name");
                 }
 
-                // TODO return outputbooking here
+
                 booking = new OutputBooking(startTime, endTime, userName, roomName, date);
             }
 
@@ -88,17 +88,22 @@ public class BookingDao {
 
 //            String findUserIdQuery = "SELECT userID FROM sqills.user WHERE email = ?";
 
-                    // TODO make this accept a room name instead of ID
-                    String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, \"owner\", isPrivate)\n" +
-                    "                VALUES ( ?, ?, ?, ?, \n" +
-                    "(SELECT sqills.users.userID\n" +
-                    "FROM sqills.users\n" +
-                    "WHERE email = ?), ?);";
+            // TODO check if this works
+            // TODO @Andrew change this into SQL functions for higher marks!
+            String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, \"owner\", isPrivate)\n" +
+                "                VALUES ( ?, ?, ?, \n" +
+                "(SELECT sqills.room.roomid\n" +
+                "FROM sqills.room\n" +
+                "WHERE roomname = ?),\n" +
+                "(SELECT sqills.users.userID\n" +
+                "FROM sqills.users\n" +
+                "WHERE email = ?),\n" +
+                " ?);";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
-            statement.setInt(4, booking.getRoomID());
+            statement.setString(4, booking.getRoomName());
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
 
@@ -182,7 +187,7 @@ public class BookingDao {
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
-            statement.setInt(4, booking.getRoomID());
+            statement.setString(4, booking.getRoomName());
             statement.setInt(5, bookingID);
 
             int updatedRows = statement.executeUpdate();
@@ -206,38 +211,44 @@ public class BookingDao {
     /**
      * Returns a list of today's Bookings for a specified room
      *
-     * @param roomID RoomID of room whose bookings will be returned
+     * @param roomName of room whose bookings will be returned
      * @return Today's bookings for the specified room
      */
+    // TODO Check if this works
     public static List<OutputBooking> getBookingsForRoomToday(String roomName) {
         ArrayList<OutputBooking> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            // TODO update this to take a roomName instead of roomID
-            String query = "SELECT b.startTime, b.endTime, b.date, b.roomID, u.name, b.isprivate FROM sqills.booking b JOIN sqills.users u on u.userid = b.owner  WHERE roomID = ? AND date = CURRENT_DATE";
+
+            String query = "SELECT b.starttime, b.endtime, u.name, b.date, b.isprivate\n" +
+                "FROM sqills.Booking b\n" +
+                "    JOIN sqills.room r ON b.roomid = r.roomid\n" +
+                "    JOIN sqills.users u ON u.userid = b.owner\n" +
+                "WHERE r.roomname = ? AND b.date = CURRENT_DATE";
+//
+
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roomID);
+            statement.setString(1, roomName);
 
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("startTime");
-                Time endTime = resultSet.getTime("endTime");
-                Date date = resultSet.getDate("date");
-                int queriedRoomID = resultSet.getInt("roomID");
+                Time startTime = resultSet.getTime("b.startTime");
+                Time endTime = resultSet.getTime("b.endTime");
+                Date date = resultSet.getDate("b.date");
 
-                // TODO return an OutputBooking list
-                boolean isprivate = resultSet.getBoolean("isprivate");
 
-                String username;
-                if (isprivate){
-                    username = "PRIVATE";
+                boolean isprivate = resultSet.getBoolean("b.isPrivate");
+
+                String userName;
+                if (isprivate) {
+                    userName = "PRIVATE";
                 } else {
-                    username = resultSet.getString("name");
+                    userName = resultSet.getString("u.name");
                 }
 
-                // TODO get outputbooking here
-                result.add(new SpecifiedBooking(startTime, endTime, queriedRoomID, date, username, isprivate));
+
+                result.add(new OutputBooking(startTime, endTime, userName, roomName, date));
             }
 
             resultSet.close();
@@ -255,27 +266,28 @@ public class BookingDao {
     }
 
 
-    public static void insertBookingToday(int roomID, Time startTime, Time endTime, String email, boolean isPrivate) {
+    public static void insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
-        SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, String.valueOf(roomID), sqlDate,email, isPrivate );
+        SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate);
         createBooking(booking);
     }
 
-    public static boolean isValidBookingToday(int roomID, Time startTime, Time endTime) {
+    public static boolean isValidBookingToday(String roomName, Time startTime, Time endTime) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
-        return isValidBooking(roomID, startTime, endTime, sqlDate);
+        return isValidBooking(roomName, startTime, endTime, sqlDate);
     }
 
     public static boolean isValidBooking(String roomName, Time wantedStart, Time wantedEnd, Date date) {
         boolean isValid = true;
-        // TODO use roomName here
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT starttime, endtime, date FROM Sqills.booking WHERE roomID = ? AND date = ? ";
+            String query = "SELECT b.starttime, b.endtime, b.date FROM Sqills.booking b \n" +
+                "JOIN sqills.room r ON b.roomid=r.roomid\n" +
+                "WHERE r.roomname = ? AND b.date = ? ";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roomID);
+            statement.setString(1, roomName);
             statement.setDate(2, date);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
@@ -283,11 +295,11 @@ public class BookingDao {
                 Time bookingEnd = Time.valueOf(result.getString("endtime"));
 //                Time wantedStart = Time.valueOf(startTime);
 //                Time wantedEnd = Time.valueOf(endTime);
-                // TODO add email checking to this
+                // TODO add email checking to this and such? right now only checks if the time is valid
                 if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
                     || wantedEnd.compareTo(bookingStart) > 0 && wantedEnd.compareTo(bookingEnd) < 0
                     || wantedStart.compareTo(bookingStart) <= 0 && wantedEnd.compareTo(bookingEnd) >= 0
-                    ) {
+                ) {
                     isValid = false;
                 }
             }
@@ -308,40 +320,10 @@ public class BookingDao {
     }
 
     public static boolean isValidBooking(SpecifiedBooking booking) {
-        return isValidBooking(Integer.parseInt(booking.getRoomID()),
+        return isValidBooking(booking.getRoomName(),
             booking.getStartTime(),
             booking.getEndTime(),
             booking.getDate());
     }
 
-    // Todo: test
-    public List<Integer> getCurrentlyAvailableRooms() {
-        List<Integer> ids = new ArrayList<>();
-        Connection connection = DatabaseConnectionFactory.getConnection();
-        try {
-            String query = "SELECT roomid FROM sqills.room " +
-                "WHERE roomid NOT IN (" +
-                "    SELECT roomid FROM sqills.booking " +
-                "    WHERE date = CURRENT_DATE " +
-                "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
-                ") " +
-                "AND roomid > 0;";
-
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                ids.add(resultSet.getInt("roomid"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return ids;
-    }
 }
