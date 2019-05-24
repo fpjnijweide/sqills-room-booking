@@ -2,7 +2,7 @@ GET /api/booking/{bookingID}
 Returns a booking with a specified bookingID
 {
     "bookingID": {bookingID}
-    "roomID": {number},
+    "roomNumber": {number},
     "startTime": {startTime},
     "endTime": {endTime}
     "date": {date}
@@ -12,7 +12,7 @@ POST /api/booking/create
 Creates a booking with for a specified room
 BODY:
 {
-    "roomID": {number},
+    "roomNumber": {number},
     "date": {date},
     "startTime": {startTime},
     "endTime": {endTime}
@@ -29,7 +29,7 @@ PUT /api/booking/{bookingID}/update
 Updates a specific booking
 BODY:
 {
-    "roomID": {number},
+    "roomNumber": {number},
     "date": {date},
     "startTime": {startTime},
     "endTime": {endTime}
