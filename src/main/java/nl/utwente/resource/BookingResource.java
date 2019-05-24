@@ -16,10 +16,6 @@ public class BookingResource {
      * @param bookingID ID of booking to be returned
      * @return JSON Object for the requested booking
      */
-
-    public BookingResource(){
-
-    }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
@@ -37,9 +33,6 @@ public class BookingResource {
     @Path("/create")
     // Todo: Add validity check
     public String createBooking(SpecifiedBooking booking) {
-
-        System.out.println(booking.toString());
-
         boolean result = BookingDao.createBooking(booking);
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
