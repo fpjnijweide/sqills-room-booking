@@ -74,7 +74,7 @@ public class RoomDao {
             String query = "SELECT roomid FROM sqills.room " +
                 "WHERE roomid NOT IN (" +
                 "    SELECT roomid FROM sqills.booking " +
-                "    WHERE bookingdate = CURRENT_DATE " +
+                "    WHERE date = CURRENT_DATE " +
                 "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
                 ") " +
                 "AND roomid > 0;";
@@ -101,7 +101,7 @@ public class RoomDao {
         try {
             String query = "SELECT MIN(starttime) FROM sqills.booking " +
                 "WHERE roomid = ? " +
-                "AND bookingdate = CURRENT_DATE " +
+                "AND date = CURRENT_DATE " +
                 "AND starttime > CURRENT_TIME;";
             Connection connection = DatabaseConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -124,11 +124,11 @@ public class RoomDao {
 
     public static List<SpecifiedBooking> getBookingsForThisWeek(int roomID) {
         List<SpecifiedBooking> result = new ArrayList<>();
-        String query = "SELECT starttime, endtime, bookingdate " +
+        String query = "SELECT starttime, endtime, date " +
             "FROM sqills.booking " +
-            "WHERE EXTRACT(WEEK FROM bookingdate) = EXTRACT(WEEK FROM CURRENT_DATE)" +
+            "WHERE EXTRACT(WEEK FROM date) = EXTRACT(WEEK FROM CURRENT_DATE)" +
             "AND roomid = ? " +
-            "ORDER BY bookingdate ASC;";
+            "ORDER BY date ASC;";
 
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -139,7 +139,7 @@ public class RoomDao {
             while (resultSet.next()) {
                 Time startTime = resultSet.getTime("starttime");
                 Time endTime = resultSet.getTime("endtime");
-                Date date = resultSet.getDate("bookingdate");
+                Date date = resultSet.getDate("date");
                 String email = resultSet.getString("email");
                 boolean isPrivate = resultSet.getBoolean("isPrivate");
 
