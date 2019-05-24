@@ -1,6 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.model.SpecifiedBooking;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -121,8 +122,8 @@ public class RoomDao {
         return result;
     }
 
-    public static List<Booking> getBookingsForThisWeek(int roomID) {
-        List<Booking> result = new ArrayList<>();
+    public static List<SpecifiedBooking> getBookingsForThisWeek(int roomID) {
+        List<SpecifiedBooking> result = new ArrayList<>();
         String query = "SELECT starttime, endtime, bookingdate " +
             "FROM sqills.booking " +
             "WHERE EXTRACT(WEEK FROM bookingdate) = EXTRACT(WEEK FROM CURRENT_DATE)" +
@@ -139,8 +140,10 @@ public class RoomDao {
                 Time startTime = resultSet.getTime("starttime");
                 Time endTime = resultSet.getTime("endtime");
                 Date date = resultSet.getDate("bookingdate");
+                String email = resultSet.getString("email");
+                boolean isPrivate = resultSet.getBoolean("isPrivate");
 
-                Booking booking = new Booking(startTime, endTime, roomID, date);
+                SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, String.valueOf(roomID), date, email, isPrivate);
                 result.add(booking);
             }
         } catch (SQLException e) {

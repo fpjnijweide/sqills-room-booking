@@ -93,7 +93,7 @@ public class RoomResource {
     @GET
     @Path("/{roomID}/week")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Booking> getBookingsForThisWeek(@PathParam("roomID") int roomID) {
+    public List<SpecifiedBooking> getBookingsForThisWeek(@PathParam("roomID") int roomID) {
         return RoomDao.getBookingsForThisWeek(roomID);
     }
 }
