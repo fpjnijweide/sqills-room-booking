@@ -91,7 +91,7 @@ public class BookingDao {
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
-            statement.setInt(4, Integer.parseInt(booking.getRoomID())); // TODO This should be a string with a subquery for the roomID later
+            statement.setInt(4, Integer.parseInt(booking.getRoomID())); // TODO This should be a string with a subquery for the room name later
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
 
@@ -174,7 +174,7 @@ public class BookingDao {
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
-            statement.setInt(4, Integer.parseInt(booking.getRoomID())); // TODO idem (see above)
+            statement.setInt(4, Integer.parseInt(booking.getRoomID())); // TODO room name subquery (see above)
             statement.setInt(5, bookingID);
 
             int updatedRows = statement.executeUpdate();
