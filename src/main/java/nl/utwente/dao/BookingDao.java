@@ -36,7 +36,7 @@ public class BookingDao {
                 Date date = resultSet.getDate("bookingdate");
                 String roomID = resultSet.getString("roomID");
 
-                boolean isprivate = resultSet.getBoolean("isPrivate");
+                boolean isprivate = resultSet.getBoolean("getIsPrivate");
                 String userID;
                 if (isprivate){
                     userID = "PRIVATE";
@@ -93,7 +93,7 @@ public class BookingDao {
             statement.setDate(3, booking.getDate());
             statement.setInt(4, Integer.parseInt(booking.getRoomID())); // TODO This should be a string with a subquery for the roomID later
             statement.setString(5, booking.getEmail());
-            statement.setBoolean(6, booking.isPrivate());
+            statement.setBoolean(6, booking.getIsPrivate());
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
