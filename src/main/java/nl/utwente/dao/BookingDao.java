@@ -229,7 +229,7 @@ public class BookingDao {
                 }
 
 
-                result.add(new SpecifiedBooking(startTime, endTime, String.valueOf(queriedRoomID), date, userID, isprivate));
+                result.add(new SpecifiedBooking(startTime, endTime, String.valueOf(queriedRoomID), date, username, isprivate));
             }
 
             resultSet.close();
