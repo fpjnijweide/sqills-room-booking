@@ -124,7 +124,7 @@ public class RoomDao {
 
     public static List<SpecifiedBooking> getBookingsForThisWeek(int roomID) {
         List<SpecifiedBooking> result = new ArrayList<>();
-        String query = "SELECT starttime, endtime, date " +
+        String query = "SELECT starttime, endtime, date, owner, isPrivate " +
             "FROM sqills.booking " +
             "WHERE EXTRACT(WEEK FROM date) = EXTRACT(WEEK FROM CURRENT_DATE)" +
             "AND roomid = ? " +
@@ -140,7 +140,7 @@ public class RoomDao {
                 Time startTime = resultSet.getTime("starttime");
                 Time endTime = resultSet.getTime("endtime");
                 Date date = resultSet.getDate("date");
-                String email = resultSet.getString("email");
+                String email = resultSet.getString("owner");
                 boolean isPrivate = resultSet.getBoolean("isPrivate");
 
                 SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, String.valueOf(roomID), date, email, isPrivate);
