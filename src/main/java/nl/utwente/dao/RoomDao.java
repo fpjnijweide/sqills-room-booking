@@ -14,22 +14,26 @@ public class RoomDao {
      * @return Whether the provided roomID is valid
      */
     public static boolean isValidRoomID(int roomID) {
+       return getRoomName(roomID)!=null;
+    }
+
+    public static String getRoomName(int roomID){
+        String result = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT * FROM sqills.Room WHERE roomID = ?";
+            String query = "SELECT roomname FROM sqills.Room WHERE roomid = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
 
             ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = resultSet.getString("roomname");
+            }
 
-            boolean result = resultSet.next();
-            resultSet.getStatement().getConnection().close();
-            return result;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             try {
                 connection.close();
@@ -37,6 +41,38 @@ public class RoomDao {
                 e.printStackTrace();
             }
         }
+        return result;
+    }
+
+    public static int getRoomID(String roomName){
+        int result=-1;
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+
+            String query = "SELECT roomid FROM sqills.Room WHERE roomName = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, roomName);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = resultSet.getInt("roomid");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static boolean isValidRoomName(String roomName) {
+        return getRoomID(roomName)!=-1;
     }
 
     public static List<Integer> getAllRoomsIDs() {
@@ -67,8 +103,36 @@ public class RoomDao {
         return result;
     }
 
+    public static List<String> getAllRoomNames() {
+        ArrayList<String> result = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+
+            String query = "SELECT roomname FROM sqills.room";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String queriedRoomName = resultSet.getString("roomid");
+                result.add(queriedRoomName);
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
     // Todo: test
-    public static List<String> getCurrentlyAvailableRooms() {
+    public static List<String> getCurrentlyAvailableRoomIDs() {
         List<String> ids = new ArrayList<>();
         try {
             String query = "SELECT roomid FROM sqills.room " +
@@ -143,7 +207,7 @@ public class RoomDao {
                 String email = resultSet.getString("owner");
                 boolean isPrivate = resultSet.getBoolean("isPrivate");
 
-                SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, String.valueOf(roomID), date, email, isPrivate);
+                SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomID, date, email, isPrivate);
                 result.add(booking);
             }
         } catch (SQLException e) {
@@ -159,4 +223,7 @@ public class RoomDao {
 
         return result;
     }
+
+
+
 }

@@ -79,7 +79,7 @@ public class RoomResource {
      * Returns a list of all currently available rooms.
      */
     public List<String> getAvailableRooms() {
-        return RoomDao.getCurrentlyAvailableRooms();
+        return RoomDao.getCurrentlyAvailableRoomIDs();
     }
 
     @GET

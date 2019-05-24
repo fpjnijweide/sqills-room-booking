@@ -20,7 +20,7 @@ public class RoomOverviewServlet extends HttpServlet {
             roomIDs.add(String.valueOf(id));
         }
         req.setAttribute("roomIDs", roomIDs);
-        req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRooms());
+        req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRoomIDs());
         req.getRequestDispatcher("/desktop/roomOverview.jsp").forward(req, res);
     }
 }
