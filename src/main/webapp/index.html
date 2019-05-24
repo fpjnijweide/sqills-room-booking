@@ -29,14 +29,16 @@
 
 </head>
 
-<body>
+<body onload="getRooms()">
 <header>
     <div class="header-logo">
         <img src="/assets/sqills-logo.svg" alt="sqills logo"/>
     </div>
 </header>
 <div class="container-fluid">
+    <div id="emailinput">
 
+    </div>
     <div id="content">
         <div class="row">
 
@@ -44,8 +46,9 @@
                 <form id="input-form">
                     <ul class="input-form-select-room">
                         <li>
-                            <input type="text" class="form-control" maxlength="5" placeholder="Room Number" id="room-input"
+                            <input type="text" class="form-control" maxlength="5" placeholder="Enter room Number" id="room-input"
                                    name="room-input">
+
                         </li>
                         <li>
                             <button onclick="selectRoom()" class="btn btn-primary" type="button"><i
@@ -55,7 +58,9 @@
                 </form>
             </div>
         </div>
+
     </div>
+
     <div class="row">
         <div class="col-sm-8 offset-sm-2 "id="book-now">
         </div>
