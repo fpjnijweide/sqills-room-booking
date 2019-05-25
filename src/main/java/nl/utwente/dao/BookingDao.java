@@ -335,4 +335,28 @@ public class BookingDao {
         }
         return ids;
     }
+
+    public static boolean isValidBookingID(int bookingID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        boolean isValid = false;
+
+        try {
+            String query = "SELECT * FROM sqills.booking WHERE bookingid = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, bookingID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            isValid = resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return isValid;
+    }
 }
