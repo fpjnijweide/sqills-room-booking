@@ -3,6 +3,7 @@ package nl.utwente.dao;
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.model.Booking;
 import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.SpecifiedBookingWithParticipants;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class BookingDao {
      * @param bookingID booking ID of booking to be returned
      * @return returns booking with specified ID or null if the booking does not exist.
      */
-    public static Booking getSpecificBooking(int bookingID) {
-        Booking booking = null;
+    public static SpecifiedBookingWithParticipants getSpecificBooking(int bookingID) {
+        SpecifiedBookingWithParticipants booking = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT * FROM sqills.Booking WHERE bookingID = ?";
@@ -36,15 +37,21 @@ public class BookingDao {
                 Date date = resultSet.getDate("date");
                 String roomID = resultSet.getString("roomID");
 
-                boolean isprivate = resultSet.getBoolean("getIsPrivate");
+                boolean isprivate = resultSet.getBoolean("isPrivate");
                 String userID;
                 if (isprivate){
                     userID = "PRIVATE";
                 } else {
-                    userID = resultSet.getString("userID");
+                    userID = resultSet.getString("owner");
                 }
 
-                booking = new SpecifiedBooking(startTime, endTime, roomID, date, userID,isprivate);
+                booking = new SpecifiedBookingWithParticipants();
+                booking.setDate(date);
+                booking.setStartTime(startTime);
+                booking.setEndTime(endTime);
+                booking.setRoomID(roomID);
+                booking.setEmail("filler");
+                booking.setParticipants(ParticipantDao.getParticipantIDsOfBooking(bookingID));
             }
 
             resultSet.close();

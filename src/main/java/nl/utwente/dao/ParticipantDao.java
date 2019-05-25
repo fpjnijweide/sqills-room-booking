@@ -53,8 +53,7 @@ public class ParticipantDao {
         boolean success = false;
 
         try {
-            String query = "INSERT INTO participants.participants (bookingid, userid)" +
-                "VALUES (?, ?);";
+            String query = "INSERT INTO sqills.participants (bookingid, userid) VALUES (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
             preparedStatement.setInt(2, userID);
