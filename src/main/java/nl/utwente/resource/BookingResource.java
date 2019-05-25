@@ -3,11 +3,14 @@ package nl.utwente.resource;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.dao.BookingDao;
+import nl.utwente.dao.ParticipantDao;
 import nl.utwente.model.Booking;
 import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/booking")
 public class BookingResource {
@@ -61,6 +64,13 @@ public class BookingResource {
         ObjectNode success = factory.objectNode();
         success.put("success", result);
         return success.toString();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{bookingID}/participants")
+    public List<User> getParticipants(@PathParam("bookingID") int bookingID) {
+        return ParticipantDao.getParticipantIDsOfBooking(bookingID);
     }
 
     /**
