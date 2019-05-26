@@ -72,4 +72,28 @@ public class ParticipantDao {
 
         return success;
     }
+
+    public static boolean removeParticipant(int bookingID, int userID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        boolean success = false;
+
+        try {
+            String query = "DELETE FROM sqills.participants WHERE bookingid = ? AND userid = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, bookingID);
+            preparedStatement.setInt(2, userID);
+
+            int count = preparedStatement.executeUpdate();
+            success = count > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return success;
+    }
 }
