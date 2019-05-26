@@ -4,6 +4,7 @@ import nl.utwente.dao.ParticipantDao;
 import nl.utwente.model.UserIDBookingIDPair;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
@@ -15,5 +16,12 @@ public class ParticipantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean addParticipant(UserIDBookingIDPair pair) {
         return ParticipantDao.addParticipantToBooking(pair.getBookingid(), pair.getUserid());
+    }
+
+    @DELETE
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean removeParticipant(UserIDBookingIDPair pair) {
+        return ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
     }
 }
