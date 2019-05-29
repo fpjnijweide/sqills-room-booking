@@ -8,7 +8,7 @@
     <script src="/scripts/create-booking.js"></script>
     <script src="/scripts/booking-details.js"></script>
     <script>
-        const ROOM_ID = <%= request.getAttribute("id") %>;
+        const ROOM_ID = "<%= request.getAttribute("id") %>";
     </script>
 </head>
 <body>
