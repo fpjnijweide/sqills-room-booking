@@ -70,7 +70,7 @@ public class RoomResource {
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
         success.put("success", valid);
-        return success.toString();
+            return success.toString();
     }
 
     @GET
