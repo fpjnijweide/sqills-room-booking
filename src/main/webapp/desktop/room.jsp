@@ -1,6 +1,6 @@
 <%@ page import="nl.utwente.model.Booking" %>
 <%@ page import="java.util.List" %>
-<%@ page import="nl.utwente.model.SpecifiedBooking" %>
+<%@ page import="nl.utwente.model.OutputBooking" %>
 <html>
 <head>
     <title>Room <%= request.getAttribute("id") %></title>
@@ -24,7 +24,7 @@
                         <th>Start Time</th>
                         <th>End Time</th>
                     </tr>
-                    <% List<SpecifiedBooking> bookings = (List< SpecifiedBooking>) request.getAttribute("bookings"); %>
+                    <% List<OutputBooking> bookings = (List< OutputBooking>) request.getAttribute("bookings"); %>
                     <% for (int i = 0; i < bookings.size(); i++) { %>
                     <tr onclick="showDetails(1)">
                         <td><%= bookings.get(i).getDate() %></td>

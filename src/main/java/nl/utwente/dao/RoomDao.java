@@ -208,18 +208,18 @@ public class RoomDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("b.startTime");
-                Time endTime = resultSet.getTime("b.endTime");
-                Date date = resultSet.getDate("b.date");
+                Time startTime = resultSet.getTime("startTime");
+                Time endTime = resultSet.getTime("endTime");
+                Date date = resultSet.getDate("date");
 
 
-                boolean isprivate = resultSet.getBoolean("b.isPrivate");
+                boolean isprivate = resultSet.getBoolean("isPrivate");
 
                 String userName;
                 if (isprivate) {
                     userName = "PRIVATE";
                 } else {
-                    userName = resultSet.getString("u.name");
+                    userName = resultSet.getString("name");
                 }
 
 
