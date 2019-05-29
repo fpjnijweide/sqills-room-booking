@@ -4,19 +4,19 @@ function displayRoomIsFree(roomStartTime) {
     let currentTime = new Date();
     if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
         // If the booking time is not now, print until when room is free
-        roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free until " +
+        roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is free until " +
             roomStartTime.getHours() + ":" + roomStartTime.getMinutes() + "!</h3>"
     } else {
         // If booking time is now, earliestStartTime wasn't reset in getEarliestStartTime()
         // This means that there are no bookings for today. Print this fact.
-        roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is free for the whole day!</h3>"
+        roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is free for the whole day!</h3>"
     }
 }
 
 function displayRoomIsBooked() {
     // Prints the fact that room is booked
     let roomStatus = document.getElementById("room-status");
-    roomStatus.innerHTML = "<h3>Room " + currentRoomNumber + " is booked right now</h3>"
+    roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is booked right now</h3>"
 }
 
 function displayTableOfBookings(tableData) {
@@ -32,7 +32,7 @@ function displayTableOfBookings(tableData) {
         tableContent += `<tr> 
             <td> ${tableData[x].startTime} </td> 
             <td> ${tableData[x].endTime} </td>
-            <td> ${tableData[x].email}</td>
+            <td> ${tableData[x].userName}</td>
         </tr>`
     }
     tableContent += `</table>`;

@@ -15,12 +15,12 @@ public class RoomOverviewServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
         // Todo: Temporary check until type of IDs gets sorted out
-        List<String> roomIDs = new ArrayList<>();
-        for (int id : RoomDao.getAllRoomsIDs()) {
-            roomIDs.add(String.valueOf(id));
+        List<String> roomNames = new ArrayList<>();
+        for (String name : RoomDao.getAllRoomNames()) {
+            roomNames.add(name);
         }
-        req.setAttribute("roomIDs", roomIDs);
-        req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRoomIDs());
+        req.setAttribute("roomIDs", roomNames);
+        req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRooms());
         req.getRequestDispatcher("/desktop/roomOverview.jsp").forward(req, res);
     }
 }
