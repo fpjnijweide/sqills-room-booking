@@ -3,6 +3,11 @@ var currentRoomNumber; // Global variable used for storing room number to be use
 var showing = false
 var rooms;
 
+function enterPressed(event) {
+    event.preventDefault()
+    selectRoom()
+}
+
 function getRooms(){
     axios.get(`/api/room/list`).then((response) => { // GET request
         rooms = response.data;
