@@ -43,7 +43,7 @@
         <div class="row">
 
             <div class="col-sm">
-                <form id="input-form">
+                <form id="input-form" onsubmit="return enterPressed(event)">
                     <ul class="input-form-select-room">
                         <li>
                             <input type="text" class="form-control" maxlength="5" placeholder="Enter room Number" id="room-input"
@@ -51,7 +51,7 @@
 
                         </li>
                         <li>
-                            <button onclick="selectRoom()" class="btn btn-primary" type="button"><i
+                            <button id="room-button" onclick="selectRoom()" class="btn btn-primary" type="button"><i
                                     class="fas fa-rocket"></i></button>
                         </li>
                     </ul>
