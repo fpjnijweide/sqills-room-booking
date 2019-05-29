@@ -1,6 +1,6 @@
 function createBooking() {
     const requestBody = {
-        "roomID": ROOM_ID,
+        "roomName": ROOM_ID,
         "date": document.getElementById("date").value,
         "startTime": document.getElementById("start-time").value + ":00",
         "endTime": document.getElementById("end-time").value + ":00",
