@@ -14,13 +14,13 @@ public class RoomServlet extends HttpServlet {
         String uri = req.getRequestURI();
         String[] splitUri = uri.split("/");
         // Todo: Add validation of URI.
-        int roomID = Integer.valueOf(splitUri[3]);
-        if (!RoomDao.isValidRoomID(roomID)) {
+        String roomName = splitUri[3];
+        if (!RoomDao.isValidRoomName(roomName)) {
             res.setStatus(404);
             req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
         } else {
-            req.setAttribute("id", roomID);
-            req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomID));
+            req.setAttribute("id", roomName); // TODO maybe change "id" thing
+            req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomName));
             req.getRequestDispatcher("/desktop/room.jsp").forward(req, res);
         }
     }
