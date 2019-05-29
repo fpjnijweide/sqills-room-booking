@@ -57,3 +57,18 @@ function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
 
     }
 }
+
+function autoCompleteRoomName(){
+
+    let candidates = [];
+    let currentvalue = document.getElementById("room-input").value;
+    for(let i = 0; i < rooms.length; i++){
+        if (rooms[i].includes(currentvalue) && rooms[i].indexOf(currentvalue) == 0){
+            candidates.push(rooms[i]);
+        }
+    }
+    if (candidates.length == 1){
+        document.getElementById("room-input").value = candidates[0];
+    }
+
+}
