@@ -96,4 +96,33 @@ public class ParticipantDao {
         }
         return success;
     }
+
+    public static boolean addParticipantEmailToBooking(int bookingID, String email) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String useridQuery = "SELECT userid FROM sqills.users WHERE email = ?;";
+            PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
+            userIDStatement.setString(1, email);
+            ResultSet userIDResult = userIDStatement.executeQuery();
+            userIDResult.next();
+            final int userID = userIDResult.getInt("userid");
+
+            String insert = "INSERT INTO sqills.participants (bookingid, userid)" +
+                "VALUES (?, ?);";
+            PreparedStatement insertStatement = connection.prepareStatement(insert);
+            insertStatement.setInt(1, bookingID);
+            insertStatement.setInt(2, userID);
+            insertStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
+    }
 }

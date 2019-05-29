@@ -5,6 +5,7 @@ import nl.utwente.model.Booking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.SpecifiedBookingWithParticipants;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,13 +74,13 @@ public class BookingDao {
     /**
      * Creates a new booking entry in the database.
      *
-     * @return whether the booking was successfully created
+     * @return id of booking
      */
-    public static boolean createBooking(SpecifiedBooking booking) {
-        boolean successful = false;
+    public static int createBooking(SpecifiedBooking booking) {
+        int id = -1;
 
         if (!isValidBooking(booking)) {
-            return false;
+            return id;
         }
         Connection connection = DatabaseConnectionFactory.getConnection();
 
@@ -93,7 +94,8 @@ public class BookingDao {
                     "                VALUES ( ?, ?, ?, ?, \n" +
                     "(SELECT sqills.users.userID\n" +
                     "FROM sqills.users\n" +
-                    "WHERE email = ?), ?);";
+                    "WHERE email = ?), ?)" +
+                    "RETURNING bookingid;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
@@ -102,8 +104,9 @@ public class BookingDao {
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
 
-            int updatedRows = statement.executeUpdate();
-            successful = updatedRows > 0;
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            id = resultSet.getInt("bookingid");
             // TODO maybe have a nice error if e-mail is not found in database
             statement.close();
             connection.close();
@@ -119,7 +122,7 @@ public class BookingDao {
             }
         }
 
-        return successful;
+        return id;
     }
 
     /**
