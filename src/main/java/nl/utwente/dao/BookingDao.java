@@ -167,7 +167,6 @@ public class BookingDao {
      * @param bookingID specifies the booking to be updated
      * @return whether the update was successful
      */
-    // TODO Update this function with private, email fields
     public static boolean updateBooking(int bookingID, SpecifiedBooking booking) {
         boolean successful = false;
 
@@ -177,18 +176,28 @@ public class BookingDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
+            String query =  "UPDATE sqills.Booking \n" +
+                            "SET startTime=?, " +
+                            "endTime=?, " +
+                            "date=?, " +
+                            "roomID= (SELECT sqills.room.roomid\n" +
+                                     "FROM sqills.room\n" +
+                                     "WHERE roomname = ?),\n" +
+                            "\"owner\"= (SELECT sqills.users.userID\n" +
+                                        "FROM sqills.users\n" +
+                                        "WHERE email = ?),\n" +
+                            "isPrivate=? \n" +
+                            "WHERE bookingID = ?;";
 
-            // TODO update this to take a room name?
-            String query = "UPDATE sqills.Booking " +
-                "SET startTime = ?, endTime = ?, date = ?, roomID = ?" +
-                "WHERE bookingID = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
             statement.setDate(3, booking.getDate());
             statement.setString(4, booking.getRoomName());
-            statement.setInt(5, bookingID);
+            statement.setString(5, booking.getEmail());
+            statement.setBoolean(6, booking.getIsPrivate());
+            statement.setInt(7, bookingID);
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
