@@ -193,7 +193,7 @@ public class RoomDao {
     public static List<OutputBooking> getBookingsForThisWeek(String roomName) {
         // TODO maybe check if valid room name here? we already do that somewhere else? idk
         List<OutputBooking> result = new ArrayList<>();
-        String query = "SELECT b.starttime, b.endtime, b.date, u.name, b.isPrivate " +
+        String query = "SELECT b.starttime, b.endtime, b.date, u.name, b.isPrivate, b.title " +
             "FROM sqills.booking b " +
             "JOIN sqills.room r ON b.roomid = r.roomid " +
             "JOIN sqills.users u ON b.owner = u.userid " +
@@ -211,7 +211,7 @@ public class RoomDao {
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
-
+                String title = resultSet.getString("title");
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
 
@@ -223,7 +223,7 @@ public class RoomDao {
                 }
 
 
-                result.add(new OutputBooking(startTime, endTime, userName, roomName, date));
+                result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
             }
         } catch (SQLException e) {
             e.printStackTrace();

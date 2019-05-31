@@ -5,14 +5,16 @@ import java.sql.Time;
 
 public class OutputBooking extends TimeSlot{
     protected String userName;
-    private String roomName;
-    private Date date;
+    protected String roomName;
+    protected Date date;
+    protected String title;
 
-    public OutputBooking(Time startTime, Time endTime, String userName, String roomName, Date date) {
+    public OutputBooking(Time startTime, Time endTime, String userName, String roomName, Date date, String title) {
         super(startTime, endTime);
         this.userName = userName;
         this.roomName = roomName;
         this.date = date;
+        this.title = title;
     }
 
     public OutputBooking() {
@@ -75,6 +77,6 @@ public class OutputBooking extends TimeSlot{
 
     @Override
     public String toString() {
-        return "endTime:" + this.endTime + " startTime: " + this.startTime + " userName: " + this.userName + " roomName: " + this.roomName + " date: " + this.date;
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " userName: " + this.userName + " roomName: " + this.roomName + " date: " + this.date + " title: " + this.title;
     }
 }

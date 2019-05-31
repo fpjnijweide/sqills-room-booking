@@ -25,7 +25,7 @@ public class BookingDao {
         try {
 
 
-            String query = "SELECT b.starttime, b.endtime, u.name, r.roomname, b.date, b.isprivate\n" +
+            String query = "SELECT b.starttime, b.endtime, u.name, r.roomname, b.date, b.isprivate, b.title\n" +
                 "FROM sqills.Booking b\n" +
                 "    JOIN sqills.room r ON b.roomid = r.roomid\n" +
                 "    JOIN sqills.users u ON u.userid = b.owner\n" +
@@ -41,6 +41,7 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
                 String roomName = resultSet.getString("roomID");
+                String title = resultSet.getString("title");
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
 
@@ -52,7 +53,7 @@ public class BookingDao {
                 }
 
 
-                booking = new OutputBooking(startTime, endTime, userName, roomName, date);
+                booking = new OutputBooking(startTime, endTime, userName, roomName, date, title);
             }
 
             resultSet.close();
@@ -91,7 +92,7 @@ public class BookingDao {
 
             // TODO check if this works
             // TODO @Andrew change this into SQL functions for higher marks!
-            String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, \"owner\", isPrivate)\n" +
+            String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, \"owner\", isPrivate, title)\n" +
                 "                VALUES ( ?, ?, ?, \n" +
                 "(SELECT sqills.room.roomid\n" +
                 "FROM sqills.room\n" +
@@ -99,7 +100,8 @@ public class BookingDao {
                 "(SELECT sqills.users.userID\n" +
                 "FROM sqills.users\n" +
                 "WHERE email = ?),\n" +
-                " ?);";
+                " ?, \n" +
+                "?);";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
@@ -107,6 +109,7 @@ public class BookingDao {
             statement.setString(4, booking.getRoomName());
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
+            statement.setString(7, booking.getTitle());;
 
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -188,7 +191,8 @@ public class BookingDao {
                             "\"owner\"= (SELECT sqills.users.userID\n" +
                                         "FROM sqills.users\n" +
                                         "WHERE email = ?),\n" +
-                            "isPrivate=? \n" +
+                            "isPrivate=?, \n" +
+                            "title=? \n" +
                             "WHERE bookingID = ?;";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -199,7 +203,8 @@ public class BookingDao {
             statement.setString(4, booking.getRoomName());
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
-            statement.setInt(7, bookingID);
+            statement.setString(7, booking.getTitle());
+            statement.setInt(8, bookingID);
 
             int updatedRows = statement.executeUpdate();
             successful = updatedRows > 0;
@@ -231,7 +236,7 @@ public class BookingDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT b.starttime, b.endtime, u.name, b.date, b.isprivate\n" +
+            String query = "SELECT b.starttime, b.endtime, u.name, b.date, b.isprivate, b.title\n" +
                 "FROM sqills.Booking b\n" +
                 "    JOIN sqills.room r ON b.roomid = r.roomid\n" +
                 "    JOIN sqills.users u ON u.userid = b.owner\n" +
@@ -250,6 +255,7 @@ public class BookingDao {
 
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
+                String title = resultSet.getString("title");
 
                 String userName;
                 if (isprivate) {
@@ -259,7 +265,7 @@ public class BookingDao {
                 }
 
 
-                result.add(new OutputBooking(startTime, endTime, userName, roomName, date));
+                result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
             }
 
             resultSet.close();
@@ -277,10 +283,10 @@ public class BookingDao {
     }
 
 
-    public static void insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate) {
+    public static void insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate, String title) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
-        SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate);
+        SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate, title);
         createBooking(booking);
     }
 

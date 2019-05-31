@@ -8,8 +8,8 @@ public class SpecifiedBooking extends Booking {
     private String roomName;
     private Date date;
 
-    public SpecifiedBooking(Time startTime, Time endTime, String roomName, Date date, String email, boolean isPrivate) {
-        super(startTime, endTime, email, isPrivate);
+    public SpecifiedBooking(Time startTime, Time endTime, String roomName, Date date, String email, boolean isPrivate, String title) {
+        super(startTime, endTime, email, isPrivate, title);
         this.roomName = roomName;
         this.date = date;
     }
@@ -56,6 +56,6 @@ public class SpecifiedBooking extends Booking {
 
     @Override
     public String toString() {
-        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate + " roomName: " + this.roomName + " date: " + this.date;
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate + " roomName: " + this.roomName + " date: " + this.date + "title: " + this.title;
     }
 }
