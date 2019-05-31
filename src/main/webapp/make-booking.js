@@ -12,7 +12,12 @@ function displayMakeBooking() {
                 <br>
                 <br>
                 <input type="email" class="form-control" placeholder="Enter e-mail" id="e-mail" onkeyup="autoComplete()">
-                <input type="checkbox" name="private" value="private" id="private"> private meeting <br>
+                <br>
+                <input type="text" class="form-control" placeholder="Booking title (optional)" id="title">
+                <br>
+                <input type="checkbox" name="private" value="private" id="private"> private meeting 
+                
+                <br><br>
             </div>
             <div class="col-sm-1" id="booking-duration-value">
 
@@ -34,12 +39,15 @@ function selectHowLong(value) {
 function makeBooking() {
     let private = document.getElementById(`private`).checked;
     let email = document.getElementById(`e-mail`).value;
+    let title = document.getElementById("title").value;
+    if (title === "Booking title (optional)") {
+        title = "";
+    }
     console.log(email)
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
     if (validEmail(email) || email.value == ""){
-        // TODO find out why this only accepts "private" even though it's called isPrivate on the back-end
-        let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private};
+        let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private, "title" : title};
         axios.post(`/api/room/` + currentRoomName + `/book`, jsonBody).then((response) => {
             displayBooked(response.data);
         }).catch((error) => {
