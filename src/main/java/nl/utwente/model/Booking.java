@@ -8,6 +8,19 @@ public class Booking extends TimeSlot{
     protected boolean isPrivate;
     protected String title;
 
+
+
+    public Booking(Time startTime, Time endTime, String email, boolean isPrivate, String title) {
+        super(startTime, endTime);
+        this.email = email;
+        this.isPrivate = isPrivate;
+        this.title = title;
+    }
+
+    public Booking() {
+
+    }
+
     /**
      * Gets title
      *
@@ -24,17 +37,6 @@ public class Booking extends TimeSlot{
      */
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Booking(Time startTime, Time endTime, String email, boolean isPrivate, String title) {
-        super(startTime, endTime);
-        this.email = email;
-        this.isPrivate = isPrivate;
-        this.title = title;
-    }
-
-    public Booking() {
-
     }
 
     /**

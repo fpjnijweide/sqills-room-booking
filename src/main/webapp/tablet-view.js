@@ -27,12 +27,14 @@ function displayTableOfBookings(tableData) {
                          <th>Start Time</th>   
                          <th>End Time</th>  
                          <th>Booked by</th> 
+                         <th>Booking title</th>
                         </tr>`
     for (let x in tableData) {
         tableContent += `<tr> 
             <td> ${tableData[x].startTime} </td> 
             <td> ${tableData[x].endTime} </td>
             <td> ${tableData[x].userName}</td>
+            <td> ${tableData[x].title} </td>
         </tr>`
     }
     tableContent += `</table>`;

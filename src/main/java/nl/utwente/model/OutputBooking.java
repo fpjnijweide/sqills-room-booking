@@ -75,6 +75,24 @@ public class OutputBooking extends TimeSlot{
         this.date = date;
     }
 
+    /**
+     * Gets title
+     *
+     * @return value of title
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Sets title to title
+     *
+     * @param title new value of title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "endTime:" + this.endTime + " startTime: " + this.startTime + " userName: " + this.userName + " roomName: " + this.roomName + " date: " + this.date + " title: " + this.title;
