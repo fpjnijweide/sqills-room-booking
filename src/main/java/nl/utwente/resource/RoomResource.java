@@ -58,13 +58,12 @@ public class RoomResource {
         @PathParam("roomName") String roomName,
         Booking booking
     ) {
-        Time startTime = booking.getStartTime();
-        Time endTime = booking.getEndTime();
         boolean valid = RoomDao.isValidRoomName(roomName) &&
-            BookingDao.isValidBookingToday(roomName, startTime, endTime);
+            BookingDao.isValidBookingToday(roomName, booking.getStartTime(), booking.getEndTime());
 
         if (valid) {
-            BookingDao.insertBookingToday(roomName, startTime, endTime, booking.getEmail(), booking.getIsPrivate());
+            BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
+                booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
         }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
