@@ -4,7 +4,9 @@ import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.SpecifiedBookingWithParticipants;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,19 +37,18 @@ public class BookingDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("b.startTime");
-                Time endTime = resultSet.getTime("b.endTime");
-                Date date = resultSet.getDate("b.date");
-                String roomName = resultSet.getString("r.roomname");
+                Time startTime = resultSet.getTime("startTime");
+                Time endTime = resultSet.getTime("endTime");
+                Date date = resultSet.getDate("date");
+                String roomName = resultSet.getString("roomID");
 
-
-                boolean isprivate = resultSet.getBoolean("b.isPrivate");
+                boolean isprivate = resultSet.getBoolean("isPrivate");
 
                 String userName;
                 if (isprivate) {
                     userName = "PRIVATE";
                 } else {
-                    userName = resultSet.getString("u.name");
+                    userName = resultSet.getString("name");
                 }
 
 
@@ -73,13 +74,13 @@ public class BookingDao {
     /**
      * Creates a new booking entry in the database.
      *
-     * @return whether the booking was successfully created
+     * @return id of booking
      */
-    public static boolean createBooking(SpecifiedBooking booking) {
-        boolean successful = false;
+    public static int createBooking(SpecifiedBooking booking) {
+        int id = -1;
 
         if (!isValidBooking(booking)) {
-            return false;
+            return id;
         }
         Connection connection = DatabaseConnectionFactory.getConnection();
 
@@ -107,8 +108,9 @@ public class BookingDao {
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
 
-            int updatedRows = statement.executeUpdate();
-            successful = updatedRows > 0;
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            id = resultSet.getInt("bookingid");
             // TODO maybe have a nice error if e-mail is not found in database
             statement.close();
             connection.close();
@@ -124,7 +126,7 @@ public class BookingDao {
             }
         }
 
-        return successful;
+        return id;
     }
 
     /**
@@ -335,4 +337,27 @@ public class BookingDao {
             booking.getDate());
     }
 
+   public static boolean isValidBookingID(int bookingID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        boolean isValid = false;
+
+        try {
+            String query = "SELECT * FROM sqills.booking WHERE bookingid = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, bookingID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            isValid = resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return isValid;
+    }
 }

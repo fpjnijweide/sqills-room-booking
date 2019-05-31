@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h2>Bookings for room <%= request.getAttribute("id") %></h2>
-                <table class="table">
+                <table class="table" id="bookings-table">
                     <tr>
                         <th>Date</th>
                         <th>Start Time</th>
@@ -79,7 +79,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
