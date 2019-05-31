@@ -4,12 +4,15 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import nl.utwente.dao.BookingDao;
+import nl.utwente.dao.ParticipantDao;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/booking")
 public class BookingResource {
@@ -35,11 +38,11 @@ public class BookingResource {
     @Path("/create")
     // Todo: Add validity check
     public String createBooking(SpecifiedBooking booking) {
-        boolean result = BookingDao.createBooking(booking);
+        int result = BookingDao.createBooking(booking);
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
-        success.put("success", result);
+        success.put("bookingid", result);
         return success.toString();
     }
 
@@ -63,6 +66,13 @@ public class BookingResource {
         ObjectNode success = factory.objectNode();
         success.put("success", result);
         return success.toString();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{bookingID}/participants")
+    public List<User> getParticipants(@PathParam("bookingID") int bookingID) {
+        return ParticipantDao.getParticipantIDsOfBooking(bookingID);
     }
 
     /**
