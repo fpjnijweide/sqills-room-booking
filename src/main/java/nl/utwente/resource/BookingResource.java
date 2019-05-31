@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.ParticipantDao;
-import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
