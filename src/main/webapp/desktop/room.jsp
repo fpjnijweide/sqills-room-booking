@@ -106,10 +106,10 @@
 
     <div id="booking-details" class="booking-details hide">
         <button class="close-button" onclick="hideDetails()"><i class="fas fa-times"></i></button>
-        <div class="booking-title">Code Review</div>
-        <div class="booking-date">Date: 27-08-2000</div>
-        <div class="booking-time">Time: 14:00 - 15:00</div>
-        <div class="booking-owner">Owner: platon@enschede.com</div>
+        <div class="booking-title" id="selected-booking-title">Code Review</div>
+        <div class="booking-date" id="selected-booking-date">Date: 27-08-2000</div>
+        <div class="booking-time" id="selected-booking-time">Time: 14:00 - 15:00</div>
+        <div class="booking-owner" id="selected-booking-owner">Owner: platon@enschede.com</div>
     </div>
 </body>
 </html>
