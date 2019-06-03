@@ -1,4 +1,4 @@
-//Shows the duration form used top make a booking
+let emailIsInDatabase = false;
 function displayMakeBooking() {
     document.getElementById(`content`).innerHTML = `
         <div class="row">
@@ -37,7 +37,7 @@ function makeBooking() {
     console.log(email)
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    if (validEmail(email) || email.value == ""){
+    if (validEmail){
         // TODO find out why this only accepts "private" even though it's called isPrivate on the back-end
         let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private};
         axios.post(`/api/room/` + currentRoomNumber + `/book`, jsonBody).then((response) => {
@@ -98,34 +98,16 @@ function invalidEmailMessage(){
 }
 
 function autoComplete(){
-    axios.get(`/api/user/list`).then((response) => { // GET request
-        let candidates = [];
-        let emails = response.data
-        let currentvalue = document.getElementById("e-mail").value;
-        for(let i = 0; i < emails.length; i++){
-            if (emails[i].includes(currentvalue) && emails[i].indexOf(currentvalue) == 0){
-                candidates.push(emails[i]);
+    let email = document.getElementById("e-mail").value;
+    if (email.value != "") {
+        axios.get(`/api/user/` + email).then((response) => { // GET request
+            let data = response.data;
+            if (data.email != "null") {
+                document.getElementById("e-mail").value = data.email;
+                emailIsInDatabase = true;
+            } else {
+                emailIsInDatabase = false;
             }
-        }
-        if (candidates.length == 1){
-            document.getElementById("e-mail").value = candidates[0];
-        }
-    }).catch((error) => {
-        if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            alert(error.response.status);
-            console.log(error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            alert(error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            alert('Error', error.message);
-        }
-        console.log(error.config);
-    });
+        });
+    }
 }
