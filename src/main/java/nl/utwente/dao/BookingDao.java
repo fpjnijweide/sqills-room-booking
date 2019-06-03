@@ -41,15 +41,17 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
                 String roomName = resultSet.getString("roomName");
-                String title = resultSet.getString("title");
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
 
                 String userName;
+                String title;
                 if (isprivate) {
                     userName = "PRIVATE";
+                    title = "PRIVATE;";
                 } else {
                     userName = resultSet.getString("name");
+                    title = resultSet.getString("title");
                 }
 
 
@@ -256,15 +258,17 @@ public class BookingDao {
 
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
-                String title = resultSet.getString("title");
+
 
                 String userName;
+                String title;
                 if (isprivate) {
                     userName = "PRIVATE";
+                    title = "PRIVATE;";
                 } else {
                     userName = resultSet.getString("name");
+                    title = resultSet.getString("title");
                 }
-
 
                 result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
             }
