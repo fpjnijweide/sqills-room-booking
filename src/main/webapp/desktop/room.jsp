@@ -28,7 +28,7 @@
                     </tr>
                     <% List<OutputBooking> bookings = (List<OutputBooking>) request.getAttribute("bookings"); %>
                     <% for (int i = 0; i < bookings.size(); i++) { %>
-                    <tr onclick="showDetails(1)">
+                    <tr>
                         <td><%= bookings.get(i).getTitle() %></td>
                         <td><%= bookings.get(i).getUserName() %></td>
                         <td><%= bookings.get(i).getDate() %></td>
