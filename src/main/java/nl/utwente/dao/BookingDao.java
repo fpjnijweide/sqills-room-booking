@@ -41,15 +41,17 @@ public class BookingDao {
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
                 String roomName = resultSet.getString("roomName");
-                String title = resultSet.getString("title");
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
 
                 String userName;
+                String title;
                 if (isprivate) {
                     userName = "PRIVATE";
+                    title = "PRIVATE;";
                 } else {
                     userName = resultSet.getString("name");
+                    title = resultSet.getString("title");
                 }
 
 
@@ -101,7 +103,7 @@ public class BookingDao {
                 "FROM sqills.users\n" +
                 "WHERE email = ?),\n" +
                 " ?, \n" +
-                "?)" +
+                "?) \n" +
                 "RETURNING bookingid;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
@@ -112,7 +114,7 @@ public class BookingDao {
             statement.setBoolean(6, booking.getIsPrivate());
             statement.setString(7, booking.getTitle());;
 
-            ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             id = resultSet.getInt("bookingid");
             // TODO maybe have a nice error if e-mail is not found in database
@@ -256,15 +258,17 @@ public class BookingDao {
 
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
-                String title = resultSet.getString("title");
+
 
                 String userName;
+                String title;
                 if (isprivate) {
                     userName = "PRIVATE";
+                    title = "PRIVATE;";
                 } else {
                     userName = resultSet.getString("name");
+                    title = resultSet.getString("title");
                 }
-
 
                 result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
             }
