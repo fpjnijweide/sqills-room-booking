@@ -1,6 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 
 import java.sql.*;
@@ -14,22 +15,26 @@ public class RoomDao {
      * @return Whether the provided roomID is valid
      */
     public static boolean isValidRoomID(int roomID) {
+       return getRoomName(roomID)!=null;
+    }
+
+    public static String getRoomName(int roomID){
+        String result = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT * FROM sqills.Room WHERE roomID = ?";
+            String query = "SELECT roomname FROM sqills.Room WHERE roomid = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
 
             ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = resultSet.getString("roomname");
+            }
 
-            boolean result = resultSet.next();
-            resultSet.getStatement().getConnection().close();
-            return result;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             try {
                 connection.close();
@@ -37,6 +42,38 @@ public class RoomDao {
                 e.printStackTrace();
             }
         }
+        return result;
+    }
+
+    public static int getRoomID(String roomName){
+        int result=-1;
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+
+            String query = "SELECT roomid FROM sqills.Room WHERE roomName = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, roomName);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = resultSet.getInt("roomid");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static boolean isValidRoomName(String roomName) {
+        return getRoomID(roomName)!=-1;
     }
 
     public static List<Integer> getAllRoomsIDs() {
@@ -67,45 +104,77 @@ public class RoomDao {
         return result;
     }
 
-    // Todo: test
-    public static List<String> getCurrentlyAvailableRooms() {
-        List<String> ids = new ArrayList<>();
+    public static List<String> getAllRoomNames() {
+        ArrayList<String> result = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT roomid FROM sqills.room " +
+
+            String query = "SELECT roomname FROM sqills.room";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                String queriedRoomName = resultSet.getString("roomname");
+                result.add(queriedRoomName);
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static List<String> getCurrentlyAvailableRooms() {
+        List<String> rooms = new ArrayList<>();
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "SELECT roomname FROM sqills.room " +
                 "WHERE roomid NOT IN (" +
                 "    SELECT roomid FROM sqills.booking " +
                 "    WHERE date = CURRENT_DATE " +
                 "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
                 ") " +
                 "AND roomid > 0;";
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                ids.add(resultSet.getString("roomid"));
+                rooms.add(resultSet.getString("roomname"));
             }
-
-            statement.close();
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            return ids;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return ids;
+        return rooms;
     }
 
-    public static Time getFreeUntil(int roomID) {
+    // TODO if this function is here, why do we do the incredibly stupid "getEarliestStartTime" thing on front end?
+    public static Time getFreeUntil(String roomName) {
         Time result = null;
 
         try {
-            String query = "SELECT MIN(starttime) FROM sqills.booking " +
-                "WHERE roomid = ? " +
-                "AND date = CURRENT_DATE " +
-                "AND starttime > CURRENT_TIME;";
+            String query = "SELECT MIN(b.starttime) FROM sqills.booking b " +
+                "JOIN sqills.room r ON b.roomid = r.roomid " +
+                "WHERE r.roomname = ? " +
+                "AND b.date = CURRENT_DATE " +
+                "AND b.starttime > CURRENT_TIME;";
             Connection connection = DatabaseConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roomID);
+            statement.setString(1, roomName);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -121,30 +190,42 @@ public class RoomDao {
         }
         return result;
     }
-
-    public static List<SpecifiedBooking> getBookingsForThisWeek(int roomID) {
-        List<SpecifiedBooking> result = new ArrayList<>();
-        String query = "SELECT starttime, endtime, date, owner, isPrivate " +
-            "FROM sqills.booking " +
+    public static List<OutputBooking> getBookingsForThisWeek(String roomName) {
+        // TODO maybe check if valid room name here? we already do that somewhere else? idk
+        List<OutputBooking> result = new ArrayList<>();
+        String query = "SELECT b.starttime, b.endtime, b.date, u.name, b.isPrivate, b.title " +
+            "FROM sqills.booking b " +
+            "JOIN sqills.room r ON b.roomid = r.roomid " +
+            "JOIN sqills.users u ON b.owner = u.userid " +
             "WHERE EXTRACT(WEEK FROM date) = EXTRACT(WEEK FROM CURRENT_DATE)" +
-            "AND roomid = ? " +
-            "ORDER BY date ASC;";
+            "AND r.roomname = ? " +
+            "ORDER BY b.date ASC;";
 
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, roomID);
+            statement.setString(1, roomName);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("starttime");
-                Time endTime = resultSet.getTime("endtime");
+                Time startTime = resultSet.getTime("startTime");
+                Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
-                String email = resultSet.getString("owner");
-                boolean isPrivate = resultSet.getBoolean("isPrivate");
 
-                SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, String.valueOf(roomID), date, email, isPrivate);
-                result.add(booking);
+                boolean isprivate = resultSet.getBoolean("isPrivate");
+
+                String userName;
+                String title;
+                if (isprivate) {
+                    userName = "PRIVATE";
+                    title = "PRIVATE;";
+                } else {
+                    userName = resultSet.getString("name");
+                    title = resultSet.getString("title");
+                }
+
+
+                result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -159,4 +240,7 @@ public class RoomDao {
 
         return result;
     }
+
+
+
 }

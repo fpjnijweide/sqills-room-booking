@@ -2,12 +2,16 @@ package nl.utwente.resource;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import nl.utwente.dao.BookingDao;
-import nl.utwente.model.Booking;
+import nl.utwente.dao.ParticipantDao;
+import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.User;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("/booking")
 public class BookingResource {
@@ -19,7 +23,7 @@ public class BookingResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
-    public Booking getSpecificBooking(@PathParam("bookingID") int bookingID) {
+    public OutputBooking getSpecificBooking(@PathParam("bookingID") int bookingID) {
         return BookingDao.getSpecificBooking(bookingID);
     }
 
@@ -33,11 +37,11 @@ public class BookingResource {
     @Path("/create")
     // Todo: Add validity check
     public String createBooking(SpecifiedBooking booking) {
-        boolean result = BookingDao.createBooking(booking);
+        int result = BookingDao.createBooking(booking);
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
-        success.put("success", result);
+        success.put("bookingid", result);
         return success.toString();
     }
 
@@ -51,7 +55,7 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/update")
     // Todo: Add validity check
-    public String createBooking(
+    public String updateBooking(
         @PathParam("bookingID") int bookingID,
         SpecifiedBooking booking
     ) {
@@ -63,6 +67,13 @@ public class BookingResource {
         return success.toString();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{bookingID}/participants")
+    public List<User> getParticipants(@PathParam("bookingID") int bookingID) {
+        return ParticipantDao.getParticipantIDsOfBooking(bookingID);
+    }
+
     /**
      * Deletes a specific booking
      * @param bookingID Path parameter specifying the booking to be deleted
@@ -72,7 +83,7 @@ public class BookingResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/delete")
-    public String createBooking(@PathParam("bookingID") int bookingID) {
+    public String deleteBooking(@PathParam("bookingID") int bookingID) {
         boolean success = BookingDao.deleteBooking(bookingID);
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode node = factory.objectNode();

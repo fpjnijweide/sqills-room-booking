@@ -5,3 +5,6 @@ create table sqills.room
             primary key,
     roomname varchar
 );
+
+create unique index room_roomname_uindex
+    on sqills.room (roomname);

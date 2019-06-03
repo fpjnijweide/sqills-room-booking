@@ -1,6 +1,6 @@
 <%@ page import="nl.utwente.model.Booking" %>
 <%@ page import="java.util.List" %>
-<%@ page import="nl.utwente.model.SpecifiedBooking" %>
+<%@ page import="nl.utwente.model.OutputBooking" %>
 <html>
 <head>
     <title>Room <%= request.getAttribute("id") %></title>
@@ -8,7 +8,7 @@
     <script src="/scripts/create-booking.js"></script>
     <script src="/scripts/booking-details.js"></script>
     <script>
-        const ROOM_ID = <%= request.getAttribute("id") %>;
+        const ROOM_ID = "<%= request.getAttribute("id") %>";
     </script>
 </head>
 <body>
@@ -18,15 +18,19 @@
         <div class="row">
             <div class="col-md-6">
                 <h2>Bookings for room <%= request.getAttribute("id") %></h2>
-                <table class="table">
+                <table class="table" id="bookings-table">
                     <tr>
+                        <th>Title</th>
+                        <th>Name</th>
                         <th>Date</th>
                         <th>Start Time</th>
                         <th>End Time</th>
                     </tr>
-                    <% List<SpecifiedBooking> bookings = (List< SpecifiedBooking>) request.getAttribute("bookings"); %>
+                    <% List<OutputBooking> bookings = (List<OutputBooking>) request.getAttribute("bookings"); %>
                     <% for (int i = 0; i < bookings.size(); i++) { %>
-                    <tr onclick="showDetails(1)">
+                    <tr>
+                        <td><%= bookings.get(i).getTitle() %></td>
+                        <td><%= bookings.get(i).getUserName() %></td>
                         <td><%= bookings.get(i).getDate() %></td>
                         <td><%= bookings.get(i).getStartTime() %></td>
                         <td><%= bookings.get(i).getEndTime() %></td>
@@ -38,6 +42,10 @@
             <div class="col-md-6">
                 <h2 style="text-align: right;">Create a booking</h2>
                 <form class="align-right">
+                    <div class="form-group">
+                        <label>Title: </label>
+                        <input type="text" id="title" name="title" value="" required>
+                    </div>
                     <div class="form-group">
                         <label>Date: </label>
                         <input type="date" id="date" name="date" value="" required>
@@ -79,7 +87,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -106,10 +113,10 @@
 
     <div id="booking-details" class="booking-details hide">
         <button class="close-button" onclick="hideDetails()"><i class="fas fa-times"></i></button>
-        <div class="booking-title">Code Review</div>
-        <div class="booking-date">Date: 27-08-2000</div>
-        <div class="booking-time">Time: 14:00 - 15:00</div>
-        <div class="booking-owner">Owner: platon@enschede.com</div>
+        <div class="booking-title" id="selected-booking-title">Code Review</div>
+        <div class="booking-date" id="selected-booking-date">Date: 27-08-2000</div>
+        <div class="booking-time" id="selected-booking-time">Time: 14:00 - 15:00</div>
+        <div class="booking-owner" id="selected-booking-owner">Owner: platon@enschede.com</div>
     </div>
 </body>
 </html>

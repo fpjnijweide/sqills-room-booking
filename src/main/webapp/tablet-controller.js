@@ -1,5 +1,5 @@
 var refreshSet = false; // Global boolean used to check whether the updatePage method is being called every X seconds
-var currentRoomNumber; // Global variable used for storing room number to be used in methods
+var currentRoomName; // Global variable used for storing room number to be used in methods
 var showing = false
 var rooms;
 
@@ -32,19 +32,19 @@ function getRooms(){
 }
 
 function selectRoom() { // Called when "select room" button is pressed
-    currentRoomNumber = document.getElementById("room-input").value;
-    if (rooms.includes(parseInt(currentRoomNumber))){
-        updatePage(currentRoomNumber, false); // Call the main method
+    currentRoomName = document.getElementById("room-input").value;
+    if (rooms.includes(currentRoomName)){
+        updatePage(currentRoomName, false); // Call the main method
         if(!refreshSet){ // If we do not already have the updatePage method being checked every X seconds
             // Use setInterval to make sure it is called every X seconds, and set refreshSet to true
             setInterval(() => {
-                updatePage(currentRoomNumber, true);
+                updatePage(currentRoomName, true);
 
             }, 30000);
             refreshSet = true;
         }
     } else {
-        invalidRoomNumber(currentRoomNumber);
+        invalidRoomNumber(currentRoomName);
     }
 }
 
@@ -120,7 +120,7 @@ function checkIfOtherRoomsAreBooked() {
     axios.get(`/api/room/list`).then((response) => { // GET request
         let listOfRoomIDs = response.data
         for(let id of listOfRoomIDs) {
-            if (id != currentRoomNumber) { // Don't check for current room, obviously
+            if (id != currentRoomName) { // Don't check for current room, obviously
                 callDisplayFreeRooms(id)
             }
         }
