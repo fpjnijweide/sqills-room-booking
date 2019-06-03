@@ -211,15 +211,17 @@ public class RoomDao {
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
-                String title = resultSet.getString("title");
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
 
                 String userName;
+                String title;
                 if (isprivate) {
                     userName = "PRIVATE";
+                    title = "PRIVATE;";
                 } else {
                     userName = resultSet.getString("name");
+                    title = resultSet.getString("title");
                 }
 
 

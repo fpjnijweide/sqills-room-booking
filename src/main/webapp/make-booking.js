@@ -46,7 +46,10 @@ function makeBooking() {
     console.log(email)
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    if (validEmail(email) || email.value == ""){
+    if (email.value==""){
+        email.value="sqills_tablet@gmail.com";
+    }
+    if (validEmail(email)){
         let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private, "title" : title};
         axios.post(`/api/room/` + currentRoomName + `/book`, jsonBody).then((response) => {
             displayBooked(response.data);

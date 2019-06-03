@@ -1,6 +1,6 @@
 create table sqills.users
 (
-    bookingid        serial not null
+    userid        serial not null
         constraint users_pkey
             primary key,
     name          varchar,
