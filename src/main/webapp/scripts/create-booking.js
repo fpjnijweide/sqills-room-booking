@@ -5,12 +5,13 @@ function createBooking() {
         "startTime": document.getElementById("start-time").value + ":00",
         "endTime": document.getElementById("end-time").value + ":00",
         "email": document.getElementById("email").value,
-        "isPrivate": document.getElementById("isPrivate").checked
+        "isPrivate": document.getElementById("isPrivate").checked,
+        "title": document.getElementById("title").value
     };
 
     axios.post("/api/booking/create", requestBody)
         .then(response => {
-            if (response.data.success) {
+            if (response.data.bookingid >= 0) {
                 $("#success-modal").modal();
             } else {
                 $("#fail-modal").modal();

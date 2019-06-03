@@ -101,7 +101,8 @@ public class BookingDao {
                 "FROM sqills.users\n" +
                 "WHERE email = ?),\n" +
                 " ?, \n" +
-                "?);";
+                "?)" +
+                "RETURNING bookingid;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
