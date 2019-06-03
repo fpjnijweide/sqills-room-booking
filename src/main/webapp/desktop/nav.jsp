@@ -12,7 +12,7 @@
                 <a class="nav-link" href="/desktop/rooms">Rooms</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Bookings</a>
+                <a class="nav-link" href="/desktop/book">Book a Room</a>
             </li>
         </ul>
     </div>
