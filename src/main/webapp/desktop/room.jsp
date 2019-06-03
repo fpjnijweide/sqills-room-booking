@@ -39,6 +39,10 @@
                 <h2 style="text-align: right;">Create a booking</h2>
                 <form class="align-right">
                     <div class="form-group">
+                        <label>Title: </label>
+                        <input type="text" id="title" name="title" value="" required>
+                    </div>
+                    <div class="form-group">
                         <label>Date: </label>
                         <input type="date" id="date" name="date" value="" required>
                     </div>
