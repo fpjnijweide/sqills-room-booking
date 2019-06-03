@@ -40,7 +40,7 @@ public class BookingDao {
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
-                String roomName = resultSet.getString("roomID");
+                String roomName = resultSet.getString("roomName");
                 String title = resultSet.getString("title");
 
                 boolean isprivate = resultSet.getBoolean("isPrivate");
