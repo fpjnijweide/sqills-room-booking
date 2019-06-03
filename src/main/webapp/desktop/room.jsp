@@ -20,13 +20,17 @@
                 <h2>Bookings for room <%= request.getAttribute("id") %></h2>
                 <table class="table" id="bookings-table">
                     <tr>
+                        <th>Title</th>
+                        <th>Name</th>
                         <th>Date</th>
                         <th>Start Time</th>
                         <th>End Time</th>
                     </tr>
-                    <% List<OutputBooking> bookings = (List< OutputBooking>) request.getAttribute("bookings"); %>
+                    <% List<OutputBooking> bookings = (List<OutputBooking>) request.getAttribute("bookings"); %>
                     <% for (int i = 0; i < bookings.size(); i++) { %>
                     <tr onclick="showDetails(1)">
+                        <td><%= bookings.get(i).getTitle() %></td>
+                        <td><%= bookings.get(i).getUserName() %></td>
                         <td><%= bookings.get(i).getDate() %></td>
                         <td><%= bookings.get(i).getStartTime() %></td>
                         <td><%= bookings.get(i).getEndTime() %></td>
