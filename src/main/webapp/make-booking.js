@@ -46,8 +46,8 @@ function makeBooking() {
     console.log(email)
     let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    if (email.value==""){
-        email.value="sqills_tablet@gmail.com";
+    if (email == ""){
+        email ="sqills_tablet@gmail.com";
     }
     if (validEmail(email)){
         let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private, "title" : title};
