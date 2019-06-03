@@ -1,4 +1,4 @@
-window.onload = () => {
+    window.onload = () => {
     axios.get('/api/room/available')
         .then(response => {
             displayAvailableRooms(response.data);

@@ -10,6 +10,7 @@
  import javax.ws.rs.core.Application;
  import javax.ws.rs.core.Response;
 
+ import static nl.utwente.dao.RoomDao.getRoomName;
  import static org.junit.Assert.assertEquals;
  import static org.junit.Assert.assertNotNull;
 
@@ -30,7 +31,8 @@ public class RoomResourceTest extends JerseyTest {
 
     @Test
     public void getBookingsForSpecificRoomToday(){
-        for (int i = 0; i < 10; i++) {
+        for (int nr = 0; nr < 10; nr++) {
+            String i=getRoomName(nr);
             Response res = target().path("/room/"+i).request().get();
             String json = new Gson().toJson(res);
             assertEquals("Should return status 200", 200, res.getStatus());

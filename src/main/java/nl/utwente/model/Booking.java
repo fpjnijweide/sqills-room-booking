@@ -3,42 +3,41 @@ package nl.utwente.model;
 import java.sql.Date;
 import java.sql.Time;
 
-public class Booking {
-    protected Time startTime;
-    protected Time endTime;
+public class Booking extends TimeSlot{
     protected String email;
     protected boolean isPrivate;
+    protected String title;
 
-    public Booking(Time startTime, Time endTime, String email, boolean isPrivate) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+
+
+    public Booking(Time startTime, Time endTime, String email, boolean isPrivate, String title) {
+        super(startTime, endTime);
         this.email = email;
         this.isPrivate = isPrivate;
+        this.title = title;
     }
 
     public Booking() {
 
     }
 
-
-
-    public Time getStartTime() {
-        return startTime;
+    /**
+     * Gets title
+     *
+     * @return value of title
+     */
+    public String getTitle() {
+        return title;
     }
 
-    public Time getEndTime() {
-        return endTime;
+    /**
+     * Sets title to title
+     *
+     * @param title new value of title
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
-
-
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-
 
     /**
      * Gets email
@@ -78,6 +77,6 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate;
+        return "endTime:" + this.endTime + " startTime: " + this.startTime + " email: " + this.email + " getIsPrivate: " + this.isPrivate + " title: " + this.title;
     }
 }
