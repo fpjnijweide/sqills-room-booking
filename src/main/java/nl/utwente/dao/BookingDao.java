@@ -103,7 +103,7 @@ public class BookingDao {
                 "FROM sqills.users\n" +
                 "WHERE email = ?),\n" +
                 " ?, \n" +
-                "?)" +
+                "?) \n" +
                 "RETURNING bookingid;";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
@@ -114,7 +114,7 @@ public class BookingDao {
             statement.setBoolean(6, booking.getIsPrivate());
             statement.setString(7, booking.getTitle());;
 
-            ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             id = resultSet.getInt("bookingid");
             // TODO maybe have a nice error if e-mail is not found in database
