@@ -1,19 +1,19 @@
 function bookRoom() {
     let requestBody = {
-        // "title": document.getElementById("booking-title").value,
+        "title": document.getElementById("booking-title").value,
         "email": document.getElementById("booking-email").value,
         "date": document.getElementById("booking-date").value,
         "startTime": document.getElementById("booking-starttime").value + ":00",
         "endTime": document.getElementById("booking-endtime").value + ":00",
-        "roomID": document.getElementById("booking-roomid").value,
+        "roomName": document.getElementById("booking-roomid").value,
         "isPrivate": document.getElementById("booking-isPrivate").checked
     };
 
     axios.post("/api/booking/create", requestBody)
         .then(response => {
             let id = response.data.bookingid;
-            alert(id);
             addParticipantsToBooking(id);
+            document.location.replace(`/api/booking/${id}`);
         });
 }
 
