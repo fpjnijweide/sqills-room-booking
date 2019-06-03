@@ -1,11 +1,3 @@
-create table sqills.room
-(
-    roomid   serial not null
-        constraint room_pkey
-            primary key,
-    roomname varchar
-);
-
 create table sqills.users
 (
     userid        serial not null
@@ -16,11 +8,13 @@ create table sqills.users
     administrator boolean
 );
 
-CREATE TABLE sqills.participants (
-  userID integer,
-  bookingID integer,
-  FOREIGN KEY (userID) REFERENCES sqills.users(userID),
-  FOREIGN KEY (bookingID) REFERENCES sqills.booking(bookingID)
+
+create table sqills.room
+(
+    roomid   serial not null
+        constraint room_pkey
+            primary key,
+    roomname varchar
 );
 
 create table sqills.booking
@@ -40,4 +34,14 @@ create table sqills.booking
     isprivate boolean,
     title varchar
 );
+
+
+CREATE TABLE sqills.participants (
+  userID integer,
+  bookingID integer,
+  FOREIGN KEY (userID) REFERENCES sqills.users(userID),
+  FOREIGN KEY (bookingID) REFERENCES sqills.booking(bookingID)
+);
+
+
 
