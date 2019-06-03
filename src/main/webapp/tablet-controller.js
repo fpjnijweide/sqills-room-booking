@@ -40,7 +40,7 @@ function selectRoom() { // Called when "select room" button is pressed
             setInterval(() => {
                 updatePage(currentRoomName, true);
 
-            }, 30000);
+            }, 5000);
             refreshSet = true;
         }
     } else {
