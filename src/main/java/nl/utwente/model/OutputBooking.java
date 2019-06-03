@@ -3,7 +3,7 @@ package nl.utwente.model;
 import java.sql.Date;
 import java.sql.Time;
 
-public class OutputBooking extends TimeSlot{
+public class OutputBooking extends TimeSlot {
     protected String userName;
     protected String roomName;
     protected Date date;
