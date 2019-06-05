@@ -34,14 +34,14 @@ public class UserDao {
 
         return isValid;
     }
-    public static String getEmail(String text) {
+    public static String getEmail(String incompleteEmail) {
         int count = 0;
         String email = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT email FROM sqills.users WHERE email LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, text + "%");
+            statement.setString(1, incompleteEmail + "%");
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -60,7 +60,7 @@ public class UserDao {
                 e.printStackTrace();
             }
         }
-        if (count == 1){
+        if (count == 1) {
             return email;
         }
         return null;

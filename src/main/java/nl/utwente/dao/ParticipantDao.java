@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParticipantDao {
-    public static List<User> getParticipantIDsOfBooking(int bookingID) {
+    public static List<User> getParticipantsOfBooking(int bookingID) {
         Connection connection = DatabaseConnectionFactory.getConnection();
         List<User> result = new ArrayList<>();
         try {
@@ -97,6 +97,7 @@ public class ParticipantDao {
         return success;
     }
 
+    // Todo: @Marten Make into single query
     public static boolean addParticipantEmailToBooking(int bookingID, String email) {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {

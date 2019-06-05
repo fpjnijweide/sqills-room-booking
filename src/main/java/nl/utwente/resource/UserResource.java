@@ -25,5 +25,4 @@ public class UserResource {
     public String getUserList (@PathParam("email") String email) {
         return "{ \"email\":" + "\"" + UserDao.getEmail(email) + "\""+ "}";
     }
-
 }
