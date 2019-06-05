@@ -97,7 +97,7 @@ public class ParticipantDao {
         return success;
     }
 
-    // Todo: @Marten Make into single query
+    // Todo: @Andrew Make into single query
     public static boolean addParticipantEmailToBooking(int bookingID, String email) {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {

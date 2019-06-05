@@ -35,7 +35,7 @@ public class BookingResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
-    // Todo: Add validity check
+    // Todo: Add validity check and add status codes
     public String createBooking(SpecifiedBooking booking) {
         int result = BookingDao.createBooking(booking);
 
@@ -54,7 +54,7 @@ public class BookingResource {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/update")
-    // Todo: Add validity check
+    // Todo: Add validity check and add status codes
     public String updateBooking(
         @PathParam("bookingID") int bookingID,
         SpecifiedBooking booking
