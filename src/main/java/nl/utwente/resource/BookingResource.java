@@ -71,7 +71,7 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/participants")
     public List<User> getParticipants(@PathParam("bookingID") int bookingID) {
-        return ParticipantDao.getParticipantIDsOfBooking(bookingID);
+        return ParticipantDao.getParticipantsOfBooking(bookingID);
     }
 
     /**

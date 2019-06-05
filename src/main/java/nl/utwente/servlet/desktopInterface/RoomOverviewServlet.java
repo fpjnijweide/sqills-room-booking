@@ -12,9 +12,9 @@ import java.util.List;
 
 public class RoomOverviewServlet extends HttpServlet {
     @Override
+    // Todo: @Marten sort out names of variables
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
-        // Todo: Temporary check until type of IDs gets sorted out
         List<String> roomNames = new ArrayList<>();
         for (String name : RoomDao.getAllRoomNames()) {
             roomNames.add(name);

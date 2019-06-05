@@ -1,13 +1,11 @@
 package nl.utwente.model;
 
-import java.sql.Date;
 import java.sql.Time;
 
-public class Booking extends TimeSlot{
+public class Booking extends TimeSlot {
     protected String email;
     protected boolean isPrivate;
     protected String title;
-
 
 
     public Booking(Time startTime, Time endTime, String email, boolean isPrivate, String title) {

@@ -1,10 +1,9 @@
 package nl.utwente.model;
 
-import java.sql.Time;
 import java.sql.Date;
+import java.sql.Time;
 
 public class SpecifiedBooking extends Booking {
-
     private String roomName;
     private Date date;
 
