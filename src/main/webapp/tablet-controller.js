@@ -145,6 +145,7 @@ function checkIfOtherRoomsAreBooked() {
 
 }
 
+// TODO @Andrew refactor to use GetFreeUntil() function on back-end, instead of this verbose stuff
 function getEarliestStartTime(bookings) {
     let earliestStartTime = new Date();
     // Set the earliest booking found to tomorrow, so all new bookings we find come before it
