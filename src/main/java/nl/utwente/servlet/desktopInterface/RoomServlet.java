@@ -10,10 +10,10 @@ import java.io.IOException;
 
 public class RoomServlet extends HttpServlet {
     @Override
+    // Todo: @Marten Refactor names of variables.
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String uri = req.getRequestURI();
         String[] splitUri = uri.split("/");
-        // Todo: Add validation of URI.
         String roomName = splitUri[3];
         if (!RoomDao.isValidRoomName(roomName)) {
             res.setStatus(404);

@@ -2,7 +2,6 @@ package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.model.OutputBooking;
-import nl.utwente.model.SpecifiedBooking;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,18 +10,18 @@ import java.util.List;
 public class RoomDao {
     /**
      * Returns whether a roomID belongs to a room.
+     *
      * @param roomID The roomID which validity will be checked
      * @return Whether the provided roomID is valid
      */
     public static boolean isValidRoomID(int roomID) {
-       return getRoomName(roomID)!=null;
+        return getRoomName(roomID) != null;
     }
 
-    public static String getRoomName(int roomID){
+    public static String getRoomName(int roomID) {
         String result = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-
             String query = "SELECT roomname FROM sqills.Room WHERE roomid = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -32,7 +31,6 @@ public class RoomDao {
             if (resultSet.next()) {
                 result = resultSet.getString("roomname");
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -45,8 +43,8 @@ public class RoomDao {
         return result;
     }
 
-    public static int getRoomID(String roomName){
-        int result=-1;
+    public static int getRoomID(String roomName) {
+        int result = -1;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
@@ -73,7 +71,7 @@ public class RoomDao {
     }
 
     public static boolean isValidRoomName(String roomName) {
-        return getRoomID(roomName)!=-1;
+        return getRoomID(roomName) != -1;
     }
 
     public static List<Integer> getAllRoomsIDs() {
@@ -162,7 +160,7 @@ public class RoomDao {
         return rooms;
     }
 
-    // TODO if this function is here, why do we do the incredibly stupid "getEarliestStartTime" thing on front end?
+    // TODO If this function is here, why do we do the incredibly stupid "getEarliestStartTime" thing on front end?
     public static Time getFreeUntil(String roomName) {
         Time result = null;
 
@@ -190,8 +188,11 @@ public class RoomDao {
         }
         return result;
     }
+
     public static List<OutputBooking> getBookingsForThisWeek(String roomName) {
         // TODO maybe check if valid room name here? we already do that somewhere else? idk
+        // Todo @Freek Add validity check. 
+
         List<OutputBooking> result = new ArrayList<>();
         String query = "SELECT b.starttime, b.endtime, b.date, u.name, b.isPrivate, b.title " +
             "FROM sqills.booking b " +
@@ -240,7 +241,6 @@ public class RoomDao {
 
         return result;
     }
-
 
 
 }
