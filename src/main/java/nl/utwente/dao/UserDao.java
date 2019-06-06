@@ -65,4 +65,8 @@ public class UserDao {
         }
         return null;
     }
+
+    public static boolean isValidEmail(String email) {
+        return getEmail(email)!=null;
+    }
 }

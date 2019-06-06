@@ -6,12 +6,13 @@ import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
-import nl.utwente.model.SpecifiedBooking;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.Time;
 import java.util.List;
+
+import static nl.utwente.dao.BookingDao.isValidBookingToday;
 
 @Path("/room")
 public class RoomResource {
@@ -58,8 +59,7 @@ public class RoomResource {
         @PathParam("roomName") String roomName,
         Booking booking
     ) {
-        boolean valid = RoomDao.isValidRoomName(roomName) &&
-            BookingDao.isValidBookingToday(roomName, booking.getStartTime(), booking.getEndTime());
+        boolean valid = isValidBookingToday(booking, roomName);
 
         if (valid) {
             BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
