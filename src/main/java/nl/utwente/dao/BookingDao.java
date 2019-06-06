@@ -1,6 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 
@@ -8,6 +9,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import static nl.utwente.dao.RoomDao.isValidRoomName;
+import static nl.utwente.dao.UserDao.isValidEmail;
 
 public class BookingDao {
     /**
@@ -75,7 +79,7 @@ public class BookingDao {
     public static int createBooking(SpecifiedBooking booking) {
         int id = -1;
 
-        if (!isValidBooking(booking)) {
+        if (!isValidSpecifiedBooking(booking)) {
             return id;
         }
         Connection connection = DatabaseConnectionFactory.getConnection();
@@ -167,7 +171,7 @@ public class BookingDao {
     public static boolean updateBooking(int bookingID, SpecifiedBooking booking) {
         boolean successful = false;
 
-        if (!isValidBooking(booking)) {
+        if (!isValidSpecifiedBooking(booking)) {
             return false;
         }
         Connection connection = DatabaseConnectionFactory.getConnection();
@@ -273,13 +277,26 @@ public class BookingDao {
         createBooking(booking);
     }
 
-    public static boolean isValidBookingToday(String roomName, Time startTime, Time endTime) {
-        Calendar currentTime = Calendar.getInstance();
-        Date sqlDate = new Date((currentTime.getTime()).getTime());
-        return isValidBooking(roomName, startTime, endTime, sqlDate);
+    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) {
+        return isValidBooking(booking, booking.getRoomName(), booking.getDate());
     }
 
-    public static boolean isValidBooking(String roomName, Time wantedStart, Time wantedEnd, Date date) {
+    public static boolean isValidBookingToday(Booking booking, String roomName){
+        Calendar currentTime = Calendar.getInstance();
+        Date sqlDate = new Date((currentTime.getTime()).getTime());
+        return isValidBooking(booking, roomName, sqlDate);
+    }
+
+    public static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) {
+        boolean validEmail = isValidEmail(booking.getEmail());
+        boolean validTimeSlot =  isValidTimeSlot(roomName, booking.getStartTime(), booking.getEndTime(), sqlDate);
+        return (validEmail && validTimeSlot);
+    }
+
+    public static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) {
+        if (!isValidRoomName(roomName)){
+            return false;
+        }
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -316,13 +333,6 @@ public class BookingDao {
             }
         }
         return isValid;
-    }
-
-    public static boolean isValidBooking(SpecifiedBooking booking) {
-        return isValidBooking(booking.getRoomName(),
-            booking.getStartTime(),
-            booking.getEndTime(),
-            booking.getDate());
     }
 
     public static boolean isValidBookingID(int bookingID) {
