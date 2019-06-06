@@ -20,10 +20,10 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="styles.css">
-    <script src="tablet-controller.js"></script>
-    <script src="tablet-view.js"></script>
-    <script src="make-booking.js"></script>
+    <link rel="stylesheet" href="/css/tablet.css">
+    <script src="/scripts/tablet/tablet-controller.js"></script>
+    <script src="/scripts/tablet/tablet-view.js"></script>
+    <script src="/scripts/tablet/make-booking.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
           integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
