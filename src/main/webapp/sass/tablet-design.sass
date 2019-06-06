@@ -1,0 +1,71 @@
+$left-width: 600px
+$height: 100vh
+$slant: calc(100vh / 10)
+
+body
+  padding: 0
+  margin: 0
+  background: url("/assets/background.jpg") no-repeat center center fixed
+  background-size: cover
+  //background-s
+
+.right-container, .left-container
+  min-height: $height
+  position: relative
+  //width: calc(50%)
+
+.left-container
+  float: left
+  background-color: white
+  width: calc(#{$left-width})
+
+.right-container
+  float: left
+  width: calc(100% - #{$left-width})
+  background-color: transparent // transparent
+
+  .centered-container
+    position: absolute
+    left: 50%
+
+  .centered-text
+    text-align: center
+
+  #room-name
+    font-size: 40px
+    color: white
+
+  #time
+    font-size: 40px
+    color: white
+
+  #availability
+    font-size: 40px
+    color: white
+
+  .centered-button
+    padding: 20px
+    border: 1px solid orange
+    text-align: center
+    color: orange
+    width: 200px
+    margin-left: auto
+    margin-right: auto
+    background-color: transparent
+
+.left-container:after, .right-container:before
+  content: ''
+  position: absolute
+  top: 0
+  width: 0
+  height: 0
+
+.left-container:after
+  left: 100%
+  border-top: $height solid white
+  border-right: 100px solid transparent
+
+.right-container:before
+  right: 100%
+  border-bottom: $height solid transparent // orange
+  border-left: 100px solid white
