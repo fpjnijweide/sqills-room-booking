@@ -13,6 +13,7 @@ import java.sql.Time;
 import java.util.List;
 
 import static nl.utwente.dao.BookingDao.isValidBookingToday;
+import static nl.utwente.dao.RoomDao.isValidRoomName;
 
 @Path("/room")
 public class RoomResource {

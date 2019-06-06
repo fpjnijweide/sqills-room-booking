@@ -10,8 +10,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static nl.utwente.dao.BookingDao.isValidBookingID;
+import static nl.utwente.dao.UserDao.isValidEmail;
+import static nl.utwente.dao.UserDao.isValidUserID;
+
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) {
+        if (!isValidBookingID(bookingID)){
+            return null;
+        }
         Connection connection = DatabaseConnectionFactory.getConnection();
         List<User> result = new ArrayList<>();
         try {
@@ -45,7 +52,7 @@ public class ParticipantDao {
     }
 
     public static boolean addParticipantToBooking(int bookingID, int userID) {
-        if (!BookingDao.isValidBookingID(bookingID) || !UserDao.isValidUserID(userID)) {
+        if (!isValidBookingID(bookingID) || !UserDao.isValidUserID(userID)) {
             return false;
         }
 
@@ -74,6 +81,9 @@ public class ParticipantDao {
     }
 
     public static boolean removeParticipant(int bookingID, int userID) {
+        if (!(isValidBookingID(bookingID) && isValidUserID(userID))){
+            return false;
+        }
         Connection connection = DatabaseConnectionFactory.getConnection();
         boolean success = false;
 
@@ -99,6 +109,9 @@ public class ParticipantDao {
 
     // Todo: @Andrew Make into single query
     public static boolean addParticipantEmailToBooking(int bookingID, String email) {
+        if (!(isValidBookingID(bookingID) && isValidEmail(email))){
+            return false;
+        }
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String useridQuery = "SELECT userid FROM sqills.users WHERE email = ?;";

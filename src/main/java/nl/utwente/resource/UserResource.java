@@ -14,6 +14,7 @@ public class UserResource {
 
     }
 
+    // TODO refactor this method's name and javascript
     @GET
     @Path("/{email}")
     @Produces(MediaType.APPLICATION_JSON)

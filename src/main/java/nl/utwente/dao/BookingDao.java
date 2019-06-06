@@ -21,6 +21,9 @@ public class BookingDao {
      * @return returns booking with specified ID or null if the booking does not exist.
      */
     public static OutputBooking getSpecificBooking(int bookingID) {
+        if (!isValidBookingID(bookingID)){
+            return null;
+        }
         OutputBooking booking = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -136,6 +139,9 @@ public class BookingDao {
      * @return whether the deletion was successful
      */
     public static boolean deleteBooking(int bookingID) {
+        if (!isValidBookingID(bookingID)){
+            return false;
+        }
         boolean successful = false;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -218,6 +224,9 @@ public class BookingDao {
      * @return Today's bookings for the specified room
      */
     public static List<OutputBooking> getBookingsForRoomToday(String roomName) {
+        if (!isValidRoomName(roomName)){
+            return null;
+        }
         ArrayList<OutputBooking> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
