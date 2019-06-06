@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static nl.utwente.dao.BookingDao.resultSetToBooking;
+
 public class RoomDao {
     /**
      * Returns whether a roomID belongs to a room.
@@ -207,24 +209,8 @@ public class RoomDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("startTime");
-                Time endTime = resultSet.getTime("endTime");
-                Date date = resultSet.getDate("date");
-
-                boolean isprivate = resultSet.getBoolean("isPrivate");
-
-                String userName;
-                String title;
-                if (isprivate) {
-                    userName = "PRIVATE";
-                    title = "PRIVATE;";
-                } else {
-                    userName = resultSet.getString("name");
-                    title = resultSet.getString("title");
-                }
-
-
-                result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
+                OutputBooking booking = resultSetToBooking(roomName, resultSet);
+                result.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();

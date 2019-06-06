@@ -92,15 +92,9 @@ public class BookingDao {
                 " ?, " +
                 "?) " +
                 "RETURNING bookingid;";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setTime(1, booking.getStartTime());
-            statement.setTime(2, booking.getEndTime());
-            statement.setDate(3, booking.getDate());
-            statement.setString(4, booking.getRoomName());
-            statement.setString(5, booking.getEmail());
-            statement.setBoolean(6, booking.getIsPrivate());
-            statement.setString(7, booking.getTitle());
-            ;
+            PreparedStatement statement = prepareBookingStatement(booking, connection, query);
+
+
 
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -117,6 +111,18 @@ public class BookingDao {
         }
 
         return id;
+    }
+
+    private static PreparedStatement prepareBookingStatement(SpecifiedBooking booking, Connection connection, String query) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setTime(1, booking.getStartTime());
+        statement.setTime(2, booking.getEndTime());
+        statement.setDate(3, booking.getDate());
+        statement.setString(4, booking.getRoomName());
+        statement.setString(5, booking.getEmail());
+        statement.setBoolean(6, booking.getIsPrivate());
+        statement.setString(7, booking.getTitle());
+        return statement;
     }
 
     /**
@@ -181,15 +187,7 @@ public class BookingDao {
                 "title=? " +
                 "WHERE bookingID = ?;";
 
-            PreparedStatement statement = connection.prepareStatement(query);
-
-            statement.setTime(1, booking.getStartTime());
-            statement.setTime(2, booking.getEndTime());
-            statement.setDate(3, booking.getDate());
-            statement.setString(4, booking.getRoomName());
-            statement.setString(5, booking.getEmail());
-            statement.setBoolean(6, booking.getIsPrivate());
-            statement.setString(7, booking.getTitle());
+            PreparedStatement statement = prepareBookingStatement(booking, connection, query);
             statement.setInt(8, bookingID);
 
             int updatedRows = statement.executeUpdate();
@@ -227,27 +225,11 @@ public class BookingDao {
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
-
             ResultSet resultSet = statement.executeQuery();
-            // TODO @Freek Split this into into a method
+
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("startTime");
-                Time endTime = resultSet.getTime("endTime");
-                Date date = resultSet.getDate("date");
-
-                boolean isPrivate = resultSet.getBoolean("isPrivate");
-
-                String userName;
-                String title;
-                if (isPrivate) {
-                    userName = "PRIVATE";
-                    title = "PRIVATE;";
-                } else {
-                    userName = resultSet.getString("name");
-                    title = resultSet.getString("title");
-                }
-
-                result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
+                OutputBooking booking = resultSetToBooking(roomName, resultSet);
+                result.add(booking);
             }
 
             resultSet.close();
@@ -262,6 +244,25 @@ public class BookingDao {
             }
         }
         return result;
+    }
+
+    public static OutputBooking resultSetToBooking(String roomName, ResultSet resultSet) throws SQLException {
+        Time startTime = resultSet.getTime("startTime");
+        Time endTime = resultSet.getTime("endTime");
+        Date date = resultSet.getDate("date");
+
+        boolean isPrivate = resultSet.getBoolean("isPrivate");
+
+        String userName;
+        String title;
+        if (isPrivate) {
+            userName = "PRIVATE";
+            title = "PRIVATE;";
+        } else {
+            userName = resultSet.getString("name");
+            title = resultSet.getString("title");
+        }
+        return new OutputBooking(startTime, endTime, userName, roomName, date, title);
     }
 
 
