@@ -55,7 +55,7 @@ public class BookingResource {
 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/update")
-    // Todo: Add validity check and add status codes
+    // Todo:  add status codes
     public String updateBooking(
         @PathParam("bookingID") int bookingID,
         SpecifiedBooking booking

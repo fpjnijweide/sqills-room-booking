@@ -163,6 +163,9 @@ public class RoomDao {
     }
 
     public static Time getFreeUntil(String roomName) {
+        if (!isValidRoomName(roomName)){
+            return null;
+        }
         Time result = null;
 
         try {
@@ -191,7 +194,9 @@ public class RoomDao {
     }
 
     public static List<OutputBooking> getBookingsForThisWeek(String roomName) {
-        // Todo @Freek Add validity check for room name.
+        if (!isValidRoomName(roomName)){
+            return null;
+        }
 
         List<OutputBooking> result = new ArrayList<>();
         String query = "SELECT b.starttime, b.endtime, b.date, u.name, b.isPrivate, b.title " +
