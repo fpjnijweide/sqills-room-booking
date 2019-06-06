@@ -321,7 +321,6 @@ public class BookingDao {
                 Time bookingEnd = Time.valueOf(result.getString("endtime"));
 //                Time wantedStart = Time.valueOf(startTime);
 //                Time wantedEnd = Time.valueOf(endTime);
-                // TODO @Freek add email checking to this
                 if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
                     || wantedEnd.compareTo(bookingStart) > 0 && wantedEnd.compareTo(bookingEnd) < 0
                     || wantedStart.compareTo(bookingStart) <= 0 && wantedEnd.compareTo(bookingEnd) >= 0
