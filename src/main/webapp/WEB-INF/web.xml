@@ -6,12 +6,7 @@
          version="3.1">
 
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-        <welcome-file>index.htm</welcome-file>
-        <welcome-file>index.jsp</welcome-file>
-        <welcome-file>default.html</welcome-file>
-        <welcome-file>default.htm</welcome-file>
-        <welcome-file>default.jsp</welcome-file>
+        <welcome-file>index</welcome-file>
     </welcome-file-list>
 
 	<servlet>
@@ -33,7 +28,11 @@
         <servlet-name>Booking Servlet</servlet-name>
         <servlet-class>nl.utwente.servlet.desktopInterface.BookingServlet</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>Tablet Index Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.tabletInterface.IndexServlet</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
 		<url-pattern>/api/*</url-pattern>
@@ -53,5 +52,9 @@
     <servlet-mapping>
         <servlet-name>Booking Servlet</servlet-name>
         <url-pattern>/desktop/book</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Tablet Index Servlet</servlet-name>
+        <url-pattern>/index</url-pattern>
     </servlet-mapping>
 </web-app>
