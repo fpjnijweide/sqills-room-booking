@@ -1,77 +1,79 @@
-//package nl.utwente.dao;
-//
-//import nl.utwente.db.DatabaseConnectionFactory;
-//import nl.utwente.model.Booking;
-//import org.junit.After;
-//import org.junit.Before;
-//import org.junit.Test;
-//
-//import java.sql.*;
-//import java.util.List;
-//
-//import static junit.framework.TestCase.fail;
-//import static org.junit.Assert.*;
-//
-//public class BookingDaoTest {
-//    private Connection connection;
-//
-//    @Before
-//    public void setUpConnectionAndPopulate() {
-//        this.connection = DatabaseConnectionFactory.getConnection();
-//
-//        try {
-//            Statement statement = connection.createStatement();
-//            String query = "INSERT INTO Sqills.Booking(bookingdate, starttime, endtime, roomID) " +
-//                           "VALUES ('2030-12-12', '9:00:00', '10:00:00', 1)";
-//            int updatedRows = statement.executeUpdate(query);
-//        } catch(SQLException sqle) {
-//            System.err.println(sqle);
-//        }
-//    }
-//
-//    @After
-//    public void closeConnection() {
-//        try {
-//            Statement statement = connection.createStatement();
-//            String query = "DELETE FROM sqills.Booking WHERE bookingdate = '2030-12-12'";
-//            int updatedRows = statement.executeUpdate(query);
-//            statement.close();
-//            this.connection.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    @Test
-//    public void testDeleteBookingExistingBooking() {
-//        try {
-//            // Insert a query with ID of -1
-//            String insertQuery = "INSERT INTO sqills.booking " +
-//                                 "(bookingid, bookingdate, starttime, endtime, roomid) " +
-//                                 "VALUES " +
-//                                 "(-1, '2069-01-01', '22:00:00', '23:00:00', 1);";
-//
-//            Statement insertStatement = connection.createStatement();
-//            insertStatement.execute(insertQuery);
-//            insertStatement.close();
-//
-//            boolean result = BookingDao.deleteBooking(-1);
-//            assertTrue(result);
-//
-//            String selectQuery = "SELECT * FROM sqills.booking WHERE bookingid = -1;";
-//            Statement selectStatement = connection.createStatement();
-//            ResultSet resultSet = selectStatement.executeQuery(selectQuery);
-//
-//            assertFalse(resultSet.next());
-//
-//            resultSet.close();
-//            selectStatement.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            fail();
-//        }
-//    }
-//
+package nl.utwente.dao;
+
+import nl.utwente.db.DatabaseConnectionFactory;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import static junit.framework.TestCase.fail;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class BookingDaoTest {
+    private Connection connection;
+
+    @Before
+    public void setUpConnectionAndPopulate() {
+        this.connection = DatabaseConnectionFactory.getConnection();
+
+        try {
+            Statement statement = connection.createStatement();
+            String query = "INSERT INTO Sqills.Booking(bookingdate, starttime, endtime, roomID) " +
+                           "VALUES ('2030-12-12', '9:00:00', '10:00:00', 1)";
+            int updatedRows = statement.executeUpdate(query);
+        } catch(SQLException sqle) {
+            System.err.println(sqle);
+        }
+    }
+
+    @After
+    public void closeConnection() {
+        try {
+            Statement statement = connection.createStatement();
+            String query = "DELETE FROM sqills.Booking WHERE bookingdate = '2030-12-12'";
+            int updatedRows = statement.executeUpdate(query);
+            statement.close();
+            this.connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testDeleteBookingExistingBooking() {
+        try {
+            // Insert a query with ID of -1
+            String insertQuery = "INSERT INTO sqills.booking " +
+                                 "(bookingid, bookingdate, starttime, endtime, roomid) " +
+                                 "VALUES " +
+                                 "(-1, '2069-01-01', '22:00:00', '23:00:00', 1);";
+
+            Statement insertStatement = connection.createStatement();
+            insertStatement.execute(insertQuery);
+            insertStatement.close();
+
+            boolean result = BookingDao.deleteBooking(-1);
+            assertTrue(result);
+
+            String selectQuery = "SELECT * FROM sqills.booking WHERE bookingid = -1;";
+            Statement selectStatement = connection.createStatement();
+            ResultSet resultSet = selectStatement.executeQuery(selectQuery);
+
+            assertFalse(resultSet.next());
+
+            resultSet.close();
+            selectStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
 //    @Test
 //    public void testGetSpecificBookingExistingBooking() {
 //        try {
@@ -337,4 +339,4 @@
 //            e.printStackTrace();
 //        }
 //    }
-//}
+}

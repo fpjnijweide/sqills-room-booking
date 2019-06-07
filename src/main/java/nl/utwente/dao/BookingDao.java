@@ -20,11 +20,7 @@ public class BookingDao {
         OutputBooking booking = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT b.starttime, b.endtime, u.name, r.roomname, b.date, b.isprivate, b.title " +
-                "FROM sqills.Booking b " +
-                "    JOIN sqills.room r ON b.roomid = r.roomid " +
-                "    JOIN sqills.users u ON u.userid = b.owner " +
-                "WHERE b.bookingid = ?";
+            String query = "SELECT get_specific_booking(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, bookingID);
@@ -81,17 +77,7 @@ public class BookingDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
-            String query = "INSERT INTO sqills.Booking (startTime, endTime, date, roomID, \"owner\", isPrivate, title) " +
-                "                VALUES ( ?, ?, ?, " +
-                "(SELECT sqills.room.roomid " +
-                "FROM sqills.room " +
-                "WHERE roomname = ?), " +
-                "(SELECT sqills.users.userID " +
-                "FROM sqills.users " +
-                "WHERE email = ?), " +
-                " ?, " +
-                "?) " +
-                "RETURNING bookingid;";
+            String query = "select create_booking(?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
@@ -104,7 +90,7 @@ public class BookingDao {
 
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            id = resultSet.getInt("bookingid");
+            id = resultSet.getInt("booking_id");
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -167,19 +153,7 @@ public class BookingDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
-            String query = "UPDATE sqills.Booking " +
-                "SET startTime=?, " +
-                "endTime=?, " +
-                "date=?, " +
-                "roomID= (SELECT sqills.room.roomid " +
-                "FROM sqills.room " +
-                "WHERE roomname = ?), " +
-                "\"owner\"= (SELECT sqills.users.userID " +
-                "FROM sqills.users " +
-                "WHERE email = ?), " +
-                "isPrivate=?, " +
-                "title=? " +
-                "WHERE bookingID = ?;";
+            String query = "select update_booking(?,?,?,?,?,?,?,?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
 
@@ -219,11 +193,7 @@ public class BookingDao {
         ArrayList<OutputBooking> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT b.starttime, b.endtime, u.name, b.date, b.isprivate, b.title\n" +
-                "FROM sqills.Booking b\n" +
-                "    JOIN sqills.room r ON b.roomid = r.roomid\n" +
-                "    JOIN sqills.users u ON u.userid = b.owner\n" +
-                "WHERE r.roomname = ? AND b.date = CURRENT_DATE";
+            String query = "select * from booking_for_room_today(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -231,7 +201,7 @@ public class BookingDao {
             ResultSet resultSet = statement.executeQuery();
             // TODO @Freek Split this into into a method
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("startTime");
+                Time startTime = resultSet.getTime("start_time");
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
 
@@ -282,16 +252,14 @@ public class BookingDao {
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT b.starttime, b.endtime, b.date FROM Sqills.booking b \n" +
-                "JOIN sqills.room r ON b.roomid=r.roomid\n" +
-                "WHERE r.roomname = ? AND b.date = ? ";
+            String query = "select * from is_valid_booking(?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
             statement.setDate(2, date);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                Time bookingStart = Time.valueOf(result.getString("starttime"));
-                Time bookingEnd = Time.valueOf(result.getString("endtime"));
+                Time bookingStart = Time.valueOf(result.getString("start_time"));
+                Time bookingEnd = Time.valueOf(result.getString("end_time"));
 //                Time wantedStart = Time.valueOf(startTime);
 //                Time wantedEnd = Time.valueOf(endTime);
                 // TODO @Freek add email checking to this
