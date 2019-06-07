@@ -3,13 +3,15 @@
     <title>jTemp</title>
     <link rel="stylesheet" href="/css/tablet-design.css">
 
+    <script src="/scripts/tablet/time.js"></script>
+
     <script>
         function openBookingPage() {
             console.log("Open booking page was called.")
         }
     </script>
 </head>
-<body>
+<body onload="updateTime()">
     <div class="left-container">
         <div id="bookings-container">
             <h1>Todays Bookings</h1>
