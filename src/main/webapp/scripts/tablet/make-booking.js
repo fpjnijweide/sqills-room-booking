@@ -43,8 +43,7 @@ function makeBooking() {
     if (title === "Booking title (optional)") {
         title = "";
     }
-    console.log(email)
-    let duration = document.getElementById(`booking-duration`).value;
+   let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
     if (email == ""){
         email ="sqills_tablet@gmail.com";
@@ -79,7 +78,6 @@ function makeBooking() {
 
 function validEmail(emailParam){
     let email = emailParam;
-    console.log(email.length != 0 && email.includes("@") && email.includes("."));
     return email.length != 0 && email.includes("@") && email.includes(".");
 }
 //Add the duration to the current time
@@ -90,7 +88,6 @@ function addMinutes(date, minutes) {
 
 //display that the booking is complete
 function displayBooked(data) {
-    console.log("here")
     if (data.success){
         document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
     } else {
