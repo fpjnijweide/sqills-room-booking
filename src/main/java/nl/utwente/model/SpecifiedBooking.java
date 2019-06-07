@@ -1,10 +1,13 @@
 package nl.utwente.model;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.sql.Time;
 
 public class SpecifiedBooking extends Booking {
+    @NotNull
     private String roomName;
+    @NotNull
     private Date date;
 
     public SpecifiedBooking(Time startTime, Time endTime, String roomName, Date date, String email, boolean isPrivate, String title) {

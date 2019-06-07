@@ -162,9 +162,9 @@ public class RoomDao {
         return rooms;
     }
 
-    public static Time getFreeUntil(String roomName) {
+    public static Time getFreeUntil(String roomName) throws IllegalArgumentException {
         if (!isValidRoomName(roomName)){
-            return null;
+            throw new IllegalArgumentException();
         }
         Time result = null;
 

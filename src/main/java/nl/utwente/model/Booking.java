@@ -1,8 +1,15 @@
 package nl.utwente.model;
 
+import javax.annotation.MatchesPattern;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Time;
+import javax.validation.constraints.Pattern;
 
+@XmlRootElement
 public class Booking extends TimeSlot {
+    @NotNull
+    @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")
     protected String email;
     protected boolean isPrivate;
     protected String title;

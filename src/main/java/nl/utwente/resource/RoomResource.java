@@ -7,6 +7,7 @@ import nl.utwente.dao.RoomDao;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.Time;
@@ -43,7 +44,12 @@ public class RoomResource {
     public List<OutputBooking> getBookingsForSpecificRoomToday (
         @PathParam("roomName") String roomName
     ) {
-        return BookingDao.getBookingsForRoomToday(roomName);
+        List<OutputBooking> result = BookingDao.getBookingsForRoomToday(roomName);
+        if (result!=null){
+            return result;
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     @POST
@@ -56,21 +62,18 @@ public class RoomResource {
      * @param specifiedBooking startTime and endTime specifying the times of the booking
      * @return JSON object containing a "success" boolean value
      */
-    public String createBookingForSpecificRoom (
+    public int createBookingForSpecificRoom (
         @PathParam("roomName") String roomName,
-        Booking booking
+        @Valid Booking booking
     ) {
-        boolean valid = isValidBookingToday(booking, roomName);
-
-        if (valid) {
-            BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
+        int roomID = BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
                 booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
-        }
 
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ObjectNode success = factory.objectNode();
-        success.put("success", valid);
-            return success.toString();
+        if (roomID != -1) {
+            return roomID;
+        } else {
+            throw new BadRequestException();
+        }
     }
 
     @GET
@@ -88,13 +91,23 @@ public class RoomResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Time getAvailableUntil(@PathParam("roomName") String roomName) {
         System.out.println(RoomDao.getFreeUntil(roomName));
-        return RoomDao.getFreeUntil(roomName);
+        try {
+            Time result = RoomDao.getFreeUntil(roomName);
+            return result;
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException();
+        }
     }
 
     @GET
     @Path("/{roomName}/week")
     @Produces(MediaType.APPLICATION_JSON)
     public List<OutputBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
-        return RoomDao.getBookingsForThisWeek(roomName);
+        List<OutputBooking> result = RoomDao.getBookingsForThisWeek(roomName);
+        if (result != null) {
+            return result;
+        } else {
+            throw new NotFoundException();
+        }
     }
 }

@@ -1,7 +1,13 @@
 package nl.utwente.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class UserIDEmailPair {
+    @NotNull
     private int bookingid;
+    @NotNull
+    @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")
     private String email;
 
     public int getBookingid() {
