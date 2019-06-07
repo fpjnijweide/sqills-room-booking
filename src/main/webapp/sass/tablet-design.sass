@@ -1,6 +1,12 @@
+@import 'styleguide.sass'
+
 $left-width: 600px
 $height: 100vh
 $slant: calc(100vh / 10)
+
+*
+  font-family: $sqills-font
+  box-sizing: border-box
 
 body
   padding: 0
@@ -19,6 +25,31 @@ body
   background-color: white
   width: calc(#{$left-width})
 
+  #bookings-container
+    width: $left-width
+
+    .booking
+      $booking-height: 50px
+      height: $booking-height
+      line-height: $booking-height
+      width: auto
+      margin: 25px
+      border: 1px solid $sqills-purple
+
+      .time
+        height: $booking-height
+        width: calc(20% - 2px)
+        float: left
+        color: $sqills-grey
+
+      .title
+        height: $booking-height
+        width: 80%
+        float: left
+        color: $sqills-purple
+        font-weight: 600
+        font-size: 20px
+
 .right-container
   float: left
   width: calc(100% - #{$left-width})
@@ -26,32 +57,55 @@ body
 
   .centered-container
     position: absolute
-    left: 50%
+    left: 40%
 
   .centered-text
     text-align: center
 
   #room-name
-    font-size: 40px
-    color: white
+    font-size: 80px
+    color: $sqills-orange
+    font-weight: 100
+    margin-top: 50px
+    margin-bottom: 0
 
   #time
-    font-size: 40px
+    font-size: 100px
     color: white
+    font-weight: 100
+    margin-top: 25px
+    margin-bottom: 0
 
   #availability
-    font-size: 40px
-    color: white
+    font-size: 80px
+    font-weight: 200
+    color: $sqills-orange
+    margin-top: 25px
+    margin-bottom: 0
 
   .centered-button
-    padding: 20px
-    border: 1px solid orange
+    font-size: 26px
+    font-weight: 300
     text-align: center
-    color: orange
-    width: 200px
+    color: $sqills-orange
+    background-color: transparent
+
+    padding: 20px
+    border: 3px solid $sqills-orange
+    width: 300px
+    border-radius: 50px
+
+    margin-top: 25px
     margin-left: auto
     margin-right: auto
-    background-color: transparent
+    cursor: pointer
+
+    transition: background-color linear 0.3s 0s, color linear 0.3s 0s
+
+  .centered-button:hover
+    background-color: $sqills-orange
+    color: white
+    font-weight: 300
 
 .left-container:after, .right-container:before
   content: ''
@@ -65,7 +119,7 @@ body
   border-top: $height solid white
   border-right: 100px solid transparent
 
-.right-container:before
-  right: 100%
-  border-bottom: $height solid transparent // orange
-  border-left: 100px solid white
+//.right-container:before
+//  right: 100%
+//  border-bottom: $height solid transparent // orange
+//  border-left: 100px solid white
