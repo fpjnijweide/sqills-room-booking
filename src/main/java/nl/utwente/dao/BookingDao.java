@@ -1,6 +1,9 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.exceptions.BookingException;
+import nl.utwente.exceptions.InvalidBookingIDException;
+import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
@@ -20,9 +23,9 @@ public class BookingDao {
      * @param bookingID booking ID of booking to be returned
      * @return returns booking with specified ID or null if the booking does not exist.
      */
-    public static OutputBooking getSpecificBooking(int bookingID) {
+    public static OutputBooking getSpecificBooking(int bookingID) throws InvalidBookingIDException {
         if (!isValidBookingID(bookingID)){
-            return null;
+            throw new InvalidBookingIDException(bookingID);
         }
         OutputBooking booking = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
@@ -79,7 +82,7 @@ public class BookingDao {
      *
      * @return id of booking
      */
-    public static int createBooking(SpecifiedBooking booking) {
+    public static int createBooking(SpecifiedBooking booking) throws BookingException {
         int id = -1;
 
         if (!isValidSpecifiedBooking(booking)) {
@@ -138,9 +141,9 @@ public class BookingDao {
      * @param bookingID specifies the booking to be deleted
      * @return whether the deletion was successful
      */
-    public static boolean deleteBooking(int bookingID) {
+    public static boolean deleteBooking(int bookingID) throws InvalidBookingIDException{
         if (!isValidBookingID(bookingID)){
-            return false;
+            throw new InvalidBookingIDException(bookingID);
         }
         boolean successful = false;
         Connection connection = DatabaseConnectionFactory.getConnection();
@@ -174,7 +177,7 @@ public class BookingDao {
      * @param bookingID specifies the booking to be updated
      * @return whether the update was successful
      */
-    public static boolean updateBooking(int bookingID, SpecifiedBooking booking) {
+    public static boolean updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException{
         boolean successful = false;
 
         if (!isValidSpecifiedBooking(booking)) {
@@ -287,25 +290,44 @@ public class BookingDao {
         return bookingID;
     }
 
-    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) {
+    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) throws BookingException {
         return isValidBooking(booking, booking.getRoomName(), booking.getDate());
     }
 
-    public static boolean isValidBookingToday(Booking booking, String roomName){
+    public static boolean isValidBookingToday(Booking booking, String roomName) throws BookingException {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         return isValidBooking(booking, roomName, sqlDate);
     }
 
-    public static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) {
+    public static boolean checkBooking(Booking booking, String roomName, Date sqlDate) throws BookingException {
+        ArrayList<String> errorMessages = new ArrayList<>();
+
         boolean validEmail = isValidEmail(booking.getEmail());
-        boolean validTimeSlot =  isValidTimeSlot(roomName, booking.getStartTime(), booking.getEndTime(), sqlDate);
-        return (validEmail && validTimeSlot);
+        if (!validEmail){
+            errorMessages.add("Invalid email");
+        }
+
+        boolean validTimeSlot = false;
+        try {
+            validTimeSlot = isValidTimeSlot(roomName, booking.getStartTime(), booking.getEndTime(), sqlDate);
+            if (!validTimeSlot) {
+                errorMessages.add("Invalid time slot for room");
+            }
+        } catch (InvalidRoomNameException e) {
+            errorMessages.add("Invalid room name");
+        }
+        if (errorMessages.isEmpty()){
+            return true;
+        } else {
+            String errorString = String.join("\n",errorMessages);
+            throw new BookingException(errorString);
+        }
     }
 
-    public static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) {
+    public static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException {
         if (!isValidRoomName(roomName)){
-            return false;
+            throw new InvalidRoomNameException(roomName);
         }
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.getConnection();
