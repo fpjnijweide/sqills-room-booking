@@ -4,10 +4,8 @@ import nl.utwente.dao.ParticipantDao;
 import nl.utwente.model.UserIDBookingIDPair;
 import nl.utwente.model.UserIDEmailPair;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("/participant")
@@ -15,14 +13,20 @@ public class ParticipantResource {
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean addParticipant(UserIDEmailPair pair) {
-        return ParticipantDao.addParticipantEmailToBooking(pair.getBookingid(), pair.getEmail());
+    public UserIDEmailPair addParticipant(@Valid UserIDEmailPair pair) {
+        if (ParticipantDao.addParticipantEmailToBooking(pair.getBookingid(), pair.getEmail())){
+            return pair;
+        } else {
+            throw new BadRequestException();
+        }
     }
 
     @DELETE
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean removeParticipant(UserIDBookingIDPair pair) {
-        return ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
+    public void removeParticipant(@Valid UserIDBookingIDPair pair) {
+        if (!ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid())){
+            throw new BadRequestException();
+        }
     }
 }

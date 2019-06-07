@@ -23,7 +23,7 @@ public class UserResource {
      * @param roomNumber Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public String getUserList (@PathParam("email") String email) {
-        return "{ \"email\":" + "\"" + UserDao.getEmail(email) + "\""+ "}";
+    public String getUserList (@PathParam("email") String incompleteEmail) {
+        return "{ \"email\":" + "\"" + UserDao.getEmail(incompleteEmail) + "\""+ "}";
     }
 }

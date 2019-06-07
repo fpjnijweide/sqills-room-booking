@@ -9,12 +9,22 @@ import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NoContentException;
+import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Locale;
 
 @Path("/booking")
 public class BookingResource {
+    @Context HttpServletResponse response;
+
+
+
     /**
      * Returns a specific booking from the database.
      * @param bookingID ID of booking to be returned
@@ -24,7 +34,13 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
     public OutputBooking getSpecificBooking(@PathParam("bookingID") int bookingID) {
-        return BookingDao.getSpecificBooking(bookingID);
+        OutputBooking booking = BookingDao.getSpecificBooking(bookingID);
+        if (booking!=null){
+            return booking;
+        } else {
+            throw new NotFoundException();
+        }
+
     }
 
     /**
@@ -35,14 +51,14 @@ public class BookingResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
-    // Todo: add status codes
-    public String createBooking(SpecifiedBooking booking) {
+    public int createBooking(@Valid SpecifiedBooking booking) {
         int result = BookingDao.createBooking(booking);
 
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ObjectNode success = factory.objectNode();
-        success.put("bookingid", result);
-        return success.toString();
+        if (result!=-1){
+            return result;
+        } else {
+            throw new BadRequestException();
+        }
     }
 
     /**
@@ -52,27 +68,31 @@ public class BookingResource {
      *         successfully updated
      */
     @PUT
-
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/update")
-    // Todo: add status codes
-    public String updateBooking(
+    public SpecifiedBooking updateBooking(
         @PathParam("bookingID") int bookingID,
-        SpecifiedBooking booking
+        @Valid SpecifiedBooking booking
     ) {
         boolean result = BookingDao.updateBooking(bookingID, booking);
 
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ObjectNode success = factory.objectNode();
-        success.put("success", result);
-        return success.toString();
+        if (result){
+            return booking;
+        } else {
+            throw new BadRequestException();
+        }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/participants")
     public List<User> getParticipants(@PathParam("bookingID") int bookingID) {
-        return ParticipantDao.getParticipantsOfBooking(bookingID);
+        List<User> result = ParticipantDao.getParticipantsOfBooking(bookingID);
+        if (result != null) {
+            return result;
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     /**
@@ -83,12 +103,12 @@ public class BookingResource {
      */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{bookingID}/delete")
-    public String deleteBooking(@PathParam("bookingID") int bookingID) {
+    @Path("/{bookingID}")
+    public void deleteBooking(@PathParam("bookingID") int bookingID) {
         boolean success = BookingDao.deleteBooking(bookingID);
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ObjectNode node = factory.objectNode();
-        node.put("success", success);
-        return node.toString();
+        if (!success) {
+            throw new NotFoundException();
+        }
+
     }
 }

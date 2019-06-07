@@ -279,11 +279,12 @@ public class BookingDao {
     }
 
 
-    public static void insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate, String title) {
+    public static int insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate, String title) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate, title);
-        createBooking(booking);
+        int bookingID= createBooking(booking);
+        return bookingID;
     }
 
     public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) {
