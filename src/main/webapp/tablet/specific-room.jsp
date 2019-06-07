@@ -3,13 +3,15 @@
     <title>jTemp</title>
     <link rel="stylesheet" href="/css/tablet-design.css">
 
-    <script src="/scripts/tablet/time.js"></script>
-
     <script>
+        const ROOM_NAME = <%= request.getAttribute("roomName") %>
+
         function openBookingPage() {
             console.log("Open booking page was called.")
         }
     </script>
+
+    <script src="/scripts/tablet/time.js"></script>
 </head>
 <body onload="updateTime()">
     <div class="left-container">
@@ -47,7 +49,7 @@
 
     <div class="right-container">
         <div class="centered-container">
-            <div class="centered-text" id="room-name">CR3222</div>
+            <div class="centered-text" id="room-name"><%= request.getAttribute("roomName") %></div>
             <div class="centered-text" id="time">13:31</div>
             <div class="centered-text" id="availability">AVAILABLE</div>
             <div class="centered-button" onclick="openBookingPage()">Book Now</div>
