@@ -21,8 +21,15 @@
 <body onload="updateTime(); updateAvailabilityInterval();">
     <div class="left-container">
         <div id="bookings-container">
-            <h1>Todays Bookings</h1>
-
+            <%--<h1>Todays Bookings</h1>--%>
+            <div class="interface-selector">
+                <div class="left selected">
+                    Make a Booking
+                </div>
+                <div class="right">
+                    View Bookings
+                </div>
+            </div>
             <div class="booking">
                 <div class="time">
                     <span class="start-time">13:15</span>
