@@ -10,7 +10,7 @@ Each of these functions is called in the finally clause of setAvailableRoomsAndU
 function updateAvailabilityInterval() {
     setAvailableRoomsAndUpdatePage();
 
-    setInterval(updateAvailabilityInterval, 30000);
+    setTimeout(updateAvailabilityInterval, 30000);
 }
 
 function setAvailableRoomsAndUpdatePage() {
