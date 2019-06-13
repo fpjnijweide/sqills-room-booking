@@ -85,9 +85,8 @@ public class BookingDao {
     public static int createBooking(SpecifiedBooking booking) throws BookingException {
         int id = -1;
 
-        if (!isValidSpecifiedBooking(booking)) {
-            return id;
-        }
+        throwSpecifiedBookingExceptions(booking);
+
         Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
@@ -177,12 +176,15 @@ public class BookingDao {
      * @param bookingID specifies the booking to be updated
      * @return whether the update was successful
      */
-    public static boolean updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException{
+    public static boolean updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException {
         boolean successful = false;
 
-        if (!isValidSpecifiedBooking(booking)) {
-            return false;
+        if (!isValidBookingID(bookingID)){
+            throw new InvalidBookingIDException(bookingID);
         }
+
+        throwSpecifiedBookingExceptions(booking);
+
         Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
@@ -226,9 +228,9 @@ public class BookingDao {
      * @param roomName of room whose bookings will be returned
      * @return Today's bookings for the specified room
      */
-    public static List<OutputBooking> getBookingsForRoomToday(String roomName) {
+    public static List<OutputBooking> getBookingsForRoomToday(String roomName) throws InvalidRoomNameException {
         if (!isValidRoomName(roomName)){
-            return null;
+            throw new InvalidRoomNameException(roomName);
         }
         ArrayList<OutputBooking> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
@@ -282,7 +284,7 @@ public class BookingDao {
     }
 
 
-    public static int insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate, String title) {
+    public static int insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate, String title) throws BookingException {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate, title);
@@ -290,36 +292,55 @@ public class BookingDao {
         return bookingID;
     }
 
-    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) throws BookingException {
+    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) {
         return isValidBooking(booking, booking.getRoomName(), booking.getDate());
     }
 
-    public static boolean isValidBookingToday(Booking booking, String roomName) throws BookingException {
+    public static boolean isValidBookingToday(Booking booking, String roomName) {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         return isValidBooking(booking, roomName, sqlDate);
     }
 
-    public static boolean checkBooking(Booking booking, String roomName, Date sqlDate) throws BookingException {
-        ArrayList<String> errorMessages = new ArrayList<>();
-
+    public static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) {
         boolean validEmail = isValidEmail(booking.getEmail());
-        if (!validEmail){
-            errorMessages.add("Invalid email");
-        }
-
         boolean validTimeSlot = false;
         try {
             validTimeSlot = isValidTimeSlot(roomName, booking.getStartTime(), booking.getEndTime(), sqlDate);
+        } catch (InvalidRoomNameException e) {
+            return false;
+        }
+        return (validEmail && validTimeSlot);
+    }
+
+    public static void throwSpecifiedBookingExceptions(SpecifiedBooking booking) throws BookingException {
+        throwBookingExceptions(booking, booking.getRoomName(), booking.getDate());
+    }
+
+    public static void throwBookingTodayExceptions(Booking booking, String roomName) throws BookingException {
+        Calendar currentTime = Calendar.getInstance();
+        Date sqlDate = new Date((currentTime.getTime()).getTime());
+        throwBookingExceptions(booking, roomName, sqlDate);
+    }
+
+    public static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException {
+        ArrayList<String> errorMessages = new ArrayList<>();
+
+
+        if (!isValidEmail(booking.getEmail())) {
+            errorMessages.add("Invalid email");
+        }
+
+        try {
+            boolean validTimeSlot = isValidTimeSlot(roomName, booking.getStartTime(), booking.getEndTime(), sqlDate);
             if (!validTimeSlot) {
                 errorMessages.add("Invalid time slot for room");
             }
         } catch (InvalidRoomNameException e) {
             errorMessages.add("Invalid room name");
         }
-        if (errorMessages.isEmpty()){
-            return true;
-        } else {
+
+        if (!errorMessages.isEmpty()){
             String errorString = String.join("\n",errorMessages);
             throw new BookingException(errorString);
         }
