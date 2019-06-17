@@ -135,6 +135,43 @@ public class BookingDao {
     }
 
     /**
+     * Deletes particiapnts of booking with a specified bookingID
+     *
+     * @param bookingID specifies the booking to be deleted
+     * @return whether the deletion was successful
+     */
+    public static boolean deleteParticipantsOfBooking(int bookingID) throws InvalidBookingIDException{
+        if (!isValidBookingID(bookingID)){
+            throw new InvalidBookingIDException(bookingID);
+        }
+        boolean successful = false;
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+
+            String query = "DELETE FROM sqills.participants WHERE bookingID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            statement.setInt(1, bookingID);
+
+            int updatedRows = statement.executeUpdate();
+            successful = updatedRows > 0;
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return successful;
+    }
+
+
+    /**
      * Deletes a booking with a specified bookingID
      *
      * @param bookingID specifies the booking to be deleted
@@ -144,6 +181,7 @@ public class BookingDao {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
+        deleteParticipantsOfBooking(bookingID);
         boolean successful = false;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
