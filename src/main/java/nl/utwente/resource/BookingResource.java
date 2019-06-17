@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.ParticipantDao;
+import nl.utwente.exceptions.BookingException;
+import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
@@ -34,30 +36,28 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
     public OutputBooking getSpecificBooking(@PathParam("bookingID") int bookingID) {
-        OutputBooking booking = BookingDao.getSpecificBooking(bookingID);
-        if (booking!=null){
-            return booking;
-        } else {
-            throw new NotFoundException();
+        try {
+            return BookingDao.getSpecificBooking(bookingID);
+        } catch (InvalidBookingIDException e) {
+            throw new NotFoundException(e.getMessage());
         }
+
+
 
     }
 
     /**
      * Creates a booking.
-     * @return JSON object containing a "success" boolean field specifying whether the booking was
-     *         successfully created
+     * @return Booking ID
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
     public int createBooking(@Valid SpecifiedBooking booking) {
-        int result = BookingDao.createBooking(booking);
-
-        if (result!=-1){
-            return result;
-        } else {
-            throw new BadRequestException();
+        try {
+            return BookingDao.createBooking(booking);
+        } catch (BookingException e) {
+            throw new BadRequestException(e.getMessage());
         }
     }
 
@@ -74,12 +74,16 @@ public class BookingResource {
         @PathParam("bookingID") int bookingID,
         @Valid SpecifiedBooking booking
     ) {
-        boolean result = BookingDao.updateBooking(bookingID, booking);
-
-        if (result){
-            return booking;
-        } else {
-            throw new BadRequestException();
+        try {
+            if (BookingDao.updateBooking(bookingID, booking)) {
+                return booking;
+            } else {
+                throw new InternalServerErrorException("Something went wrong in updateBooking, but that's all we know");
+            }
+        } catch (InvalidBookingIDException e) {
+            throw new NotFoundException(e.getMessage());
+        } catch (BookingException e) {
+            throw new BadRequestException(e.getMessage());
         }
     }
 
@@ -87,12 +91,12 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/participants")
     public List<User> getParticipants(@PathParam("bookingID") int bookingID) {
-        List<User> result = ParticipantDao.getParticipantsOfBooking(bookingID);
-        if (result != null) {
-            return result;
-        } else {
-            throw new NotFoundException();
+        try {
+            return ParticipantDao.getParticipantsOfBooking(bookingID);
+        } catch (InvalidBookingIDException e) {
+            throw new NotFoundException(e.getMessage());
         }
+
     }
 
     /**
@@ -105,10 +109,12 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
     public void deleteBooking(@PathParam("bookingID") int bookingID) {
-        boolean success = BookingDao.deleteBooking(bookingID);
-        if (!success) {
-            throw new NotFoundException();
+        try {
+            BookingDao.deleteBooking(bookingID);
+        } catch (InvalidBookingIDException e) {
+            throw new NotFoundException(e.getMessage());
         }
+
 
     }
 }
