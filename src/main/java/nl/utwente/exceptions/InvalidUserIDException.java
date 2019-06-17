@@ -1,11 +1,11 @@
 package nl.utwente.exceptions;
 
-public class InvalidBookingIDException extends DAOException {
+public class InvalidUserIDException extends DAOException {
 
     private int id;
 
-    public InvalidBookingIDException(int id) {
-        super("Invalid booking id: " + String.valueOf(id));
+    public InvalidUserIDException(int id) {
+        super("Invalid user id: " + String.valueOf(id));
         this.id=id;
 
     }

@@ -1,6 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.OutputBooking;
 
 import java.sql.*;
@@ -162,9 +163,9 @@ public class RoomDao {
         return rooms;
     }
 
-    public static Time getFreeUntil(String roomName) throws IllegalArgumentException {
+    public static Time getFreeUntil(String roomName) throws InvalidRoomNameException {
         if (!isValidRoomName(roomName)){
-            throw new IllegalArgumentException();
+            throw new InvalidRoomNameException(roomName);
         }
         Time result = null;
 
@@ -193,9 +194,9 @@ public class RoomDao {
         return result;
     }
 
-    public static List<OutputBooking> getBookingsForThisWeek(String roomName) {
+    public static List<OutputBooking> getBookingsForThisWeek(String roomName) throws InvalidRoomNameException {
         if (!isValidRoomName(roomName)){
-            return null;
+            throw new InvalidRoomNameException(roomName);
         }
 
         List<OutputBooking> result = new ArrayList<>();
