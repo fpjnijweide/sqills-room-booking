@@ -83,29 +83,29 @@ body
     margin-top: 25px
     margin-bottom: 0
 
-  .centered-button
-    font-size: 26px
-    font-weight: 300
-    text-align: center
-    color: $sqills-orange
-    background-color: transparent
+.centered-button
+  font-size: 26px
+  font-weight: 300
+  text-align: center
+  color: $sqills-orange
+  background-color: transparent
 
-    padding: 20px
-    border: 3px solid $sqills-orange
-    width: 300px
-    border-radius: 50px
+  padding: 20px
+  border: 3px solid $sqills-orange
+  width: 300px
+  border-radius: 50px
 
-    margin-top: 25px
-    margin-left: auto
-    margin-right: auto
-    cursor: pointer
+  margin-top: 25px
+  margin-left: auto
+  margin-right: auto
+  cursor: pointer
 
-    transition: background-color linear 0.3s 0s, color linear 0.3s 0s
+  transition: background-color linear 0.3s 0s, color linear 0.3s 0s
 
-  .centered-button:hover
-    background-color: $sqills-orange
-    color: white
-    font-weight: 300
+.centered-button:hover
+  background-color: $sqills-orange
+  color: white
+  font-weight: 300
 
 .left-container:after, .right-container:before
   content: ''
@@ -149,7 +149,61 @@ body
     height: 50px
     float: left
 
-//.right-container:before
-//  right: 100%
-//  border-bottom: $height solid transparent // orange
-//  border-left: 100px solid white
+#make-booking-overlay
+  position: absolute
+  z-index: 100
+  left: calc(50% - 300px)
+  width: 600px
+  top: 10vh
+  background-color: $sqills-purple
+  //box-shadow: 3px 3px 10px $sqills-purple, -3px -3px -10px $sqills-purple
+
+  .vertical-group
+    display: flex
+    margin-bottom: 10px
+
+    .text-input
+      background-color: lighten($sqills-purple, 10%)
+      border: none
+      font-size: 26px
+      width: 100%
+      margin-left: 20px
+      margin-right: 20px
+      padding: 10px
+      color: $sqills-grey
+      transition: color 0.25s linear 0s
+
+    .text-input:focus
+      color: white
+
+    label, .duration-display
+      font-size: 26px
+      line-height: 46px
+      color: $sqills-grey
+      margin-left: 10px
+
+    .duration-display
+      width: 100px
+
+  .centered-title
+    margin-bottom: 20px
+    text-align: center
+    font-weight: 100
+    color: white
+    font-size: 50px
+
+  .custom-range
+    flex-grow: 1
+    margin-right: 20px
+
+  button
+    margin-bottom: 20px
+
+#make-booking-overlay.hidden
+  display: none
+
+.blur-container.blur
+  filter: blur(4px)
+
+textarea:focus, input:focus
+  outline: none
