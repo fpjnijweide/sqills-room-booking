@@ -26,33 +26,6 @@
         <div class="left-container">
             <div id="bookings-container">
                 <h1 class="booking-header">Today's Bookings</h1>
-                <%--<div class="interface-selector">--%>
-                    <%--<div class="left selected">--%>
-                        <%--Make a Booking--%>
-                    <%--</div>--%>
-                    <%--<div class="right">--%>
-                        <%--View Bookings--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-                <div class="booking">
-                    <div class="left">
-                        <div class="title">Code Review</div>
-                    </div>
-                    <div class="right">
-                        <div class="time">13:15 - 14:00</div>
-                        <div class="owner">Marten Voorberg</div>
-                    </div>
-                </div>
-
-                <div class="booking">
-                    <div class="left">
-                        <div class="title">Code Review</div>
-                    </div>
-                    <div class="right">
-                        <div class="time">13:15 - 14:00</div>
-                        <div class="owner">Marten Voorberg</div>
-                    </div>
-                </div>
             </div>
         </div>
 
