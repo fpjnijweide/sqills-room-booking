@@ -43,5 +43,6 @@ function bookRoom() {
             setAvailableRoomsAndUpdatePage();
             hideBookingPopUp();
             unblurBackground();
+            getBookingsAndUpdatePage();
         });
 }
