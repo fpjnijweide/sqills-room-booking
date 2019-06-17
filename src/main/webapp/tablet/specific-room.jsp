@@ -19,12 +19,13 @@
     <script src="/scripts/tablet/time.js"></script>
     <script src="/scripts/tablet/availability.js"></script>
     <script src="/scripts/tablet/pop-up-controller.js"></script>
+    <script src="/scripts/tablet/bookings-overview.js"></script>
 </head>
-<body onload="updateTime(); updateAvailabilityInterval();">
+<body onload="updateTime(); updateAvailabilityInterval(); updateBookingsOverviewInterval();">
     <div class="blur-container">
         <div class="left-container">
             <div id="bookings-container">
-                <h1>Todays Bookings</h1>
+                <h1 class="booking-header">Today's Bookings</h1>
                 <%--<div class="interface-selector">--%>
                     <%--<div class="left selected">--%>
                         <%--Make a Booking--%>
@@ -34,30 +35,23 @@
                     <%--</div>--%>
                 <%--</div>--%>
                 <div class="booking">
-                    <div class="time">
-                        <span class="start-time">13:15</span>
-                        <span class="dash"> - </span>
-                        <span class="end-time">14:00</span>
+                    <div class="left">
+                        <div class="title">Code Review</div>
                     </div>
-                    <div class="title">Code Review</div>
+                    <div class="right">
+                        <div class="time">13:15 - 14:00</div>
+                        <div class="owner">Marten Voorberg</div>
+                    </div>
                 </div>
 
                 <div class="booking">
-                    <div class="time">
-                        <span class="start-time">13:15</span>
-                        <span class="seperator"> - </span>
-                        <span class="end-time">14:00</span>
+                    <div class="left">
+                        <div class="title">Code Review</div>
                     </div>
-                    <div class="title">Code Review</div>
-                </div>
-
-                <div class="booking">
-                    <div class="time">
-                        <span class="start-time">13:15</span>
-                        <span class="seperator"> - </span>
-                        <span class="end-time">14:00</span>
+                    <div class="right">
+                        <div class="time">13:15 - 14:00</div>
+                        <div class="owner">Marten Voorberg</div>
                     </div>
-                    <div class="title">Code Review</div>
                 </div>
             </div>
         </div>

@@ -28,27 +28,44 @@ body
   #bookings-container
     width: $left-width
 
+    h1.booking-header
+      text-align: center
+      font-size: 50px
+      color: $sqills-purple
+      font-weight: 300
+
     .booking
-      $booking-height: 50px
-      height: $booking-height
-      line-height: $booking-height
-      width: auto
-      margin: 25px
-      border: 1px solid $sqills-purple
+      width: calc(100% - 10px)
+      margin-left: 10px
 
-      .time
-        height: $booking-height
-        width: calc(20% - 2px)
-        float: left
+      padding: 10px
+      border: 2px solid $sqills-purple
+      border-radius: 50px
+      height: 100px
+      display: flex
+      margin-bottom: 20px
+
+      cursor: pointer
+      transition: background-color 0.25s linear 0s
+
+      .left
+        width: 60%
+
+        .title
+          font-size: 24px
+          line-height: 75px !important
+          font-weight: 300
+          color: $sqills-purple
+          text-align: center
+
+      .right
+        flex-grow: 1
+        text-align: center
         color: $sqills-grey
+        padding-top: 20px
 
-      .title
-        height: $booking-height
-        width: 80%
-        float: left
-        color: $sqills-purple
-        font-weight: 600
-        font-size: 20px
+    .booking:hover
+      background-color: #EEE
 
 .right-container
   float: left
