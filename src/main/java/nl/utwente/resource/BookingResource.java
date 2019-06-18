@@ -2,10 +2,10 @@ package nl.utwente.resource;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.ParticipantDao;
 import nl.utwente.model.OutputBooking;
+import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
 
@@ -39,6 +39,21 @@ public class BookingResource {
     public String createBooking(SpecifiedBooking booking) {
         int result = BookingDao.createBooking(booking);
 
+        final JsonNodeFactory factory = JsonNodeFactory.instance;
+        ObjectNode success = factory.objectNode();
+        success.put("bookingid", result);
+        return success.toString();
+    }
+    /**
+     * Create recurring booking
+     *  @return JSON object containing a "success" boolean field specifying whether the booking was
+     *  successfully created
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/create/rec")
+    public String createRecurringBooking(RecurringBooking booking){
+        int result = BookingDao.createRecurringBooking(booking);
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode success = factory.objectNode();
         success.put("bookingid", result);

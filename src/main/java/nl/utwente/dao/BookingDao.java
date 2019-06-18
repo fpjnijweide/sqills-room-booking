@@ -110,9 +110,47 @@ public class BookingDao {
      * Create a recurring specified booking
      */
     public static int createRecurringBooking(RecurringBooking booking){
+        int id = -1;
 
+        if (!isValidBooking(booking)) {
+            System.out.println("invalid");
+            return id;
+        }
 
-        return 1;
+        Connection connection = DatabaseConnectionFactory.getConnection();
+
+        try {
+            String query = "select create_recurring_booking(?,?,?,?,?,?,?,?,?,?,?,?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setTime(1, booking.getStartTime());
+            statement.setTime(2, booking.getEndTime());
+            statement.setDate(3, booking.getDate());
+            statement.setString(4, booking.getRoomName());
+            statement.setString(5, booking.getEmail());
+            statement.setBoolean(6, booking.getIsPrivate());
+            statement.setString(7, booking.getTitle());
+            statement.setObject(8, booking.getRepeatEvery(), java.sql.Types.OTHER);
+            statement.setInt(9,booking.getFrequency());
+            statement.setDate(10, booking.getStartingFrom());
+            statement.setDate(11,booking.getEndingAt());
+            statement.setInt(12, booking.getWithGapsOf());
+
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            //TODO remove
+            id = resultSet.getInt(1);
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return id;
 
     }
     /**
@@ -212,10 +250,10 @@ public class BookingDao {
             // TODO @Freek Split this into into a method
             while (resultSet.next()) {
                 Time startTime = resultSet.getTime("start_time");
-                Time endTime = resultSet.getTime("endTime");
+                Time endTime = resultSet.getTime("end_time");
                 Date date = resultSet.getDate("date");
 
-                boolean isPrivate = resultSet.getBoolean("isPrivate");
+                boolean isPrivate = resultSet.getBoolean("is_private");
 
                 String userName;
                 String title;
