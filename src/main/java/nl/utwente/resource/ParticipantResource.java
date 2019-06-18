@@ -10,6 +10,10 @@ import nl.utwente.model.UserIDEmailPair;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import static nl.utwente.exceptions.ExceptionHandling.throw400;
+import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/participant")
 public class ParticipantResource {
@@ -24,10 +28,11 @@ public class ParticipantResource {
                 throw new InternalServerErrorException("Something went wrong in addParticipant");
             }
         } catch (InvalidBookingIDException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         } catch (InvalidEmailException e) {
-            throw new BadRequestException(e.getMessage());
+            throw400(e);
         }
+        return null;
     }
 
     @DELETE
@@ -37,9 +42,9 @@ public class ParticipantResource {
         try {
             ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
         } catch (InvalidBookingIDException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         } catch (InvalidUserIDException e) {
-            throw new BadRequestException(e.getMessage());
+            throw400(e);
         }
 
 

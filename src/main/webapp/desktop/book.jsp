@@ -3,6 +3,7 @@
     <title>Make a Booking</title>
     <jsp:include page="head.jsp"/>
     <script src="/scripts/make-booking-page.js"></script>
+    <link rel="stylesheet" href="../sass/book.css">
 </head>
 <body>
     <jsp:include page="nav.jsp"/>

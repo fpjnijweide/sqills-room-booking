@@ -21,9 +21,13 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Locale;
 
+import static nl.utwente.exceptions.ExceptionHandling.throw400;
+import static nl.utwente.exceptions.ExceptionHandling.throw404;
+
 @Path("/booking")
 public class BookingResource {
     @Context HttpServletResponse response;
+
 
 
 
@@ -39,12 +43,14 @@ public class BookingResource {
         try {
             return BookingDao.getSpecificBooking(bookingID);
         } catch (InvalidBookingIDException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         }
 
 
-
+        return null;
     }
+
+
 
     /**
      * Creates a booking.
@@ -57,8 +63,9 @@ public class BookingResource {
         try {
             return BookingDao.createBooking(booking);
         } catch (BookingException e) {
-            throw new BadRequestException(e.getMessage());
+            throw400(e);
         }
+        return 0;
     }
 
     /**
@@ -81,10 +88,11 @@ public class BookingResource {
                 throw new InternalServerErrorException("Something went wrong in updateBooking, but that's all we know");
             }
         } catch (InvalidBookingIDException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         } catch (BookingException e) {
-            throw new BadRequestException(e.getMessage());
+            throw400(e);
         }
+        return null;
     }
 
     @GET
@@ -94,9 +102,10 @@ public class BookingResource {
         try {
             return ParticipantDao.getParticipantsOfBooking(bookingID);
         } catch (InvalidBookingIDException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         }
 
+        return null;
     }
 
     /**
@@ -112,7 +121,7 @@ public class BookingResource {
         try {
             BookingDao.deleteBooking(bookingID);
         } catch (InvalidBookingIDException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         }
 
 

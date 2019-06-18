@@ -12,11 +12,14 @@ import nl.utwente.model.OutputBooking;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.Time;
 import java.util.List;
 
 import static nl.utwente.dao.BookingDao.isValidBookingToday;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
+import static nl.utwente.exceptions.ExceptionHandling.throw400;
+import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/room")
 public class RoomResource {
@@ -49,9 +52,10 @@ public class RoomResource {
         try {
             return BookingDao.getBookingsForRoomToday(roomName);
         } catch (InvalidRoomNameException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         }
 
+        return null;
     }
 
     @POST
@@ -73,7 +77,7 @@ public class RoomResource {
             roomID = BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
                     booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
         } catch (BookingException e) {
-            throw new BadRequestException(e.getMessage());
+            throw400(e);
         }
 
         if (roomID != -1 && roomID != 0) {
@@ -100,8 +104,9 @@ public class RoomResource {
         try {
             return RoomDao.getFreeUntil(roomName);
         } catch (InvalidRoomNameException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         }
+        return null;
     }
 
     @GET
@@ -111,8 +116,9 @@ public class RoomResource {
         try {
             return RoomDao.getBookingsForThisWeek(roomName);
         } catch (InvalidRoomNameException e) {
-            throw new NotFoundException(e.getMessage());
+            throw404(e);
         }
 
+        return null;
     }
 }
