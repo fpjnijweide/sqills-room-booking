@@ -6,7 +6,6 @@ import nl.utwente.model.UserAdministration;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.Map;
 
 @Path("/user")
 public class UserResource {
@@ -37,11 +36,4 @@ public class UserResource {
         return Response.ok("OK").cookie(cook).build();
     }
 
-    @GET
-    @Path("/test")
-    public void test(@Context HttpHeaders hh){
-        Map<String, Cookie> cookies = hh.getCookies();
-        Cookie myCookie = cookies.get("NAME");
-        System.out.println(myCookie);
-    }
 }
