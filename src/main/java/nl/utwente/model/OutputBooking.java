@@ -9,6 +9,16 @@ public class OutputBooking extends TimeSlot {
     protected Date date;
     protected String title;
 
+    public int getBookingid() {
+        return bookingid;
+    }
+
+    public void setBookingid(int bookingid) {
+        this.bookingid = bookingid;
+    }
+
+    protected int bookingid;
+
     public OutputBooking(Time startTime, Time endTime, String userName, String roomName, Date date, String title) {
         super(startTime, endTime);
         this.userName = userName;

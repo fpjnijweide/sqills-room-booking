@@ -39,26 +39,25 @@
     <div id="emailinput">
 
     </div>
+
     <div id="content">
         <div class="row">
-
             <div class="col-sm">
                 <form id="input-form" onsubmit="return enterPressed(event)">
                     <ul class="input-form-select-room">
                         <li>
-                            <input type="text" class="form-control" maxlength="10" placeholder="Enter room Number" id="room-input"
+                            <input type="text" class="form-control" maxlength="10" placeholder="Enter Room Number" id="room-input"
                                    name="room-input" onkeyup="autoCompleteRoomName()">
-
                         </li>
                         <li>
-                            <button id="room-button" onclick="selectRoom()" class="btn btn-primary" type="button"><i
-                                    class="fas fa-rocket"></i></button>
+                            <button id="room-button" onclick="selectRoom()" class="btn btn-primary" type="button">
+                                <i class="fas fa-rocket"></i>
+                            </button>
                         </li>
                     </ul>
                 </form>
             </div>
         </div>
-
     </div>
 
     <div class="row">

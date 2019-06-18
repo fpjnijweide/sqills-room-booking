@@ -30,7 +30,7 @@ public class BookingDao {
         OutputBooking booking = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT b.starttime, b.endtime, u.name, r.roomname, b.date, b.isprivate, b.title " +
+            String query = "SELECT b.bookingid, b.starttime, b.endtime, u.name, r.roomname, b.date, b.isprivate, b.title " +
                 "FROM sqills.Booking b " +
                 "    JOIN sqills.room r ON b.roomid = r.roomid " +
                 "    JOIN sqills.users u ON u.userid = b.owner " +
@@ -42,6 +42,7 @@ public class BookingDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
+                int id = resultSet.getInt("bookingid");
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
                 Date date = resultSet.getDate("date");
@@ -60,6 +61,7 @@ public class BookingDao {
                 }
 
                 booking = new OutputBooking(startTime, endTime, userName, roomName, date, title);
+                booking.setBookingid(id);
             }
 
             resultSet.close();
@@ -273,7 +275,7 @@ public class BookingDao {
         ArrayList<OutputBooking> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT b.starttime, b.endtime, u.name, b.date, b.isprivate, b.title\n" +
+            String query = "SELECT b.bookingid, b.starttime, b.endtime, u.name, b.date, b.isprivate, b.title\n" +
                 "FROM sqills.Booking b\n" +
                 "    JOIN sqills.room r ON b.roomid = r.roomid\n" +
                 "    JOIN sqills.users u ON u.userid = b.owner\n" +
