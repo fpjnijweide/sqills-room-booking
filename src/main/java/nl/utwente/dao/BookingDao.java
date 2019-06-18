@@ -2,6 +2,7 @@ package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.model.OutputBooking;
+import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 
 import java.sql.*;
@@ -105,6 +106,15 @@ public class BookingDao {
         return id;
     }
 
+    /**
+     * Create a recurring specified booking
+     */
+    public static int createRecurringBooking(RecurringBooking booking){
+
+
+        return 1;
+
+    }
     /**
      * Deletes a booking with a specified bookingID
      *
