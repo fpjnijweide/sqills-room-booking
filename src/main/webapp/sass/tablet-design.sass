@@ -219,6 +219,67 @@ body
 #make-booking-overlay.hidden
   display: none
 
+#booking-details-overlay
+  position: absolute
+  z-index: 100
+  left: calc(50% - 300px)
+  width: 600px
+  top: 10vh
+  background-color: $sqills-purple
+
+  .close
+    position: absolute
+    left: 560px
+    width: 40px
+    height: 40px
+    //background-color: green
+    cursor: pointer
+    text-align: center
+    font-size: 40px
+    //color: lighten($sqills-orange, 25)
+    color: white
+    transition: color 0.25s linear 0s
+
+  .close:hover
+    color: $sqills-orange
+
+  .title
+    text-align: center
+    color: white
+    font-size: 40px
+    font-weight: 300
+
+  .time
+    text-align: center
+    color: $sqills-grey
+    font-size: 30px
+    font-weight: 300
+
+  .owner
+    text-align: center
+    font-size: 24px
+    color: white
+
+    .booked-by
+      color: $sqills-grey
+
+  .participants
+    color: $sqills-grey
+    text-align: center
+
+    h4
+      font-size: 30px
+      margin-bottom: 0px
+
+    ul
+      margin-top: 0
+
+      li
+      font-size: 20px
+
+#booking-details-overlay.hidden
+  display: none
+
 .blur-container.blur
   filter: blur(4px)
 
