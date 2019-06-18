@@ -10,12 +10,7 @@ import java.io.IOException;
 public class BookingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        if (hasCookie(req.getCookies())){
-            req.getRequestDispatcher("/desktop/book.jsp").forward(req, res);
-        } else {
-            System.out.println("wf2g2");
-        }
-
+        req.getRequestDispatcher("/desktop/book.jsp").forward(req, res);
     }
 
     public boolean hasCookie(Cookie[] cookies){
