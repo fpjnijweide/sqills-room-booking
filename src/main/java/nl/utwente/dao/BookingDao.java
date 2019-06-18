@@ -41,27 +41,10 @@ public class BookingDao {
 
             ResultSet resultSet = statement.executeQuery();
 
+            // TODO freek merge conflict here
             while (resultSet.next()) {
-                int id = resultSet.getInt("bookingid");
-                Time startTime = resultSet.getTime("startTime");
-                Time endTime = resultSet.getTime("endTime");
-                Date date = resultSet.getDate("date");
-                String roomName = resultSet.getString("roomName");
-
-                boolean isPrivate = resultSet.getBoolean("isPrivate");
-
-                String userName;
-                String title;
-                if (isPrivate) {
-                    userName = "PRIVATE";
-                    title = "PRIVATE";
-                } else {
-                    userName = resultSet.getString("name");
-                    title = resultSet.getString("title");
-                }
-
-                booking = new OutputBooking(startTime, endTime, userName, roomName, date, title);
-                booking.setBookingid(id);
+                String roomName = resultSet.getString("roomname");
+                booking = resultSetToBooking(roomName, resultSet);
             }
 
             resultSet.close();
@@ -308,6 +291,7 @@ public class BookingDao {
         Time startTime = resultSet.getTime("startTime");
         Time endTime = resultSet.getTime("endTime");
         Date date = resultSet.getDate("date");
+        int bookingid = resultSet.getInt("bookingid");
 
         boolean isPrivate = resultSet.getBoolean("isPrivate");
 
@@ -320,7 +304,7 @@ public class BookingDao {
             userName = resultSet.getString("name");
             title = resultSet.getString("title");
         }
-        return new OutputBooking(startTime, endTime, userName, roomName, date, title);
+        return new OutputBooking(startTime, endTime, userName, roomName, date, title, bookingid);
     }
 
 
