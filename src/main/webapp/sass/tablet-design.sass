@@ -1,0 +1,287 @@
+@import 'styleguide.sass'
+
+$left-width: 600px
+$height: 100vh
+$slant: calc(100vh / 10)
+
+*
+  font-family: $sqills-font
+  box-sizing: border-box !important
+
+body
+  padding: 0
+  margin: 0
+  background: url("/assets/background.jpg") no-repeat center center fixed
+  background-size: cover
+  //background-s
+
+.right-container, .left-container
+  min-height: $height
+  position: relative
+  //width: calc(50%)
+
+.left-container
+  float: left
+  background-color: white
+  width: calc(#{$left-width})
+
+  #bookings-container
+    width: $left-width
+
+    h1.booking-header
+      text-align: center
+      font-size: 50px
+      color: $sqills-purple
+      font-weight: 300
+
+    .booking
+      width: calc(100% - 10px)
+      margin-left: 10px
+
+      padding: 10px
+      border: 2px solid $sqills-purple
+      border-radius: 50px
+      height: 100px
+      display: flex
+      margin-bottom: 20px
+
+      cursor: pointer
+      transition: background-color 0.25s linear 0s
+
+      .left
+        width: 60%
+
+        .title
+          font-size: 24px
+          line-height: 75px !important
+          font-weight: 300
+          color: $sqills-purple
+          text-align: center
+
+      .right
+        flex-grow: 1
+        text-align: center
+        color: $sqills-grey
+        padding-top: 20px
+
+    .booking:hover
+      background-color: #EEE
+
+.right-container
+  float: left
+  width: calc(100% - #{$left-width})
+  background-color: transparent // transparent
+
+  .centered-container
+    position: absolute
+    left: 40%
+
+  .centered-text
+    text-align: center
+
+  #room-name
+    font-size: 80px
+    color: $sqills-orange
+    font-weight: 100
+    margin-top: 50px
+    margin-bottom: 0
+
+  #time
+    font-size: 100px
+    color: white
+    font-weight: 100
+    margin-top: 25px
+    margin-bottom: 0
+
+  #availability
+    font-size: 80px
+    font-weight: 200
+    color: $sqills-orange
+    margin-top: 25px
+    margin-bottom: 0
+
+.centered-button
+  font-size: 26px
+  font-weight: 300
+  text-align: center
+  color: $sqills-orange
+  background-color: transparent
+
+  padding: 20px
+  border: 3px solid $sqills-orange
+  width: 300px
+  border-radius: 50px
+
+  margin-top: 25px
+  margin-left: auto
+  margin-right: auto
+  cursor: pointer
+
+  transition: background-color linear 0.3s 0s, color linear 0.3s 0s
+
+.centered-button:hover
+  background-color: $sqills-orange
+  color: white
+  font-weight: 300
+
+.left-container:after, .right-container:before
+  content: ''
+  position: absolute
+  top: 0
+  width: 0
+  height: 0
+
+.left-container:after
+  left: 100%
+  border-top: $height solid white
+  border-right: 100px solid transparent
+
+
+.interface-selector
+  width: calc(100% - 20px)
+  height: 50px
+  line-height: 50px
+  text-align: center
+  font-size: 24px
+  margin-top: 20px
+  margin-left: 10px
+  margin-right: 10px
+
+  border: 1px solid $sqills-purple
+
+  .left, .right
+    cursor: pointer
+
+  .left
+    width: 50%
+    height: 50px
+    float: left
+
+  .left.selected, .right.selected
+    background-color: $sqills-purple
+    color: white
+
+  .right
+    width: 50%
+    height: 50px
+    float: left
+
+#make-booking-overlay
+  position: absolute
+  z-index: 100
+  left: calc(50% - 300px)
+  width: 600px
+  top: 10vh
+  background-color: $sqills-purple
+  //box-shadow: 3px 3px 10px $sqills-purple, -3px -3px -10px $sqills-purple
+
+  .vertical-group
+    display: flex
+    margin-bottom: 10px
+
+    .text-input
+      background-color: lighten($sqills-purple, 10%)
+      border: none
+      font-size: 26px
+      width: 100%
+      margin-left: 20px
+      margin-right: 20px
+      padding: 10px
+      color: $sqills-grey
+      transition: color 0.25s linear 0s
+
+    .text-input:focus
+      color: white
+
+    label, .duration-display
+      font-size: 26px
+      line-height: 46px
+      color: $sqills-grey
+      margin-left: 10px
+
+    .duration-display
+      width: 100px
+
+  .centered-title
+    margin-bottom: 20px
+    text-align: center
+    font-weight: 100
+    color: white
+    font-size: 50px
+
+  .custom-range
+    flex-grow: 1
+    margin-right: 20px
+
+  button
+    margin-bottom: 20px
+
+#make-booking-overlay.hidden
+  display: none
+
+#booking-details-overlay
+  position: absolute
+  z-index: 100
+  left: calc(50% - 300px)
+  width: 600px
+  top: 10vh
+  background-color: $sqills-purple
+
+  .close
+    position: absolute
+    left: 560px
+    width: 40px
+    height: 40px
+    //background-color: green
+    cursor: pointer
+    text-align: center
+    font-size: 40px
+    //color: lighten($sqills-orange, 25)
+    color: white
+    transition: color 0.25s linear 0s
+
+  .close:hover
+    color: $sqills-orange
+
+  .title
+    text-align: center
+    color: white
+    font-size: 40px
+    font-weight: 300
+
+  .time
+    text-align: center
+    color: $sqills-grey
+    font-size: 30px
+    font-weight: 300
+
+  .owner
+    text-align: center
+    font-size: 24px
+    color: white
+
+    .booked-by
+      color: $sqills-grey
+
+  .participants
+    color: $sqills-grey
+    text-align: center
+
+    h4
+      font-size: 30px
+      margin-bottom: 0px
+
+    ul
+      margin-top: 0
+
+      li
+      font-size: 20px
+
+#booking-details-overlay.hidden
+  display: none
+
+.blur-container.blur
+  filter: blur(4px)
+
+textarea:focus, input:focus
+  outline: none

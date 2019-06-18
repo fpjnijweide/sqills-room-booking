@@ -32,6 +32,10 @@
         <servlet-name>Tablet Index Servlet</servlet-name>
         <servlet-class>nl.utwente.servlet.tabletInterface.IndexServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Specific Room Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.tabletInterface.SpecificRoomServlet</servlet-class>
+    </servlet>
 
 	<servlet-mapping>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
@@ -56,5 +60,9 @@
     <servlet-mapping>
         <servlet-name>Tablet Index Servlet</servlet-name>
         <url-pattern>/index</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Specific Room Servlet</servlet-name>
+        <url-pattern>/tablet/room/*</url-pattern>
     </servlet-mapping>
 </web-app>
