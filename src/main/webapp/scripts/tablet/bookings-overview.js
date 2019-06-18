@@ -18,7 +18,7 @@ function updatePage(bookings) {
 
     for (let i = 0; i < bookings.length; i++) {
         container.innerHTML +=
-            `<div class=\"booking\">\n` +
+            `<div class=\"booking\" onclick=\"openDetailsPopUp(${bookings[i].bookingid})\">\n` +
             `<div class=\"left\">\n` +
             `<div class=\"title\">${bookings[i].title}</div>` +
             `</div>` +

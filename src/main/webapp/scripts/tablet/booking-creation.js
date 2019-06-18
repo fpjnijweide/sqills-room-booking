@@ -37,11 +37,10 @@ function bookRoom() {
     axios.post("/api/booking/create", requestBody)
         .then(response => {
             let id = response.data.bookingid;
-            alert(id);
         })
         .finally(() => {
             setAvailableRoomsAndUpdatePage();
-            hideBookingPopUp();
+            hideCreationPopUp();
             unblurBackground();
             getBookingsAndUpdatePage();
         });
