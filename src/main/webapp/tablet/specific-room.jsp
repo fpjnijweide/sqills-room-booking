@@ -51,6 +51,7 @@
     <div id="make-booking-overlay" class="hidden">
         <div class="close" onclick="hideCreationPopUp(); unblurBackground();"><i class="fa fa-close" aria-hidden="true"></i></div>
         <div class="centered-title">Book a Room</div>
+        <div class="instructions">Leave the title or email field empty to use default values</div>
         <div class="vertical-group">
             <label>Title: </label><input class="text-input" type="text" id="booking-title" value="Booking Title (Optional)">
         </div>

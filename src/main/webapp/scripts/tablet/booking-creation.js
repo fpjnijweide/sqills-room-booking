@@ -3,9 +3,19 @@ function updateDuration(value) {
 }
 
 function bookRoom() {
+    let title = document.getElementById("booking-title").value;
+    if (title === "Booking Title (Optional)") {
+        title = "Titleless Meeting";
+    }
+
+    let email = document.getElementById("booking-email").value;
+    if (email === "Email (Optional)") {
+        email = "sqills_tablet@gmail.com";
+    }
+
     let requestBody = {
-        "title": document.getElementById("booking-title").value,
-        "email": document.getElementById("booking-email").value,
+        "title": title,
+        "email": email,
         "roomName": ROOM_NAME,
         "isPrivate": document.getElementById("booking-checkbox").checked
     };
@@ -17,7 +27,6 @@ function bookRoom() {
     dateString += today.getFullYear();
     dateString += "-" + (today.getMonth() + 1);
     dateString += "-" + today.getDate();
-    console.log(dateString);
 
     let startTimeString = today.getHours() + ":"
         + today.getMinutes() + ":" +
