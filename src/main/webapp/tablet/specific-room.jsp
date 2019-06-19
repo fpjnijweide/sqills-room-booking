@@ -43,7 +43,7 @@
                 <div class="centered-text" id="room-name"><%= request.getAttribute("roomName") %></div>
                 <div class="centered-text" id="time">13:31</div>
                 <div class="centered-text" id="availability">UNAVAILABLE</div>
-                <div class="centered-button" onclick="blurBackground(); showCreationPopUp();">Book Now</div>
+                <div id="book-button" class="centered-button" onclick="blurBackground(); showCreationPopUp();">Book Now</div>
             </div>
         </div>
     </div>

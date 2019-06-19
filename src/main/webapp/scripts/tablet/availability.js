@@ -35,7 +35,9 @@ function updateAvailabilityDisplay() {
         return;
     } else if (isAvailable) {
         element.innerText = "AVAILABLE";
+        document.getElementById("book-button").classList.remove("disable");
     } else {
         element.innerText = "UNAVAILABLE";
+        document.getElementById("book-button").classList.add("disable");
     }
 }
