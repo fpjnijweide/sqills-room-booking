@@ -375,6 +375,9 @@ public class BookingDao {
     public static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException {
         ArrayList<String> errorMessages = new ArrayList<>();
 
+        if (!isValidTitle(booking.getTitle())) {
+            errorMessages.add("Invalid title");
+        }
 
         if (!isValidEmail(booking.getEmail())) {
             errorMessages.add("Invalid email");
@@ -458,5 +461,19 @@ public class BookingDao {
         }
 
         return isValid;
+    }
+
+    public static boolean isValidTitle(String title) {
+        final String ALLOWED_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. -_";
+
+        for (int i = 0; i < title.length(); i++){
+            char c = title.charAt(i);
+
+            if (ALLOWED_CHARS.indexOf(c) == -1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
