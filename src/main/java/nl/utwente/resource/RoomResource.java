@@ -4,14 +4,22 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
+import nl.utwente.exceptions.BookingException;
+import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
-import nl.utwente.model.SpecifiedBooking;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.Time;
 import java.util.List;
+
+import static nl.utwente.dao.BookingDao.isValidBookingToday;
+import static nl.utwente.dao.RoomDao.isValidRoomName;
+import static nl.utwente.exceptions.ExceptionHandling.throw400;
+import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/room")
 public class RoomResource {
@@ -41,7 +49,13 @@ public class RoomResource {
     public List<OutputBooking> getBookingsForSpecificRoomToday (
         @PathParam("roomName") String roomName
     ) {
-        return BookingDao.getBookingsForRoomToday(roomName);
+        try {
+            return BookingDao.getBookingsForRoomToday(roomName);
+        } catch (InvalidRoomNameException e) {
+            throw404(e);
+        }
+
+        return null;
     }
 
     @POST
@@ -54,22 +68,23 @@ public class RoomResource {
      * @param specifiedBooking startTime and endTime specifying the times of the booking
      * @return JSON object containing a "success" boolean value
      */
-    public String createBookingForSpecificRoom (
+    public int createBookingForSpecificRoom (
         @PathParam("roomName") String roomName,
-        Booking booking
+        @Valid Booking booking
     ) {
-        boolean valid = RoomDao.isValidRoomName(roomName) &&
-            BookingDao.isValidBookingToday(roomName, booking.getStartTime(), booking.getEndTime());
-
-        if (valid) {
-            BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
-                booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
+        int roomID = 0;
+        try {
+            roomID = BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
+                    booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
+        } catch (BookingException e) {
+            throw400(e);
         }
 
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ObjectNode success = factory.objectNode();
-        success.put("success", valid);
-            return success.toString();
+        if (roomID != -1 && roomID != 0) {
+            return roomID;
+        } else {
+            throw new InternalServerErrorException("Something went wrong in createBookingForSpecificRoom");
+        }
     }
 
     @GET
@@ -86,14 +101,24 @@ public class RoomResource {
     @Path("/{roomName}/availableUntil")
     @Produces(MediaType.APPLICATION_JSON)
     public Time getAvailableUntil(@PathParam("roomName") String roomName) {
-        System.out.println(RoomDao.getFreeUntil(roomName));
-        return RoomDao.getFreeUntil(roomName);
+        try {
+            return RoomDao.getFreeUntil(roomName);
+        } catch (InvalidRoomNameException e) {
+            throw404(e);
+        }
+        return null;
     }
 
     @GET
     @Path("/{roomName}/week")
     @Produces(MediaType.APPLICATION_JSON)
     public List<OutputBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
-        return RoomDao.getBookingsForThisWeek(roomName);
+        try {
+            return RoomDao.getBookingsForThisWeek(roomName);
+        } catch (InvalidRoomNameException e) {
+            throw404(e);
+        }
+
+        return null;
     }
 }

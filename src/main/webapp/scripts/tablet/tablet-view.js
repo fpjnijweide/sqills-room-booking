@@ -61,7 +61,6 @@ function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
 }
 
 function autoCompleteRoomName(){
-
     let candidates = [];
     let currentvalue = document.getElementById("room-input").value;
     for(let i = 0; i < rooms.length; i++){

@@ -117,19 +117,19 @@
 //    @Test
 //    public void testValidBooking(){
 //        //booking for same time, date room: shoukld not be accepted
-//        boolean result1 = BookingDao.isValidBooking(1, "9:00:00", "10:00:00", "2030-12-12");
+//        boolean result1 = BookingDao.isValidSpecifiedBooking(1, "9:00:00", "10:00:00", "2030-12-12");
 //        //valid booking with startime just after endtime current booking: should be accepted
-//        boolean result2 = BookingDao.isValidBooking(1, "10:00:00", "11:00:00", "2030-12-12");
+//        boolean result2 = BookingDao.isValidSpecifiedBooking(1, "10:00:00", "11:00:00", "2030-12-12");
 //        //booking with the current booking in between: should not be accepted
-//        boolean result3 = BookingDao.isValidBooking(1, "9:00:00", "11:00:00", "2030-12-12");
+//        boolean result3 = BookingDao.isValidSpecifiedBooking(1, "9:00:00", "11:00:00", "2030-12-12");
 //        //other date same time same room: should be accepted
-//        boolean result4 = BookingDao.isValidBooking(1, "9:00:00", "11:00:00", "2030-12-13");
+//        boolean result4 = BookingDao.isValidSpecifiedBooking(1, "9:00:00", "11:00:00", "2030-12-13");
 //        //other room booking for same time: should be accepted
-//        boolean result5 = BookingDao.isValidBooking(2, "9:00:00", "11:00:00", "2030-12-12");
+//        boolean result5 = BookingDao.isValidSpecifiedBooking(2, "9:00:00", "11:00:00", "2030-12-12");
 //        //endtime before startime: should not be accepted
-//        boolean result6 = BookingDao.isValidBooking(1, "13:00:00", "12:00:00", "2030-12-12");
+//        boolean result6 = BookingDao.isValidSpecifiedBooking(1, "13:00:00", "12:00:00", "2030-12-12");
 //        //booking with endtime just before current booking starttime: should be accepted
-//        boolean result7 = BookingDao.isValidBooking(1, "8:00:00", "9:00:00", "2030-12-12");
+//        boolean result7 = BookingDao.isValidSpecifiedBooking(1, "8:00:00", "9:00:00", "2030-12-12");
 //        assertFalse(result1);
 //        assertTrue(result2);
 //        assertFalse(result3);
@@ -178,7 +178,7 @@
 //            BookingDao.createBooking(firstBooking);
 //
 //            Booking overlappingBooking = new Booking("10:30:00", "13:00:00", 1, "1999-12-12");
-//            assertFalse(BookingDao.isValidBooking(overlappingBooking));
+//            assertFalse(BookingDao.isValidSpecifiedBooking(overlappingBooking));
 //            BookingDao.createBooking(overlappingBooking);
 //
 //            // Check whether the booking was actually created

@@ -1,6 +1,7 @@
 package nl.utwente.resource;
 
 import nl.utwente.dao.BookingDao;
+import nl.utwente.exceptions.InvalidBookingIDException;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 public class BookingResourceTest extends JerseyTest {
 
     @Override
@@ -21,7 +24,11 @@ public class BookingResourceTest extends JerseyTest {
         for (int i=0; i < 10; i++) {
             Response res = target().path("/booking/bookingID").request().get();
             assertEquals("Should return status 200", 200, res.getStatus());
-            assertEquals(BookingDao.getSpecificBooking(i).toString().replaceAll("\\s",""), res.readEntity(String.class));
+            try {
+                assertEquals(BookingDao.getSpecificBooking(i).toString().replaceAll("\\s",""), res.readEntity(String.class));
+            } catch (InvalidBookingIDException e) {
+                fail("Invalid booking ID");
+            }
         }
 
     }
