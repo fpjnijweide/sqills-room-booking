@@ -173,11 +173,6 @@ public class UserDao {
         return checkByteArrays(getHash(email), hashPassword(password, getSalt(email)));
     }
 
-    public static void main(String[] args) {
-//        insertUser("Andrew", "andrew@gmail.com", "12345678", false);
-        checkCredentials("andrew@gmail.com", "1234567");
-    }
-
     public static boolean isValidEmail(String email) {
         return getEmail(email)!=null;
     }
