@@ -34,7 +34,8 @@ create table sqills.booking_recurring
 (
   booking_recurring_id serial,
   recurring_pattern_id integer not null REFERENCES sqills.recurring_pattern(recurring_pattern_id),
-  booking_id integer not null REFERENCES sqills.booking(bookingid)
+  booking_id integer not null REFERENCES sqills.booking(bookingid),
+  parent_booking_id integer not null REFERENCES sqills.booking(bookingid)
 );
 drop type repeat_type;
 create type repeat_type as enum
@@ -44,17 +45,18 @@ drop table if exists  sqills.recurring_pattern;
 create table sqills.recurring_pattern
 (
   recurring_pattern_id serial unique,
-  repeat_every repeat_type not null,
+  repeat_every_type repeat_type not null,
 --   day, Week, month or year
-  frequency integer not null,
+  repeat_every integer not null,
 --   Every 1, 2 ... etc (repeat_type)
   starting_from date not null,
 --   When to start repeating
   ending_at date,
 --   When to end repeating
-  with_gaps_of integer,
+
+-- @TODO remove this, most likely not needed
 --   gap of x (repeat_type)
-  unique (repeat_every,frequency,starting_from,ending_at, with_gaps_of)
+  unique (repeat_every_type,repeat_every,starting_from,ending_at)
 );
 
 CREATE TABLE sqills.participants (
@@ -66,4 +68,3 @@ CREATE TABLE sqills.participants (
 
 
 
-select * from sqills.users

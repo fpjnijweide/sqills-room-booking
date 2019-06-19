@@ -5,35 +5,26 @@ import java.sql.Date;
 
 public class RecurringBooking extends SpecifiedBooking {
 
-    private RepeatUnits repeatEvery;
-    private int frequency;
-    private Date startingFrom;
+    private String repeatEveryType;
+    private int repeatEvery;
     private Date endingAt;
-    private int withGapsOf;
 
-    public RecurringBooking(Time startTime, Time endTime, String roomName, java.sql.Date date, String email, boolean isPrivate, String title, int frequency, Date startingFrom, Date endingAt, int withGapsOf){
+    public RecurringBooking(Time startTime, Time endTime, String roomName, java.sql.Date date, String email, boolean isPrivate, String title, String repeatEveryType, int repeatEvery, Date endingAt){
         super( startTime,  endTime,  roomName,  date,  email,  isPrivate,  title);
-        this.frequency = frequency;
-        this.startingFrom = startingFrom;
+        this.repeatEvery = repeatEvery;
+        this.repeatEveryType = repeatEveryType;
         this.endingAt = endingAt;
-        this.withGapsOf = withGapsOf;
     }
+
     public RecurringBooking(){
     }
-    public int getFrequency() {
-        return frequency;
+
+    public int getRepeatEvery() {
+        return repeatEvery;
     }
 
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
-    }
-
-    public Date getStartingFrom() {
-        return startingFrom;
-    }
-
-    public void setStartingFrom(Date startingFrom) {
-        this.startingFrom = startingFrom;
+    public void setRepeatEvery(int repeatEvery) {
+        this.repeatEvery = repeatEvery;
     }
 
     public Date getEndingAt() {
@@ -44,31 +35,24 @@ public class RecurringBooking extends SpecifiedBooking {
         this.endingAt = endingAt;
     }
 
-    public int getWithGapsOf() {
-        return withGapsOf;
+
+    public String getRepeatEveryType() {
+        return repeatEveryType;
     }
 
-    public void setWithGapsOf(int withGapsOf) {
-        this.withGapsOf = withGapsOf;
-    }
-
-    public RepeatUnits getRepeatEvery() {
-        return repeatEvery;
-    }
-
-    public void setRepeatEvery(RepeatUnits repeatEvery) {
-        this.repeatEvery = repeatEvery;
+    public void setRepeatEveryType(String repeatEveryType) {
+        this.repeatEveryType = repeatEveryType;
     }
 
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "Repeat type: "+ this.repeatEveryType + "Repeat type: " + this.repeatEvery;
+    }
 }
  enum RepeatUnits {
-    day,
-    week,
-    month,
-    year
+    day,//0
+    week,//1
+    month,//2
+    year//3
 }

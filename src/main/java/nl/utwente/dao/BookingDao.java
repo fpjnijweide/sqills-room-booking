@@ -113,14 +113,11 @@ public class BookingDao {
         int id = -1;
 
         if (!isValidBooking(booking)) {
-            System.out.println("invalid");
             return id;
         }
-
         Connection connection = DatabaseConnectionFactory.getConnection();
-
         try {
-            String query = "select create_recurring_booking(?,?,?,?,?,?,?,?,?,?,?,?)";
+            String query = "select create_recurring_booking_parent(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
             statement.setTime(2, booking.getEndTime());
@@ -129,11 +126,9 @@ public class BookingDao {
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
             statement.setString(7, booking.getTitle());
-            statement.setObject(8, booking.getRepeatEvery(), java.sql.Types.OTHER);
-            statement.setInt(9,booking.getFrequency());
-            statement.setDate(10, booking.getStartingFrom());
-            statement.setDate(11,booking.getEndingAt());
-            statement.setInt(12, booking.getWithGapsOf());
+            statement.setObject(8, booking.getRepeatEveryType(), java.sql.Types.OTHER);
+            statement.setInt(9,booking.getRepeatEvery());
+            statement.setDate(10,booking.getEndingAt());
 
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
