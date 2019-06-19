@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "sqills-room-booking",
+  "private_key_id": "8ca7a41f50552599f28cae1ffe83f4a142028a18",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCN/ntquEaIV7LA\nDr7ErmMUyF/nFh692YA0S8ooYvPII+KcObnL1Z99hzwjQs/t5dJz0Rm8nD6B1+L2\nv+EZphSuXE7mKaN53FOnPOdSeNX18W1vawGhr7VLGXzjXcaUVBNPDQqgVilBpq4l\nJEJUM9cqd2MbC9RjFzyq42R1K66YhbDblxEvoSdng5yaxmhGSEQoJU8WIF0sPBvc\nb0qkwuQvA7IzP+WVjal0xHEiPNSGx5l+NINJd8PAFBBafYxZVWBfp5EvNhG0KNrx\noFbkO6AkpqJwYYsP1vvdeKQq01HWGNVIJ1Q2+8LyWYICG1Dcwhsmmq7Mc5/15+wi\nUyNRm//vAgMBAAECggEAGODWCdg4j2niKTFMLlSpinojB2+COlwx0LfYtyPDN7VF\n3n5ktbh7hbhciocJvFJQgbdIrZmogAJtwzLSQzasl/IXZs8z08WNKJeMphAC2OEQ\nff1/Hy+UcZCJJ6MGCHYEngyYaIhAGT8Vcu976ZndoJSjWhlEAIqROBW4Q6lAIXvE\nM7d5yAU/zUjiJJYRksAVm1AJXkNpsnKDM8bVYdHpKE/T0volvQcYiozmxL60mNq+\nxxhKEaJWtiM1IfQCEwSBoc+f0tAnoHTGafcF3rY+ZsDcs2pqdEO56yRbJYuMbQLB\nPizfRQODpZteQ8ShoB/jjE6Ex27tBR3+8dbguRqJDQKBgQDB11NqEOglrsvLZ1pe\nKnJB/wSehgAfqiezCe+K4/klRvwXXdE66n0UVnNzA/4LpGvArhOq6ZjLeN7XjD0s\nqSeQ0G/rUTslV3nkY05ZP9wzOFhf8KDu1pxadBueOo5b9X/CRPq4mHli9qlkfUA+\nSnW4Kv9StaX+0Cr5QKGXCr22rQKBgQC7hvarPqA4B+qKGnsHeIjCmblwPzkWtQeh\nlupWQCyLrdoNs2wWOb54Hutr7Yr4NB4IGpSNMrnf7sndzk3W15gnU7Tz7C60TJ9K\n8pH7BGexv0aGRN6FiNnSioVQigVmDWJYlbn912kRFx8RdzD86AhfXeF/SytNVx7m\nSeoenssQiwKBgCc9gtpe78/pEcJsesPDTfwENxgsQkwmswCwiziPq/ka5J+KU3fc\nzlNWqOporX4H2/RWiQ65WUAfiOUTs7Kdz6+mMnHtsM5/ZeKRI+Q3ZElOJ73MRZf0\nBBTfmlOuwPDmwuU994909mXNTz9Th7TUd/4/Xg6NTTxHQdvRdKTR/NPFAoGAOUAy\n/oTYFUMVb6Q1+0npNsAHxSUIIM6TzdltIXfmIZ6p+5TTYtWuOK334bNbwfrnUEIN\nKC5cYOld58GcMgMQCLGdhPqOJ61c1FzKBICLx9BFj6hm5w2osoZnvPbmPwnHBJRx\ne/XPtdABRCvHYO7V34eh2GLyjWITpOrb9w0zoZECgYBM8koQpCADHYBM+4OhyVl+\nD/1xqLutXsmVmgZr2Uqxyr9xUgsaia/K7/7VmoWGgaRFfq5BWKH8cs8uQ9KvVMtm\nQsEek4GGFj+xGF9GzEOezMeRZeZH/AcvDDnA6V7taZVvGHCjUuLVnqVTozEXsHJE\nu0hApyOK4W30YfUyp3xnnw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "robo-695@sqills-room-booking.iam.gserviceaccount.com",
+  "client_id": "107174298481524852842",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/robo-695%40sqills-room-booking.iam.gserviceaccount.com"
+}
