@@ -164,6 +164,7 @@ public class RoomDao {
     }
 
     public static Time getFreeUntil(String roomName) throws InvalidRoomNameException {
+        Connection connection = DatabaseConnectionFactory.getConnection();
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
@@ -175,7 +176,6 @@ public class RoomDao {
                 "WHERE r.roomname = ? " +
                 "AND b.date = CURRENT_DATE " +
                 "AND b.starttime > CURRENT_TIME;";
-            Connection connection = DatabaseConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
 
@@ -186,10 +186,16 @@ public class RoomDao {
             }
 
             statement.close();
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return result;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
         }
         return result;
     }

@@ -53,20 +53,24 @@
         <div class="centered-title">Book a Room</div>
         <div class="instructions">Leave the title or email field empty to use default values</div>
         <div class="vertical-group">
-            <label>Title: </label><input class="text-input" type="text" id="booking-title" value="Booking Title (Optional)">
+            <label>Title: </label><input onchange="validateTitle(this.value);" class="text-input" type="text" id="booking-title" value="Booking Title (Optional)">
         </div>
 
         <div class="vertical-group">
-            <label>Email: </label><input class="text-input" type="text" id="booking-email" value="Email (Optional)">
+            <label>Email: </label><input onchange="validateEmail(this.value);" class="text-input" type="text" id="booking-email" value="Email (Optional)">
         </div>
 
         <div class="vertical-group">
             <label>Duration: </label>
             <div class="duration-display" id="booking-duration">15 min</div>
-            <input onchange="updateDuration(this.value)" type="range" min="15" max="120" step="5" value="15" class="custom-range form-control-range" id="slider">
+            <input onchange="validateDuration(this.value); updateDuration(this.value)" type="range" min="15" max="120" step="5" value="15" class="custom-range form-control-range" id="slider">
         </div>
 
         <div class="vertical-group"><label>Private Meeting: </label><input class="" type="checkbox" id="booking-checkbox"></div>
+
+        <div id="warning" class="warning-information hidden">
+            The title can only contain alphanumerical characters and +,. -_
+        </div>
 
         <div class="vertical-group">
             <button onclick="bookRoom()" class="centered-button">Book!</button>

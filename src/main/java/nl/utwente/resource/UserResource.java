@@ -1,5 +1,7 @@
 package nl.utwente.resource;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.dao.UserDao;
 import nl.utwente.model.UserAdministration;
 
@@ -37,4 +39,16 @@ public class UserResource {
         return Response.ok("OK").cookie(cook).build();
     }
 
+    @GET
+    @Path("/validateEmail/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getIsValidEmail(@PathParam("email") String email) {
+        boolean result = UserDao.isValidEmail(email);
+
+        final JsonNodeFactory factory = JsonNodeFactory.instance;
+        ObjectNode isValid = factory.objectNode();
+        isValid.put("valid", result);
+        return isValid.toString();
+
+    }
 }
