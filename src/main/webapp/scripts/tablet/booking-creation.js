@@ -48,10 +48,8 @@ function bookRoom() {
             $("#success-modal").modal();
         })
         .catch(error => {
+            document.getElementById("booking-error-message").innerText = error.response.data;
             $("#fail-modal").modal();
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
         })
         .finally(() => {
             setAvailableRoomsAndUpdatePage();
