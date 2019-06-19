@@ -1,6 +1,8 @@
 package nl.utwente.model;
 
-public class User {
+import java.security.Principal;
+
+public class User implements Principal {
     private int userid;
     private String name;
     private String email;
