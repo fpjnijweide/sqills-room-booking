@@ -45,8 +45,7 @@ public class BookingResource {
         } catch (InvalidBookingIDException e) {
             throw404(e);
         }
-
-
+        
         return null;
     }
 

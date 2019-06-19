@@ -4,9 +4,7 @@ import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidRoomNameException;
-import nl.utwente.model.Booking;
-import nl.utwente.model.OutputBooking;
-import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,11 +21,11 @@ public class BookingDao {
      * @param bookingID booking ID of booking to be returned
      * @return returns booking with specified ID or null if the booking does not exist.
      */
-    public static OutputBooking getSpecificBooking(int bookingID) throws InvalidBookingIDException {
+    public static OutputBookingWithParticipants getSpecificBooking(int bookingID) throws InvalidBookingIDException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        OutputBooking booking = null;
+        OutputBookingWithParticipants booking = new OutputBookingWithParticipants();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT b.bookingid, b.starttime, b.endtime, u.name, r.roomname, b.date, b.isprivate, b.title " +
@@ -43,12 +41,39 @@ public class BookingDao {
 
             // TODO freek merge conflict here
             while (resultSet.next()) {
-                String roomName = resultSet.getString("roomname");
-                booking = resultSetToBooking(roomName, resultSet);
+                booking.setBookingid(bookingID);
+                booking.setRoomName(resultSet.getString("roomname"));
+                booking.setUserName(resultSet.getString("name"));
+                booking.setDate(resultSet.getDate("date"));
+                booking.setStartTime(resultSet.getTime("starttime"));
+                booking.setEndTime(resultSet.getTime("endtime"));
+                booking.setTitle(resultSet.getString("title"));
             }
 
             resultSet.close();
             statement.close();
+
+            String participantQuery = "SELECT u.userid, u.name, u.email, u.administrator " +
+                "FROM sqills.users AS u, sqills.participants AS p " +
+                "WHERE p.bookingid = ? " +
+                "AND u.userid = p.userid";
+            PreparedStatement preparedStatement = connection.prepareStatement(participantQuery);
+            preparedStatement.setInt(1, bookingID);
+            ResultSet resultSetParticipants = preparedStatement.executeQuery();
+
+            List<User> participants = new ArrayList<>();
+            while (resultSetParticipants.next()) {
+                User user = new User();
+                user.setUserid(resultSetParticipants.getInt("userid"));
+                user.setName(resultSetParticipants.getString("name"));
+                user.setEmail(resultSetParticipants.getString("email"));
+                user.setAdministrator(resultSetParticipants.getBoolean("administrator"));
+                participants.add(user);
+            }
+            booking.setParticipants(participants);
+
+            resultSetParticipants.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

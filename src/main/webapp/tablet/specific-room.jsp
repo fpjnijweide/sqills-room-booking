@@ -82,13 +82,7 @@
         <div class="title" id="pop-up-title">Book a Room</div>
         <div class="time" id="pop-up-time">13:00 - 13:30</div>
         <div class="owner" id="pop-up-owner"><span class="booked-by">Booked by </span>Marten Voorberg</div>
-        <%--<div class="participants">--%>
-            <%--<h4>Participants</h4>--%>
-            <%--<ul>--%>
-                <%--<li>Platon Frolov</li>--%>
-                <%--<li>Sara Lute</li>--%>
-            <%--</ul>--%>
-        <%--</div>--%>
+        <div class="participants" id="participants"></div>
     </div>
 
     <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
