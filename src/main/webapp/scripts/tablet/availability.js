@@ -29,15 +29,20 @@ function updateAvailabilityDisplay() {
 
     let isAvailable = available_rooms.includes(ROOM_NAME);
 
+    // Disable or enable the book button depending on availability
+    if (isAvailable) {
+        document.getElementById("book-button").classList.remove("disable");
+    } else {
+        document.getElementById("book-button").classList.add("disable");
+    }
+
     // Only update the contents of the page, if the availability changed.
     if ((isAvailable && element.innerText === "AVAILABLE")
         || (!isAvailable && element.innerText === "UNAVAILABLE")) {
         return;
     } else if (isAvailable) {
         element.innerText = "AVAILABLE";
-        document.getElementById("book-button").classList.remove("disable");
     } else {
         element.innerText = "UNAVAILABLE";
-        document.getElementById("book-button").classList.add("disable");
     }
 }
