@@ -299,7 +299,7 @@ public class BookingDao {
         String title;
         if (isPrivate) {
             userName = "PRIVATE";
-            title = "PRIVATE;";
+            title = "PRIVATE";
         } else {
             userName = resultSet.getString("name");
             title = resultSet.getString("title");

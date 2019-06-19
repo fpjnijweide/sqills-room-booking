@@ -36,7 +36,13 @@ function bookRoom() {
 
     axios.post("/api/booking/create", requestBody)
         .then(response => {
-            let id = response.data.bookingid;
+            $("#success-modal").modal();
+        })
+        .catch(error => {
+            $("#fail-modal").modal();
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
         })
         .finally(() => {
             setAvailableRoomsAndUpdatePage();
