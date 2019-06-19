@@ -12,14 +12,4 @@ public class BookingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         req.getRequestDispatcher("/desktop/book.jsp").forward(req, res);
     }
-
-    public boolean hasCookie(Cookie[] cookies){
-        for (Cookie c : cookies){
-            if (c.getName().equals("fuck")){
-                System.out.println(c.getName());
-                return true;
-            }
-        }
-        return false;
-    }
 }
