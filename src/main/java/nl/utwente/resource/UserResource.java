@@ -3,6 +3,7 @@ package nl.utwente.resource;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.dao.UserDao;
+import nl.utwente.model.InputUser;
 import nl.utwente.model.UserAdministration;
 
 import javax.annotation.Priority;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.*;
 
 import java.security.Principal;
 
+import static nl.utwente.dao.UserDao.insertUser;
 import static nl.utwente.exceptions.ExceptionHandling.throw401;
 
 @Path("/user")
@@ -27,6 +29,14 @@ public class UserResource {
 
     public UserResource(){
 
+    }
+
+    @POST
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void createUser(InputUser user){
+        // TODO do input validation here
+        insertUser(user.getFullName(),user.getUsername(),user.getPassword(),false);
     }
 
     // TODO refactor this method's name and javascript
