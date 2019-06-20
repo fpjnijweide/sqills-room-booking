@@ -1,6 +1,6 @@
 package nl.utwente.exceptions;
 
-public class InvalidUserIDException extends DAOException {
+public class InvalidUserIDException extends Exception {
 
     private int id;
 
