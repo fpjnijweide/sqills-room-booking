@@ -1,9 +1,9 @@
 package nl.utwente.resource;
 
 import nl.utwente.authentication.AuthenticationFilter;
+import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.dao.UserDao;
 import nl.utwente.model.UserAdministration;
-import org.glassfish.jersey.server.ApplicationHandler;
 
 import javax.annotation.Priority;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +15,6 @@ import javax.ws.rs.core.*;
 import java.security.Principal;
 
 import static nl.utwente.exceptions.ExceptionHandling.throw401;
-import static nl.utwente.exceptions.ExceptionHandling.throw403;
 
 @Path("/user")
 @Priority(Priorities.AUTHENTICATION)
@@ -47,7 +46,7 @@ public class UserResource {
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     public void login(UserAdministration loginAttempt){
-        boolean result = UserDao.checkCredentials(loginAttempt.getUsername(), loginAttempt.getPassword());
+        boolean result = AuthenticationHandler.checkCredentials(loginAttempt.getUsername(), loginAttempt.getPassword());
         if (result) {
             HttpSession session = request.getSession(true);
             session.setAttribute(AuthenticationFilter.principalName, loginAttempt.getUsername());
