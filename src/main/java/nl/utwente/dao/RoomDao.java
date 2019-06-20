@@ -1,11 +1,14 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.OutputBooking;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static nl.utwente.dao.BookingDao.resultSetToBooking;
 
 public class RoomDao {
     /**
@@ -154,7 +157,10 @@ public class RoomDao {
         return rooms;
     }
 
-    public static Time getFreeUntil(String roomName) {
+    public static Time getFreeUntil(String roomName) throws InvalidRoomNameException {
+        if (!isValidRoomName(roomName)){
+            throw new InvalidRoomNameException(roomName);
+        }
         Time result = null;
 
         try {
@@ -178,8 +184,10 @@ public class RoomDao {
         return result;
     }
 
-    public static List<OutputBooking> getBookingsForThisWeek(String roomName) {
-        // Todo @Freek Add validity check for room name.
+    public static List<OutputBooking> getBookingsForThisWeek(String roomName) throws InvalidRoomNameException {
+        if (!isValidRoomName(roomName)){
+            throw new InvalidRoomNameException(roomName);
+        }
 
         List<OutputBooking> result = new ArrayList<>();
         String query = "SELECT * from get_booking_for_this_week(?)";
@@ -191,24 +199,8 @@ public class RoomDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                Time startTime = resultSet.getTime("startTime");
-                Time endTime = resultSet.getTime("endTime");
-                Date date = resultSet.getDate("date");
-
-                boolean isprivate = resultSet.getBoolean("isPrivate");
-
-                String userName;
-                String title;
-                if (isprivate) {
-                    userName = "PRIVATE";
-                    title = "PRIVATE;";
-                } else {
-                    userName = resultSet.getString("name");
-                    title = resultSet.getString("title");
-                }
-
-
-                result.add(new OutputBooking(startTime, endTime, userName, roomName, date, title));
+                OutputBooking booking = resultSetToBooking(roomName, resultSet);
+                result.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();

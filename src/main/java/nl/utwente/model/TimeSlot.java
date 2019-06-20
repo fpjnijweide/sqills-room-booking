@@ -1,9 +1,12 @@
 package nl.utwente.model;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Time;
 
 public class TimeSlot {
+    @NotNull
     protected Time startTime;
+    @NotNull
     protected Time endTime;
 
     public TimeSlot(Time startTime, Time endTime){

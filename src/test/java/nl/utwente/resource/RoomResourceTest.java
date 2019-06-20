@@ -3,6 +3,7 @@
  import com.google.gson.Gson;
  import nl.utwente.dao.BookingDao;
  import nl.utwente.dao.RoomDao;
+ import nl.utwente.exceptions.InvalidRoomNameException;
  import org.glassfish.jersey.server.ResourceConfig;
  import org.glassfish.jersey.test.JerseyTest;
  import org.junit.Test;
@@ -11,10 +12,9 @@
  import javax.ws.rs.core.Response;
 
  import static nl.utwente.dao.RoomDao.getRoomName;
- import static org.junit.Assert.assertEquals;
- import static org.junit.Assert.assertNotNull;
+ import static org.junit.Assert.*;
 
-public class RoomResourceTest extends JerseyTest {
+ public class RoomResourceTest extends JerseyTest {
 
     @Override
     public Application configure(){
@@ -36,9 +36,18 @@ public class RoomResourceTest extends JerseyTest {
             Response res = target().path("/room/"+i).request().get();
             String json = new Gson().toJson(res);
             assertEquals("Should return status 200", 200, res.getStatus());
-            String jsonCheck = new Gson().toJson(BookingDao.getBookingsForRoomToday(i));
+            String jsonCheck = null;
+            try {
+                jsonCheck = new Gson().toJson(BookingDao.getBookingsForRoomToday(i));
+            } catch (InvalidRoomNameException e) {
+                fail(e.getMessage());
+            }
             System.out.println(jsonCheck);
-            assertEquals(BookingDao.getBookingsForRoomToday(i).toString(), json);
+            try {
+                assertEquals(BookingDao.getBookingsForRoomToday(i).toString(), json);
+            } catch (InvalidRoomNameException e) {
+                fail(e.getMessage());
+            }
         }
     }
 }
