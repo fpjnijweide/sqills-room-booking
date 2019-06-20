@@ -40,6 +40,10 @@ public class BasicSecurityContext implements SecurityContext {
     @Override
     public boolean isSecure() { return secure; }
 
+    public int getUserID(){
+        return user.getUserid();
+    }
+
     @Override
     public boolean isUserInRole(String role) {
         // This method is completely awful. However, it needs to work this way

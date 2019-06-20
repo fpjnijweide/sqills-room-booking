@@ -3,6 +3,7 @@ package nl.utwente.resource;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.UserDao;
 import nl.utwente.model.UserAdministration;
+import org.glassfish.jersey.server.ApplicationHandler;
 
 import javax.annotation.Priority;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+
+import java.security.Principal;
 
 import static nl.utwente.exceptions.ExceptionHandling.throw401;
 import static nl.utwente.exceptions.ExceptionHandling.throw403;
@@ -60,8 +63,26 @@ public class UserResource {
     @GET
     @Path("/logout")
     public void logout() {
-        HttpSession session = request.getSession(true);
-        session.setAttribute(AuthenticationFilter.principalName, null);
+        HttpSession session = request.getSession();
+        session.removeAttribute(AuthenticationFilter.principalName);
+        session.invalidate();
+        securityContext = new SecurityContext() {
+            public boolean isUserInRole(String role) {
+                return false;
+            }
+
+            public boolean isSecure() {
+                return false;
+            }
+
+            public Principal getUserPrincipal() {
+                return null;
+            }
+
+            public String getAuthenticationScheme() {
+                return null;
+            }
+        };
     }
 
 }

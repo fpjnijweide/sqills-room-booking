@@ -62,7 +62,7 @@ public class BookingDao {
         return booking;
     }
 
-    public static String getEmailOfBookingOwnerFromBookingID(int bookingID) throws InvalidBookingIDException {
+    public static String getEmailOfBookingOwner(int bookingID) throws InvalidBookingIDException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
