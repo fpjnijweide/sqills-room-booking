@@ -103,12 +103,12 @@
         <url-pattern>/tablet/room/*</url-pattern>
     </servlet-mapping>
 
-    <security-role>
-        <role-name>USER</role-name>
-    </security-role>
-    <security-role>
-        <role-name>ADMIN</role-name>
-    </security-role>
+<!--    <security-role>-->
+<!--        <role-name>USER</role-name>-->
+<!--    </security-role>-->
+<!--    <security-role>-->
+<!--        <role-name>ADMIN</role-name>-->
+<!--    </security-role>-->
 
 <!--    Even though we want to use annotations for security, it won't work if we don't specify a -->
 <!--    <security-constraint>-->
@@ -121,10 +121,10 @@
 <!--        </auth-constraint>-->
 <!--    </security-constraint>-->
 
-    <login-config>
-        <auth-method>BASIC</auth-method>
-        <realm-name>default</realm-name>
-    </login-config>
+<!--    <login-config>-->
+<!--        <auth-method>BASIC</auth-method>-->
+<!--        <realm-name>default</realm-name>-->
+<!--    </login-config>-->
 
 
 

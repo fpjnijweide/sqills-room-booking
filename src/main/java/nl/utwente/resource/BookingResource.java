@@ -12,7 +12,6 @@ import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
 
 import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,7 @@ import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/booking")
 @DeclareRoles({"ADMIN","USER"})
-@PermitAll
+@DenyAll
 public class BookingResource {
     @Context HttpServletResponse response;
     @Context
