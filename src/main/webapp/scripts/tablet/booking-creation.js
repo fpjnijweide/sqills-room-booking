@@ -2,6 +2,53 @@ function updateDuration(value) {
     document.getElementById("booking-duration").innerHTML = value + " min";
 }
 
+function book15() {
+    let requestBody = {
+        "title": "Quick Booking",
+        "email": "sqills_tablet@gmail.com",
+        "roomName": ROOM_NAME,
+        "isPrivate": false
+    };
+
+    let durationInputMinutes = parseInt(document.getElementById("slider").value);
+
+    let today = new Date();
+    let dateString = "";
+    dateString += today.getFullYear();
+    dateString += "-" + (today.getMonth() + 1);
+    dateString += "-" + today.getDate();
+
+    let startTimeString = today.getHours() + ":"
+        + today.getMinutes() + ":" +
+        "00";
+
+    let endTimeHours = today.getHours() + Math.floor((today.getMinutes() + durationInputMinutes) / 60);
+    let endTimeMinutes = (today.getMinutes() + durationInputMinutes) % 60;
+
+    let endTimeString = endTimeHours + ":"
+        + endTimeMinutes + ":" +
+        "00";
+
+    requestBody.date = dateString;
+    requestBody.startTime = startTimeString;
+    requestBody.endTime = endTimeString;
+
+    axios.post("/api/booking/create", requestBody)
+        .then(response => {
+            $("#success-modal").modal();
+        })
+        .catch(error => {
+            document.getElementById("booking-error-message").innerText = error.response.data;
+            $("#fail-modal").modal();
+        })
+        .finally(() => {
+            setAvailableRoomsAndUpdatePage();
+            hideCreationPopUp();
+            unblurBackground();
+            getBookingsAndUpdatePage();
+        });
+}
+
 function bookRoom() {
     let title = document.getElementById("booking-title").value;
     if (title === "Booking Title (Optional)") {

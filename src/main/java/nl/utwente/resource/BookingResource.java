@@ -28,9 +28,6 @@ import static nl.utwente.exceptions.ExceptionHandling.throw404;
 public class BookingResource {
     @Context HttpServletResponse response;
 
-
-
-
     /**
      * Returns a specific booking from the database.
      * @param bookingID ID of booking to be returned

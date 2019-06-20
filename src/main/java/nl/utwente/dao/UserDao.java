@@ -154,7 +154,6 @@ public class UserDao {
             //          statement.setBytes(2, userPassword);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-
                 return resultSet.getBytes("hash");
             }
         } catch (SQLException sqle){
