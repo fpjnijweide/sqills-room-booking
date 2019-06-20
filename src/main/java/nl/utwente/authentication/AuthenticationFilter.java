@@ -19,7 +19,6 @@ import java.io.IOException;
 
 @Provider
 @PreMatching
-@Dependent
 @Priority(Priorities.AUTHENTICATION)  // needs to happen before authorization
 public class AuthenticationFilter implements ContainerRequestFilter {
     @Context
