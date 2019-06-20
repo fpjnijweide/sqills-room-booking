@@ -11,8 +11,10 @@ import nl.utwente.model.OutputBooking;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.sql.Time;
 import java.util.List;
 
@@ -23,6 +25,9 @@ import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/room")
 public class RoomResource {
+    @Context
+    SecurityContext securityContext;
+
     public RoomResource(){ }
 
 

@@ -168,14 +168,14 @@ public class RoomDao {
             throw new InvalidRoomNameException(roomName);
         }
         Time result = null;
-
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT MIN(b.starttime) FROM sqills.booking b " +
                 "JOIN sqills.room r ON b.roomid = r.roomid " +
                 "WHERE r.roomname = ? " +
                 "AND b.date = CURRENT_DATE " +
                 "AND b.starttime > CURRENT_TIME;";
-            Connection connection = DatabaseConnectionFactory.getConnection();
+
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
 
@@ -186,10 +186,15 @@ public class RoomDao {
             }
 
             statement.close();
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return result;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }

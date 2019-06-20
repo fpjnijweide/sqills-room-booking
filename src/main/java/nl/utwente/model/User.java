@@ -1,12 +1,23 @@
 package nl.utwente.model;
 
+import java.io.Serializable;
 import java.security.Principal;
 
-public class User implements Principal {
+public class User implements Serializable, Principal {
     private int userid;
     private String name;
     private String email;
     private boolean administrator;
+
+    public User() {
+    }
+
+    public User(int userid, String name, String email, boolean administrator) {
+        this.userid = userid;
+        this.name = name;
+        this.email = email;
+        this.administrator = administrator;
+    }
 
     public int getUserid() {
         return userid;

@@ -9,14 +9,19 @@ import nl.utwente.model.UserIDEmailPair;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import static nl.utwente.exceptions.ExceptionHandling.throw400;
 import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/participant")
 public class ParticipantResource {
+    @Context
+    SecurityContext securityContext;
+
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
