@@ -77,19 +77,13 @@ public class RoomResource {
         @PathParam("roomName") String roomName,
         @Valid Booking booking
     ) {
-        int roomID = 0;
         try {
-            roomID = BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
+            return BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
                     booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
         } catch (BookingException e) {
             throw400(e.getMessage());
         }
-
-        if (roomID != -1 && roomID != 0) {
-            return roomID;
-        } else {
-            throw500("Something went wrong in createBookingForSpecificRoom");
-        }
+        return 0;
     }
 
     @GET

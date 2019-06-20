@@ -14,11 +14,9 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
-import java.util.Objects;
 
 import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
 import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
-import static nl.utwente.dao.BookingDao.getEmailOfBookingOwnerFromBookingID;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/booking")
@@ -42,8 +40,6 @@ public class BookingResource {
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
         }
-
-
         return null;
     }
 
@@ -74,7 +70,6 @@ public class BookingResource {
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
         }
-
         return null;
     }
 
@@ -96,7 +91,7 @@ public class BookingResource {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
             }
-            if (!userOwnsBooking(securityContext, bookingID)) { // If owner = logged in user
+            if (!userOwnsBooking(securityContext, bookingID)) {
                 throw403("You are not authorized to edit this person's booking");
             }
             BookingDao.updateBooking(bookingID, booking);
@@ -126,7 +121,7 @@ public class BookingResource {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
             }
-            if (!userOwnsBooking(securityContext, bookingID)) { // If owner = logged in user
+            if (!userOwnsBooking(securityContext, bookingID)) {
                 throw403("You are not authorized to edit this person's booking");
             }
             BookingDao.deleteBooking(bookingID);
