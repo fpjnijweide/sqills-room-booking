@@ -42,29 +42,23 @@ body
 
       padding: 10px
       border: 2px solid $sqills-purple
-      border-radius: 50px
-      height: 100px
-      display: flex
+      border-radius: 60px
+      height: 120px
       margin-bottom: 40px
 
       cursor: pointer
       transition: background-color 0.25s linear 0s
 
-      .left
-        width: 60%
+    .title
+      font-size: 36px
+      font-weigt: 300
+      color: $sqills-purple
+      text-align: center
 
-        .title
-          font-size: 24px
-          line-height: 75px !important
-          font-weight: 300
-          color: $sqills-purple
-          text-align: center
-
-      .right
-        flex-grow: 1
-        text-align: center
-        color: $sqills-grey
-        padding-top: 20px
+    .time
+      font-size: 24px
+      color: $sqills-grey
+      text-align: center
 
     .booking:hover
       background-color: #EEE
@@ -102,6 +96,12 @@ body
     margin-top: 25px
     margin-bottom: 0
 
+  .centered-button
+    font-weight: 300
+    font-size: 28px
+    background-color: $sqills-orange
+    color: white
+
 .centered-button
   font-size: 26px
   font-weight: 300
@@ -125,6 +125,7 @@ body
   cursor: not-allowed
   color: grey
   border: 3px solid #CCC
+  background: transparent
 
 .centered-button.disable:hover
   background-color: transparent
@@ -329,7 +330,7 @@ body
       margin-top: 0
 
       li
-      font-size: 20px
+        font-size: 20px
 
 #booking-details-overlay.hidden
   display: none
