@@ -2,6 +2,7 @@ package nl.utwente.authentication;
 
 import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.InvalidBookingIDException;
+import nl.utwente.exceptions.InvalidEmailException;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -67,8 +68,12 @@ public class AuthenticationHandler {
         return salt;
     }
 
-    public static boolean checkCredentials(String email, String password){
-        return checkByteArrays(UserDao.getHash(email), hashPassword(password, UserDao.getSalt(email)));
+    public static boolean checkCredentials(String email, String password) {
+        try {
+            return checkByteArrays(UserDao.getHash(email), hashPassword(password, UserDao.getSalt(email)));
+        } catch (InvalidEmailException e) {
+            return false;
+        }
     }
 
     public static boolean checkByteArrays(byte[] firstArray, byte[] secondArray){

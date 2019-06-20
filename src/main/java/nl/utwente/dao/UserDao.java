@@ -97,7 +97,10 @@ public class UserDao {
         return null;
     }
 
-    public static byte[] getSalt(String email){
+    public static byte[] getSalt(String email) throws InvalidEmailException {
+        if (!isValidEmail(email)){
+            throw new InvalidEmailException(email);
+        }
         Connection connection = DatabaseConnectionFactory.getConnection();
         int userCount = 1;
         byte[] salt = null;
@@ -149,7 +152,10 @@ public class UserDao {
         }
     }
 
-    public static byte[] getHash(String email){
+    public static byte[] getHash(String email) throws InvalidEmailException {
+        if (!isValidEmail(email)){
+            throw new InvalidEmailException(email);
+        }
         Connection connection = DatabaseConnectionFactory.getConnection();
         int count = 0;
         try {

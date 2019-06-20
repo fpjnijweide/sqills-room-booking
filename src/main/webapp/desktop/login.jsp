@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <jsp:include page="head.jsp"/>
     <script src="/scripts/login.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-
+<jsp:include page="nav.jsp"/>
 <div class="loginform">
     <table class="logintable">
         <tr>
@@ -24,5 +25,6 @@
         </tr>
     </table>
 </div>
+<div id="response"></div>
 </body>
 </html>
