@@ -84,7 +84,7 @@
 //            insertStatement.execute(insertQuery);
 //            insertStatement.close();
 //
-//            Booking booking = BookingDao.getSpecificBooking(-1);
+//            Booking booking = BookingDao.getOutputBooking(-1);
 //            assertEquals(booking.getDate().toString(), ("2069-01-01"));
 //            assertEquals(booking.getStartTime().toString(), "22:00:00");
 //            assertEquals(booking.getEndTime().toString(), "23:00:00");
@@ -104,7 +104,7 @@
 //
 //    @Test
 //    public void testGetSpecificBookingNonExistingBooking() {
-//        Booking booking = BookingDao.getSpecificBooking(-1);
+//        Booking booking = BookingDao.getOutputBooking(-1);
 //        assertNull(booking);
 //    }
 //
@@ -216,7 +216,7 @@
 //            Booking updatedBooking = new Booking("12:00:00", "13:00:00", 2, "1999-12-12");
 //            BookingDao.updateBooking(-1, updatedBooking);
 //
-//            Booking result = BookingDao.getSpecificBooking(-1);
+//            Booking result = BookingDao.getOutputBooking(-1);
 //            assertEquals(2, updatedBooking.getRoomNumber());
 //            assertEquals(result.getStartTime().toString(), updatedBooking.getStartTime().toString());
 //

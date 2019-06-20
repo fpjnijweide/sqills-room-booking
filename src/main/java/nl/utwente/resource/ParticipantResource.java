@@ -14,8 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-import static nl.utwente.exceptions.ExceptionHandling.throw400;
-import static nl.utwente.exceptions.ExceptionHandling.throw404;
+import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/participant")
 public class ParticipantResource {
@@ -30,12 +29,12 @@ public class ParticipantResource {
             if (ParticipantDao.addParticipantEmailToBooking(pair.getBookingid(), pair.getEmail())) {
                 return pair;
             } else {
-                throw new InternalServerErrorException("Something went wrong in addParticipant");
+                throw500("Something went wrong in addParticipant");
             }
         } catch (InvalidBookingIDException e) {
-            throw404(e);
+            throw404(e.getMessage());
         } catch (InvalidEmailException e) {
-            throw400(e);
+            throw400(e.getMessage());
         }
         return null;
     }
@@ -47,9 +46,9 @@ public class ParticipantResource {
         try {
             ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
         } catch (InvalidBookingIDException e) {
-            throw404(e);
+            throw404(e.getMessage());
         } catch (InvalidUserIDException e) {
-            throw400(e);
+            throw400(e.getMessage());
         }
 
 

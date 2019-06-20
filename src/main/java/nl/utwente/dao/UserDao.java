@@ -6,6 +6,7 @@ import nl.utwente.model.User;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.ws.rs.core.SecurityContext;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -210,12 +211,11 @@ public class UserDao {
         return checkByteArrays(getHash(email), hashPassword(password, getSalt(email)));
     }
 
-    public static void main(String[] args) {
-//        insertUser("Andrew", "andrew@gmail.com", "12345678", false);
-        checkCredentials("andrew@gmail.com", "1234567");
-    }
-
     public static boolean isValidEmail(String email) {
         return getEmail(email)!=null;
     }
+
+//    public static boolean loggedIn(SecurityContext securityContext) {
+//        return securityContext.getUserPrincipal().
+//    }
 }

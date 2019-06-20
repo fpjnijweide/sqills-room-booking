@@ -11,7 +11,8 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
-import static nl.utwente.exceptions.ExceptionHandling.throwForbidden;
+import static nl.utwente.exceptions.ExceptionHandling.throw401;
+import static nl.utwente.exceptions.ExceptionHandling.throw403;
 
 @Path("/user")
 @Priority(Priorities.AUTHENTICATION)
@@ -48,7 +49,7 @@ public class UserResource {
             HttpSession session = request.getSession(true);
             session.setAttribute(AuthenticationFilter.principalName, loginAttempt.getUsername());
         } else {
-            throwForbidden();
+            throw401("Incorrect login");
         }
 //        Cookie cookie = new Cookie("NAME", "123");
 //        NewCookie cook = new NewCookie(cookie, "123", 5*60, true);

@@ -23,7 +23,7 @@ public class BookingDao {
      * @param bookingID booking ID of booking to be returned
      * @return returns booking with specified ID or null if the booking does not exist.
      */
-    public static OutputBooking getSpecificBooking(int bookingID) throws InvalidBookingIDException {
+    public static OutputBooking getOutputBooking(int bookingID) throws InvalidBookingIDException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
@@ -60,6 +60,43 @@ public class BookingDao {
         }
 
         return booking;
+    }
+
+    public static String getEmailOfBookingOwnerFromBookingID(int bookingID) throws InvalidBookingIDException {
+        if (!isValidBookingID(bookingID)){
+            throw new InvalidBookingIDException(bookingID);
+        }
+        String email = null;
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "SELECT u.email " +
+                "FROM sqills.Booking b " +
+                "    JOIN sqills.users u ON u.userid = b.owner " +
+                "WHERE b.bookingid = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, bookingID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            // TODO freek merge conflict here
+            if (resultSet.next()) {
+                email = resultSet.getString("email");
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return email;
     }
 
     /**
