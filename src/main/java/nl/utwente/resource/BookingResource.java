@@ -73,13 +73,14 @@ public class BookingResource {
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/create/rec")
-    public String createRecurringBooking(RecurringBooking booking){
-        int result = BookingDao.createRecurringBooking(booking);
-        final JsonNodeFactory factory = JsonNodeFactory.instance;
-        ObjectNode success = factory.objectNode();
-        success.put("bookingid", result);
-        return success.toString();
+    @Path("/create/recurring")
+    public int createRecurringBooking(RecurringBooking booking) {
+        try {
+            return BookingDao.createRecurringBooking(booking);
+        } catch (BookingException e) {
+            throw400(e.getMessage());
+        }
+        return 0;
     }
 
     @GET

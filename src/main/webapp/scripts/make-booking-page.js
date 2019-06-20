@@ -69,7 +69,7 @@ function makeRecurringBooking(){
         "endingAt": document.getElementById("recurring-end-date").value
     };
     console.log(requestBody)
-    axios.post("/api/booking/create/rec", requestBody)
+    axios.post("/api/booking/create/recurring", requestBody)
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
