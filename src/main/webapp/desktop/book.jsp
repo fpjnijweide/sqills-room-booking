@@ -3,7 +3,6 @@
     <title>Make a Booking</title>
     <jsp:include page="head.jsp"/>
     <script src="/scripts/make-booking-page.js"></script>
-
     <link rel="stylesheet" href="../css/book.css">
 </head>
 <body>
@@ -11,68 +10,77 @@
 <%--Todo: Input validation--%>
     <div class="container">
         <div class="row">
-            <div class="col-md-3"></div>
+            <div class="col-md-2"></div>
 
-            <div class="col-md-6">
-                <h1 class="create-booking-title">Create a booking</h1>
+            <div class="col-md-8 outer">
+                <div class="inner">
+                    <h1 class="create-booking-title">Create a booking</h1>
 
-                <form class="form-group row">
-                    <label for="booking-title" class="col-md-2 col-form-label">Booking Title</label>
-                    <div class="col-md-10">
-                      <input id="booking-title" class="form-control" type="text" placeholder="Booking Title">
-                    </div>
+                    <form class="create-booking-form">
+                        <label>Booking Title</label>
+                        <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
 
-                    <label for="booking-email" class="col-md-2 col-form-label">Your Email</label>
-                    <div class="col-md-10">
-                    <input id="booking-email" class="form-control" type="text" placeholder="Your Email">
-                    </div>
-                    
-                    <label for="booking-date" class="col-md-2 col-form-label">Date</label>
-                    <div class="col-md-10">
-                    <input type="date" id="booking-date" class="form-control">
-                    </div>
+                        <label>Your Email</label>
+                        <input id="booking-email" class="booking-email full-width" type="text" placeholder="Your Email">
 
-<%--                 TODO this should be roomname instead of roomid --%>
-                    <label for="booking-roomid" class="col-md-2 col-form-label">Room ID</label>
-                    <div class="col-md-10">
-                    <input type="text" id="booking-roomid" class="form-control">
-                    </div>
+                        <label>Date</label>
+                        <input type="date" id="booking-date" class="booking-date full-width">
 
-                    <label>Time</label>
-                    <div class="form-row time-container col-md-12">
-                        <div class="col-md-4">
-                        <input type="time" class="start-time" id="booking-starttime">
+                        <label>Room ID</label>
+                        <input type="text" id="booking-roomid" class="full-width" placeholder="Room-ID">
+
+                        <label>Time</label>
+                        <div class="time-container">
+                            <input type="time" class="start-time" id="booking-starttime">
+                            <input type="time" class="end-time" id="booking-endtime">
                         </div>
-                        <div class="col-md-4">
-                        <input type="time" class="end-time" id="booking-endtime">
+
+                        <label>Private meeting</label>
+                        <input type="checkbox" id="booking-isPrivate">
+                        <div class="participants-view">
+                            <table>
+                                <tr>
+                                    <td><label class="participants-title">Add participants</label></td>
+                                    <td><div class="add-participants" onclick="setParticipantsVisible()">+</div></td>
+                                </tr>
+
+                            </table>
+
                         </div>
-                        <div class="col-md-2">
+                        <div id="participants-container">
 
-<%--                            <div class="center">--%>
-                                <input type="checkbox" id="booking-isPrivate" style="display:none"/>
+                            <div class="input-and-button">
+                                <input type="text" id="participant" placeholder="Participant name">
+                                <button type="button" onclick="addParticipantField()">+</button>
+                            </div>
+                            <div id="participants-list">
+                                Participants list
+                            </div>
                         </div>
-                                <label for="booking-isPrivate" class="toggle col-md-2"><span>Private meeting</span></label>
-<%--                            </div>--%>
+                        <div class="recurring">
+                            <label>Recurring booking</label>
+                            <input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes
+                            <input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No
+                            <div id="recurring-info">I want a booking every
+                                <input id="time" type="number">
+                                <select id="choose-time-unit" class="choose-time-unit">
+                                    <option value="days">Days</option>
+                                    <option value="weeks">Weeks</option>
+                                    <option value="months">Months</option>
+                                    <option value="years">Years</option>
+                                </select>
+                                <br>
+                                ending at
+                                <input id="recurring-end-date" type="date">
+                                from now
+                            </div>
+                        </div>
 
-<%--                        <label for="booking-isPrivate">Is Private</label>--%>
-<%--                            <input type="checkbox" id="booking-isPrivate" style="display:none"/>--%>
-
-                    </div>
-
-
-
-                    <div class="form-row" id="participants-container">
-
-                        <button type="button" class="btn btn-secondary" onclick="addParticipantField()">Add participant</button>
-                        <button type="button" class="btn btn-primary "onclick="bookRoom()">Submit</button>
-
-                    </div>
-
-
-                </form>
+                        <button class="submit-button" type="button" onclick="checkAllEmails()">Submit</button>
+                    </form>
+                </div>
             </div>
-
-            <div class="col-md-3"></div>     
+            <div class="col-md-2"></div>
         </div>
     </div>
 </body>
