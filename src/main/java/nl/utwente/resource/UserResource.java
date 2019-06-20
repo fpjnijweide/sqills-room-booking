@@ -69,7 +69,7 @@ public class UserResource {
 
     }
 
-    @GET
+    @POST
     @Path("/logout")
     public void logout() {
         HttpSession session = request.getSession();
