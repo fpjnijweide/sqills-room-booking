@@ -132,7 +132,6 @@ public class BookingDao {
 
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            //TODO remove
             id = resultSet.getInt(1);
             statement.close();
         } catch (SQLException e) {

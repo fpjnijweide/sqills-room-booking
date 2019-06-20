@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-
+//Test calendar ID: student.utwente.nl_cq0u4f1tg89j5j8701qpj8bpec@group.calendar.google.com
 //https://developers.google.com/calendar/quickstart/java
 public class GoogleCalendar {
 
@@ -21,10 +21,11 @@ public class GoogleCalendar {
                         .setJsonFactory(JacksonFactory.getDefaultInstance())
                         .setServiceAccountId("robo-695@sqills-room-booking.iam.gserviceaccount.com")
                         .setServiceAccountScopes(Arrays.asList("https://www.googleapis.com/auth/calendar"))
-                        .setServiceAccountPrivateKeyFromP12File(new File("src/main/java/nl/utwente/keys/Sqills-Room-Booking-8ca7a41f5055.json"))
+                        .setServiceAccountPrivateKeyFromP12File(new File("src/main/java/nl/utwente/keys/sqills-room-booking-9768f9c01f14.p12"))
                         .setServiceAccountUser("robo-695@sqills-room-booking.iam.gserviceaccount.com")
                         .build();
             Calendar client = new Calendar.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), credentials).build();
+            System.out.println(client.events().insert("student.utwente.nl_cq0u4f1tg89j5j8701qpj8bpec@group.calendar.google.com", ));
 
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
@@ -35,6 +36,7 @@ public class GoogleCalendar {
 
     public static void main(String[] args) {
         GoogleCalendar gc = new GoogleCalendar();
+
     }
 
 }
