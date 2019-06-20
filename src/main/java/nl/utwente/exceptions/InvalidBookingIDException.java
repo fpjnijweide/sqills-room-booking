@@ -1,6 +1,6 @@
 package nl.utwente.exceptions;
 
-public class InvalidBookingIDException extends DAOException {
+public class InvalidBookingIDException extends Exception {
 
     private int id;
 

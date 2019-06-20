@@ -2,6 +2,7 @@ package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.BookingException;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.Booking;
@@ -41,7 +42,6 @@ public class BookingDao {
 
             ResultSet resultSet = statement.executeQuery();
 
-            // TODO freek merge conflict here
             while (resultSet.next()) {
                 String roomName = resultSet.getString("roomname");
                 booking = resultSetToBooking(roomName, resultSet);
@@ -79,7 +79,6 @@ public class BookingDao {
 
             ResultSet resultSet = statement.executeQuery();
 
-            // TODO freek merge conflict here
             if (resultSet.next()) {
                 email = resultSet.getString("email");
             }
@@ -162,7 +161,7 @@ public class BookingDao {
      * @param bookingID specifies the booking to be deleted
      * @return whether the deletion was successful
      */
-    public static boolean deleteParticipantsOfBooking(int bookingID) throws InvalidBookingIDException{
+    public static void deleteParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
@@ -176,7 +175,9 @@ public class BookingDao {
             statement.setInt(1, bookingID);
 
             int updatedRows = statement.executeUpdate();
-            successful = updatedRows > 0;
+            if (updatedRows == 0){
+                throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
+            }
 
             statement.close();
         } catch (SQLException e) {
@@ -189,7 +190,6 @@ public class BookingDao {
             }
         }
 
-        return successful;
     }
 
 
@@ -199,7 +199,7 @@ public class BookingDao {
      * @param bookingID specifies the booking to be deleted
      * @return whether the deletion was successful
      */
-    public static boolean deleteBooking(int bookingID) throws InvalidBookingIDException{
+    public static void deleteBooking(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
@@ -214,7 +214,9 @@ public class BookingDao {
             statement.setInt(1, bookingID);
 
             int updatedRows = statement.executeUpdate();
-            successful = updatedRows > 0;
+            if (updatedRows == 0){
+                throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
+            }
 
             statement.close();
         } catch (SQLException e) {
@@ -227,7 +229,6 @@ public class BookingDao {
             }
         }
 
-        return successful;
     }
 
     /**
@@ -236,7 +237,7 @@ public class BookingDao {
      * @param bookingID specifies the booking to be updated
      * @return whether the update was successful
      */
-    public static boolean updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException {
+    public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
         boolean successful = false;
 
         if (!isValidBookingID(bookingID)){
@@ -266,7 +267,9 @@ public class BookingDao {
             statement.setInt(8, bookingID);
 
             int updatedRows = statement.executeUpdate();
-            successful = updatedRows > 0;
+            if (updatedRows == 0){
+                throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
+            }
 
             statement.close();
         } catch (SQLException e) {
@@ -279,7 +282,6 @@ public class BookingDao {
             }
         }
 
-        return successful;
     }
 
     /**

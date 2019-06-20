@@ -43,6 +43,9 @@ public class ParticipantResource {
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
     public void removeParticipant(@Valid UserIDBookingIDPair pair) {
+        // admin
+        // participants
+        // owner
         try {
             ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
         } catch (InvalidBookingIDException e) {
