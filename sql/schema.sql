@@ -53,9 +53,6 @@ create table sqills.recurring_pattern
 --   When to start repeating
   ending_at date,
 --   When to end repeating
-
--- @TODO remove this, most likely not needed
---   gap of x (repeat_type)
   unique (repeat_every_type,repeat_every,starting_from,ending_at)
 );
 
