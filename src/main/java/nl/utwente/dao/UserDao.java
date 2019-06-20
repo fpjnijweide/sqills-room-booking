@@ -51,7 +51,6 @@ public class UserDao {
             }
             resultSet.close();
             statement.close();
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -179,6 +178,9 @@ public class UserDao {
     }
 
     public static boolean isValidEmail(String email) {
-        return getEmail(email)!=null;
+        if (email.contains("@") && email.contains(".")){
+            return getEmail(email) != null;
+        }
+        return false;
     }
 }
