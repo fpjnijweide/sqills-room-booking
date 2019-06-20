@@ -11,10 +11,10 @@ CREATE FUNCTION get_specific_booking(booking_id int) RETURNS TABLE(starttime tim
      $$
     LANGUAGE SQL;
 
-
-drop function if exists create_booking(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text);
-create or replace function create_booking(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text) returns integer
-  as $$
+select * from create_booking( CAST('08:30:00' as time(0)),cast('09:30:00'as time(0)), cast('2053-11-13' as date),'CR1a'::text, 'andrew@gmail.com'::text, false, 'test'::text  );
+drop function if exists create_booking(start_time time, end_time time, date date ,room_name text, p_owner text, is_private boolean, title text);
+create or replace function create_booking(start_time time, end_time time, date date ,room_name text, p_owner text, is_private boolean, title text) returns integer
+  as $bookingid$
     INSERT INTO sqills.Booking (startTime, endTime, date, roomID, owner, isPrivate, title)
                                 VALUES ( start_time, end_time, date,
                 (SELECT sqills.room.roomid
@@ -22,11 +22,11 @@ create or replace function create_booking(start_time time, end_time time, date d
                   WHERE roomname = room_name),
                 (SELECT sqills.users.userID
                 FROM sqills.users
-                  WHERE email = owner),
+                  WHERE email = p_owner),
                 is_private,
                 title)
-                RETURNING bookingid
-    $$
+                RETURNING bookingid;
+    $bookingid$
     LANGUAGE SQL;
 
 drop function if exists create_recurring_booking_parent(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text, repeat_every_type repeat_type, repeat_every int, ending_at date);
@@ -49,7 +49,6 @@ BEGIN
     $$
   LANGUAGE plpgsql;
 
-select count(*) from sqills.booking_recurring
 
 drop function if exists create_recurring_pattern(p_repeat_every_type repeat_type, p_repeat_every int, p_starting_from date, p_ending_at date);
 create or replace function create_recurring_pattern(p_repeat_every_type repeat_type, p_repeat_every int, p_starting_from date, p_ending_at date)

@@ -22,13 +22,14 @@ as $$
   where r.roomname = room_name
   and b.date = CURRENT_DATE
   and b.starttime > CURRENT_TIME;
+  and b.starttime > CURRENT_TIME;
   $$
   language sql;
 
-drop function if exists get_booking_for_this_week;
-create function get_booking_for_this_week(room_name text) returns table(starttime time, endtime time, date date, name text, isPrivate boolean, title text)
+drop function if exists get_booking_for_this_week(room_name text);
+create function get_booking_for_this_week(room_name text) returns table(booking_id int,start_time time, end_time time, date date, name text, is_private boolean, title text)
 as $$
-  select b.starttime, b.endtime, b.date, u.name, b.isPrivate, b.title
+  select b.bookingid, b.starttime, b.endtime, b.date, u.name, b.isPrivate, b.title
   from sqills.booking b
   join sqills.room r on b.roomid = r.roomid
   join sqills.users u on b.owner = u.userid
