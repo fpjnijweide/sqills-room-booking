@@ -11,13 +11,15 @@ import nl.utwente.model.OutputBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
 
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NoContentException;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,10 +27,12 @@ import static nl.utwente.exceptions.ExceptionHandling.throw400;
 import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/booking")
+@DeclareRoles({"ADMIN","USER"})
+@PermitAll
 public class BookingResource {
     @Context HttpServletResponse response;
-
-
+    @Context
+    SecurityContext securityContext;
 
 
     /**
@@ -39,6 +43,7 @@ public class BookingResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
+    @RolesAllowed("ADMIN")
     public OutputBooking getSpecificBooking(@PathParam("bookingID") int bookingID) {
         try {
             return BookingDao.getSpecificBooking(bookingID);
@@ -115,6 +120,7 @@ public class BookingResource {
      *         successfully deleted
      */
     @DELETE
+    @RolesAllowed("ADMIN")
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}")
     public void deleteBooking(@PathParam("bookingID") int bookingID) {

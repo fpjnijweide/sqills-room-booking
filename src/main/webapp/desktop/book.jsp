@@ -32,6 +32,7 @@
                     <input type="date" id="booking-date" class="form-control">
                     </div>
 
+<%--                 TODO this should be roomname instead of roomid --%>
                     <label for="booking-roomid" class="col-md-2 col-form-label">Room ID</label>
                     <div class="col-md-10">
                     <input type="text" id="booking-roomid" class="form-control">
