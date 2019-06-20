@@ -138,12 +138,11 @@ public class BookingDao {
     /**
      * Create a recurring specified booking
      */
-    public static int createRecurringBooking(RecurringBooking booking){
-        int id = -1;
+    public static int createRecurringBooking(RecurringBooking booking) throws BookingException {
 
-        if (!isValidBooking(booking)) {
-            return id;
-        }
+
+        throwSpecifiedBookingExceptions(booking);
+        int id = -1;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "select create_recurring_booking_parent(?,?,?,?,?,?,?,?,?,?)";
