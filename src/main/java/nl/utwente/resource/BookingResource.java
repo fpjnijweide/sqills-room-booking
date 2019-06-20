@@ -6,12 +6,15 @@ import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.model.OutputBooking;
+import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.*;
 import java.util.List;
 
@@ -40,6 +43,8 @@ public class BookingResource {
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
         }
+
+
         return null;
     }
 
@@ -59,6 +64,22 @@ public class BookingResource {
             throw400(e.getMessage());
         }
         return 0;
+    }
+
+    /**
+     * Create recurring booking
+     *  @return JSON object containing a "success" boolean field specifying whether the booking was
+     *  successfully created
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/create/rec")
+    public String createRecurringBooking(RecurringBooking booking){
+        int result = BookingDao.createRecurringBooking(booking);
+        final JsonNodeFactory factory = JsonNodeFactory.instance;
+        ObjectNode success = factory.objectNode();
+        success.put("bookingid", result);
+        return success.toString();
     }
 
     @GET

@@ -1,7 +1,5 @@
 package nl.utwente.resource;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.exceptions.BookingException;
@@ -18,8 +16,6 @@ import javax.ws.rs.core.SecurityContext;
 import java.sql.Time;
 import java.util.List;
 
-import static nl.utwente.dao.BookingDao.isValidBookingToday;
-import static nl.utwente.dao.RoomDao.isValidRoomName;
 import static nl.utwente.exceptions.ExceptionHandling.throw400;
 import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
