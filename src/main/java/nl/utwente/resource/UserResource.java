@@ -1,11 +1,14 @@
 package nl.utwente.resource;
 
 import nl.utwente.dao.UserDao;
+import nl.utwente.model.EmailList;
 import nl.utwente.model.UserAdministration;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Path("/user")
 public class UserResource {
@@ -36,5 +39,21 @@ public class UserResource {
         NewCookie cook = new NewCookie(cookie, "123", 5*60, true);
         return Response.ok("OK").cookie(cook).build();
     }
+
+    @POST
+    @Path("/email/check")
+    @Produces(MediaType.APPLICATION_JSON)
+    public EmailList getInvalidEmails(EmailList emails){
+        EmailList returnList = new EmailList();
+        List<String> invalidEmails = new ArrayList<>();
+        for(String email : emails.getEmails()){
+            if (!UserDao.isValidEmail(email)){
+                invalidEmails.add(email);
+            }
+        }
+        returnList.setEmails(invalidEmails);
+        return returnList;
+    }
+
 
 }
