@@ -57,7 +57,7 @@ public class RoomResource {
         try {
             return BookingDao.getBookingsForRoomToday(roomName);
         } catch (InvalidRoomNameException e) {
-            throw404(e);
+            throw404(e.getMessage());
         }
 
         return null;
@@ -82,13 +82,13 @@ public class RoomResource {
             roomID = BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
                     booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
         } catch (BookingException e) {
-            throw400(e);
+            throw400(e.getMessage());
         }
 
         if (roomID != -1 && roomID != 0) {
             return roomID;
         } else {
-            throw new InternalServerErrorException("Something went wrong in createBookingForSpecificRoom");
+            throw500("Something went wrong in createBookingForSpecificRoom");
         }
     }
 
@@ -109,7 +109,7 @@ public class RoomResource {
         try {
             return RoomDao.getFreeUntil(roomName);
         } catch (InvalidRoomNameException e) {
-            throw404(e);
+            throw404(e.getMessage());
         }
         return null;
     }
@@ -121,7 +121,7 @@ public class RoomResource {
         try {
             return RoomDao.getBookingsForThisWeek(roomName);
         } catch (InvalidRoomNameException e) {
-            throw404(e);
+            throw404(e.getMessage());
         }
 
         return null;

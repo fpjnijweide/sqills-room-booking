@@ -19,9 +19,16 @@ public class BasicSecurityContext implements SecurityContext {
     public Principal getUserPrincipal() {
         return new Principal() {
             @Override
+            // Yes, this returns the email instead of the name (the interface requires a getName)
+            // However, the "username" that the user logs in with (his/her email)
+            // should be the name that is relevant to the security. It is ugly.
+            // Because of Jersey constraints, there is no other way to do this.
+
             public String getName() {
-                return user.getName();
+                return user.getEmail();
             }
+
+
         };
     }
 
@@ -35,7 +42,8 @@ public class BasicSecurityContext implements SecurityContext {
 
     @Override
     public boolean isUserInRole(String role) {
-        // TODO Improve
+        // This method is completely awful. However, it needs to work this way
+        // because otherwise, Jersey will complain. Don't question it.
         if (Objects.equals(role, "ADMIN") || Objects.equals(role, "admin") ||
             Objects.equals(role, "administrator") || Objects.equals(role, "ADMINISTRATOR")){
             return user.isAdministrator();
