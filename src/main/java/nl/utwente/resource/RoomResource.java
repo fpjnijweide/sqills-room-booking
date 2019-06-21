@@ -1,7 +1,5 @@
 package nl.utwente.resource;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.exceptions.BookingException;
@@ -11,18 +9,21 @@ import nl.utwente.model.OutputBooking;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.sql.Time;
 import java.util.List;
 
-import static nl.utwente.dao.BookingDao.isValidBookingToday;
-import static nl.utwente.dao.RoomDao.isValidRoomName;
 import static nl.utwente.exceptions.ExceptionHandling.throw400;
 import static nl.utwente.exceptions.ExceptionHandling.throw404;
 
 @Path("/room")
 public class RoomResource {
+    @Context
+    SecurityContext securityContext;
+
     public RoomResource(){ }
 
 
@@ -52,7 +53,7 @@ public class RoomResource {
         try {
             return BookingDao.getBookingsForRoomToday(roomName);
         } catch (InvalidRoomNameException e) {
-            throw404(e);
+            throw404(e.getMessage());
         }
 
         return null;
@@ -72,19 +73,13 @@ public class RoomResource {
         @PathParam("roomName") String roomName,
         @Valid Booking booking
     ) {
-        int roomID = 0;
         try {
-            roomID = BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
+            return BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
                     booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
         } catch (BookingException e) {
-            throw400(e);
+            throw400(e.getMessage());
         }
-
-        if (roomID != -1 && roomID != 0) {
-            return roomID;
-        } else {
-            throw new InternalServerErrorException("Something went wrong in createBookingForSpecificRoom");
-        }
+        return 0;
     }
 
     @GET
@@ -104,7 +99,7 @@ public class RoomResource {
         try {
             return RoomDao.getFreeUntil(roomName);
         } catch (InvalidRoomNameException e) {
-            throw404(e);
+            throw404(e.getMessage());
         }
         return null;
     }
@@ -116,7 +111,7 @@ public class RoomResource {
         try {
             return RoomDao.getBookingsForThisWeek(roomName);
         } catch (InvalidRoomNameException e) {
-            throw404(e);
+            throw404(e.getMessage());
         }
 
         return null;

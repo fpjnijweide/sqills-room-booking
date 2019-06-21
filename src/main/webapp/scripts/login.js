@@ -7,9 +7,12 @@ function login(){
         axios.post(`/api/user/login`, jsonBody).then((response) => {
             console.log(response);
             console.log(document.cookie);
-            axios.get(`/api/user/test`, jsonBody).then((response) => {
+            window.location="/desktop";
 
-            })
+
+        }).catch((response) => {
+            textfield = document.getElementById("response");
+            textfield.innerHTML="<p class='text-danger'>Invalid login data</p>"
         })
     }
 }

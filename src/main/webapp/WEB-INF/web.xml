@@ -5,12 +5,16 @@
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+
+
     <welcome-file-list>
         <welcome-file>index</welcome-file>
     </welcome-file-list>
 
+
 	<servlet>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+
 	</servlet>
     <servlet>
         <servlet-name>Desktop Servlet</servlet-name>
@@ -73,4 +77,8 @@
         <servlet-name>Specific Room Servlet</servlet-name>
         <url-pattern>/tablet/room/*</url-pattern>
     </servlet-mapping>
+
+
+
+
 </web-app>
