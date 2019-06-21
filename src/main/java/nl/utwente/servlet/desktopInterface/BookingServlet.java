@@ -1,5 +1,7 @@
 package nl.utwente.servlet.desktopInterface;
 
+import nl.utwente.authentication.AuthenticationFilter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +12,10 @@ import java.io.IOException;
 public class BookingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        req.getRequestDispatcher("/desktop/book.jsp").forward(req, res);
+        if (req.getSession().getAttribute(AuthenticationFilter.principalName)==null){
+            req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
+        } else {
+            req.getRequestDispatcher("/desktop/book.jsp").forward(req, res);
+        }
     }
 }

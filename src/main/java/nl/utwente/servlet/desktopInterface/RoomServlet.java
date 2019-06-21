@@ -1,5 +1,6 @@
 package nl.utwente.servlet.desktopInterface;
 
+import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.exceptions.InvalidRoomNameException;
 
@@ -13,18 +14,22 @@ public class RoomServlet extends HttpServlet {
     @Override
     // Todo: @Marten Refactor names of variables.
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        String uri = req.getRequestURI();
-        String[] splitUri = uri.split("/");
-        String roomName = splitUri[3];
-        req.setAttribute("id", roomName); // TODO maybe change "id" thing
-        try {
-            req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomName));
-        } catch (InvalidRoomNameException e) {
-            res.setStatus(404);
-            req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
-            res.getWriter().write(e.getMessage());
+        if (req.getSession().getAttribute(AuthenticationFilter.principalName)==null){
+            req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
+        } else {
+            String uri = req.getRequestURI();
+            String[] splitUri = uri.split("/");
+            String roomName = splitUri[3];
+            req.setAttribute("id", roomName); // TODO maybe change "id" thing
+            try {
+                req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomName));
+            } catch (InvalidRoomNameException e) {
+                res.setStatus(404);
+                req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
+                res.getWriter().write(e.getMessage());
+            }
+            req.getRequestDispatcher("/desktop/room.jsp").forward(req, res);
         }
-        req.getRequestDispatcher("/desktop/room.jsp").forward(req, res);
     }
 }
 
