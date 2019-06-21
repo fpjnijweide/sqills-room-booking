@@ -10,6 +10,7 @@ function bookRoom() {
         "isPrivate": document.getElementById("booking-checkbox").checked
     };
 
+
     let durationInputMinutes = parseInt(document.getElementById("slider").value);
 
     let today = new Date();
@@ -40,6 +41,8 @@ function bookRoom() {
         })
         .catch(error => {
             $("#fail-modal").modal();
+            failModalText = document.getElementById("fail-modal-text")
+            failModalText.innerHTML = error.response.data;
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);

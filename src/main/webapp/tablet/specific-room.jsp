@@ -51,11 +51,11 @@
     <div id="make-booking-overlay" class="hidden">
         <div class="centered-title">Book a Room</div>
         <div class="vertical-group">
-            <label>Title: </label><input class="text-input" type="text" id="booking-title" value="Booking Title (Optional)">
+            <label>Title: </label><input class="text-input" type="text" id="booking-title" placeholder="Booking Title (Optional)">
         </div>
 
         <div class="vertical-group">
-            <label>Email: </label><input class="text-input" type="text" id="booking-email" value="Email (Optional)">
+            <label>Email: </label><input class="text-input" type="text" id="booking-email" placeholder="Email (Optional)">
         </div>
 
         <div class="vertical-group">
@@ -113,7 +113,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="fail-modal-text">
                     Something went wrong! Sadly your booking could not be created.
                 </div>
                 <div class="modal-footer">
