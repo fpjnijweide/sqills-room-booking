@@ -94,19 +94,19 @@ public class UserResource {
         };
     }
 
-//    @POST
-//    @Path("/email/check")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public EmailList getInvalidEmails(EmailList emails){
-//        EmailList returnList = new EmailList();
-//        List<String> invalidEmails = new ArrayList<>();
-//        for(String email : emails.getEmails()){
-//            if (!UserDao.isValidEmail(email)){
-//                invalidEmails.add(email);
-//            }
-//        }
-//        returnList.setEmails(invalidEmails);
-//        return returnList;
-//    }
+    @POST
+    @Path("/email/check")
+    @Produces(MediaType.APPLICATION_JSON)
+    public EmailList getInvalidEmails(EmailList emails){
+        EmailList returnList = new EmailList();
+        List<String> invalidEmails = new ArrayList<>();
+        for(String email : emails.getEmails()){
+            if (!UserDao.isValidEmail(email)){
+                invalidEmails.add(email);
+            }
+        }
+        returnList.setEmails(invalidEmails);
+        return returnList;
+    }
 
 }
