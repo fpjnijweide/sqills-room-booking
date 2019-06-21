@@ -79,7 +79,7 @@ function makeRecurringBooking(){
 function addParticipantsToBooking(bookingID) {
     let participantElements = document.getElementsByClassName("participant-in-list")
     for (let i = 0; i < participantElements.length; i++) {
-        let email = participantElements[i].textContent;
+        let email = participantElements[i].textContent.slice(0,-6);
         let requestObject = {
             "email": email,
             "bookingid": bookingID
@@ -124,7 +124,7 @@ function getAllEmails(){
     let participantElements = document.getElementsByClassName("participant-in-list");
     emails.push(creatorEmail)
     for (let i = 0; i < participantElements.length; i++) {
-        let email = document.getElementsByClassName("participant-in-list")[0].textContent.slice(0,-6);
+        let email = document.getElementsByClassName("participant-in-list")[i].textContent.slice(0,-6);
         emails.push(email)
     }
     return emails
@@ -144,11 +144,13 @@ function checkRecurringDays(){
     } else if (number > 12 && value == "months") {
         document.getElementById("time").value = Math.floor(number / 12);
         document.getElementById("choose-time-unit").value = "years";
+    } else if (number <= 0){
+
     }
 }
 
 function removeParticipant(element){
     element.parentNode.removeChild(element);
 }
-
+//todo
 //todo throw nicer errors instead of console.logs
