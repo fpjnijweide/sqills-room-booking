@@ -26,10 +26,7 @@ public class ParticipantDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         List<User> result = new ArrayList<>();
         try {
-            String query = "SELECT u.userid, u.name, u.email, u.administrator " +
-                "FROM sqills.participants AS p, sqills.users AS u " +
-                "WHERE p.bookingid = ?" +
-                "AND p.userid = u.userid;";
+            String query = "select * from get_participants_of_booking(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, bookingID);
@@ -37,7 +34,7 @@ public class ParticipantDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 User user = new User();
-                user.setUserid(resultSet.getInt("userid"));
+                user.setUserid(resultSet.getInt("user_id"));
                 user.setName(resultSet.getString("name"));
                 user.setEmail(resultSet.getString("email"));
                 user.setAdministrator(resultSet.getBoolean("administrator"));
