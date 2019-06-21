@@ -54,8 +54,7 @@ function makeBooking(){
         });
 }
 function makeRecurringBooking(){
-    var elem = document.getElementById("choose-time-unit");
-
+    let elem = document.getElementById("choose-time-unit");
     let requestBody = {
         "title": document.getElementById("booking-title").value,
         "email": document.getElementById("booking-email").value,
@@ -97,10 +96,11 @@ function addParticipantField() {
     let input = document.getElementById("participant").value;
     if(input != "") {
         let element = document.getElementById("participants-list");
-        element.innerHTML += "<br>" + "<div class='participant-in-list'>" +  input + "</div>"
+        element.innerHTML += "<div class='participant-in-list'>" +
+            input + "<div class='delete' onclick='removeParticipant(this.parentElement)'>delete</div>"
+            + "</div>"
         document.getElementById("participant").value = "";
         console.log()
-
     }
 }
 
@@ -124,8 +124,31 @@ function getAllEmails(){
     let participantElements = document.getElementsByClassName("participant-in-list");
     emails.push(creatorEmail)
     for (let i = 0; i < participantElements.length; i++) {
-        let email = participantElements[i].textContent;
+        let email = document.getElementsByClassName("participant-in-list")[0].textContent.slice(0,-6);
         emails.push(email)
     }
     return emails
 }
+
+function checkRecurringDays(){
+    let unit = document.getElementById("choose-time-unit");
+    let value = unit.options[unit.selectedIndex].value;
+    console.log(value);
+    let number = document.getElementById("time").value;
+    if (number > 7 && value == "days"){
+        document.getElementById("time").value = Math.floor(number / 7);
+        document.getElementById("choose-time-unit").value = "weeks";
+    } else if (number > 4 && value == "weeks") {
+        document.getElementById("time").value = Math.floor(number / 4);
+        document.getElementById("choose-time-unit").value = "months";
+    } else if (number > 12 && value == "months") {
+        document.getElementById("time").value = Math.floor(number / 12);
+        document.getElementById("choose-time-unit").value = "years";
+    }
+}
+
+function removeParticipant(element){
+    element.parentNode.removeChild(element);
+}
+
+//todo throw nicer errors instead of console.logs
