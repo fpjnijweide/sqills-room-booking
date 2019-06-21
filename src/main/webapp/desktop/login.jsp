@@ -10,7 +10,7 @@
     <meta name="google-signin-client_id" content="47026751328-n650qv0b0v1qjmmnk16vddsae05rqp4v.apps.googleusercontent.com">
 </head>
 <body>
-<jsp:include page="nav.jsp"/>
+<%--<jsp:include page="nav.jsp"/>--%>
 <div class="loginform">
     <table class="logintable">
 <%--<tr>--%>
