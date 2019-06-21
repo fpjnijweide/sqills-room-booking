@@ -162,10 +162,9 @@ public class RoomDao {
             throw new InvalidRoomNameException(roomName);
         }
         Time result = null;
-
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT * from get_free_until(?)";
-            Connection connection = DatabaseConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
 
@@ -176,10 +175,15 @@ public class RoomDao {
             }
 
             statement.close();
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return result;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }

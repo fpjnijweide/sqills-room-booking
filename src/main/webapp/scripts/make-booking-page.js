@@ -63,12 +63,12 @@ function makeRecurringBooking(){
         "endTime": document.getElementById("booking-endtime").value + ":00",
         "roomName": document.getElementById("booking-roomid").value,
         "isPrivate": document.getElementById("booking-isPrivate").checked,
-        "repeatEveryTime": elem.options[elem.selectedIndex].value,
+        "repeatEveryType": elem.options[elem.selectedIndex].value,
         "repeatEvery": document.getElementById("time").value,
         "endingAt": document.getElementById("recurring-end-date").value
     };
     console.log(requestBody)
-    axios.post("/api/booking/create/rec", requestBody)
+    axios.post("/api/booking/create/recurring", requestBody)
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
