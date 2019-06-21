@@ -144,11 +144,13 @@ function checkRecurringDays(){
     } else if (number > 12 && value == "months") {
         document.getElementById("time").value = Math.floor(number / 12);
         document.getElementById("choose-time-unit").value = "years";
+    } else if (number <= 0){
+
     }
 }
 
 function removeParticipant(element){
     element.parentNode.removeChild(element);
 }
-
+//todo
 //todo throw nicer errors instead of console.logs
