@@ -64,10 +64,10 @@
                         <div id="recurring-info">I want a booking every
                             <input id="time" type="number" oninput="checkRecurringDays()">
                             <select id="choose-time-unit" class="choose-time-unit" onchange="checkRecurringDays()">
-                                <option value="days">Days</option>
-                                <option value="weeks">Weeks</option>
-                                <option value="months">Months</option>
-                                <option value="years">Years</option>
+                                <option value="day">Days</option>
+                                <option value="week">Weeks</option>
+                                <option value="month">Months</option>
+                                <option value="year">Years</option>
                             </select>
                             <br>
                             ending at

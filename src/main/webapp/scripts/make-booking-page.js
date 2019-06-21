@@ -63,7 +63,7 @@ function makeRecurringBooking(){
         "endTime": document.getElementById("booking-endtime").value + ":00",
         "roomName": document.getElementById("booking-roomid").value,
         "isPrivate": document.getElementById("booking-isPrivate").checked,
-        "repeatEveryTime": elem.options[elem.selectedIndex].value,
+        "repeatEveryType": elem.options[elem.selectedIndex].value,
         "repeatEvery": document.getElementById("time").value,
         "endingAt": document.getElementById("recurring-end-date").value
     };
