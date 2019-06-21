@@ -3,6 +3,7 @@ package nl.utwente.resource;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.dao.UserDao;
+import nl.utwente.model.EmailList;
 import nl.utwente.model.InputUser;
 import nl.utwente.model.UserAdministration;
 
@@ -14,6 +15,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static nl.utwente.dao.UserDao.insertUser;
 import static nl.utwente.exceptions.ExceptionHandling.throw401;
