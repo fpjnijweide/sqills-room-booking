@@ -11,15 +11,14 @@ function createBooking() {
 
     axios.post("/api/booking/create", requestBody)
         .then(response => {
-            if (response.data.bookingid >= 0) {
-                $("#success-modal").modal();
-            } else {
-                $("#fail-modal").modal();
-            }
-        })
-        .finally(
+            $("#success-modal").modal();
+        }).catch((response) => {
+            $("#fail-modal").modal();
+            failModalText = document.getElementById("fail-modal-text")
+            failModalText.innerHTML = response.response.data;
+        }).finally((response) => {
             updateBookingOverview()
-        );
+    });
 }
 
 function sleep(ms) {

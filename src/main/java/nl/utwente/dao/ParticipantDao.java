@@ -62,7 +62,6 @@ public class ParticipantDao {
         }
 
         Connection connection = DatabaseConnectionFactory.getConnection();
-        boolean success = false;
 
         try {
             String query = "INSERT INTO sqills.participants (bookingid, userid) VALUES (?, ?);";
@@ -94,7 +93,6 @@ public class ParticipantDao {
             throw new InvalidUserIDException(userID);
         }
         Connection connection = DatabaseConnectionFactory.getConnection();
-        boolean success = false;
 
         try {
             String query = "DELETE FROM sqills.participants WHERE bookingid = ? AND userid = ?;";

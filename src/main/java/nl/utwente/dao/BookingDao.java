@@ -14,6 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import static nl.utwente.dao.RoomDao.isValidRoomName;
 import static nl.utwente.dao.UserDao.isValidEmail;
@@ -102,7 +103,7 @@ public class BookingDao {
      */
     public static int createBooking(SpecifiedBooking booking) throws BookingException {
         int id = -1;
-
+        booking = prepareBooking(booking);
         throwSpecifiedBookingExceptions(booking);
         Connection connection = DatabaseConnectionFactory.getConnection();
 
@@ -133,6 +134,13 @@ public class BookingDao {
         }
 
         return id;
+    }
+
+    private static SpecifiedBooking prepareBooking(SpecifiedBooking booking) {
+        if (Objects.equals(booking.getEmail(), "")) {
+            booking.setEmail("sqills_tablet@gmail.com");
+        }
+        return booking;
     }
 
     /**
@@ -185,7 +193,6 @@ public class BookingDao {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        boolean successful = false;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
@@ -224,7 +231,6 @@ public class BookingDao {
             throw new InvalidBookingIDException(bookingID);
         }
         deleteParticipantsOfBooking(bookingID);
-        boolean successful = false;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
@@ -257,7 +263,6 @@ public class BookingDao {
      * @return whether the update was successful
      */
     public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
-        boolean successful = false;
 
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
@@ -408,7 +413,7 @@ public class BookingDao {
         try {
             boolean validTimeSlot = isValidTimeSlot(roomName, booking.getStartTime(), booking.getEndTime(), sqlDate);
             if (!validTimeSlot) {
-                errorMessages.add("Invalid time slot for room");
+                errorMessages.add("Booking overlaps or time is invalid");
             }
         } catch (InvalidRoomNameException e) {
             errorMessages.add("Invalid room name");
