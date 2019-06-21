@@ -62,8 +62,8 @@
                             <input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes
                             <input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No
                             <div id="recurring-info">I want a booking every
-                                <input id="time" type="number">
-                                <select id="choose-time-unit" class="choose-time-unit">
+                                <input id="time" type="number" oninput="checkRecurringDays()">
+                                <select id="choose-time-unit" class="choose-time-unit" onchange="checkRecurringDays()">
                                     <option value="days">Days</option>
                                     <option value="weeks">Weeks</option>
                                     <option value="months">Months</option>
