@@ -5,10 +5,7 @@ import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidRoomNameException;
-import nl.utwente.model.Booking;
-import nl.utwente.model.OutputBooking;
-import nl.utwente.model.RecurringBooking;
-import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,7 +27,7 @@ public class BookingDao {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        OutputBooking booking = null;
+        OutputBookingWithParticipants booking = new OutputBookingWithParticipants();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "SELECT get_specific_booking(?)";
@@ -42,11 +39,33 @@ public class BookingDao {
 
             while (resultSet.next()) {
                 String roomName = resultSet.getString("roomname");
-                booking = resultSetToBooking(roomName, resultSet);
+                booking = (OutputBookingWithParticipants) resultSetToBooking(roomName, resultSet);
             }
 
             resultSet.close();
             statement.close();
+
+            String participantQuery = "SELECT u.userid, u.name, u.email, u.administrator " +
+                "FROM sqills.users AS u, sqills.participants AS p " +
+                "WHERE p.bookingid = ? " +
+                "AND u.userid = p.userid";
+            PreparedStatement preparedStatement = connection.prepareStatement(participantQuery);
+            preparedStatement.setInt(1, bookingID);
+            ResultSet resultSetParticipants = preparedStatement.executeQuery();
+
+            List<User> participants = new ArrayList<>();
+            while (resultSetParticipants.next()) {
+                User user = new User();
+                user.setUserid(resultSetParticipants.getInt("userid"));
+                user.setName(resultSetParticipants.getString("name"));
+                user.setEmail(resultSetParticipants.getString("email"));
+                user.setAdministrator(resultSetParticipants.getBoolean("administrator"));
+                participants.add(user);
+            }
+            booking.setParticipants(participants);
+
+            resultSetParticipants.close();
+            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -184,7 +203,7 @@ public class BookingDao {
 
     }
     /**
-     * Deletes a booking with a specified bookingID
+     * Deletes particiapnts of booking with a specified bookingID
      *
      * @param bookingID specifies the booking to be deleted
      * @return whether the deletion was successful
@@ -405,6 +424,9 @@ public class BookingDao {
     public static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException {
         ArrayList<String> errorMessages = new ArrayList<>();
 
+        if (!isValidTitle(booking.getTitle())) {
+            errorMessages.add("Invalid title");
+        }
 
         if (!isValidEmail(booking.getEmail())) {
             errorMessages.add("Invalid email");
@@ -492,5 +514,19 @@ public class BookingDao {
         }
 
         return isValid;
+    }
+
+    public static boolean isValidTitle(String title) {
+        final String ALLOWED_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. -_";
+
+        for (int i = 0; i < title.length(); i++){
+            char c = title.charAt(i);
+
+            if (ALLOWED_CHARS.indexOf(c) == -1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -124,9 +124,9 @@ create or replace function update_booking(start_time time, end_time time, date d
 
 
 drop function if exists booking_for_room_today(room_name text);
-create or replace function booking_for_room_today(room_name text) returns table(start_time time, end_time time, name text, date date, is_private boolean, title text)
+create or replace function booking_for_room_today(room_name text) returns table(booking_id int ,start_time time, end_time time, name text, date date, is_private boolean, title text)
 as $$
-  select b.starttime, b.endtime, u.name, b.date, b.isprivate, b.title
+  select b.bookingid as booking_id, b.starttime, b.endtime, u.name, b.date, b.isprivate, b.title
   from sqills.booking b
   join sqills.room r on b.roomid = r.roomid
   join sqills.users u on u.userid = b.owner
@@ -145,4 +145,5 @@ as $$
   $$
   language sql;
 
-SELECT roomid , roomname FROM sqills.Room WHERE roomName ilike 'cr1a'
+
+
