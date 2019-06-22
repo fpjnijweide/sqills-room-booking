@@ -38,6 +38,3 @@ as $$
   order by b.date asc;
   $$
   language sql;
-
-select * from sqills.users;
-

@@ -6,7 +6,9 @@ import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
 import java.sql.*;
-import java.util.Arrays;
+
+import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
+import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
 
 public class UserDao {
     public static boolean isValidUserID(int userID) {
@@ -135,7 +137,7 @@ public class UserDao {
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, email);
             statement.setString(2, email);
-            statement.setBytes(3, AuthenticationHandler.hashPassword(password, salt));
+            statement.setBytes(3, hashPassword(password, salt));
             statement.setBoolean(4, admin);
             statement.setBytes(5, salt);
             int affectedRows = statement.executeUpdate();
@@ -164,7 +166,6 @@ public class UserDao {
             //          statement.setBytes(2, userPassword);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-
                 return resultSet.getBytes("hash");
             }
         } catch (SQLException sqle){
@@ -179,6 +180,15 @@ public class UserDao {
         return null;
     }
 
+
+    public static boolean checkCredentials(String email, String password){
+        try {
+            return checkByteArrays(getHash(email), hashPassword(password, getSalt(email)));
+        } catch (InvalidEmailException e) {
+            e.printStackTrace();
+        }
+        return  false;
+    }
 
     public static boolean isValidEmail(String email) {
         if (email.contains("@") && email.contains(".")){

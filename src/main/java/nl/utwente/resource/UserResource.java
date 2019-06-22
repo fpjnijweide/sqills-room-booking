@@ -1,5 +1,7 @@
 package nl.utwente.resource;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.dao.UserDao;
@@ -12,8 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,4 +115,16 @@ public class UserResource {
         return returnList;
     }
 
+    @GET
+    @Path("/validateEmail/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getIsValidEmail(@PathParam("email") String email) {
+        boolean result = UserDao.isValidEmail(email);
+
+        final JsonNodeFactory factory = JsonNodeFactory.instance;
+        ObjectNode isValid = factory.objectNode();
+        isValid.put("valid", result);
+        return isValid.toString();
+
+    }
 }
