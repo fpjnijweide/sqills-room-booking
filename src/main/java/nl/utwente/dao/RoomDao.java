@@ -51,7 +51,7 @@ public class RoomDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT roomid FROM sqills.Room WHERE roomName = ?";
+            String query = "SELECT roomid FROM sqills.Room WHERE roomName ilike ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
