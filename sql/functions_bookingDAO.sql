@@ -130,7 +130,7 @@ as $$
   from sqills.booking b
   join sqills.room r on b.roomid = r.roomid
   join sqills.users u on u.userid = b.owner
-  where r.roomname = room_name and b.date = CURRENT_DATE
+  where r.roomname ilike room_name and b.date = CURRENT_DATE
   $$
   language sql;
 
@@ -144,3 +144,5 @@ as $$
   where r.roomname = room_name and b.date = booking_date;
   $$
   language sql;
+
+SELECT roomid , roomname FROM sqills.Room WHERE roomName ilike 'cr1a'

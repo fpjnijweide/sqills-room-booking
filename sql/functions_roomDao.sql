@@ -39,3 +39,5 @@ as $$
   $$
   language sql;
 
+select * from sqills.users;
+
