@@ -1,17 +1,20 @@
 function createBooking() {
+    let date = document.getElementById("date").value, startTime = document.getElementById("start-time").value + ":00",
+       endTime =  document.getElementById("end-time").value + ":00", email = document.getElementById("email").value,
+        isPrivate =  document.getElementById("isPrivate").checked, title = document.getElementById("title").value;
     const requestBody = {
         "roomName": ROOM_ID,
-        "date": document.getElementById("date").value,
-        "startTime": document.getElementById("start-time").value + ":00",
-        "endTime": document.getElementById("end-time").value + ":00",
-        "email": document.getElementById("email").value,
-        "isPrivate": document.getElementById("isPrivate").checked,
-        "title": document.getElementById("title").value
+        "date": date,
+        "startTime": startTime,
+        "endTime": endTime,
+        "email": email,
+        "isPrivate": isPrivate,
+        "title": title
     };
-
     axios.post("/api/booking/create", requestBody)
         .then(response => {
             $("#success-modal").modal();
+            insertGCalendarEvent(createGCalendarEvent(ROOM_ID,date, startTime, endTime, title, null, isPrivate, null));
         }).catch((response) => {
             $("#fail-modal").modal();
             failModalText = document.getElementById("fail-modal-text")
@@ -49,3 +52,5 @@ async function updateBookingOverview() {
             }
         });
 }
+
+

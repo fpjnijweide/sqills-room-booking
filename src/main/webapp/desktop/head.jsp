@@ -19,3 +19,8 @@
 <link rel="stylesheet" href="/css/desktop.css">
 <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap" rel="stylesheet">
 <script src="/scripts/clickable-row.js"></script>
+<script src="/scripts/google-calendar.js"></script>
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async></script>
+<script src="https://apis.google.com/js/api.js" async></script>
+<meta name="google-signin-client_id" content="347026751328-n650qv0b0v1qjmmnk16vddsae05rqp4v.apps.googleusercontent.com">
+

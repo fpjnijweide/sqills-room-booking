@@ -36,21 +36,32 @@ function checkRecurringFields(){
 }
 
 function makeBooking(){
-    let requestBody = {
-        "title": document.getElementById("booking-title").value,
-        "email": document.getElementById("booking-email").value,
-        "date": document.getElementById("booking-date").value,
-        "startTime": document.getElementById("booking-starttime").value + ":00",
-        "endTime": document.getElementById("booking-endtime").value + ":00",
-        "roomName": document.getElementById("booking-roomid").value,
-        "isPrivate": document.getElementById("booking-isPrivate").checked
+
+
+    let title = document.getElementById("booking-title").value
+    , email = document.getElementById("booking-email").value
+    , date = document.getElementById("booking-date").value
+    , startTime = document.getElementById("booking-starttime").value + ":00"
+    , endTime = document.getElementById("booking-endtime").value + ":00"
+    , roomName = document.getElementById("booking-roomid").value
+    , isPrivate = document.getElementById("booking-isPrivate").checked
+    , participantElements = document.getElementsByClassName("participant-in-list").every(()=>textContent.slice(0,-6))
+    , requestBody = {
+        "title": title,
+        "email": email,
+        "date": date,
+        "startTime": startTime,
+        "endTime": endTime,
+        "roomName": roomName,
+        "isPrivate": isPrivate
     };
 
     axios.post("/api/booking/create", requestBody)
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
-            document.location.replace(`/api/booking/${id}`);
+            insertGCalendarEvent(createGCalendarEvent(ROOM_ID,date, startTime, endTime, title, participantElements, isPrivate, null));
+            // document.location.replace(`/api/booking/${id}`);
         });
 }
 function makeRecurringBooking(){
@@ -76,8 +87,9 @@ function makeRecurringBooking(){
         });
 }
 
+
+
 function addParticipantsToBooking(bookingID) {
-    let participantElements = document.getElementsByClassName("participant-in-list")
     for (let i = 0; i < participantElements.length; i++) {
         let email = participantElements[i].textContent.slice(0,-6);
         let requestObject = {

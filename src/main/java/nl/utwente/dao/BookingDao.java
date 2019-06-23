@@ -38,7 +38,7 @@ public class BookingDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String roomName = resultSet.getString("roomname");
+                String roomName = resultSet.getString("room_name");
                 booking = (OutputBookingWithParticipants) resultSetToBooking(roomName, resultSet);
             }
 
