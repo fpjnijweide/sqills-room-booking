@@ -51,7 +51,7 @@ public class RoomDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT roomid FROM sqills.Room WHERE roomName = ?";
+            String query = "SELECT roomid FROM sqills.Room WHERE roomName ilike ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -137,13 +137,7 @@ public class RoomDao {
         List<String> rooms = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT roomname FROM sqills.room " +
-                "WHERE roomid NOT IN (" +
-                "    SELECT roomid FROM sqills.booking " +
-                "    WHERE date = CURRENT_DATE " +
-                "    AND CURRENT_TIME BETWEEN starttime AND endtime " +
-                ") " +
-                "AND roomid > 0;";
+            String query = "select * from get_currently_available_rooms()";
 
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
@@ -168,14 +162,9 @@ public class RoomDao {
             throw new InvalidRoomNameException(roomName);
         }
         Time result = null;
-
+        Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT MIN(b.starttime) FROM sqills.booking b " +
-                "JOIN sqills.room r ON b.roomid = r.roomid " +
-                "WHERE r.roomname = ? " +
-                "AND b.date = CURRENT_DATE " +
-                "AND b.starttime > CURRENT_TIME;";
-            Connection connection = DatabaseConnectionFactory.getConnection();
+            String query = "SELECT * from get_free_until(?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
 
@@ -186,10 +175,15 @@ public class RoomDao {
             }
 
             statement.close();
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return result;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
@@ -200,13 +194,7 @@ public class RoomDao {
         }
 
         List<OutputBooking> result = new ArrayList<>();
-        String query = "SELECT b.starttime, b.endtime, b.date, u.name, b.isPrivate, b.title " +
-            "FROM sqills.booking b " +
-            "JOIN sqills.room r ON b.roomid = r.roomid " +
-            "JOIN sqills.users u ON b.owner = u.userid " +
-            "WHERE EXTRACT(WEEK FROM date) = EXTRACT(WEEK FROM CURRENT_DATE)" +
-            "AND r.roomname = ? " +
-            "ORDER BY b.date ASC;";
+        String query = "SELECT * from get_booking_for_this_week(?)";
 
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {

@@ -1,6 +1,6 @@
 package nl.utwente.exceptions;
 
-public class InvalidEmailException extends DAOException {
+public class InvalidEmailException extends Exception {
 
     private String email;
 

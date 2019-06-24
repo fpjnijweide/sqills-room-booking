@@ -25,7 +25,7 @@ public class BookingResourceTest extends JerseyTest {
             Response res = target().path("/booking/bookingID").request().get();
             assertEquals("Should return status 200", 200, res.getStatus());
             try {
-                assertEquals(BookingDao.getSpecificBooking(i).toString().replaceAll("\\s",""), res.readEntity(String.class));
+                assertEquals(BookingDao.getOutputBooking(i).toString().replaceAll("\\s",""), res.readEntity(String.class));
             } catch (InvalidBookingIDException e) {
                 fail("Invalid booking ID");
             }
