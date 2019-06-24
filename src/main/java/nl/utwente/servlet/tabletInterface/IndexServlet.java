@@ -8,7 +8,8 @@ import java.io.IOException;
 
 public class IndexServlet extends HttpServlet {
     @Override
+    //TODO @matren rename
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        req.getRequestDispatcher("/tablet/index.jsp").forward(req, res);
+        req.getRequestDispatcher("/tablet/specific-room.jsp").forward(req, res);
     }
 }

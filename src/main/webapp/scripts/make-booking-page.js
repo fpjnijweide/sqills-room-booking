@@ -45,7 +45,7 @@ function makeBooking(){
     , endTime = document.getElementById("booking-endtime").value + ":00"
     , roomName = document.getElementById("booking-roomid").value
     , isPrivate = document.getElementById("booking-isPrivate").checked
-    , participantElements = document.getElementsByClassName("participant-in-list").every(()=>textContent.slice(0,-6))
+    , participantElements = extractParticpants(document.getElementsByClassName("participant-in-list"))
     , requestBody = {
         "title": title,
         "email": email,
@@ -60,7 +60,7 @@ function makeBooking(){
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
-            insertGCalendarEvent(createGCalendarEvent(ROOM_ID,date, startTime, endTime, title, participantElements, isPrivate, null));
+            initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
             // document.location.replace(`/api/booking/${id}`);
         });
 }
@@ -87,9 +87,16 @@ function makeRecurringBooking(){
         });
 }
 
+function extractParticpants(participantElements){
+    let participants = [];
 
-
+    for (let i = 0; i < participantElements.length; i++) {
+        participants[i] = participantElements[i].textContent.slice(0,-6);
+    }
+    return participantElements;
+}
 function addParticipantsToBooking(bookingID) {
+    let participantElements = document.getElementsByClassName("participant-in-list");
     for (let i = 0; i < participantElements.length; i++) {
         let email = participantElements[i].textContent.slice(0,-6);
         let requestObject = {
