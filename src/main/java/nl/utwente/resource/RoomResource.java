@@ -51,7 +51,7 @@ public class RoomResource {
         @PathParam("roomName") String roomName
     ) {
         try {
-            return BookingDao.getBookingsForRoomToday(roomName);
+            return BookingDao.getBookingsForRoomToday(roomName,securityContext.getUserPrincipal().getName());
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
         }
@@ -109,7 +109,7 @@ public class RoomResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<OutputBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
         try {
-            return RoomDao.getBookingsForThisWeek(roomName);
+            return RoomDao.getBookingsForThisWeek(roomName,securityContext.getUserPrincipal().getName());
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
         }

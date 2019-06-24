@@ -189,6 +189,10 @@ public class RoomDao {
     }
 
     public static List<OutputBooking> getBookingsForThisWeek(String roomName) throws InvalidRoomNameException {
+        return getBookingsForThisWeek(roomName, null);
+    }
+
+    public static List<OutputBooking> getBookingsForThisWeek(String roomName, String email) throws InvalidRoomNameException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
@@ -203,7 +207,7 @@ public class RoomDao {
                 ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                OutputBooking booking = resultSetToBooking(roomName, resultSet);
+                OutputBooking booking = resultSetToBooking(roomName, resultSet,email);
                 result.add(booking);
             }
         } catch (SQLException e) {
