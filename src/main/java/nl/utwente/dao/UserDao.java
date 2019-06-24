@@ -50,7 +50,7 @@ public class UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 String name = resultSet.getString("name");
-                int id = resultSet.getInt("userid");
+                int id = resultSet.getInt("user_id");
                 boolean admin = resultSet.getBoolean("administrator");
                 user = new User(id, name, email, admin);
             }
