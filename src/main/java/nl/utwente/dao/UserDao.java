@@ -128,7 +128,8 @@ public class UserDao {
         return null;
     }
 
-    public static void insertUser(String name, String email, String password, boolean admin){
+    public static void insertUser(String name, String email, String password, boolean admin) {
+        // TODO input validation (XSS and such?)
         Connection connection = DatabaseConnectionFactory.getConnection();
         try{
             byte[] salt = AuthenticationHandler.generateSalt();

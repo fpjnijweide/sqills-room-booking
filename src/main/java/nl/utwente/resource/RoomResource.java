@@ -50,8 +50,12 @@ public class RoomResource {
     public List<OutputBooking> getBookingsForSpecificRoomToday (
         @PathParam("roomName") String roomName
     ) {
+        String userEmail = null;
+        if (securityContext.getUserPrincipal()!=null) {
+            userEmail = securityContext.getUserPrincipal().getName();
+        }
         try {
-            return BookingDao.getBookingsForRoomToday(roomName,securityContext.getUserPrincipal().getName());
+            return BookingDao.getBookingsForRoomToday(roomName,userEmail);
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
         }
@@ -108,8 +112,12 @@ public class RoomResource {
     @Path("/{roomName}/week")
     @Produces(MediaType.APPLICATION_JSON)
     public List<OutputBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
+        String userEmail = null;
+        if (securityContext.getUserPrincipal()!=null) {
+            userEmail = securityContext.getUserPrincipal().getName();
+        }
         try {
-            return RoomDao.getBookingsForThisWeek(roomName,securityContext.getUserPrincipal().getName());
+            return RoomDao.getBookingsForThisWeek(roomName,userEmail);
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
         }

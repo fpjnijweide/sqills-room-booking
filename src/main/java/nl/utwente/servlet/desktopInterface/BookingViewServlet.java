@@ -30,8 +30,9 @@ public class BookingViewServlet extends HttpServlet {
                 res.setStatus(404);
                 req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
                 res.getWriter().write(e.getMessage());
-                req.getRequestDispatcher("/desktop/booking.jsp").forward(req, res);
             }
+            req.getRequestDispatcher("/desktop/booking.jsp").forward(req, res);
+
         }
     }
 }

@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import static nl.utwente.authentication.AuthenticationHandler.userIsAdmin;
 import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
@@ -382,7 +383,7 @@ public class BookingDao {
 
         try {
             if (!isPrivate || (Objects.equals(email, getEmailOfBookingOwner(bookingid))) ||
-                getParticipantsOfBooking(bookingid).contains(getUserFromEmail(email))) {
+                getParticipantsOfBooking(bookingid).contains(getUserFromEmail(email)) || getUserFromEmail(email).isAdministrator())  {
                  // User owns booking, or participates in it, or it is not private
 
                 userName = resultSet.getString("name");
