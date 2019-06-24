@@ -50,7 +50,7 @@
                             addBooking("<%= bookings.get(i).getStartTime() %>", "<%= bookings.get(i).getEndTime() %>");
                         }
                     </script>
-                    <tr>
+                    <tr class="tablerow" onclick="window.location.href='/desktop/booking/<%= bookings.get(i).getBookingid()%>'">
                         <td><%= bookings.get(i).getTitle() %></td>
                         <td><%= bookings.get(i).getUserName() %></td>
                         <td><%= bookings.get(i).getDate() %></td>
