@@ -19,3 +19,4 @@
 <link rel="stylesheet" href="/css/desktop.css">
 <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap" rel="stylesheet">
 <script src="/scripts/clickable-row.js"></script>
+<script src="/scripts/error-handling.js"></script>

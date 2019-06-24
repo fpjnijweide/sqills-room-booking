@@ -3,17 +3,34 @@
 <%@ page import="nl.utwente.model.OutputBooking" %>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="/css/specific-room.css">
     <title>Room <%= request.getAttribute("id") %></title>
     <jsp:include page="head.jsp"/>
     <script src="/scripts/create-booking.js"></script>
     <script src="/scripts/booking-details.js"></script>
+    <script src="/scripts/specific-room.js"></script>
     <script>
         const ROOM_ID = "<%= request.getAttribute("id") %>";
     </script>
 </head>
-<body>
+<body onload="positionTimeBars()">
     <jsp:include page="nav.jsp"/>
+    <div id="footer">
+        <div class="bar">
+            <div class="timestamps">
+                <div class="timestamp time-0" value="0"></div>
+                <div class="timestamp time-3" value="3"></div>
+                <div class="timestamp time-6" value="6"></div>
+                <div class="timestamp time-9" value="9"></div>
+                <div class="timestamp time-12" value="12"></div>
+                <div class="timestamp time-15" value="15"></div>
+                <div class="timestamp time-18" value="18"></div>
+                <div class="timestamp time-21" value="21"></div>
+                <div class="timestamp time-24" value="24"></div>
+            </div>
+        </div>
 
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -28,6 +45,11 @@
                     </tr>
                     <% List<OutputBooking> bookings = (List<OutputBooking>) request.getAttribute("bookings"); %>
                     <% for (int i = 0; i < bookings.size(); i++) { %>
+                    <script>
+                        if (checkIfBookingToday("<%= bookings.get(i).getDate() %>")){
+                            addBooking("<%= bookings.get(i).getStartTime() %>", "<%= bookings.get(i).getEndTime() %>");
+                        }
+                    </script>
                     <tr>
                         <td><%= bookings.get(i).getTitle() %></td>
                         <td><%= bookings.get(i).getUserName() %></td>
@@ -118,5 +140,6 @@
         <div class="booking-time" id="selected-booking-time">Time: 14:00 - 15:00</div>
         <div class="booking-owner" id="selected-booking-owner">Owner: platon@enschede.com</div>
     </div>
+
 </body>
 </html>
