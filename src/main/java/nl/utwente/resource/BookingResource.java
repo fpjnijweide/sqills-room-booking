@@ -179,7 +179,9 @@ public class BookingResource {
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
         } catch (InvalidEmailException e) {
-            throw401(e.getMessage());
+            throw400(e.getMessage());
+        } catch (NullPointerException e) {
+            throw401("User is not logged in");
         }
         return userInParticipants;
     }

@@ -23,8 +23,13 @@ public class AuthenticationHandler {
     }
 
     public static boolean userOwnsBooking(SecurityContext securityContext, int bookingID) throws InvalidBookingIDException {
-
-        return (Objects.equals(securityContext.getUserPrincipal().getName(),
+        String userEmail = null;
+        if (securityContext.getUserPrincipal()!=null) {
+            userEmail = securityContext.getUserPrincipal().getName();
+        } else {
+            return false;
+        }
+        return (Objects.equals(userEmail,
             getEmailOfBookingOwner(bookingID)));
 
     }
