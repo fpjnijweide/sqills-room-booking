@@ -42,13 +42,55 @@
                         <button type="button" onclick="addParticipantField()">Add participant</button>
 
                         </div>
-
-                        <button type="button" onclick="bookRoom()">Submit</button>
-                    </form>
-                </div>
+                    </div>
+                    <div class="recurring">
+                        <label>Recurring booking</label>
+                        <input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes
+                        <input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No
+                        <div id="recurring-info">I want a booking every
+                            <input id="time" type="number" oninput="checkRecurringDays()">
+                            <select id="choose-time-unit" class="choose-time-unit" onchange="checkRecurringDays()">
+                                <option value="day">Days</option>
+                                <option value="week">Weeks</option>
+                                <option value="month">Months</option>
+                                <option value="year">Years</option>
+                            </select>
+                            <br>
+                            ending at
+                            <input id="recurring-end-date" type="date">
+                            from now
+                        </div>
+                    </div>
+                    <button class="submit-button" type="button" onclick="checkAllEmails()">Submit</button>
+                </form>
             </div>
 
             <div class="col-md-2"></div>
+        </div>
+        <div class="col-md-2"></div>
+        <!-- Button trigger modal -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="error-text">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
