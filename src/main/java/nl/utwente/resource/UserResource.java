@@ -25,6 +25,7 @@ import java.util.List;
 
 import static nl.utwente.dao.UserDao.insertUser;
 import static nl.utwente.exceptions.ExceptionHandling.throw401;
+import static nl.utwente.exceptions.ExceptionHandling.throw403;
 
 @Path("/user")
 @Priority(Priorities.AUTHENTICATION)
@@ -42,9 +43,14 @@ public class UserResource {
     @POST
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public void createUser(InputUser user){
+    public void createUser(InputUser user) {
         // TODO do input validation here
-        insertUser(user.getFullName(),user.getUsername(),user.getPassword(),false);
+        if (!user.isAdmin() || securityContext.isUserInRole("ADMIN")) {
+            insertUser(user.getFullName(), user.getUsername(), user.getPassword(), user.isAdmin());
+        } else {
+            throw403("You are not allowed to make admin users");
+        }
+
     }
 
     // TODO refactor this method's name and javascript
