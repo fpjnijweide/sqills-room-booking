@@ -33,16 +33,6 @@ public class AuthenticationHandler {
         return (((BasicSecurityContext) securityContext).getUserID() == userID);
     }
 
-//    public static boolean userParticipatesInBooking(SecurityContext securityContext, int bookingID) throws InvalidBookingIDException {
-//        List<User> users = getParticipantsOfBooking(bookingID);
-//        for (User u : users) {
-//            if (u.getEmail().equals(securityContext.getUserPrincipal().getName())){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
     public static boolean userIsAdmin(SecurityContext securityContext) {
         return securityContext.isUserInRole("ADMIN");
     }

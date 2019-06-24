@@ -22,7 +22,6 @@ function setAvailableTimes(IDs) {
     for (let i = 0; i < IDs.length; i++) {
         axios.get('/api/room/' + IDs[i] + '/availableUntil')
             .then(response => {
-               console.log(response.data);
                let elem = document.getElementById('time-' + IDs[i]);
                if (!response.data) {
                    elem.innerHTML = "Entire Day"

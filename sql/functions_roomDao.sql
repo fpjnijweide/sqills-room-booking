@@ -38,4 +38,3 @@ as $$
   order by b.date asc;
   $$
   language sql;
-
