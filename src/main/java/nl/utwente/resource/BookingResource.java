@@ -18,8 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.*;
 import java.util.List;
 
-import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
-import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
+import static nl.utwente.authentication.AuthenticationHandler.*;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/booking")
@@ -112,7 +111,7 @@ public class BookingResource {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
             }
-            if (!userOwnsBooking(securityContext, bookingID)) {
+            if (!userOwnsBooking(securityContext, bookingID) && !userIsAdmin(securityContext)) {
                 throw403("You are not authorized to edit this person's booking");
             }
             BookingDao.updateBooking(bookingID, booking);
@@ -142,7 +141,7 @@ public class BookingResource {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
             }
-            if (!userOwnsBooking(securityContext, bookingID)) {
+            if (!userOwnsBooking(securityContext, bookingID) && !userIsAdmin(securityContext)) {
                 throw403("You are not authorized to edit this person's booking");
             }
             BookingDao.deleteBooking(bookingID);
