@@ -123,7 +123,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="fail-modal-text">
                     Something went wrong! Sadly your booking could not be created.
                 </div>
                 <div class="modal-footer">

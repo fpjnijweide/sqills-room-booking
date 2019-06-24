@@ -6,7 +6,7 @@ create table sqills.users
     administrator boolean
 );
 
-
+select * from sqills.booking;
 create table sqills.room
 (
     roomid   serial not null unique,
@@ -64,4 +64,5 @@ CREATE TABLE sqills.participants (
 );
 
 
-
+select * from sqills.users;
+insert into sqills.users (name, email) values('gaccounttest', 'a.j.heath@student.utwente.nl');

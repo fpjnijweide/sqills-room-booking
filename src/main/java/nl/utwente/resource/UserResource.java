@@ -1,8 +1,12 @@
 package nl.utwente.resource;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.dao.UserDao;
+import nl.utwente.google.GoogleAuth;
 import nl.utwente.model.EmailList;
 import nl.utwente.model.InputUser;
 import nl.utwente.model.UserAdministration;
@@ -12,8 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +71,6 @@ public class UserResource {
         } else {
             throw401("Incorrect login");
         }
-//        Cookie cookie = new Cookie("NAME", "123");
-//        NewCookie cook = new NewCookie(cookie, "123", 5*60, true);
-//        return Response.ok("OK").cookie(cook).build();
-
     }
 
     @POST
@@ -112,4 +113,33 @@ public class UserResource {
         return returnList;
     }
 
+    @GET
+    @Path("/validateEmail/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getIsValidEmail(@PathParam("email") String email) {
+        boolean result = UserDao.isValidEmail(email);
+
+        final JsonNodeFactory factory = JsonNodeFactory.instance;
+        ObjectNode isValid = factory.objectNode();
+        isValid.put("valid", result);
+        return isValid.toString();
+
+    }
+
+    @POST
+    @Path("/googleauth")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getGoogleAuthToken(String gAuthToken){
+        GoogleIdToken googleIdToken = null;
+        try {
+            googleIdToken = GoogleAuth.getToken(gAuthToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw401("Incorrect login");
+        }
+        String email = GoogleAuth.getUser(googleIdToken);
+        HttpSession session = request.getSession(true);
+        session.setAttribute(AuthenticationFilter.principalName, email);
+        return "Token Received";
+    }
 }

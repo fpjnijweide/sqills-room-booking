@@ -44,7 +44,6 @@ public class BookingResource {
             throw404(e.getMessage());
         }
 
-
         return null;
     }
 
