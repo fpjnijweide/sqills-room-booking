@@ -11,6 +11,7 @@ function checkAllEmails(){
             } else {
                 //todo throw error that some emails are not correct
                 console.log("one of the emails is invalid");
+                showError("one of the emails is invalid")
             }
         });
 }
@@ -152,5 +153,5 @@ function checkRecurringDays(){
 function removeParticipant(element){
     element.parentNode.removeChild(element);
 }
-//todo
+
 //todo throw nicer errors instead of console.logs
