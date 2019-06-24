@@ -200,7 +200,7 @@ public class RoomDao {
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
-            ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 OutputBooking booking = resultSetToBooking(roomName, resultSet);
