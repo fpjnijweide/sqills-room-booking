@@ -14,7 +14,8 @@ public class RoomServlet extends HttpServlet {
     @Override
     // Todo: @Marten Refactor names of variables.
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        if (req.getSession().getAttribute(AuthenticationFilter.principalName)==null){
+        String email = (String) req.getSession().getAttribute(AuthenticationFilter.principalName);
+        if (email==null){
             req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
         } else {
             String uri = req.getRequestURI();
@@ -22,7 +23,7 @@ public class RoomServlet extends HttpServlet {
             String roomName = splitUri[3];
             req.setAttribute("id", roomName); // TODO maybe change "id" thing
             try {
-                req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomName));
+                req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomName,email));
             } catch (InvalidRoomNameException e) {
                 res.setStatus(404);
                 req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);

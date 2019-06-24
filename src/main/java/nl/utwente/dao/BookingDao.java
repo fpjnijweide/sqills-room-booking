@@ -1,10 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
-import nl.utwente.exceptions.BookingException;
-import nl.utwente.exceptions.DAOException;
-import nl.utwente.exceptions.InvalidBookingIDException;
-import nl.utwente.exceptions.InvalidRoomNameException;
+import nl.utwente.exceptions.*;
 import nl.utwente.model.*;
 
 import java.sql.*;
@@ -13,7 +10,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
+import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
+import static nl.utwente.dao.UserDao.getUserFromEmail;
 import static nl.utwente.dao.UserDao.isValidEmail;
 
 public class BookingDao {
@@ -330,6 +330,10 @@ public class BookingDao {
      * @return Today's bookings for the specified room
      */
     public static List<OutputBooking> getBookingsForRoomToday(String roomName) throws InvalidRoomNameException {
+        return getBookingsForRoomToday(roomName, null);
+    }
+
+    public static List<OutputBooking> getBookingsForRoomToday(String roomName, String email) throws InvalidRoomNameException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
@@ -343,7 +347,7 @@ public class BookingDao {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                OutputBooking booking = resultSetToBooking(roomName, resultSet);
+                OutputBooking booking = resultSetToBooking(roomName, resultSet, email);
                 result.add(booking);
             }
 
@@ -362,21 +366,30 @@ public class BookingDao {
     }
 
     public static OutputBooking resultSetToBooking(String roomName, ResultSet resultSet) throws SQLException {
-        Time startTime = resultSet.getTime("start_time");
-        Time endTime = resultSet.getTime("end_time");
+        return resultSetToBooking(roomName, resultSet, null);
+    }
+
+    public static OutputBooking resultSetToBooking(String roomName, ResultSet resultSet, String email) throws SQLException {
+        Time startTime = resultSet.getTime("starttime");
+        Time endTime = resultSet.getTime("endtime");
         Date date = resultSet.getDate("date");
-        int bookingid = resultSet.getInt("booking_id");
+        int bookingid = resultSet.getInt("bookingid");
 
-        boolean isPrivate = resultSet.getBoolean("is_private");
+        boolean isPrivate = resultSet.getBoolean("isprivate");
 
-        String userName;
-        String title;
-        if (isPrivate) {
-            userName = "PRIVATE";
-            title = "PRIVATE";
-        } else {
-            userName = resultSet.getString("name");
-            title = resultSet.getString("title");
+        String userName = "PRIVATE";
+        String title = "PRIVATE";
+
+        try {
+            if (!isPrivate || (Objects.equals(email, getEmailOfBookingOwner(bookingid))) ||
+                getParticipantsOfBooking(bookingid).contains(getUserFromEmail(email))) {
+                 // User owns booking, or participates in it, or it is not private
+
+                userName = resultSet.getString("name");
+                title = resultSet.getString("title");
+            }
+
+        } catch (InvalidBookingIDException | InvalidEmailException e) {
         }
         return new OutputBooking(startTime, endTime, userName, roomName, date, title, bookingid);
     }
@@ -460,8 +473,8 @@ public class BookingDao {
             statement.setDate(2, date);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                Time bookingStart = Time.valueOf(result.getString("start_time"));
-                Time bookingEnd = Time.valueOf(result.getString("end_time"));
+                Time bookingStart = Time.valueOf(result.getString("starttime"));
+                Time bookingEnd = Time.valueOf(result.getString("endtime"));
 //                Time wantedStart = Time.valueOf(startTime);
 //                Time wantedEnd = Time.valueOf(endTime);
                 if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
