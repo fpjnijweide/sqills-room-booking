@@ -1,33 +1,34 @@
 
-
-drop function if exists get_specific_booking(booking_id int);
-CREATE FUNCTION get_specific_booking(booking_id int) RETURNS TABLE(starttime time, endtime time, name text, roomname text, date date, isprivate boolean, title text)
+drop function if exists get_specific_booking(p_booking_id int);
+CREATE or replace FUNCTION get_specific_booking(p_booking_id int) RETURNS TABLE(booking_id int, start_time time, end_time time, name text, room_name text, date date, is_private boolean, title text)
     AS $$
-        SELECT b.starttime, b.endtime, u.name, r.roomname, b.date, b.isprivate, b.title
+        SELECT b.booking_id, b.start_time, b.end_time, u.name, r.room_name, b.date, b.is_private, b.title
         FROM sqills.Booking b
-        JOIN sqills.room r ON b.roomid = r.roomid
-        JOIN sqills.users u ON u.userid = b.owner
-        WHERE b.bookingid = booking_id
+        JOIN sqills.room r ON b.room_id = r.room_id
+        JOIN sqills.users u ON u.user_id = b.owner
+        WHERE b.booking_id = p_booking_id
      $$
     LANGUAGE SQL;
 
-select * from create_booking( CAST('08:30:00' as time(0)),cast('09:30:00'as time(0)), cast('2053-11-13' as date),'CR1a'::text, 'andrew@gmail.com'::text, false, 'test'::text  );
-drop function if exists create_booking(start_time time, end_time time, date date ,room_name text, p_owner text, is_private boolean, title text);
-create or replace function create_booking(start_time time, end_time time, date date ,room_name text, p_owner text, is_private boolean, title text) returns integer
-  as $bookingid$
-    INSERT INTO sqills.Booking (startTime, endTime, date, roomID, owner, isPrivate, title)
-                                VALUES ( start_time, end_time, date,
-                (SELECT sqills.room.roomid
-                 FROM sqills.room
-                  WHERE roomname = room_name),
-                (SELECT sqills.users.userID
-                FROM sqills.users
+drop function if exists create_booking(p_start_time time, p_end_time time, p_date date ,p_room_name text, p_owner text, p_is_private boolean, p_title text);
+create or replace function create_booking(p_start_time time, p_end_time time, p_date date ,p_room_name text, p_owner text, p_is_private boolean, p_title text) returns integer
+  as $booking_id$
+    INSERT INTO sqills.Booking (start_time, end_time, date, room_id, owner, is_private, title)
+                                VALUES ( p_start_time, p_end_time, p_date,
+                (SELECT r.room_id
+                 FROM sqills.room r
+                  WHERE r.room_name = p_room_name),
+                (SELECT u.user_id
+                FROM sqills.users u
                   WHERE email = p_owner),
-                is_private,
-                title)
-                RETURNING bookingid;
-    $bookingid$
+                p_is_private,
+                p_title)
+                RETURNING booking_id;
+    $booking_id$
     LANGUAGE SQL;
+
+select * from sqills.room;
+select * from sqills.users;
 
 drop function if exists create_recurring_booking_parent(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text, repeat_every_type repeat_type, repeat_every int, ending_at date);
 create or replace function create_recurring_booking_parent(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text, repeat_every_type repeat_type, repeat_every int, ending_at date)
@@ -90,10 +91,10 @@ begin
        from  cte_get_recurring_pattern rp
   ),
   cte_create_recurring_bookings as(
-    insert into sqills.booking (date, starttime, endtime, roomid, owner, isprivate, title)
-      select cd.b_date, b.starttime, b.endtime, b.roomid, b.owner, b.isprivate, b.title
+    insert into sqills.booking (date, start_time, end_time, room_id, owner, is_private, title)
+      select cd.b_date, b.start_time, b.end_time, b.room_id, b.owner, b.is_private, b.title
       from cte_booking_dates cd
-             join sqills.booking b on b.bookingid = booking_id
+             join sqills.booking b on b.booking_id = booking_id
     returning booking_id as child_booking_id
   )
   insert into sqills.booking_recurring(recurring_pattern_id, booking_id, parent_booking_id)
@@ -108,42 +109,36 @@ drop function if exists update_booking(start_time time, end_time time, date date
 create or replace function update_booking(start_time time, end_time time, date date, room_name text, email text, is_private boolean, title text, booking_id int) returns void
   as $$
     UPDATE sqills.Booking
-      SET startTime= start_time, endTime= end_time, date= date, roomID =
-        (SELECT sqills.room.roomid
+      SET start_time= start_time, end_time= end_time, date= date, room_id =
+        (SELECT sqills.room.room_id
         FROM sqills.room
-        WHERE roomname = room_name),
-      owner= (SELECT sqills.users.userID
+        WHERE room_name = room_name),
+      owner= (SELECT sqills.users.user_id
       FROM sqills.users
       WHERE email = email),
-      isPrivate= is_private,
+      is_private= is_private,
       title= title
-      WHERE bookingID = booking_id
+      WHERE booking_id = booking_id
   $$
   LANGUAGE SQL;
 
-
-
-drop function if exists booking_for_room_today(room_name text);
-create or replace function booking_for_room_today(room_name text) returns table(booking_id int ,start_time time, end_time time, name text, date date, is_private boolean, title text)
+drop function if exists booking_for_room_today(p_room_name text);
+create or replace function booking_for_room_today(p_room_name text) returns table(booking_id int ,start_time time, end_time time, name text, date date, is_private boolean, title text)
 as $$
-  select b.bookingid as booking_id, b.starttime, b.endtime, u.name, b.date, b.isprivate, b.title
+  select b.booking_id as booking_id, b.start_time, b.end_time, u.name, b.date, b.is_private, b.title
   from sqills.booking b
-  join sqills.room r on b.roomid = r.roomid
-  join sqills.users u on u.userid = b.owner
-  where r.roomname ilike room_name and b.date = CURRENT_DATE
+  join sqills.room r on b.room_id = r.room_id
+  join sqills.users u on u.user_id = b.owner
+  where r.room_name = p_room_name and b.date = CURRENT_DATE
   $$
   language sql;
 
-
-drop function if exists is_valid_booking(room_name text, booking_date date);
-create or replace function is_valid_booking(room_name text, booking_date date) returns table(start_time time, end_time time, date date)
+drop function if exists is_valid_booking(p_room_name text, booking_date date);
+create or replace function is_valid_booking(p_room_name text, booking_date date) returns table(start_time time, end_time time, date date)
 as $$
-  select b.starttime, b.endtime, b.date
+  select b.start_time, b.end_time, b.date
   from sqills.booking b
-  join sqills.room r on b.roomid = r.roomid
-  where r.roomname = room_name and b.date = booking_date;
+  join sqills.room r on b.room_id = r.room_id
+  where r.room_name = p_room_name and b.date = booking_date;
   $$
   language sql;
-
-
-

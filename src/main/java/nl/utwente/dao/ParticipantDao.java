@@ -6,7 +6,6 @@ import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.exceptions.InvalidUserIDException;
 import nl.utwente.model.User;
-import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import static nl.utwente.dao.BookingDao.isValidBookingID;
 import static nl.utwente.dao.UserDao.isValidEmail;
-import static nl.utwente.dao.UserDao.isValidUserID;
 
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
@@ -128,14 +126,14 @@ public class ParticipantDao {
 
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String useridQuery = "SELECT userid FROM sqills.users WHERE email = ?;";
+            String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
             PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
             userIDStatement.setString(1, email);
             ResultSet userIDResult = userIDStatement.executeQuery();
             userIDResult.next();
-            final int userID = userIDResult.getInt("userid");
+            final int userID = userIDResult.getInt("user_id");
 
-            String insert = "INSERT INTO sqills.participants (bookingid, userid)" +
+            String insert = "INSERT INTO sqills.participants (booking_id, user_id)" +
                 "VALUES (?, ?);";
             PreparedStatement insertStatement = connection.prepareStatement(insert);
             insertStatement.setInt(1, bookingID);

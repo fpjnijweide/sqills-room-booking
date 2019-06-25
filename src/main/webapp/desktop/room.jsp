@@ -4,11 +4,14 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="/css/specific-room.css">
+    <link rel="stylesheet" type="text/css" href="/css/book.css">
     <title>Room <%= request.getAttribute("id") %></title>
     <jsp:include page="head.jsp"/>
     <script src="/scripts/create-booking.js"></script>
     <script src="/scripts/booking-details.js"></script>
     <script src="/scripts/specific-room.js"></script>
+    <script src="/scripts/make-booking-page.js"></script>
+
     <script>
         const ROOM_ID = "<%= request.getAttribute("id") %>";
     </script>
@@ -29,7 +32,6 @@
                 <div class="timestamp time-24" value="24"></div>
             </div>
         </div>
-
     </div>
     <div class="container">
         <div class="row">
@@ -66,35 +68,10 @@
             </div>
 
             <div class="col-md-6">
-                <h2 style="text-align: right;">Create a booking</h2>
-                <form class="align-right">
-                    <div class="form-group">
-                        <label>Title: </label>
-                        <input type="text" id="title" name="title" value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Date: </label>
-                        <input type="date" id="date" name="date" value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label >Start Time:</label>
-                        <input type="time" id="start-time" name="start-time" min="7:00" max="23:00" required>
-                    </div>
-                    <div class="form-group">
-                        <label >End Time:</label>
-                        <input type="time" id="end-time" name="end-time" min="7:00" max="23:00" required>
-                    </div>
-                    <div class="form-group">
-                        <label >Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" id="isPrivate"> Private Meeting</label>
-                    </div>
-
-
-                    <button type="button" onclick="createBooking();" class="btn btn-default">Submit</button>
-                </form>
+                <!-- Button trigger modal -->
+                <button type="button" class="make-booking-room-button" data-toggle="modal" data-target="#exampleModalLong">
+                    Launch demo modal
+                </button>
             </div>
         </div>
     </div>
@@ -143,6 +120,87 @@
         <div class="booking-date" id="selected-booking-date">Date: 27-08-2000</div>
         <div class="booking-time" id="selected-booking-time">Time: 14:00 - 15:00</div>
         <div class="booking-owner" id="selected-booking-owner">Owner: platon@enschede.com</div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div style="z-index: 5" class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="inner">
+                    <h1 class="create-booking-title">Create a booking</h1>
+
+                    <form class="create-booking-form">
+                        <label>Booking Title</label>
+                        <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
+
+                        <label>Your Email</label>
+                        <input id="booking-email" class="booking-email full-width" type="text" placeholder="Your Email">
+
+                        <label>Date</label>
+                        <input type="date" id="booking-date" class="booking-date full-width">
+
+                        <label>Room ID</label>
+                        <input type="text" id="booking-roomid" class="full-width" value="<%= request.getAttribute("id") %>">
+
+                        <label>Time</label>
+                        <div class="time-container">
+                            <input type="time" class="start-time" id="booking-starttime">
+                            <input type="time" class="end-time" id="booking-endtime">
+                        </div>
+
+                        <label>Private meeting</label>
+                        <input type="checkbox" id="booking-isPrivate">
+                        <div class="participants-view">
+                            <table>
+                                <tr>
+                                    <td><label class="participants-title">Add participants</label></td>
+                                    <td><div class="add-participants" onclick="setParticipantsVisible()">+</div></td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                        <div id="participants-container">
+
+                            <div class="input-and-button">
+                                <input type="text" id="participant" placeholder="Participant name">
+                                <button type="button" onclick="addParticipantField()">+</button>
+                            </div>
+                            <div id="participants-list">
+                                Participants list
+                            </div>
+                        </div>
+                        <div class="recurring">
+                            <label>Recurring booking</label>
+                            <input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes
+                            <input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No
+                            <div id="recurring-info">I want a booking every
+                                <input id="time" type="number" oninput="checkRecurringDays()">
+                                <select id="choose-time-unit" class="choose-time-unit" onchange="checkRecurringDays()">
+                                    <option value="day">Days</option>
+                                    <option value="week">Weeks</option>
+                                    <option value="month">Months</option>
+                                    <option value="year">Years</option>
+                                </select>
+                                <br>
+                                ending at
+                                <input id="recurring-end-date" type="date">
+                                from now
+                            </div>
+                        </div>
+
+                        <button class="submit-button" type="button" onclick="checkFieldsAndBook()">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>
