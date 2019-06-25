@@ -16,7 +16,6 @@ function updateTime() {
     }
     element.innerHTML = hourString + ":" + minuteString;
 
-    console.log(available_rooms);
 
     let timeout = setTimeout(updateTime, 30000);
 }
