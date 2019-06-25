@@ -26,14 +26,14 @@ public class RoomDao {
         String result = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT roomname FROM sqills.Room WHERE roomid = ?";
+            String query = "SELECT room_name FROM sqills.Room WHERE room_id = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, roomID);
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                result = resultSet.getString("roomname");
+                result = resultSet.getString("room_name");
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
@@ -52,14 +52,14 @@ public class RoomDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT roomid FROM sqills.Room WHERE roomName ilike ?";
+            String query = "SELECT room_id FROM sqills.Room WHERE room_name ilike ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                result = resultSet.getInt("roomid");
+                result = resultSet.getInt("room_id");
             }
 
         } catch (SQLException e) {
@@ -83,12 +83,12 @@ public class RoomDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT roomid FROM sqills.room";
+            String query = "SELECT room_id FROM sqills.room";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                String queriedRoomID = resultSet.getString("roomid");
+                String queriedRoomID = resultSet.getString("room_id");
                 result.add(Integer.parseInt(queriedRoomID));
             }
 
@@ -111,12 +111,12 @@ public class RoomDao {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
 
-            String query = "SELECT roomname FROM sqills.room";
+            String query = "SELECT room_name FROM sqills.room";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                String queriedRoomName = resultSet.getString("roomname");
+                String queriedRoomName = resultSet.getString("room_name");
                 result.add(queriedRoomName);
             }
 
@@ -144,7 +144,7 @@ public class RoomDao {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                rooms.add(resultSet.getString("roomname"));
+                rooms.add(resultSet.getString("room_name"));
             }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());

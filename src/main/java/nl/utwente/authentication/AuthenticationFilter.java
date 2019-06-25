@@ -7,7 +7,6 @@ import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
 import javax.annotation.Priority;
-import javax.enterprise.context.Dependent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Priorities;
@@ -37,6 +36,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                 user = UserDao.getUserFromEmail(email);
                 requestContext.setSecurityContext(new BasicSecurityContext(user, false));
             } catch (InvalidEmailException | DAOException e) {
+                // Todo: Show the user that they are not in the system.
                 throw new IOException(e.getMessage());
             }
 
