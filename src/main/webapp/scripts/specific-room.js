@@ -54,3 +54,10 @@ function checkIsFromPastDays(date){
         return false;
     }
 }
+
+function checkIfFormAndOpen(){
+    if ($("#exampleModalLong").length > 0) {
+        $("#exampleModalLong").modal('show');
+
+    }
+}
