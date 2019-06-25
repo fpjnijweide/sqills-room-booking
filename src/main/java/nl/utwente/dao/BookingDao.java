@@ -384,12 +384,12 @@ throw new DAOException(e.getMessage());
     }
 
     public static OutputBooking resultSetToBooking(String roomName, ResultSet resultSet, String email) throws SQLException, DAOException {
-        Time startTime = resultSet.getTime("starttime");
-        Time endTime = resultSet.getTime("endtime");
+        Time startTime = resultSet.getTime("start_time");
+        Time endTime = resultSet.getTime("end_time");
         Date date = resultSet.getDate("date");
-        int bookingid = resultSet.getInt("bookingid");
+        int bookingid = resultSet.getInt("booking_id");
 
-        boolean isPrivate = resultSet.getBoolean("isprivate");
+        boolean isPrivate = resultSet.getBoolean("is_private");
 
         String userName = "PRIVATE";
         String title = "PRIVATE";
@@ -487,8 +487,8 @@ throw new DAOException(e.getMessage());
             statement.setDate(2, date);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                Time bookingStart = Time.valueOf(result.getString("starttime"));
-                Time bookingEnd = Time.valueOf(result.getString("endtime"));
+                Time bookingStart = Time.valueOf(result.getString("start_time"));
+                Time bookingEnd = Time.valueOf(result.getString("end_time"));
 //                Time wantedStart = Time.valueOf(startTime);
 //                Time wantedEnd = Time.valueOf(endTime);
                 if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
