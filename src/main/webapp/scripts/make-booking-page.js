@@ -46,7 +46,7 @@ function makeBooking(){
     , endTime = document.getElementById("booking-endtime").value + ":00"
     , roomName = document.getElementById("booking-roomid").value
     , isPrivate = document.getElementById("booking-isPrivate").checked
-    , participantElements = extractParticpants(document.getElementsByClassName("participant-in-list"))
+    , participantElements = extractParticpants(document.getElementsByClassName("booking-participant"))
     , requestBody = {
         "title": title,
         "email": email,
@@ -90,25 +90,20 @@ function makeRecurringBooking(){
 
 function extractParticpants(participantElements){
     let participants = [];
-
     for (let i = 0; i < participantElements.length; i++) {
-        participants[i] = participantElements[i].textContent.slice(0,-6);
+        participants[i] = {email: participantElements[i].innerText};
     }
-    return participantElements;
+    return participants;
 }
 function addParticipantsToBooking(bookingID) {
-    let participantElements = document.getElementsByClassName("participant-in-list");
-    for (let i = 0; i < participantElements.length; i++) {
-        let email = participantElements[i].textContent.slice(0,-6);
+    let participantsElements = document.getElementsByClassName("booking-participant");
+    console.log(participants);
+    for (let i = 0; i < participantsElements.length; i++) {
         let requestObject = {
-            "email": email,
+            "email": participantsElements[i].innerText,
             "bookingid": bookingID
         };
-
-        axios.post("/api/participant/add", requestObject)
-            .then(response => {
-                console.log(response);
-            })
+        axios.post("/api/participant/add", requestObject);
     }
 }
 
@@ -116,8 +111,8 @@ function addParticipantField() {
     let input = document.getElementById("participant").value;
     if(input != "") {
         let element = document.getElementById("participants-list");
-        element.innerHTML += "<div class='participant-in-list'>" +
-            input + "<div class='delete' onclick='removeParticipant(this.parentElement)'>delete</div>"
+        element.innerHTML += "<div class='participant-in-list'> <span class='booking-participant'>" +
+            input + "</span><div class='delete' onclick='removeParticipant(this.parentElement)'>delete</div>"
             + "</div>"
         document.getElementById("participant").value = "";
         console.log()

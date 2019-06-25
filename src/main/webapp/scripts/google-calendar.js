@@ -1,21 +1,21 @@
+function onLoadGAPI(){
+    gapi.load('client');
+}
 
-function initGCalendar(callback){
+async function initGCalendar(){
     let CLIENT_ID = '347026751328-idgjfem8sg70oq9kdf3ivarntlhbkrvk.apps.googleusercontent.com'
     , API_KEY = 'AIzaSyBEYUE-ZZR0vDAfWaYhB6KRiNY1zNcLWSY'
     , DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
-    , SCOPES = "https://www.googleapis.com/auth/calendar"
-    gapi.load('client', () => {
-        gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES
-        })
+    , SCOPES = "https://www.googleapis.com/auth/calendar";
+    await gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES
     });
-    callback();
 }
 function createGCalendarEvent(roomName, date, startTime, endTime, title, participants, isPrivate, recurrence) {
-    event =  {
+    events = {
         'summary': title,
         'location': roomName,
         'description': null,
@@ -30,14 +30,16 @@ function createGCalendarEvent(roomName, date, startTime, endTime, title, partici
         'recurrence': recurrence,
         'attendees': participants,
     }
-    return event;
+    console.log(events);
+    return events;
 
 }
-async function insertGCalendarEvent(event){
-    await initGCalendar( gapi.client.calendar.events.insert({
-        'calendarId': 'primary',
-        'resource': event
-    }).execute());
+ async function insertGCalendarEvent(event){
+     await initGCalendar()
+         gapi.client.calendar.events.insert({
+             'calendarId': 'primary',
+             'resource': event
+         }).execute();
 
 }
 
