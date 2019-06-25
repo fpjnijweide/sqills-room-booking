@@ -7,8 +7,3 @@ function logout(){
     })
 }
 // Required to load auth2 lib correctly
-function onLoad() {
-    gapi.load('auth2', function () {
-        gapi.auth2.init();
-    });
-}

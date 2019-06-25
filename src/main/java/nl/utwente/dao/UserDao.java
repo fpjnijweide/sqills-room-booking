@@ -192,7 +192,7 @@ public class UserDao {
 
     public static boolean isValidEmail(String email) {
         if (email.contains("@") && email.contains(".")){
-            return getEmail(email) != null;
+            return getEmail(email.trim()) != null;
         }
         return false;
     }
