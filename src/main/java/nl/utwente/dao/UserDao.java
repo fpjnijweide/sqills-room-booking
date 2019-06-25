@@ -2,6 +2,7 @@ package nl.utwente.dao;
 
 import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
@@ -11,7 +12,7 @@ import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
 import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
 
 public class UserDao {
-    public static boolean isValidUserID(int userID) {
+    public static boolean isValidUserID(int userID) throws DAOException {
         Connection connection = DatabaseConnectionFactory.getConnection();
         boolean isValid = false;
 
@@ -23,7 +24,7 @@ public class UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             isValid = resultSet.next();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -35,7 +36,7 @@ public class UserDao {
         return isValid;
     }
 
-    public static User getUserFromEmail(String email) throws InvalidEmailException {
+    public static User getUserFromEmail(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
@@ -55,7 +56,7 @@ public class UserDao {
                 user = new User(id, name, email, admin);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -67,7 +68,7 @@ public class UserDao {
         return user;
     }
 
-    public static String getEmail(String incompleteEmail) {
+    public static String getEmail(String incompleteEmail) throws DAOException {
         int count = 0;
         String email = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
@@ -84,7 +85,7 @@ public class UserDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -98,7 +99,7 @@ public class UserDao {
         return null;
     }
 
-    public static byte[] getSalt(String email) throws InvalidEmailException {
+    public static byte[] getSalt(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
@@ -117,7 +118,7 @@ public class UserDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -128,7 +129,7 @@ public class UserDao {
         return null;
     }
 
-    public static void insertUser(String name, String email, String password, boolean admin) {
+    public static void insertUser(String name, String email, String password, boolean admin) throws DAOException {
         // TODO input validation (XSS and such?)
         Connection connection = DatabaseConnectionFactory.getConnection();
         try{
@@ -144,7 +145,7 @@ public class UserDao {
             int affectedRows = statement.executeUpdate();
             System.out.println(affectedRows);
         } catch (SQLException sqle){
-            System.err.println(sqle);
+            throw new DAOException(sqle.getMessage());
         } finally {
             try {
                 connection.close();
@@ -154,7 +155,7 @@ public class UserDao {
         }
     }
 
-    public static byte[] getHash(String email) throws InvalidEmailException {
+    public static byte[] getHash(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
@@ -182,7 +183,7 @@ public class UserDao {
     }
 
 
-    public static boolean checkCredentials(String email, String password){
+    public static boolean checkCredentials(String email, String password) throws DAOException {
         try {
             return checkByteArrays(getHash(email), hashPassword(password, getSalt(email)));
         } catch (InvalidEmailException e) {
@@ -191,7 +192,7 @@ public class UserDao {
         return  false;
     }
 
-    public static boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) throws DAOException {
         if (email.contains("@") && email.contains(".")){
             return getEmail(email) != null;
         }

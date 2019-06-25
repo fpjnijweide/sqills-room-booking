@@ -1,6 +1,7 @@
 package nl.utwente.servlet.tabletInterface;
 
 import nl.utwente.dao.RoomDao;
+import nl.utwente.exceptions.DAOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,12 +15,17 @@ public class SpecificRoomServlet extends HttpServlet {
         String uri = req.getRequestURI();
         String[] splitUri = uri.split("/");
         String roomName = splitUri[3];
-        if (!RoomDao.isValidRoomName(roomName)) {
-            res.setStatus(404);
-            res.getWriter().write("404");
-        } else {
-            req.setAttribute("roomName", roomName); // TODO maybe change "id" thing
-            req.getRequestDispatcher("/tablet/specific-room.jsp").forward(req, res);
+        try {
+            if (!RoomDao.isValidRoomName(roomName)) {
+                res.setStatus(404);
+                res.getWriter().write("404");
+            } else {
+                req.setAttribute("roomName", roomName); // TODO maybe change "id" thing
+                req.getRequestDispatcher("/tablet/specific-room.jsp").forward(req, res);
+            }
+        } catch (DAOException e) {
+            res.setStatus(500);
+            res.getWriter().write("Something went terribly wrong");;
         }
     }
 }

@@ -45,6 +45,8 @@ public class BookingResource {
             return BookingDao.getOutputBooking(bookingID);
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
 
         return null;
@@ -64,6 +66,8 @@ public class BookingResource {
             return BookingDao.createBooking(booking);
         } catch (BookingException e) {
             throw400(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
         return 0;
     }
@@ -81,6 +85,8 @@ public class BookingResource {
             return BookingDao.createRecurringBooking(booking);
         } catch (BookingException e) {
             throw400(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
         return 0;
     }
@@ -93,6 +99,8 @@ public class BookingResource {
             return getParticipantsOfBooking(bookingID);
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
         return null;
     }
@@ -124,8 +132,9 @@ public class BookingResource {
         } catch (BookingException e) {
             throw400(e.getMessage());
         } catch (DAOException e) {
-            throw500(e.getMessage());
+            throw500("Something went terribly wrong");
         }
+
 
         return booking;
     }
@@ -152,7 +161,7 @@ public class BookingResource {
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
         } catch (DAOException e) {
-            throw500(e.getMessage());
+            throw500("Something went terribly wrong");
         }
     }
 
@@ -182,6 +191,8 @@ public class BookingResource {
             throw400(e.getMessage());
         } catch (NullPointerException e) {
             throw401("User is not logged in");
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
         return userInParticipants;
     }

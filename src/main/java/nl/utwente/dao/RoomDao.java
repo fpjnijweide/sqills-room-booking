@@ -1,6 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.OutputBooking;
 
@@ -17,11 +18,11 @@ public class RoomDao {
      * @param roomID The roomID which validity will be checked
      * @return Whether the provided roomID is valid
      */
-    public static boolean isValidRoomID(int roomID) {
+    public static boolean isValidRoomID(int roomID) throws DAOException {
         return getRoomName(roomID) != null;
     }
 
-    public static String getRoomName(int roomID) {
+    public static String getRoomName(int roomID) throws DAOException {
         String result = null;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -35,7 +36,7 @@ public class RoomDao {
                 result = resultSet.getString("roomname");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -46,7 +47,7 @@ public class RoomDao {
         return result;
     }
 
-    public static int getRoomID(String roomName) {
+    public static int getRoomID(String roomName) throws DAOException {
         int result = -1;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -62,7 +63,7 @@ public class RoomDao {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -73,11 +74,11 @@ public class RoomDao {
         return result;
     }
 
-    public static boolean isValidRoomName(String roomName) {
+    public static boolean isValidRoomName(String roomName) throws DAOException {
         return getRoomID(roomName) != -1;
     }
 
-    public static List<Integer> getAllRoomsIDs() {
+    public static List<Integer> getAllRoomsIDs() throws DAOException {
         ArrayList<Integer> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -94,7 +95,7 @@ public class RoomDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -105,7 +106,7 @@ public class RoomDao {
         return result;
     }
 
-    public static List<String> getAllRoomNames() {
+    public static List<String> getAllRoomNames() throws DAOException {
         ArrayList<String> result = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -122,7 +123,7 @@ public class RoomDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -133,7 +134,7 @@ public class RoomDao {
         return result;
     }
 
-    public static List<String> getCurrentlyAvailableRooms() {
+    public static List<String> getCurrentlyAvailableRooms() throws DAOException {
         List<String> rooms = new ArrayList<>();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
@@ -146,7 +147,7 @@ public class RoomDao {
                 rooms.add(resultSet.getString("roomname"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -157,7 +158,7 @@ public class RoomDao {
         return rooms;
     }
 
-    public static Time getFreeUntil(String roomName) throws InvalidRoomNameException {
+    public static Time getFreeUntil(String roomName) throws InvalidRoomNameException, DAOException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
@@ -177,7 +178,7 @@ public class RoomDao {
             statement.close();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -188,11 +189,11 @@ public class RoomDao {
         return result;
     }
 
-    public static List<OutputBooking> getBookingsForThisWeek(String roomName) throws InvalidRoomNameException {
+    public static List<OutputBooking> getBookingsForThisWeek(String roomName) throws InvalidRoomNameException, DAOException {
         return getBookingsForThisWeek(roomName, null);
     }
 
-    public static List<OutputBooking> getBookingsForThisWeek(String roomName, String email) throws InvalidRoomNameException {
+    public static List<OutputBooking> getBookingsForThisWeek(String roomName, String email) throws InvalidRoomNameException, DAOException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
@@ -211,7 +212,7 @@ public class RoomDao {
                 result.add(booking);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();

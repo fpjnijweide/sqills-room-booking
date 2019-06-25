@@ -36,7 +36,7 @@ public class ParticipantResource {
         } catch (InvalidEmailException e) {
             throw400(e.getMessage());
         } catch (DAOException e) {
-            throw500(e.getMessage());
+            throw500("Something went terribly wrong");
         }
         return null;
     }
@@ -63,7 +63,7 @@ public class ParticipantResource {
         } catch (InvalidUserIDException e) {
             throw400(e.getMessage());
         } catch (DAOException e) {
-            throw500(e.getMessage());
+            throw500("Something went terribly wrong");
         }
 
 

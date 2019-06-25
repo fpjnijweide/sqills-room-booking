@@ -3,6 +3,7 @@ package nl.utwente.servlet.desktopInterface;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidRoomNameException;
 
@@ -26,12 +27,16 @@ public class BookingViewServlet extends HttpServlet {
             req.setAttribute("id", bookingID); // TODO maybe change "id" thing
             try {
                 req.setAttribute("booking", BookingDao.getOutputBooking(Integer.valueOf(bookingID)));
+                req.getRequestDispatcher("/desktop/booking.jsp").forward(req, res);
+
             } catch (InvalidBookingIDException e) {
                 res.setStatus(404);
                 req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
                 res.getWriter().write(e.getMessage());
+            } catch (DAOException e) {
+                res.setStatus(500);
+                res.getWriter().write(e.getMessage());
             }
-            req.getRequestDispatcher("/desktop/booking.jsp").forward(req, res);
 
         }
     }
