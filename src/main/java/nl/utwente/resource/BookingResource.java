@@ -21,6 +21,7 @@ import javax.ws.rs.core.*;
 import java.util.List;
 
 import static nl.utwente.authentication.AuthenticationHandler.*;
+import static nl.utwente.dao.BookingDao.prepareBooking;
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.UserDao.getUserFromEmail;
 import static nl.utwente.exceptions.ExceptionHandling.*;
@@ -62,6 +63,7 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
     public int createBooking(@Valid SpecifiedBooking booking) {
+        booking = prepareBooking(securityContext,booking);
         try {
             return BookingDao.createBooking(booking);
         } catch (BookingException e) {
@@ -81,6 +83,7 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create/recurring")
     public int createRecurringBooking(RecurringBooking booking) {
+        booking = (RecurringBooking) prepareBooking(securityContext,booking);
         try {
             return BookingDao.createRecurringBooking(booking);
         } catch (BookingException e) {
@@ -119,6 +122,7 @@ public class BookingResource {
         @PathParam("bookingID") int bookingID,
         @Valid SpecifiedBooking booking
     ) {
+        booking = prepareBooking(securityContext,booking);
         try {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
