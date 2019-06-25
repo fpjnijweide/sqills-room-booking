@@ -4,6 +4,7 @@ import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.*;
 import nl.utwente.model.*;
 
+import javax.ws.rs.core.SecurityContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -130,7 +131,6 @@ throw new DAOException(e.getMessage());
      */
     public static int createBooking(SpecifiedBooking booking) throws BookingException, DAOException {
         int id = -1;
-        booking = prepareBooking(booking);
         throwSpecifiedBookingExceptions(booking);
         Connection connection = DatabaseConnectionFactory.getConnection();
 
@@ -164,9 +164,14 @@ throw new DAOException(e.getMessage());
         return id;
     }
 
-    private static SpecifiedBooking prepareBooking(SpecifiedBooking booking) {
-        if (Objects.equals(booking.getEmail(), "")) {
-            booking.setEmail("sqills_tablet@gmail.com");
+    public static SpecifiedBooking prepareBooking(SecurityContext securityContext, SpecifiedBooking booking) {
+        boolean loggedIn = securityContext.getUserPrincipal() != null;
+        if (Objects.equals(booking.getEmail(), "") || booking.getEmail()==null) {
+            if (loggedIn) {
+                booking.setEmail(securityContext.getUserPrincipal().getName());
+            } else {
+                booking.setEmail("sqills_tablet@gmail.com");
+            }
         }
         return booking;
     }
