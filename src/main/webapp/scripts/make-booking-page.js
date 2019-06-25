@@ -61,9 +61,13 @@ function makeBooking(){
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
-            initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
+            // initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
+            window.location.href="/desktop/booking/" + id;
             // document.location.replace(`/api/booking/${id}`);
-        });
+        }).catch((response) => {
+            showError(response.response.data)
+    });
+
 }
 function makeRecurringBooking(){
     let elem = document.getElementById("choose-time-unit");
