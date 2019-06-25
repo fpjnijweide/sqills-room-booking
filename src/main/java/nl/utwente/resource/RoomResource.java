@@ -3,6 +3,7 @@ package nl.utwente.resource;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
 import nl.utwente.exceptions.BookingException;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
@@ -16,8 +17,7 @@ import javax.ws.rs.core.SecurityContext;
 import java.sql.Time;
 import java.util.List;
 
-import static nl.utwente.exceptions.ExceptionHandling.throw400;
-import static nl.utwente.exceptions.ExceptionHandling.throw404;
+import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/room")
 public class RoomResource {
@@ -36,7 +36,12 @@ public class RoomResource {
      * @return JSON object containing all of today's bookings for a specific room
      */
     public List<String> getRoomList () {
-        return RoomDao.getAllRoomNames();
+        try {
+            return RoomDao.getAllRoomNames();
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
+        }
+        return null;
     }
 
     @GET
@@ -58,6 +63,8 @@ public class RoomResource {
             return BookingDao.getBookingsForRoomToday(roomName,userEmail);
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
 
         return null;
@@ -82,6 +89,8 @@ public class RoomResource {
                     booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
         } catch (BookingException e) {
             throw400(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
         return 0;
     }
@@ -93,7 +102,12 @@ public class RoomResource {
      * Returns a list of all currently available rooms.
      */
     public List<String> getAvailableRooms() {
-        return RoomDao.getCurrentlyAvailableRooms();
+        try {
+            return RoomDao.getCurrentlyAvailableRooms();
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
+        }
+        return null;
     }
 
     @GET
@@ -104,6 +118,8 @@ public class RoomResource {
             return RoomDao.getFreeUntil(roomName);
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
         return null;
     }
@@ -120,6 +136,8 @@ public class RoomResource {
             return RoomDao.getBookingsForThisWeek(roomName,userEmail);
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
         }
 
         return null;

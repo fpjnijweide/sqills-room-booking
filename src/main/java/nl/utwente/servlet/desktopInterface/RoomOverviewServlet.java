@@ -2,6 +2,7 @@ package nl.utwente.servlet.desktopInterface;
 
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.RoomDao;
+import nl.utwente.exceptions.DAOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,16 +17,21 @@ public class RoomOverviewServlet extends HttpServlet {
     // Todo: @Marten sort out names of variables
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
-        if (req.getSession().getAttribute(AuthenticationFilter.principalName)==null){
-            req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
-        } else {
-            List<String> roomNames = new ArrayList<>();
-            for (String name : RoomDao.getAllRoomNames()) {
-                roomNames.add(name);
+        try {
+            if (req.getSession().getAttribute(AuthenticationFilter.principalName) == null) {
+                req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
+            } else {
+                List<String> roomNames = new ArrayList<>();
+                for (String name : RoomDao.getAllRoomNames()) {
+                    roomNames.add(name);
+                }
+                req.setAttribute("roomIDs", roomNames);
+                req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRooms());
+                req.getRequestDispatcher("/desktop/roomOverview.jsp").forward(req, res);
             }
-            req.setAttribute("roomIDs", roomNames);
-            req.setAttribute("availableRoomIDs", RoomDao.getCurrentlyAvailableRooms());
-            req.getRequestDispatcher("/desktop/roomOverview.jsp").forward(req, res);
+        } catch (DAOException e) {
+            res.setStatus(500);
+            res.getWriter().write("Something went terribly wrong");
         }
     }
 }

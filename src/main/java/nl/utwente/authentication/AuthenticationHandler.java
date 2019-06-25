@@ -1,6 +1,7 @@
 package nl.utwente.authentication;
 
 import nl.utwente.dao.UserDao;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidEmailException;
 
@@ -22,7 +23,7 @@ public class AuthenticationHandler {
         return (securityContext.getUserPrincipal() != null);
     }
 
-    public static boolean userOwnsBooking(SecurityContext securityContext, int bookingID) throws InvalidBookingIDException {
+    public static boolean userOwnsBooking(SecurityContext securityContext, int bookingID) throws InvalidBookingIDException, DAOException {
         String userEmail = null;
         if (securityContext.getUserPrincipal()!=null) {
             userEmail = securityContext.getUserPrincipal().getName();
@@ -63,7 +64,7 @@ public class AuthenticationHandler {
         return salt;
     }
 
-    public static boolean checkCredentials(String email, String password) {
+    public static boolean checkCredentials(String email, String password) throws DAOException {
         try {
             return checkByteArrays(UserDao.getHash(email), hashPassword(password, UserDao.getSalt(email)));
         } catch (InvalidEmailException e) {

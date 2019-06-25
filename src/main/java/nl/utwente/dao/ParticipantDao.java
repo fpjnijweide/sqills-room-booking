@@ -20,7 +20,7 @@ import static nl.utwente.dao.UserDao.isValidEmail;
 import static nl.utwente.dao.UserDao.isValidUserID;
 
 public class ParticipantDao {
-    public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException {
+    public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
@@ -42,7 +42,7 @@ public class ParticipantDao {
                 result.add(user);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -74,7 +74,7 @@ public class ParticipantDao {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -105,7 +105,7 @@ public class ParticipantDao {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -145,7 +145,7 @@ public class ParticipantDao {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();

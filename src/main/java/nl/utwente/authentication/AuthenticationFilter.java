@@ -2,6 +2,7 @@ package nl.utwente.authentication;
 
 
 import nl.utwente.dao.UserDao;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
@@ -35,7 +36,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             try {
                 user = UserDao.getUserFromEmail(email);
                 requestContext.setSecurityContext(new BasicSecurityContext(user, false));
-            } catch (InvalidEmailException e) {
+            } catch (InvalidEmailException | DAOException e) {
                 throw new IOException(e.getMessage());
             }
 

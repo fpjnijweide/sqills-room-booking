@@ -1,6 +1,7 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.exceptions.DAOException;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -14,7 +15,12 @@ import static org.junit.Assert.assertFalse;
 public class RoomDaoTest {
     @Test
     public void testIsValidBookingNotValid() {
-        assertFalse(isValidRoomID(-2));
+        try {
+            assertFalse(isValidRoomID(-2));
+        } catch (DAOException e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 
     @Test
@@ -32,6 +38,9 @@ public class RoomDaoTest {
             assertTrue(isValid);
             connection.close();
         } catch (SQLException e) {
+            e.printStackTrace();
+            fail();
+        } catch (DAOException e) {
             e.printStackTrace();
             fail();
         }

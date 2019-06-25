@@ -2,6 +2,7 @@ package nl.utwente.servlet.desktopInterface;
 
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.RoomDao;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidRoomNameException;
 
 import javax.servlet.ServletException;
@@ -24,12 +25,15 @@ public class RoomServlet extends HttpServlet {
             req.setAttribute("id", roomName); // TODO maybe change "id" thing
             try {
                 req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomName,email));
+                req.getRequestDispatcher("/desktop/room.jsp").forward(req, res);
             } catch (InvalidRoomNameException e) {
                 res.setStatus(404);
                 req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
                 res.getWriter().write(e.getMessage());
+            } catch (DAOException e) {
+                res.setStatus(500);
+                res.getWriter().write(e.getMessage());
             }
-            req.getRequestDispatcher("/desktop/room.jsp").forward(req, res);
         }
     }
 }
