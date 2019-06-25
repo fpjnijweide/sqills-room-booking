@@ -73,7 +73,8 @@ public class BookingDao {
             resultSetParticipants.close();
             preparedStatement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -109,7 +110,8 @@ public class BookingDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -149,7 +151,8 @@ public class BookingDao {
             id = resultSet.getInt(1);
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -196,7 +199,8 @@ public class BookingDao {
             id = resultSet.getInt(1);
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -233,7 +237,8 @@ public class BookingDao {
 
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -271,7 +276,8 @@ public class BookingDao {
 
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -318,7 +324,8 @@ public class BookingDao {
 
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -360,7 +367,8 @@ public class BookingDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -523,7 +531,8 @@ public class BookingDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             isValid = resultSet.next();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();

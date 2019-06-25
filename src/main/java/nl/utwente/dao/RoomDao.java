@@ -36,7 +36,8 @@ public class RoomDao {
                 result = resultSet.getString("room_name");
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -63,7 +64,8 @@ public class RoomDao {
             }
 
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -95,7 +97,8 @@ public class RoomDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -123,7 +126,8 @@ public class RoomDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -147,7 +151,8 @@ public class RoomDao {
                 rooms.add(resultSet.getString("room_name"));
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -178,7 +183,8 @@ public class RoomDao {
             statement.close();
 
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -212,7 +218,8 @@ public class RoomDao {
                 result.add(booking);
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
