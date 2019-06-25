@@ -30,7 +30,7 @@ public class BookingDao {
         OutputBookingWithParticipants booking = new OutputBookingWithParticipants();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT get_specific_booking(?)";
+            String query = "SELECT * from get_specific_booking(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, bookingID);
@@ -38,17 +38,22 @@ public class BookingDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String roomName = resultSet.getString("room_name");
-                booking = (OutputBookingWithParticipants) resultSetToBooking(roomName, resultSet);
+                booking.setRoomName(resultSet.getString("room_name"));
+                booking.setTitle(resultSet.getString("title"));
+                booking.setDate(resultSet.getDate("date"));
+                booking.setStartTime(resultSet.getTime("start_time"));
+                booking.setEndTime(resultSet.getTime("end_time"));
+                booking.setUserName(resultSet.getString("name"));
+                booking.setBookingid(bookingID);
             }
 
             resultSet.close();
             statement.close();
 
-            String participantQuery = "SELECT u.userid, u.name, u.email, u.administrator " +
+            String participantQuery = "SELECT u.user_id, u.name, u.email, u.administrator " +
                 "FROM sqills.users AS u, sqills.participants AS p " +
-                "WHERE p.bookingid = ? " +
-                "AND u.userid = p.userid";
+                "WHERE p.booking_id = ? " +
+                "AND u.user_id = p.user_id";
             PreparedStatement preparedStatement = connection.prepareStatement(participantQuery);
             preparedStatement.setInt(1, bookingID);
             ResultSet resultSetParticipants = preparedStatement.executeQuery();
@@ -56,7 +61,7 @@ public class BookingDao {
             List<User> participants = new ArrayList<>();
             while (resultSetParticipants.next()) {
                 User user = new User();
-                user.setUserid(resultSetParticipants.getInt("userid"));
+                user.setUserid(resultSetParticipants.getInt("user_id"));
                 user.setName(resultSetParticipants.getString("name"));
                 user.setEmail(resultSetParticipants.getString("email"));
                 user.setAdministrator(resultSetParticipants.getBoolean("administrator"));
@@ -88,8 +93,8 @@ public class BookingDao {
         try {
             String query = "SELECT u.email " +
                 "FROM sqills.Booking b " +
-                "    JOIN sqills.users u ON u.userid = b.owner " +
-                "WHERE b.bookingid = ?";
+                "    JOIN sqills.users u ON u.user_id = b.owner " +
+                "WHERE b.booking_id = ?";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, bookingID);
@@ -136,7 +141,7 @@ public class BookingDao {
             statement.setString(5, booking.getEmail());
             statement.setBoolean(6, booking.getIsPrivate());
             statement.setString(7, booking.getTitle());
-            ;
+
 
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -497,7 +502,7 @@ public class BookingDao {
         boolean isValid = false;
 
         try {
-            String query = "SELECT * FROM sqills.booking WHERE bookingid = ?";
+            String query = "SELECT * FROM sqills.booking WHERE booking_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
 
