@@ -24,7 +24,8 @@ public class UserDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             isValid = resultSet.next();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -56,7 +57,8 @@ public class UserDao {
                 user = new User(id, name, email, admin);
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -85,7 +87,8 @@ public class UserDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -118,7 +121,8 @@ public class UserDao {
             resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();

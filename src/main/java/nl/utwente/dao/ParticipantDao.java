@@ -40,7 +40,8 @@ public class ParticipantDao {
                 result.add(user);
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -72,7 +73,8 @@ public class ParticipantDao {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -103,7 +105,8 @@ public class ParticipantDao {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();
@@ -143,7 +146,8 @@ public class ParticipantDao {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+            e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.close();

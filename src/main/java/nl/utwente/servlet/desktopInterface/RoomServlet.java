@@ -32,7 +32,7 @@ public class RoomServlet extends HttpServlet {
                 res.getWriter().write(e.getMessage());
             } catch (DAOException e) {
                 res.setStatus(500);
-                res.getWriter().write(e.getMessage());
+                res.getWriter().write("Something went terribly wrong");
             }
         }
     }
