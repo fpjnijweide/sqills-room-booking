@@ -1,4 +1,4 @@
-function checkAllEmails(){
+function checkFieldsAndBook(){
     let emails = getAllEmails();
     let requestBody = {
         "emails": emails
@@ -6,11 +6,11 @@ function checkAllEmails(){
     axios.post("/api/user/email/check", requestBody)
         .then(response => {
             let data= response.data;
-            if (data.emails.length == 0){
+            if (data.emails.length == 0 && checkAllFieldsFilledIn()){
                 bookRoom()
+            } else if(!checkAllFieldsFilledIn()) {
+                showError("Please fill in all fields")
             } else {
-                //todo throw error that some emails are not correct
-                console.log("one of the emails is invalid");
                 showError("one of the emails is invalid")
             }
         });
@@ -171,6 +171,16 @@ function checkRecurringDays(){
 
 function removeParticipant(element){
     element.parentNode.removeChild(element);
+}
+
+function checkAllFieldsFilledIn(){
+    let empty = $(this).parent().find("input").filter(function() {
+        return this.value === "";
+    });
+    if(empty.length) {
+        return false;
+    }
+    return true;
 }
 
 //todo throw nicer errors instead of console.logs
