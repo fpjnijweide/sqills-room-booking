@@ -34,6 +34,11 @@ function createGCalendarEvent(roomName, date, startTime, endTime, title, partici
     return events;
 
 }
+
+
+function createRecurrence(repeatEveryType, repeatEvery, endAt){
+    return `RRULE:FREQ=${repeatEveryType.toUpperCase()}LY;INTERVAL=${repeatEvery};UNTIL=${new Date(endAt).toISOString()}`;
+}
  async function insertGCalendarEvent(event){
      await initGCalendar()
          gapi.client.calendar.events.insert({

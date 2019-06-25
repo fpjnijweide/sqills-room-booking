@@ -34,22 +34,21 @@ drop function if exists create_recurring_booking_parent(start_time time, end_tim
 create or replace function create_recurring_booking_parent(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text, repeat_every_type repeat_type, repeat_every int, ending_at date)
 RETURNS integer as $$
 DECLARE
-  booking_id integer;
-  recurring_pattern_id integer;
+  v_booking_id integer;
+  v_recurring_pattern_id integer;
 BEGIN
-  recurring_pattern_id :=  create_recurring_pattern(repeat_every_type, repeat_every, date, ending_at);
-  booking_id :=  create_booking(start_time, end_time, date, room_name, owner, is_private, title);
+  v_recurring_pattern_id :=  create_recurring_pattern(repeat_every_type, repeat_every, date, ending_at);
+  v_booking_id :=  create_booking(start_time, end_time, date, room_name, owner, is_private, title);
     insert into sqills.booking_recurring(recurring_pattern_id, booking_id, parent_booking_id )
-    values(recurring_pattern_id, booking_id, booking_id);
+    values(v_recurring_pattern_id, v_booking_id, v_booking_id);
 
-  PERFORM populate_recurring_bookings(booking_id, recurring_pattern_id);
+  PERFORM populate_recurring_bookings(v_booking_id, v_recurring_pattern_id);
 
-    return booking_id;
+    return v_booking_id;
 
   end;
     $$
   LANGUAGE plpgsql;
-
 
 drop function if exists create_recurring_pattern(p_repeat_every_type repeat_type, p_repeat_every int, p_starting_from date, p_ending_at date);
 create or replace function create_recurring_pattern(p_repeat_every_type repeat_type, p_repeat_every int, p_starting_from date, p_ending_at date)
@@ -73,8 +72,8 @@ create or replace function create_recurring_pattern(p_repeat_every_type repeat_t
     $$
     LANGUAGE plpgsql;
 
-drop function if exists populate_recurring_bookings(booking_id int, p_recurring_pattern_id int);
-create OR REPLACE  function populate_recurring_bookings(booking_id int, p_recurring_pattern_id int)
+drop function if exists populate_recurring_bookings(p_booking_id int, p_recurring_pattern_id int);
+create OR REPLACE  function populate_recurring_bookings(p_booking_id int, p_recurring_pattern_id int)
 returns void as $$
 declare
 begin
@@ -94,11 +93,11 @@ begin
     insert into sqills.booking (date, start_time, end_time, room_id, owner, is_private, title)
       select cd.b_date, b.start_time, b.end_time, b.room_id, b.owner, b.is_private, b.title
       from cte_booking_dates cd
-             join sqills.booking b on b.booking_id = booking_id
+             join sqills.booking b on b.booking_id = p_booking_id
     returning booking_id as child_booking_id
   )
   insert into sqills.booking_recurring(recurring_pattern_id, booking_id, parent_booking_id)
-  select p_recurring_pattern_id, crb.child_booking_id d, booking_id
+  select p_recurring_pattern_id, crb.child_booking_id d, p_booking_id
   from cte_create_recurring_bookings crb;
 end;
     $$
