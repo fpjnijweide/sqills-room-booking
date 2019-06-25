@@ -1,13 +1,12 @@
 
-
-drop function if exists get_specific_booking(booking_id int);
-CREATE FUNCTION get_specific_booking(booking_id int) RETURNS TABLE(start_time time, end_time time, name text, room_name text, date date, is_private boolean, title text)
+drop function if exists get_specific_booking(p_booking_id int);
+CREATE or replace FUNCTION get_specific_booking(p_booking_id int) RETURNS TABLE(booking_id int, start_time time, end_time time, name text, room_name text, date date, is_private boolean, title text)
     AS $$
-        SELECT b.start_time, b.end_time, u.name, r.room_name, b.date, b.is_private, b.title
+        SELECT b.booking_id, b.start_time, b.end_time, u.name, r.room_name, b.date, b.is_private, b.title
         FROM sqills.Booking b
         JOIN sqills.room r ON b.room_id = r.room_id
         JOIN sqills.users u ON u.user_id = b.owner
-        WHERE b.booking_id = booking_id
+        WHERE b.booking_id = p_booking_id
      $$
     LANGUAGE SQL;
 

@@ -126,14 +126,14 @@ public class ParticipantDao {
 
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String useridQuery = "SELECT userid FROM sqills.users WHERE email = ?;";
+            String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
             PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
             userIDStatement.setString(1, email);
             ResultSet userIDResult = userIDStatement.executeQuery();
             userIDResult.next();
             final int userID = userIDResult.getInt("user_id");
 
-            String insert = "INSERT INTO sqills.participants (bookingid, userid)" +
+            String insert = "INSERT INTO sqills.participants (booking_id, user_id)" +
                 "VALUES (?, ?);";
             PreparedStatement insertStatement = connection.prepareStatement(insert);
             insertStatement.setInt(1, bookingID);

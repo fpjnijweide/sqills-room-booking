@@ -13,13 +13,13 @@ as $$
   $$
   language sql;
 
-drop function if exists get_free_until(room_name text);
-create function get_free_until(room_name text) returns table(start_time time)
+drop function if exists get_free_until(p_room_name text);
+create function get_free_until(p_room_name text) returns table(start_time time)
 as $$
   select min(b.start_time)
   from sqills.booking b
   join sqills.room r on b.room_id = r.room_id
-  where r.room_name = room_name
+  where r.room_name = p_room_name
   and b.date = CURRENT_DATE
   and b.start_time > CURRENT_TIME;
   $$

@@ -30,7 +30,7 @@ public class BookingDao {
         OutputBookingWithParticipants booking = new OutputBookingWithParticipants();
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "SELECT get_specific_booking(?)";
+            String query = "SELECT * from get_specific_booking(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, bookingID);
@@ -38,8 +38,13 @@ public class BookingDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String roomName = resultSet.getString("room_name");
-                booking = (OutputBookingWithParticipants) resultSetToBooking(roomName, resultSet);
+                booking.setRoomName(resultSet.getString("room_name"));
+                booking.setTitle(resultSet.getString("title"));
+                booking.setDate(resultSet.getDate("date"));
+                booking.setStartTime(resultSet.getTime("start_time"));
+                booking.setEndTime(resultSet.getTime("end_time"));
+                booking.setUserName(resultSet.getString("name"));
+                booking.setBookingid(bookingID);
             }
 
             resultSet.close();
