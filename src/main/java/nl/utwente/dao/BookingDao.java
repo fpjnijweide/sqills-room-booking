@@ -47,7 +47,7 @@ public class BookingDao {
 
             String participantQuery = "SELECT u.user_id, u.name, u.email, u.administrator " +
                 "FROM sqills.users AS u, sqills.participants AS p " +
-                "WHERE p.bookingid = ? " +
+                "WHERE p.booking_id = ? " +
                 "AND u.user_id = p.user_id";
             PreparedStatement preparedStatement = connection.prepareStatement(participantQuery);
             preparedStatement.setInt(1, bookingID);
@@ -497,7 +497,7 @@ public class BookingDao {
         boolean isValid = false;
 
         try {
-            String query = "SELECT * FROM sqills.booking WHERE bookingid = ?";
+            String query = "SELECT * FROM sqills.booking WHERE booking_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
 

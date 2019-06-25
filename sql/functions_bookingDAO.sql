@@ -123,24 +123,23 @@ create or replace function update_booking(start_time time, end_time time, date d
   $$
   LANGUAGE SQL;
 
-drop function if exists booking_for_room_today(room_name text);
-create or replace function booking_for_room_today(room_name text) returns table(booking_id int ,start_time time, end_time time, name text, date date, is_private boolean, title text)
+drop function if exists booking_for_room_today(p_room_name text);
+create or replace function booking_for_room_today(p_room_name text) returns table(booking_id int ,start_time time, end_time time, name text, date date, is_private boolean, title text)
 as $$
   select b.booking_id as booking_id, b.start_time, b.end_time, u.name, b.date, b.is_private, b.title
   from sqills.booking b
   join sqills.room r on b.room_id = r.room_id
   join sqills.users u on u.user_id = b.owner
-  where r.room_name = room_name and b.date = CURRENT_DATE
+  where r.room_name = p_room_name and b.date = CURRENT_DATE
   $$
   language sql;
 
-
-drop function if exists is_valid_booking(room_name text, booking_date date);
-create or replace function is_valid_booking(room_name text, booking_date date) returns table(start_time time, end_time time, date date)
+drop function if exists is_valid_booking(p_room_name text, booking_date date);
+create or replace function is_valid_booking(p_room_name text, booking_date date) returns table(start_time time, end_time time, date date)
 as $$
   select b.start_time, b.end_time, b.date
   from sqills.booking b
   join sqills.room r on b.room_id = r.room_id
-  where r.room_name = room_name and b.date = booking_date;
+  where r.room_name = p_room_name and b.date = booking_date;
   $$
   language sql;
