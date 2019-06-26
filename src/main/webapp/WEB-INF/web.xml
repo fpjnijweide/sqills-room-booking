@@ -44,7 +44,6 @@
         <servlet-name>Desktop login Servlet</servlet-name>
         <servlet-class>nl.utwente.servlet.desktopInterface.LoginServlet</servlet-class>
     </servlet>
-
 	<servlet-mapping>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
 		<url-pattern>/api/*</url-pattern>
