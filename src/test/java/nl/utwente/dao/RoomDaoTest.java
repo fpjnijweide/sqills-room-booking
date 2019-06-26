@@ -8,27 +8,18 @@ import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.OutputBooking;
 import org.junit.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
 import static nl.utwente.dao.BookingDao.deleteBooking;
 import static nl.utwente.dao.BookingDao.insertBookingToday;
+import static nl.utwente.dao.DaoTestUtils.*;
 import static nl.utwente.dao.RoomDao.*;
 import static org.junit.Assert.assertFalse;
 
 public class RoomDaoTest {
-
-    private static Connection connection;
-    private static int roomID = -100;
-    private static String roomName = "test_room";
-    private static String bookingTitle = "Test booking title";
-    private static String email = "sqills_tablet@gmail.com";
-
     @BeforeClass
     public static void setup() {
         connection = DatabaseConnectionFactory.conn;
@@ -49,17 +40,6 @@ public class RoomDaoTest {
         // But we need createRoom to be static so that we can easily access it from BookingDaoTest
         // This was the best solution
         createRoom();
-    }
-
-    public static void createRoom() {
-        String query = "INSERT INTO sqills.room (room_id, room_name) VALUES (" + roomID + ", '" + roomName + "')";
-        try {
-            connection.createStatement().execute(query);
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
     }
 
     @Test
@@ -182,6 +162,7 @@ public class RoomDaoTest {
         }
     }
 
+    @Test
     public void testBookingsForThisWeek() {
         try {
             List<OutputBooking> bookings = getBookingsForThisWeek(roomName);
@@ -208,23 +189,10 @@ public class RoomDaoTest {
         }
     }
 
-    private Time currentTimePlusMinutes(int offset) {
-        Date date = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.MINUTE,offset);
-        return new Time(cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),0);
-    }
-
     private int makeBooking(Time startTime) throws BookingException, DAOException, SQLException {
         Time endTime = new Time(23, 59, 59);
         connection.commit();
         return insertBookingToday(roomName, startTime, endTime, email, false, bookingTitle);
     }
 
-    private void deleteRoom() throws SQLException {
-        String query = "DELETE FROM sqills.room WHERE room_id = " + roomID;
-        connection.createStatement().execute(query);
-        connection.commit();
-    }
 }
