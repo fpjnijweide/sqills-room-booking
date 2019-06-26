@@ -51,11 +51,6 @@ public class UserResource {
     @GET
     @Path("/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    /**
-     * Returns all of today's bookings for a specific room.
-     * @param roomNumber Number specifying the room
-     * @return JSON object containing all of today's bookings for a specific room
-     */
     public String getUserList (@PathParam("email") String incompleteEmail) {
         return "{ \"email\":" + "\"" + UserDao.getEmail(incompleteEmail) + "\""+ "}";
     }

@@ -189,5 +189,9 @@ function adaptTimeText(){
     $('.btn.btn-sm.btn-default.btn-block.clockpicker-button').text("Select")
 }
 
+function setRoom(number){
+    console.log(number)
+    document.getElementById("room-select").value = number;
+}
 
 //todo throw nicer errors instead of console.logs
