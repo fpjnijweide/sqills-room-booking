@@ -45,6 +45,10 @@
         <servlet-class>nl.utwente.servlet.desktopInterface.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Bookings Overview</servlet-name>
+        <servlet-class>nl.utwente.servlet.desktopInterface.BookingsServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Booking View Servlet</servlet-name>
         <servlet-class>nl.utwente.servlet.desktopInterface.BookingViewServlet</servlet-class>
     </servlet>
@@ -80,6 +84,10 @@
     <servlet-mapping>
         <servlet-name>Specific Room Servlet</servlet-name>
         <url-pattern>/tablet/room/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Bookings Overview</servlet-name>
+        <url-pattern>/desktop/bookings</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Booking View Servlet</servlet-name>
