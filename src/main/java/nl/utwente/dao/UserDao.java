@@ -6,7 +6,10 @@ import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
 import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
@@ -127,23 +130,18 @@ throw new DAOException(e.getMessage());
         return null;
     }
 
-    @Deprecated
-    public static void insertUser(String name, String email, String password, boolean admin) throws DAOException {
-        // TODO input validation (XSS and such?)
-        Connection connection = DatabaseConnectionFactory.conn;
-        try{
-            byte[] salt = AuthenticationHandler.generateSalt();
-            String query = "INSERT INTO sqills.users(name, email, hash, administrator, salt) " +
-                    "VALUES(?,?,?,?,?);";
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, email);
-            statement.setString(2, email);
-            statement.setBytes(3, hashPassword(password, salt));
-            statement.setBoolean(4, admin);
-            statement.setBytes(5, salt);
-            int affectedRows = statement.executeUpdate();
-            System.out.println(affectedRows);
+    public static void insertUser(String name, String email, boolean admin){
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "INSERT INTO sqills.users (\"name\", email, administrator) VALUES (?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, email);
+            preparedStatement.setBoolean(3, admin);
+            preparedStatement.execute();
+            preparedStatement.close();
         } catch (SQLException sqle){
+            sqle.printStackTrace();
             throw new DAOException(sqle.getMessage());
         } finally {
             try {
@@ -202,4 +200,11 @@ throw new DAOException(e.getMessage());
 //    public static boolean loggedIn(SecurityContext securityContext) {
 //        return securityContext.getUserPrincipal().
 //    }
+
+    public static void main(String[] args) {
+        String name = "Platon Frolov";
+        String email = "p.m.frolov@student.utwente.nl";
+        boolean admin = true;
+        insertUser(name, email, admin);
+    }
 }

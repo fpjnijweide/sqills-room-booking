@@ -44,14 +44,14 @@ function checkRecurringFields(){
 }
 
 function makeBooking(){
-
-
+    let selectRoom = document.getElementById("room-select");
+//todo hook up room dropdown to make booking
     let title = document.getElementById("booking-title").value
     , email = "" // document.getElementById("booking-email").value
     , date = document.getElementById("booking-date").value
     , startTime = document.getElementById("booking-starttime").value + ":00"
     , endTime = document.getElementById("booking-endtime").value + ":00"
-    , roomName = document.getElementById("booking-roomid").value
+    , roomName = selectRoom.options[selectRoom.selectedIndex].value
     , isPrivate = document.getElementById("booking-isPrivate").checked
     , participantElements = extractParticpants(document.getElementsByClassName("participant-in-list"))
     , requestBody = {
@@ -77,6 +77,7 @@ function makeBooking(){
 
 }
 function makeRecurringBooking(){
+    let selectRoom = document.getElementById("room-select");
     let elem = document.getElementById("choose-time-unit");
     let requestBody = {
         "title": document.getElementById("booking-title").value,
@@ -84,7 +85,7 @@ function makeRecurringBooking(){
         "date": document.getElementById("booking-date").value,
         "startTime": document.getElementById("booking-starttime").value + ":00",
         "endTime": document.getElementById("booking-endtime").value + ":00",
-        "roomName": document.getElementById("booking-roomid").value,
+        "roomName": selectRoom.options[selectRoom.selectedIndex].value,
         "isPrivate": document.getElementById("booking-isPrivate").checked,
         "repeatEveryType": elem.options[elem.selectedIndex].value,
         "repeatEvery": document.getElementById("time").value,
@@ -192,6 +193,16 @@ function checkAllFieldsFilledIn(){
         return false;
     }
     return true;
+}
+
+
+function adaptTimeText(){
+    $('.btn.btn-sm.btn-default.btn-block.clockpicker-button').text("Select")
+}
+
+function setRoom(number){
+    console.log(number)
+    document.getElementById("room-select").value = number;
 }
 
 //todo throw nicer errors instead of console.logs
