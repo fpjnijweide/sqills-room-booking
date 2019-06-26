@@ -122,7 +122,7 @@ public class BookingResource {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{bookingID}/update")
+    @Path("/{bookingID}")
     public SpecifiedBooking updateBooking(
         @PathParam("bookingID") int bookingID,
         @Valid SpecifiedBooking booking

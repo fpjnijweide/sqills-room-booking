@@ -3,9 +3,13 @@ package nl.utwente.servlet.desktopInterface;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.RoomDao;
+import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidRoomNameException;
+import nl.utwente.model.OutputBooking;
+import nl.utwente.model.OutputBookingWithParticipants;
+import nl.utwente.model.SpecifiedBooking;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +31,9 @@ public class BookingViewServlet extends HttpServlet {
             String bookingID = splitUri[3];
             req.setAttribute("id", bookingID); // TODO maybe change "id" thing
             try {
-                req.setAttribute("booking", BookingDao.getOutputBooking(Integer.valueOf(bookingID)));
+                OutputBooking booking = BookingDao.getOutputBooking(Integer.valueOf(bookingID));
+                req.setAttribute("booking", booking);
+                req.setAttribute("email", UserDao.getEmailFromUsername(booking.getUserName()));
                 req.getRequestDispatcher("/desktop/booking.jsp").forward(req, res);
             } catch (InvalidBookingIDException e) {
                 res.setStatus(404);

@@ -10,8 +10,8 @@ import java.sql.SQLException;
  * The DatabaseConnectionFactory is responsible for returning connections to our SQL database.
  */
 public class DatabaseConnectionFactory {
-
     public static Connection conn = getConnection();
+
     /**
      * Returns a connection to the SQL database.
      * @return connection object to the database
