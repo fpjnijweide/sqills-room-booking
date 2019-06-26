@@ -1,9 +1,18 @@
-# MOD4 Project
-                                                                                            
-                                                                                            Trello board:
-                                                                                            [Trello](https://trello.com/b/Ac1nyVHU/mod-4)
-      ##Accounts
-      [13:47, 6/22/2019] Freek: freek@gmail.com : 12345678
-      [13:47, 6/22/2019] Freek: andrew@gmail.com : 12345678   (admin account)                    
-                          
-                                                        [Trello Invite](https://trello.com/invite/b/Ac1nyVHU/1af845560800f1584530a88d7c54496a/mod-4)
+MOD 4 project Group 37 setup guide
+
+
+
+CREATING A USER WITH YOUR OWN EMAIL
+In order to have access to our system, you need to have a google
+account and that email should be in the DB
+In order to put your email in the DB, follow the following steps
+    - Go to /src/main/java/dao/userdao
+    - uncomment the main method
+    - fill in your name, e-mail(the one you want to login with) 
+      and true or false for whether the account should have admin rights
+Example: 
+String name = "Platon Frolov"
+String email = "pl.frolov99@gmail.com"
+boolean admin = true
+    -Run the main method
+    -Your email is now in the DB, you can login to our system now through google

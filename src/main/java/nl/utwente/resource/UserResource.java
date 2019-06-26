@@ -8,7 +8,6 @@ import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.dao.UserDao;
 import nl.utwente.google.GoogleAuth;
 import nl.utwente.model.EmailList;
-import nl.utwente.model.InputUser;
 import nl.utwente.model.UserAdministration;
 
 import javax.annotation.Priority;
@@ -23,7 +22,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.utwente.dao.UserDao.insertUser;
 import static nl.utwente.exceptions.ExceptionHandling.throw401;
 
 @Path("/user")
@@ -39,13 +37,13 @@ public class UserResource {
 
     }
 
-    @POST
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void createUser(InputUser user){
-        // TODO do input validation here
-        insertUser(user.getFullName(),user.getUsername(),user.getPassword(),false);
-    }
+//    @POST
+//    @Path("/")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public void createUser(InputUser user){
+//        // TODO do input validation here
+//        insertUser(user.getFullName(),user.getUsername(),user.getPassword(),false);
+//    }
 
     // TODO refactor this method's name and javascript
     @GET
