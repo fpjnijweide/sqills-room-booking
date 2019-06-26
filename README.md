@@ -18,4 +18,8 @@ boolean admin = true
     -Run the main method
     -Your email is now in the DB, you can login to our system now through google
 
-You can run the server by compiling the .war file and deploying with tomcat 
+You can run the server by compiling the .war file and deploying with tomcat
+
+Make sure to include the appropriate postgresql .jar file that was provided on canvas for the JDBC driver if you want to compile the code
+
+We use SASS / SCSS and bootstrap for styling. Please look at documents/UsingSass.md to see how to compile this to CSS.
