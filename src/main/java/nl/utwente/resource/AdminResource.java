@@ -6,7 +6,6 @@ import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidUserIDException;
-import nl.utwente.model.InputUser;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.UserIDBookingIDPair;
 
@@ -17,8 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
-import static nl.utwente.authentication.AuthenticationHandler.*;
-import static nl.utwente.dao.UserDao.insertUser;
+import static nl.utwente.authentication.AuthenticationHandler.userIsAdmin;
+import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/admin")
@@ -109,18 +108,18 @@ public class AdminResource {
         }
     }
 
-    @POST
-    @Path("/user")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void createUser(InputUser user){
-        // TODO do input validation here
-        if (!userIsLoggedIn(securityContext)) {
-            throw401("You are not logged in");
-        }
-        if (!userIsAdmin(securityContext)) {
-            throw403("You are not an administrator");
-        }
-        insertUser(user.getFullName(),user.getUsername(),user.getPassword(),true);
-    }
+//    @POST
+//    @Path("/user")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public void createUser(InputUser user){
+//        // TODO do input validation here
+//        if (!userIsLoggedIn(securityContext)) {
+//            throw401("You are not logged in");
+//        }
+//        if (!userIsAdmin(securityContext)) {
+//            throw403("You are not an administrator");
+//        }
+//        insertUser(user.getFullName(),user.getUsername(),user.getPassword(),true);
+//    }
 
 }
