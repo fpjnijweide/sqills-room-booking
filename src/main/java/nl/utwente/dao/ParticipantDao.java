@@ -22,7 +22,7 @@ public class ParticipantDao {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         List<User> result = new ArrayList<>();
         try {
             String query = "select * from get_participants_of_booking(?)";
@@ -44,7 +44,7 @@ public class ParticipantDao {
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -60,7 +60,7 @@ throw new DAOException(e.getMessage());
             throw new InvalidUserIDException(userID);
         }
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
             String query = "INSERT INTO sqills.participants (bookingid, userid) VALUES (?, ?);";
@@ -77,7 +77,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -92,7 +92,7 @@ throw new DAOException(e.getMessage());
         if ( !UserDao.isValidUserID(userID)) {
             throw new InvalidUserIDException(userID);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
             String query = "DELETE FROM sqills.participants WHERE bookingid = ? AND userid = ?;";
@@ -109,7 +109,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -127,7 +127,7 @@ throw new DAOException(e.getMessage());
         }
 
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
             PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
@@ -150,7 +150,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

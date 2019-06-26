@@ -13,7 +13,7 @@ import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
 
 public class UserDao {
     public static boolean isValidUserID(int userID) throws DAOException {
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         boolean isValid = false;
 
         try {
@@ -28,7 +28,7 @@ public class UserDao {
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -41,7 +41,7 @@ throw new DAOException(e.getMessage());
         if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         boolean isValid = false;
         User user = null;
         try {
@@ -61,7 +61,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -73,7 +73,7 @@ throw new DAOException(e.getMessage());
     public static String getEmail(String incompleteEmail) throws DAOException {
         int count = 0;
         String email = null;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT email FROM sqills.users WHERE email LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -91,7 +91,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -102,11 +102,12 @@ throw new DAOException(e.getMessage());
         return null;
     }
 
+    @Deprecated
     public static byte[] getSalt(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         int userCount = 1;
         byte[] salt = null;
         byte[] saltbyte = null;
@@ -125,7 +126,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -133,9 +134,10 @@ throw new DAOException(e.getMessage());
         return null;
     }
 
+    @Deprecated
     public static void insertUser(String name, String email, String password, boolean admin) throws DAOException {
         // TODO input validation (XSS and such?)
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try{
             byte[] salt = AuthenticationHandler.generateSalt();
             String query = "INSERT INTO sqills.users(name, email, hash, administrator, salt) " +
@@ -152,18 +154,19 @@ throw new DAOException(e.getMessage());
             throw new DAOException(sqle.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    @Deprecated
     public static byte[] getHash(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         int count = 0;
         try {
             String query = "SELECT hash FROM sqills.users WHERE email LIKE ?";
@@ -178,7 +181,7 @@ throw new DAOException(e.getMessage());
             System.err.println(sqle);
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -186,7 +189,7 @@ throw new DAOException(e.getMessage());
         return null;
     }
 
-
+    @Deprecated
     public static boolean checkCredentials(String email, String password) throws DAOException {
         try {
             return checkByteArrays(getHash(email), hashPassword(password, getSalt(email)));

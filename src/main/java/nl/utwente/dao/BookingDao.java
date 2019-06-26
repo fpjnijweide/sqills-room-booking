@@ -30,7 +30,7 @@ public class BookingDao {
             throw new InvalidBookingIDException(bookingID);
         }
         OutputBookingWithParticipants booking = new OutputBookingWithParticipants();
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT * from get_specific_booking(?)";
 
@@ -78,7 +78,7 @@ public class BookingDao {
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -92,7 +92,7 @@ throw new DAOException(e.getMessage());
             throw new InvalidBookingIDException(bookingID);
         }
         String email = null;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT u.email " +
                 "FROM sqills.Booking b " +
@@ -115,7 +115,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -132,7 +132,7 @@ throw new DAOException(e.getMessage());
     public static int createBooking(SpecifiedBooking booking) throws BookingException, DAOException {
         int id = -1;
         throwSpecifiedBookingExceptions(booking);
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
             String query = "select * from create_booking(?,?,?,?,?,?,?)";
@@ -155,7 +155,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -184,7 +184,7 @@ throw new DAOException(e.getMessage());
 
         throwSpecifiedBookingExceptions(booking);
         int id = -1;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select create_recurring_booking_parent(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -208,7 +208,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -227,7 +227,7 @@ throw new DAOException(e.getMessage());
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
 
             String query = "DELETE FROM sqills.participants WHERE bookingID = ?";
@@ -246,7 +246,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -266,7 +266,7 @@ throw new DAOException(e.getMessage());
             throw new InvalidBookingIDException(bookingID);
         }
         deleteParticipantsOfBooking(bookingID);
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
 
             String query = "DELETE FROM sqills.Booking WHERE bookingID = ?";
@@ -285,7 +285,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -306,7 +306,7 @@ throw new DAOException(e.getMessage());
 
         throwSpecifiedBookingExceptions(booking);
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
             String query = "select update_booking(?,?,?,?,?,?,?,?)";
@@ -333,7 +333,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -356,7 +356,7 @@ throw new DAOException(e.getMessage());
             throw new InvalidRoomNameException(roomName);
         }
         ArrayList<OutputBooking> result = new ArrayList<>();
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select * from booking_for_room_today(?)";
 
@@ -376,7 +376,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -484,7 +484,7 @@ throw new DAOException(e.getMessage());
             throw new InvalidRoomNameException(roomName);
         }
         boolean isValid = true;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select * from is_valid_booking(?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -510,7 +510,7 @@ throw new DAOException(e.getMessage());
             return false;
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -525,7 +525,7 @@ throw new DAOException(e.getMessage());
     }
 
     public static boolean isValidBookingID(int bookingID) throws DAOException {
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         boolean isValid = false;
 
         try {
@@ -540,7 +540,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

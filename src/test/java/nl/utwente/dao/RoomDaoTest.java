@@ -26,7 +26,7 @@ public class RoomDaoTest {
     @Test
     public void testIsValidBookingValid() {
         try {
-            Connection connection = DatabaseConnectionFactory.getConnection();
+            Connection connection = DatabaseConnectionFactory.conn;
             String insertQuery = "INSERT INTO sqills.room (roomid) VALUES (100);";
             connection.createStatement().execute(insertQuery);
 
@@ -36,7 +36,7 @@ public class RoomDaoTest {
             connection.createStatement().execute(deleteQuery);
 
             assertTrue(isValid);
-            connection.close();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
             fail();

@@ -24,7 +24,7 @@ public class RoomDao {
 
     public static String getRoomName(int roomID) throws DAOException {
         String result = null;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT room_name FROM sqills.Room WHERE room_id = ?";
 
@@ -40,7 +40,7 @@ public class RoomDao {
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -50,7 +50,7 @@ throw new DAOException(e.getMessage());
 
     public static int getRoomID(String roomName) throws DAOException {
         int result = -1;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
 
             String query = "SELECT room_id FROM sqills.Room WHERE room_name ilike ?";
@@ -68,7 +68,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -82,7 +82,7 @@ throw new DAOException(e.getMessage());
 
     public static List<Integer> getAllRoomsIDs() throws DAOException {
         ArrayList<Integer> result = new ArrayList<>();
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
 
             String query = "SELECT room_id FROM sqills.room";
@@ -101,7 +101,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -111,7 +111,7 @@ throw new DAOException(e.getMessage());
 
     public static List<String> getAllRoomNames() throws DAOException {
         ArrayList<String> result = new ArrayList<>();
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
 
             String query = "SELECT room_name FROM sqills.room";
@@ -130,7 +130,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -140,7 +140,7 @@ throw new DAOException(e.getMessage());
 
     public static List<String> getCurrentlyAvailableRooms() throws DAOException {
         List<String> rooms = new ArrayList<>();
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select * from get_currently_available_rooms()";
 
@@ -155,7 +155,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -168,7 +168,7 @@ throw new DAOException(e.getMessage());
             throw new InvalidRoomNameException(roomName);
         }
         Time result = null;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT * from get_free_until(?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -187,7 +187,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -207,7 +207,7 @@ throw new DAOException(e.getMessage());
         List<OutputBooking> result = new ArrayList<>();
         String query = "SELECT * from get_booking_for_this_week(?)";
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -222,7 +222,7 @@ throw new DAOException(e.getMessage());
 throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

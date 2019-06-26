@@ -36,7 +36,7 @@
 //            String query = "DELETE FROM sqills.Booking WHERE bookingdate = '2030-12-12'";
 //            int updatedRows = statement.executeUpdate(query);
 //            statement.close();
-//            this.connection.close();
+//            this.connection.commit()
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
