@@ -1,6 +1,7 @@
 package nl.utwente.servlet.tabletInterface;
 
 import nl.utwente.dao.RoomDao;
+import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.DAOException;
 
 import javax.servlet.ServletException;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class SpecificRoomServlet extends HttpServlet {
     @Override
@@ -17,6 +19,11 @@ public class SpecificRoomServlet extends HttpServlet {
         String roomName = splitUri[3];
         try {
             if (!RoomDao.isValidRoomName(roomName)) {
+                try {
+                    DatabaseConnectionFactory.conn.commit();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 res.setStatus(404);
                 res.getWriter().write("404");
             } else {

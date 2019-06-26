@@ -26,14 +26,7 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
 throw new DAOException(e.getMessage());
-        } finally {
-            try {
-                connection.commit();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
         return isValid;
     }
 

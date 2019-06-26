@@ -432,7 +432,7 @@ throw new DAOException(e.getMessage());
         return isValidBooking(booking, roomName, sqlDate);
     }
 
-    public static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) throws DAOException {
+    private static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) throws DAOException {
         boolean validEmail = isValidEmail(booking.getEmail());
         boolean validTimeSlot = false;
         try {
@@ -443,7 +443,7 @@ throw new DAOException(e.getMessage());
         return (validEmail && validTimeSlot);
     }
 
-    public static void throwSpecifiedBookingExceptions(SpecifiedBooking booking) throws BookingException, DAOException {
+    private static void throwSpecifiedBookingExceptions(SpecifiedBooking booking) throws BookingException, DAOException {
         throwBookingExceptions(booking, booking.getRoomName(), booking.getDate());
     }
 
@@ -453,7 +453,7 @@ throw new DAOException(e.getMessage());
         throwBookingExceptions(booking, roomName, sqlDate);
     }
 
-    public static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException, DAOException {
+    private static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException, DAOException {
         ArrayList<String> errorMessages = new ArrayList<>();
 
         if (!isValidTitle(booking.getTitle())) {
@@ -479,7 +479,8 @@ throw new DAOException(e.getMessage());
         }
     }
 
-    public static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
+    // Not meant to be called from endpoint
+    private static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
@@ -508,12 +509,6 @@ throw new DAOException(e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            try {
-                connection.commit();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isValid;
     }
@@ -538,12 +533,6 @@ throw new DAOException(e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
 throw new DAOException(e.getMessage());
-        } finally {
-            try {
-                connection.commit();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return isValid;

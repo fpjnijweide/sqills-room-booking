@@ -22,6 +22,7 @@ public class RoomDao {
         return getRoomName(roomID) != null;
     }
 
+    // Not meant to be called from a resource
     public static String getRoomName(int roomID) throws DAOException {
         String result = null;
         Connection connection = DatabaseConnectionFactory.conn;
@@ -38,12 +39,6 @@ public class RoomDao {
         } catch (SQLException e) {
             e.printStackTrace();
 throw new DAOException(e.getMessage());
-        } finally {
-            try {
-                connection.commit();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return result;
     }
@@ -66,12 +61,6 @@ throw new DAOException(e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
 throw new DAOException(e.getMessage());
-        } finally {
-            try {
-                connection.commit();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return result;
     }
