@@ -21,6 +21,7 @@ public class BookingViewServlet extends HttpServlet {
         if (req.getSession().getAttribute(AuthenticationFilter.principalName)==null){
             req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
         } else {
+//            if (BookingDao.)
             String uri = req.getRequestURI();
             String[] splitUri = uri.split("/");
             String bookingID = splitUri[3];
@@ -28,7 +29,6 @@ public class BookingViewServlet extends HttpServlet {
             try {
                 req.setAttribute("booking", BookingDao.getOutputBooking(Integer.valueOf(bookingID)));
                 req.getRequestDispatcher("/desktop/booking.jsp").forward(req, res);
-
             } catch (InvalidBookingIDException e) {
                 res.setStatus(404);
                 res.getWriter().write(e.getMessage());
