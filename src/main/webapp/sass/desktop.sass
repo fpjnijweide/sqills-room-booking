@@ -279,3 +279,46 @@ $endcolor: white
 
 .booking-row-clickable:hover
   background-color: #CCC
+
+.booking-information-field
+  font-size: 24px
+  text-align: center
+  color: rgba(0, 0, 0, 0.65)
+
+  .highlight
+    color: black
+
+.booking-information-header
+  margin-top: 20px
+  text-align: center
+  color: $sqills-purple
+  font-size: 40px
+  font-weight: 100
+
+.button-container
+  display: flex
+  width: 100%
+
+  .booking-information-button
+    width: 50%
+    flex:  1 1 auto
+    height: 75px
+    border: 2px solid $sqills-purple
+    margin: 10px
+    font-size: 28px
+    color: $sqills-purple
+    background-color: transparent
+    transition: background 0.25s linear 0s, color 0.25s linear 0s
+
+  .booking-information-button:hover
+    background-color: $sqills-purple
+    color: white
+
+  .booking-information-button.disabled
+    cursor: not-allowed
+    color: #CCC
+    border: 2px solid #CCC
+
+  .booking-information-button:hover.disabled
+    background: transparent
+    color: #CCC

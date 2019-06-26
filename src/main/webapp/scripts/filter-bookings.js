@@ -16,8 +16,6 @@ function filterBookings() {
         params.endDate = document.getElementById("filter-enddate").value;
     }
 
-    console.log(params);
-
     axios.get('/api/booking/filter', {"params": params})
         .then(response => {
             let bookings = response.data;
@@ -36,4 +34,8 @@ function filterBookings() {
                 `
             }
         })
+}
+
+function redirectToBookingPage(bookingID) {
+    window.location = `/desktop/booking/${bookingID}`;
 }
