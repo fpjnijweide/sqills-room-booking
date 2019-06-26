@@ -22,7 +22,7 @@ import static org.junit.Assert.assertFalse;
 public class RoomDaoTest {
     @BeforeClass
     public static void setup() {
-        connection = DatabaseConnectionFactory.conn;
+        connection = DatabaseConnectionFactory.connection;
     }
 
     @AfterClass

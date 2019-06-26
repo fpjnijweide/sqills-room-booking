@@ -1,7 +1,5 @@
 package nl.utwente.db;
 
-import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,7 +9,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConnectionFactory {
 
-    public static Connection conn = getConnection();
+    public static Connection connection = getConnection();
     /**
      * Returns a connection to the SQL database.
      * @return connection object to the database
@@ -40,7 +38,7 @@ public class DatabaseConnectionFactory {
 
     @Override
     protected void finalize() throws Throwable {
-        conn.close();
+        connection.close();
         super.finalize();
     }
 

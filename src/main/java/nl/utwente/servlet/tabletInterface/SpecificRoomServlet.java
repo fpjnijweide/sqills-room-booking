@@ -20,7 +20,7 @@ public class SpecificRoomServlet extends HttpServlet {
         try {
             if (!RoomDao.isValidRoomName(roomName)) {
                 try {
-                    DatabaseConnectionFactory.conn.commit();
+                    DatabaseConnectionFactory.connection.commit();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
