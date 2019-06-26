@@ -29,8 +29,8 @@
         <servlet-class>nl.utwente.servlet.desktopInterface.RoomOverviewServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Booking Servlet</servlet-name>
-        <servlet-class>nl.utwente.servlet.desktopInterface.BookingServlet</servlet-class>
+        <servlet-name>Book Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.desktopInterface.BookServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Tablet Index Servlet</servlet-name>
@@ -43,6 +43,10 @@
     <servlet>
         <servlet-name>Desktop login Servlet</servlet-name>
         <servlet-class>nl.utwente.servlet.desktopInterface.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Booking View Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.desktopInterface.BookingViewServlet</servlet-class>
     </servlet>
 
 	<servlet-mapping>
@@ -62,7 +66,7 @@
         <url-pattern>/desktop/rooms</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Booking Servlet</servlet-name>
+        <servlet-name>Book Servlet</servlet-name>
         <url-pattern>/desktop/book</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
@@ -77,8 +81,18 @@
         <servlet-name>Specific Room Servlet</servlet-name>
         <url-pattern>/tablet/room/*</url-pattern>
     </servlet-mapping>
-
-
+    <servlet-mapping>
+        <servlet-name>Booking View Servlet</servlet-name>
+        <url-pattern>/desktop/booking/*</url-pattern>
+    </servlet-mapping>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/desktop/500.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/desktop/500.jsp</location>
+    </error-page>
 
 
 </web-app>

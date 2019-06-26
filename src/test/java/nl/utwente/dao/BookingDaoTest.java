@@ -4,6 +4,7 @@
 //import nl.utwente.model.Booking;
 //import org.junit.After;
 //import org.junit.Before;
+//import org.junit.BeforeClass;
 //import org.junit.Test;
 //
 //import java.sql.*;
@@ -13,17 +14,22 @@
 //import static org.junit.Assert.*;
 //
 //public class BookingDaoTest {
-//    private Connection connection;
+//    private static Connection connection;
+//    private static int roomID = -100;
+//    private static String roomName = "test_room";
+//    private static String bookingTitle = "Test booking title";
+//    private static String email = "sqills_tablet@gmail.com";
+//
+//    @BeforeClass
+//    public static void setup() {
+//        connection = DatabaseConnectionFactory.conn;
+//    }
 //
 //    @Before
-//    public void setUpConnectionAndPopulate() {
-//        this.connection = DatabaseConnectionFactory.getConnection();
-//
+//    public void beforeEachTest() {
 //        try {
-//            Statement statement = connection.createStatement();
-//            String query = "INSERT INTO Sqills.Booking(bookingdate, starttime, endtime, roomID) " +
-//                           "VALUES ('2030-12-12', '9:00:00', '10:00:00', 1)";
-//            int updatedRows = statement.executeUpdate(query);
+//            RoomDaoTest.createRoom();
+//            // TODO create booking
 //        } catch(SQLException sqle) {
 //            System.err.println(sqle);
 //        }
@@ -36,7 +42,7 @@
 //            String query = "DELETE FROM sqills.Booking WHERE bookingdate = '2030-12-12'";
 //            int updatedRows = statement.executeUpdate(query);
 //            statement.close();
-//            this.connection.close();
+//            this.connection.commit();
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
