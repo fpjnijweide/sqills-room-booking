@@ -230,15 +230,12 @@ throw new DAOException(e.getMessage());
         Connection connection = DatabaseConnectionFactory.conn;
         try {
 
-            String query = "DELETE FROM sqills.participants WHERE bookingID = ?";
+            String query = "DELETE FROM sqills.participants WHERE booking_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setInt(1, bookingID);
 
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0){
-                throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
-            }
 
             statement.close();
         } catch (SQLException e) {
@@ -269,7 +266,7 @@ throw new DAOException(e.getMessage());
         Connection connection = DatabaseConnectionFactory.conn;
         try {
 
-            String query = "DELETE FROM sqills.Booking WHERE bookingID = ?";
+            String query = "DELETE FROM sqills.Booking WHERE booking_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setInt(1, bookingID);

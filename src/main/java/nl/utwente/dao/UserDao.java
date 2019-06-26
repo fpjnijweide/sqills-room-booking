@@ -17,7 +17,7 @@ public class UserDao {
         boolean isValid = false;
 
         try {
-            String query = "SELECT * FROM sqills.users WHERE userid = ?";
+            String query = "SELECT * FROM sqills.users WHERE user_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, userID);
 
