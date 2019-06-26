@@ -5,10 +5,7 @@ import nl.utwente.dao.ParticipantDao;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
-import nl.utwente.model.OutputBooking;
-import nl.utwente.model.RecurringBooking;
-import nl.utwente.model.SpecifiedBooking;
-import nl.utwente.model.User;
+import nl.utwente.model.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -16,10 +13,16 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.*;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
 import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
+import static nl.utwente.authentication.AuthenticationHandler.userParticipatesInBooking;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/booking")
@@ -151,6 +154,41 @@ public class BookingResource {
         } catch (DAOException e) {
             throw500(e.getMessage());
         }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/filter")
+    public List<OutputBooking> getFilteredBookings(
+        @QueryParam("title") String title,
+        @QueryParam("email") String email,
+        @QueryParam("startDate") Date startDate,
+        @QueryParam("endDate") Date endDate
+    ) {
+        System.out.println(title);
+        System.out.println(email);
+        System.out.println(startDate);
+        System.out.println(endDate);
+//        if (startDate == null) {
+//            startDate = new Date(0);
+//        }
+//
+//        if (endDate == null) {
+//            endDate = new Date(2050, 1, 1);
+//        }
+//
+        try {
+            return BookingDao.getFilteredBookings(
+                email,
+                title,
+                startDate,
+                endDate
+            );
+            } catch (DAOException e) {
+                throw400(e.getMessage());
+            }
+
+        return null;
     }
 
 }
