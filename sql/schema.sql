@@ -26,7 +26,7 @@ create table sqills.booking
     is_recurring boolean
 
 );
-drop type repeat_type;
+drop type if exists repeat_type;
 create type repeat_type as enum
   ('day','week','month','year');
 
@@ -59,7 +59,16 @@ CREATE TABLE sqills.participants (
   booking_id integer REFERENCES sqills.booking(booking_id)
 );
 
-insert into sqills.users (name, email) values('admin','sqills_tablet@gmail.com');
+INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (1, 'admin', 'sqills_tablet@gmail.com', true);
+INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (2, 'Andrew Heath', 'a.j.heath@student.utwente.nl', true);
+INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (3, 'Platon Gmail', 'pl.frolov99@gmail.com', true);
+INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (4, 'Freek Nijweide', 'freeknijweide@gmail.com', true);
+INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (5, 'Andrew 2', 'andrewideaheath@gmail.com', false);
+INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (6, 'Platon Frolov', 'p.m.frolov@student.utwente.nl', true);
 
-
-insert into sqills.room(room_name) values ('1'),('2'),('3'),('4'),('5'),('6')
+INSERT INTO sqills.room (room_id, room_name) VALUES (1, '1');
+INSERT INTO sqills.room (room_id, room_name) VALUES (2, '2');
+INSERT INTO sqills.room (room_id, room_name) VALUES (3, '3');
+INSERT INTO sqills.room (room_id, room_name) VALUES (4, '4');
+INSERT INTO sqills.room (room_id, room_name) VALUES (5, '5');
+INSERT INTO sqills.room (room_id, room_name) VALUES (6, '6');

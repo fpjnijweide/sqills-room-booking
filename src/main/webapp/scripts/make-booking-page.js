@@ -3,17 +3,24 @@ function checkFieldsAndBook(){
     let requestBody = {
         "emails": emails
     }
-    axios.post("/api/user/email/check", requestBody)
-        .then(response => {
-            let data= response.data;
-            if (data.emails.length == 0 && checkAllFieldsFilledIn()){
-                bookRoom()
-            } else if(!checkAllFieldsFilledIn()) {
-                showError("Please fill in all fields")
-            } else {
-                showError("one of the emails is invalid")
-            }
-        });
+    if (emails.length > 0) {
+        axios.post("/api/user/email/check", requestBody)
+            .then(response => {
+                let data= response.data;
+                if (data.emails.length == 0 && checkAllFieldsFilledIn()){
+                    bookRoom()
+                } else if(!checkAllFieldsFilledIn()) {
+                    showError("Please fill in all fields")
+                } else {
+                    showError("one of the emails is invalid")
+                }
+            });
+    } else if (checkAllFieldsFilledIn()){
+        bookRoom()
+    } else {
+        showError("Please fill in all fields")
+    }
+
 }
 
 function bookRoom() {
@@ -37,14 +44,14 @@ function checkRecurringFields(){
 }
 
 function makeBooking(){
-
-
+    let selectRoom = document.getElementById("room-select");
+//todo hook up room dropdown to make booking
     let title = document.getElementById("booking-title").value
-    , email = document.getElementById("booking-email").value
+    , email = "" // document.getElementById("booking-email").value
     , date = document.getElementById("booking-date").value
     , startTime = document.getElementById("booking-starttime").value + ":00"
     , endTime = document.getElementById("booking-endtime").value + ":00"
-    , roomName = document.getElementById("booking-roomid").value
+    , roomName = selectRoom.options[selectRoom.selectedIndex].value
     , isPrivate = document.getElementById("booking-isPrivate").checked
     , participantElements = extractParticpants(document.getElementsByClassName("participant-in-list"))
     , requestBody = {
@@ -61,19 +68,24 @@ function makeBooking(){
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
-            initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
+            // initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
+            window.location.href="/desktop/booking/" + id;
             // document.location.replace(`/api/booking/${id}`);
-        });
+        }).catch((response) => {
+            showError(response.response.data)
+    });
+
 }
 function makeRecurringBooking(){
+    let selectRoom = document.getElementById("room-select");
     let elem = document.getElementById("choose-time-unit");
     let requestBody = {
         "title": document.getElementById("booking-title").value,
-        "email": document.getElementById("booking-email").value,
+        "email": "", // document.getElementById("booking-email").value,
         "date": document.getElementById("booking-date").value,
         "startTime": document.getElementById("booking-starttime").value + ":00",
         "endTime": document.getElementById("booking-endtime").value + ":00",
-        "roomName": document.getElementById("booking-roomid").value,
+        "roomName": selectRoom.options[selectRoom.selectedIndex].value,
         "isPrivate": document.getElementById("booking-isPrivate").checked,
         "repeatEveryType": elem.options[elem.selectedIndex].value,
         "repeatEvery": document.getElementById("time").value,
@@ -140,9 +152,9 @@ function setRecurringVisible(invisible){
 
 function getAllEmails(){
     let emails = [];
-    let creatorEmail = document.getElementById("booking-email").value;
+    // let creatorEmail = document.getElementById("booking-email").value;
     let participantElements = document.getElementsByClassName("participant-in-list");
-    emails.push(creatorEmail)
+    // emails.push(creatorEmail)
     for (let i = 0; i < participantElements.length; i++) {
         let email = document.getElementsByClassName("participant-in-list")[i].textContent.slice(0,-6);
         emails.push(email)
@@ -181,6 +193,16 @@ function checkAllFieldsFilledIn(){
         return false;
     }
     return true;
+}
+
+
+function adaptTimeText(){
+    $('.btn.btn-sm.btn-default.btn-block.clockpicker-button').text("Select")
+}
+
+function setRoom(number){
+    console.log(number)
+    document.getElementById("room-select").value = number;
 }
 
 //todo throw nicer errors instead of console.logs

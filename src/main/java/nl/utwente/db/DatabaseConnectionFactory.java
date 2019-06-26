@@ -1,5 +1,7 @@
 package nl.utwente.db;
 
+import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,6 +10,8 @@ import java.sql.SQLException;
  * The DatabaseConnectionFactory is responsible for returning connections to our SQL database.
  */
 public class DatabaseConnectionFactory {
+
+    public static Connection conn = getConnection();
     /**
      * Returns a connection to the SQL database.
      * @return connection object to the database
@@ -25,10 +29,19 @@ public class DatabaseConnectionFactory {
         final String username = "di125";
         final String password = "E9+gNMnM";
         try {
-            return DriverManager.getConnection(url, username, password);
+            Connection connection =  DriverManager.getConnection(url, username, password);
+            connection.setAutoCommit(false);
+            return connection;
         } catch(SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        conn.close();
+        super.finalize();
+    }
+
 }

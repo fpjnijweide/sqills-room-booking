@@ -1,6 +1,7 @@
 package nl.utwente.resource;
 
 import nl.utwente.dao.BookingDao;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -28,6 +29,9 @@ public class BookingResourceTest extends JerseyTest {
                 assertEquals(BookingDao.getOutputBooking(i).toString().replaceAll("\\s",""), res.readEntity(String.class));
             } catch (InvalidBookingIDException e) {
                 fail("Invalid booking ID");
+            } catch (DAOException e) {
+                e.printStackTrace();
+                fail();
             }
         }
 
