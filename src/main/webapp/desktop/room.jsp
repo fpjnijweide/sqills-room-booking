@@ -66,7 +66,7 @@
 
             <div class="col-md-6">
                 <!-- Button trigger modal -->
-                <button type="button" class="make-booking-room-button" data-toggle="modal" data-target="#exampleModalLong">
+                <button type="button" onclick="setRoom(<%= request.getAttribute("id") %>)" class="make-booking-room-button" data-toggle="modal" data-target="#exampleModalLong">
                     Book this room
                 </button>
             </div>

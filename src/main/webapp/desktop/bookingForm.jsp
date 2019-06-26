@@ -1,9 +1,10 @@
+<script src="/scripts/tablet/make-tablet-booking.js"></script>
 <form class="create-booking-form">
     <label>Booking Title</label>
     <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
 
     <label>Your Email</label>
-    <input id="booking-email" class="booking-email full-width" type="text" placeholder="Your Email">
+    <input id="booking-email" class="booking-email full-width" type="text" placeholder="Your Email" onkeyup="autoComplete(this)">
 
     <label>Date</label>
     <input type="date" id="booking-date" class="booking-date full-width">
@@ -17,14 +18,14 @@
 
 
     <label>Start Time</label>
-    <div class="input-group clockpicker">
+    <div class="input-group clockpicker" onclick="adaptTimeText()">
         <input type="text" class="form-control" value="09:30" id="booking-starttime">
         <%--                            <span class="input-group-addon">--%>
         <%--                                <span class="glyphicon glyphicon-time"></span>--%>
         <%--                            </span>--%>
     </div>
     <label>End Time</label>
-    <div class="input-group clockpicker">
+    <div class="input-group clockpicker" onclick="adaptTimeText()">
         <input type="text" class="form-control" value="09:30" id="booking-endtime">
         <%--                            <span class="input-group-addon">--%>
         <%--                                <span class="glyphicon glyphicon-time"></span>--%>
@@ -46,7 +47,7 @@
     <div id="participants-container">
 
         <div class="input-and-button">
-            <input type="text" id="participant" placeholder="Participant name">
+            <input type="text" id="participant" onkeyup="autoComplete(this)" placeholder="Participant name">
             <button type="button" onclick="addParticipantField()">+</button>
         </div>
         <div id="participants-list">
