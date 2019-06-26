@@ -535,6 +535,52 @@ throw new DAOException(e.getMessage());
         return isValid;
     }
 
+    public static List<OutputBooking> getFilteredBookings(String email, String title, Date startDate, Date endDate) throws DAOException {
+        List<OutputBooking> bookings = new ArrayList<>();
+        String query = "SELECT b.booking_id, b.title, u.email, u.name, b.start_time, b.end_time, r.room_name, b.date " +
+            "FROM sqills.booking as b, sqills.users as u, sqills.room as r " +
+            "WHERE b.owner = u.user_id " +
+            "AND r.room_id = b.room_id " +
+            "AND b.title ILIKE CONCAT('%', ?, '%') " +
+            "AND u.email ILIKE CONCAT('%', ?, '%') " +
+            "AND b.date >= ? " +
+            "AND b.date <= ?";
+
+        Connection connection = DatabaseConnectionFactory.getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, email);
+            preparedStatement.setDate(3, startDate);
+            preparedStatement.setDate(4, endDate);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                OutputBooking booking = new OutputBooking();
+                booking.setTitle(resultSet.getString("title"));
+                booking.setBookingid(resultSet.getInt("booking_id"));
+                booking.setRoomName(resultSet.getString("room_name"));
+                booking.setDate(resultSet.getDate("date"));
+                booking.setStartTime(resultSet.getTime("start_time"));
+                booking.setEndTime(resultSet.getTime("end_time"));
+                booking.setUserName(resultSet.getString("name"));
+                bookings.add(booking);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+            throw new DAOException("Internal server exceptions");
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return bookings;
+    }
+
     public static boolean isValidTitle(String title) {
         final String ALLOWED_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. -_";
 

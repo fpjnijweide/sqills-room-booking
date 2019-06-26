@@ -145,19 +145,23 @@ $navheight: 50px
   height: $navheight*0.75
   margin-top: $navheight*0.125
 
-//.navbar
-//  padding-bottom: 0
-//  padding-top: 0
-//  height: $navheight
-//
-//.nav-item
-//  margin-left: 10px
-//  width: 125px
+.navbar
+  padding-bottom: 0
+  padding-top: 0
+  height: $navheight
+
+.nav-item
+  margin-left: 10px
+  width: 125px
 
 .container
   padding-top: 40px
 
 .nav-link
+  width: 100%
+  height: 100%
+  border-radius: 20px
+  display: block
   text-align: center
 
 a.nav-link:hover
@@ -225,3 +229,53 @@ $endcolor: white
   width: 400px
   margin-left: calc(50% - 200px)
 
+.filter-container
+  .text-input
+    width: 100%
+    outline: none
+    padding: 5px
+    border: 1px solid $sqills-purple
+    margin-left: 2px
+
+  .date-input
+    width: 100%
+    padding: 5px
+    text-align: center
+    border: 1px solid $sqills-purple
+    margin-left: 2px
+
+  .filter-header
+    font-size: 24px
+    //text-align: center
+
+  h1
+    text-align: center
+    font-weight: 300
+
+  button
+    margin-left: 2px
+    margin-top: 10px
+    width: 100%
+    padding: 10px
+    height: 70px
+    border-radius: 35px
+    color: $sqills-purple
+    border: 2px solid $sqills-purple
+    background-color: transparent
+    font-size: 30px
+    font-weight: 100
+    transition: background 0.25s linear 0s, color 0.25s linear 0s
+
+  button:hover
+    background-color: $sqills-purple
+    color: white
+
+.booking-row-clickable
+  cursor: pointer
+  transition: background 0.25s linear 0s
+
+  td
+    cursor: pointer
+
+.booking-row-clickable:hover
+  background-color: #CCC
