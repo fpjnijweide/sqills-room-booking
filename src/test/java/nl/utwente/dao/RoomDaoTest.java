@@ -44,7 +44,14 @@ public class RoomDaoTest {
     }
 
     @Before
-    public void createRoom() {
+    public void beforeEachTest() {
+        // This structure is not perfect. JUnit requires @Before methods to be non-static
+        // But we need createRoom to be static so that we can easily access it from BookingDaoTest
+        // This was the best solution
+        createRoom();
+    }
+
+    public static void createRoom() {
         String query = "INSERT INTO sqills.room (room_id, room_name) VALUES (" + roomID + ", '" + roomName + "')";
         try {
             connection.createStatement().execute(query);
