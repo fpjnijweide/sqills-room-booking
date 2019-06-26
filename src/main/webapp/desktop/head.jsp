@@ -18,10 +18,11 @@
 <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap" rel="stylesheet">
 <script src="/scripts/clickable-row.js"></script>
 <script src="/scripts/error-handling.js"></script>
-
+<%--TODO remove--%>
+<meta name="google-site-verification" content="jefKHpiLHqUKSsbBFoXqdaEe1vT0oj4wFWnUB9LshvE" />
 <%--Google Auth and Calendar API --%>
 <script src="/scripts/google-calendar.js"></script>
 <script src="https://apis.google.com/js/platform.js?" async></script>
 <script async defer src="https://apis.google.com/js/api.js?" onload="onLoadGAPI()" ></script>
-
+<meta name="google-site-verification" content="v8KQE2-q2JQIaBlDYcxO433s395Be6OR7dAT0_Cinao" />
 <meta name="google-signin-client_id" content="347026751328-n650qv0b0v1qjmmnk16vddsae05rqp4v.apps.googleusercontent.com">

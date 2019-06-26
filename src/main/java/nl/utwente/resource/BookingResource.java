@@ -5,6 +5,7 @@ import nl.utwente.dao.ParticipantDao;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
+import nl.utwente.google.GoogleCalendar;
 import nl.utwente.model.OutputBooking;
 import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
@@ -15,7 +16,8 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.SecurityContext;
+import java.io.IOException;
 import java.util.List;
 
 import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
@@ -152,4 +154,29 @@ public class BookingResource {
         }
     }
 
+    /**
+     *
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/gc")
+    public void googleCalendar(@Valid Object obj){
+        System.out.println("Change detected");
+        System.out.println(obj);
+    }
+
+
+    /**
+     *
+     */
+    @GET
+    @Path("/test/gc")
+    public void googleCalendarTestCall(){
+        GoogleCalendar gc = new GoogleCalendar();
+        try {
+            gc.setUpWatchers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

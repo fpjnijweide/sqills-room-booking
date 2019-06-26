@@ -46,7 +46,6 @@ public class UserResource {
         // TODO do input validation here
         insertUser(user.getFullName(),user.getUsername(),user.getPassword(),false);
     }
-
     // TODO refactor this method's name and javascript
     @GET
     @Path("/{email}")
