@@ -11,8 +11,10 @@ $FileName$:../css/$FileNameWithoutExtension$.css
 - Repeat the previous 3 steps, but then for Sass
 - Press apply
 
-###Alternative use
+###Alternatively, if not using IntelliJ
 ```
 cd src/main/webapp/
 sass --watch sass/desktop.sass:css/desktop.css
+```
+Repeat the last commands for all .sass / .scss files in the sass/ folder
 
