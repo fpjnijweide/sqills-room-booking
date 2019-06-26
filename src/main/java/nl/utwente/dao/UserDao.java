@@ -130,7 +130,7 @@ throw new DAOException(e.getMessage());
         return null;
     }
 
-    public static void insertUser(String name, String email, boolean admin){
+    public static void insertUser(String name, String email, boolean admin) throws DAOException {
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
             String query = "INSERT INTO sqills.users (\"name\", email, administrator) VALUES (?,?,?)";
@@ -205,6 +205,10 @@ throw new DAOException(e.getMessage());
         String name = "Platon Frolov";
         String email = "p.m.frolov@student.utwente.nl";
         boolean admin = true;
-        insertUser(name, email, admin);
+        try {
+            insertUser(name, email, admin);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
     }
 }
