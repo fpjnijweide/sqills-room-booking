@@ -1,5 +1,6 @@
 package nl.utwente.resource;
 
+import com.google.api.services.calendar.model.Event;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.dao.ParticipantDao;
 import nl.utwente.exceptions.BookingException;
@@ -158,23 +159,47 @@ public class BookingResource {
      *
      */
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/gc")
-    public void googleCalendar(@Valid Object obj){
+    @Path("/google-calendar/push-notification-events")
+    public void googleCalendarPushNotification(@HeaderParam("X-Goog-Channel-ID")String channelID, @HeaderParam("X-Goog-Resource-ID")String resourceID, @HeaderParam("X-Goog-Resource-URI") String resourceURI, @HeaderParam("X-Goog-Channel-Token") String token ){
         System.out.println("Change detected");
-        System.out.println(obj);
+        System.out.println("ChannelID: "+channelID+ " Resource ID: "+resourceID+ " Token: "+token + " Resource URI");
+        GoogleCalendar gc = new GoogleCalendar();
+        Event e  = null;
+        try {
+            e = gc.getEvent("tudent.utwente.nl_rubdfd2mejlmk77obth2qcb910@group.calendar.google.com", "DV2YOcFLYivvkNUeGel5y1eu6T0");
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("event not found");
+        }
+        System.out.println(e.getSummary());
     }
 
 
     /**
      *
      */
+    @Deprecated
     @GET
-    @Path("/test/gc")
-    public void googleCalendarTestCall(){
+    @Path("/google-calendar/test/add-watchers")
+    public void googleCalendarTestAddWatchers(){
         GoogleCalendar gc = new GoogleCalendar();
         try {
             gc.setUpWatchers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     */
+    @Deprecated
+    @GET
+    @Path("/google-calendar/test/stop-watchers")
+    public void googleCalendarTestCallRemoveWatchers(@HeaderParam("channelID")String channelID, @HeaderParam("resourceID") String resourceID){
+        GoogleCalendar gc = new GoogleCalendar();
+        try {
+            gc.removeWatchChannel(channelID, resourceID);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -67,6 +67,10 @@ public class GoogleCalendar {
 
         return null;
     }
+
+    public void getResource(String resourceID){
+    }
+
     public boolean calendarExist(String calendarName){
         try {
             Calendar.CalendarList.Get result = this.calendar.calendarList().get(calendarName);
@@ -104,7 +108,7 @@ public class GoogleCalendar {
         return dateTime;
     }
 
-    public Event getEvent(String title, Date date, Time startTime, Time endTime, String location){
+    public Event formatEvent(String title, Date date, Time startTime, Time endTime, String location){
         Event event = new Event();
         event.setStart(new EventDateTime().setDateTime(dateAndTimeToDateTime(date, startTime)));
         event.setEnd(new EventDateTime().setDateTime(dateAndTimeToDateTime(date, endTime)));
@@ -114,38 +118,39 @@ public class GoogleCalendar {
         return event;
     }
 
+    public Event getEvent(String calendarId, String eventResourceId) throws IOException {
+        this.calendar.calendarList().get(calendarId).execute();
+        return this.calendar.events().get(calendarId, eventResourceId).execute();
+    }
     private void setupWatchChannel(String calendarID) throws IOException {
         Channel channel = new Channel();
         channel.setId(UUID.randomUUID().toString());
         channel.setType("web_hook");
-        channel.setAddress("https://booking.webrelay.io/api/booking/gc");
-//        channel.setParams((Map<String, String>) new HashMap<>().put("ttl","30000"));
+        channel.setToken(calendarID);
+        channel.setAddress("https://booking.webrelay.io/api/booking/google-calendar/push-notification-events");
         Channel response =  this.calendar.events().watch(calendarID, channel).execute();
         System.out.println("Set up for id: "+calendarID);
+        System.out.println(response);
+    }
+
+    public void removeWatchChannel(String channelID, String resourceID) throws IOException {
+        Channel channel = new Channel();
+        channel.setId(channelID);
+        channel.setResourceId(resourceID);
+        Object response = this.calendar.channels().stop(channel).execute();
         System.out.println(response);
     }
 
     public void setUpWatchers() throws IOException {
 
         List<CalendarListEntry> allCalendars = this.calendar.calendarList().list().execute().getItems();
-        System.out.println("Cal list watcher");
-        Channel channel = new Channel();
-        channel.setId(UUID.randomUUID().toString());
-        channel.setType("web_hook");
-        channel.setAddress("https://booking.webrelay.io/api/booking/gc");
-        Channel response  = this.calendar.calendarList().watch(channel).execute();
-        System.out.println("Set up for calendars");
-        System.out.println(response);
-
         for (int i = 0; i < allCalendars.size(); i++) {
             System.out.println(allCalendars.get(i).getSummary());
             String id = allCalendars.get(i).getId();
-            System.out.println("Current Event: ");
-            getCalendarEvent(id);
-            System.out.println(id);
             setupWatchChannel(id);
         }
     }
+
 
     public void getCalendarEvent(String calendarID) throws IOException {
         List<Event> events = this.calendar.events().list(calendarID).execute().getItems();
