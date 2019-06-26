@@ -28,7 +28,6 @@ public class RoomServlet extends HttpServlet {
                 req.getRequestDispatcher("/desktop/room.jsp").forward(req, res);
             } catch (InvalidRoomNameException e) {
                 res.setStatus(404);
-                req.getRequestDispatcher("/desktop/404.jsp").forward(req, res);
                 res.getWriter().write(e.getMessage());
             } catch (DAOException e) {
                 res.setStatus(500);
