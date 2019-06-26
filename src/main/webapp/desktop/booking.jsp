@@ -9,6 +9,7 @@
     <title>Booking <%= booking.getTitle() %></title>
     <jsp:include page="head.jsp"/>
     <script>const bookingID = <%= booking.getBookingid() %></script>
+    <script>const EMAIL = <%= request.getAttribute("email") %></script>
     <script src="/scripts/booking-page.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
@@ -50,7 +51,7 @@
             </div>
 
             <div class="button-container">
-                <button class="booking-information-button disabled" disabled>Edit</button>
+                <button onclick="openEditPopUp()" class="booking-information-button disabled" disabled>Edit</button>
                 <button onclick='deleteBooking()' class="booking-information-button disabled" disabled>Delete</button>
             </div>
         </div>
@@ -86,6 +87,54 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Booking</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label>Title: </label>
+                            <input type="text" id="edit-booking-title" value="<%= booking.getTitle() %>">
+                        </div>
+
+                        <div>
+                            <label>Room Name: </label>
+                            <input type="text" id="edit-booking-room-name" value="<%= booking.getRoomName() %>">
+                        </div>
+
+                        <div>
+                            <label>Date: </label>
+                            <input type="date" id="edit-booking-date" value="<%= booking.getDate() %>">
+                        </div>
+
+                        <div>
+                            <label>Start Time: </label>
+                            <input type="time" id="edit-booking-start-time" value="<%= booking.getStartTime() %>">
+                        </div>
+
+                        <div>
+                            <label>End Time: </label>
+                            <input type="time" id="edit-booking-end-time" value="<%= booking.getEndTime() %>">
+                        </div>
+
+                        <div>
+                            <label>Private Meeting: </label>
+                            <input type="checkbox" id="edit-booking-is-private">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button onclick="editBooking()" type="button" class="btn btn-primary">Edit Booking</button>
                     </div>
                 </div>
             </div>

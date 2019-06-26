@@ -25,3 +25,28 @@ function deleteBooking() {
             $('#deletion-failure-modal').modal();
         });
 }
+
+function openEditPopUp() {
+    $("#edit-modal").modal();
+}
+
+function editBooking() {
+    let requestBody = {
+        "title": document.getElementById("edit-booking-title").value,
+        "roomName": document.getElementById("edit-booking-room-name").value,
+        "date": document.getElementById("edit-booking-date").value,
+        "startTime": document.getElementById("edit-booking-start-time").value,
+        "endTime": document.getElementById("edit-booking-end-time").value,
+        "isPrivate": document.getElementById("edit-booking-is-private").checked,
+        "email": EMAIL
+    }
+
+    axios.put(`/api/booking/${bookingID}`, requestBody)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error);
+            console.log(error.response.data);
+        })
+}

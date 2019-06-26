@@ -197,18 +197,29 @@ throw new DAOException(e.getMessage());
         return false;
     }
 
-//    public static boolean loggedIn(SecurityContext securityContext) {
-//        return securityContext.getUserPrincipal().
-//    }
+    public static String getEmailFromUsername(String username) {
+        String result = null;
+        Connection connection = DatabaseConnectionFactory.getConnection();
 
-    public static void main(String[] args) {
-        String name = "Platon Frolov";
-        String email = "p.m.frolov@student.utwente.nl";
-        boolean admin = true;
         try {
-            insertUser(name, email, admin);
-        } catch (DAOException e) {
+            String query = "SELECT email FROM sqills.users WHERE user_name = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                result = resultSet.getString(1);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
+        return result;
     }
 }

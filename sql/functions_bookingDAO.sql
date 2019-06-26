@@ -106,19 +106,19 @@ LANGUAGE plpgsql;
 
 
 drop function if exists update_booking(start_time time, end_time time, date date, room_name text, email text, is_private boolean, title text, booking_id int);
-create or replace function update_booking(start_time time, end_time time, date date, room_name text, email text, is_private boolean, title text, booking_id int) returns void
+create or replace function update_booking(p_start_time time, p_end_time time, p_date date, p_room_name text, p_email text, p_is_private boolean, p_title text, p_booking_id int) returns void
   as $$
     UPDATE sqills.Booking
-      SET start_time= start_time, end_time= end_time, date= date, room_id =
+      SET start_time = p_start_time, end_time = p_end_time, date = p_date, room_id =
         (SELECT sqills.room.room_id
         FROM sqills.room
-        WHERE room_name = room_name),
-      owner= (SELECT sqills.users.user_id
+        WHERE room_name = p_room_name),
+      owner = (SELECT sqills.users.user_id
       FROM sqills.users
-      WHERE email = email),
-      is_private= is_private,
-      title= title
-      WHERE booking_id = booking_id
+      WHERE email = p_email),
+      is_private= p_is_private,
+      title = p_title
+      WHERE booking_id = p_booking_id
   $$
   LANGUAGE SQL;
 

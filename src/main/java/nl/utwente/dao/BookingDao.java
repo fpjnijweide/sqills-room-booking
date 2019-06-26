@@ -303,7 +303,7 @@ throw new DAOException(e.getMessage());
 
         throwSpecifiedBookingExceptions(booking);
 
-        Connection connection = DatabaseConnectionFactory.conn;
+        Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
             String query = "select update_booking(?,?,?,?,?,?,?,?)";
