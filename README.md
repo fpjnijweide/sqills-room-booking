@@ -1,6 +1,7 @@
 MOD 4 project Group 37 setup guide
 
-
+HOW TO SETUP DB: 
+Run all the files in the sql folder on the database being used
 
 CREATING A USER WITH YOUR OWN EMAIL
 In order to have access to our system, you need to have a google
@@ -16,3 +17,5 @@ String email = "pl.frolov99@gmail.com"
 boolean admin = true
     -Run the main method
     -Your email is now in the DB, you can login to our system now through google
+
+You can run the server by compiling the .war file and deploying with tomcat 
