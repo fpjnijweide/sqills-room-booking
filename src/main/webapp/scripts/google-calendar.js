@@ -37,7 +37,18 @@ function createGCalendarEvent(roomName, date, startTime, endTime, title, partici
 
 
 function createRecurrence(repeatEveryType, repeatEvery, endAt){
-    return `RRULE:FREQ=${repeatEveryType.toUpperCase()}LY;INTERVAL=${repeatEvery};UNTIL=${new Date(endAt).toISOString()}`;
+    return [`RRULE:FREQ=${changeRepeatTypeToGoogleApi(repeatEveryType.toUpperCase())};INTERVAL=${repeatEvery};UNTIL=${new Date(endAt).toISOString()}`];
+}
+
+function changeRepeatTypeToGoogleApi(repeatEveryType){
+    switch(repeatEveryType.toUpperCase()){
+        case "DAY":
+            return "DAILY";
+        case "MONTH":
+            return "MONTHLY";
+        default:
+            return "YEARLY";
+    }
 }
  async function insertGCalendarEvent(event){
      await initGCalendar()
