@@ -59,6 +59,14 @@ CREATE TABLE sqills.participants (
   booking_id integer REFERENCES sqills.booking(booking_id)
 );
 
+
+drop table if exists sqills.google_calendar_sync;
+create table sqills.google_calendar_sync (
+  sync_id serial,
+  date_time timestamp,
+  sync_token varchar
+  );
+
 insert into sqills.users (name, email) values('admin','sqills_tablet@gmail.com');
 
 
