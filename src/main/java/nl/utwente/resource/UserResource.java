@@ -6,9 +6,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.dao.UserDao;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.google.GoogleAuth;
 import nl.utwente.model.EmailList;
-import nl.utwente.model.InputUser;
 import nl.utwente.model.UserAdministration;
 
 import javax.annotation.Priority;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static nl.utwente.dao.UserDao.insertUser;
-import static nl.utwente.exceptions.ExceptionHandling.throw401;
+import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/user")
 @Priority(Priorities.AUTHENTICATION)
@@ -39,39 +39,56 @@ public class UserResource {
 
     }
 
-    @POST
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void createUser(InputUser user){
-        // TODO do input validation here
-        insertUser(user.getFullName(),user.getUsername(),user.getPassword(),false);
-    }
+    // This code was used back when we had passwords
+//    @POST
+//    @Path("/")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public void createUser(InputUser user) {
+//        // This method is no longer used as we use Google Authentication
+//        // TODO do input validation here
+//        if (!user.isAdmin() || securityContext.isUserInRole("ADMIN")) {
+//            try {
+//                insertUser(user.getFullName(), user.getUsername(), user.getPassword(), user.isAdmin());
+//            } catch (DAOException e) {
+//                throw500("Something went terribly wrong");
+//            }
+//        } else {
+//            throw403("You are not allowed to make admin users");
+//        }
+//
+//    }
 
     // TODO refactor this method's name and javascript
     @GET
     @Path("/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    /**
-     * Returns all of today's bookings for a specific room.
-     * @param roomNumber Number specifying the room
-     * @return JSON object containing all of today's bookings for a specific room
-     */
     public String getUserList (@PathParam("email") String incompleteEmail) {
-        return "{ \"email\":" + "\"" + UserDao.getEmail(incompleteEmail) + "\""+ "}";
+        try {
+            return "{ \"email\":" + "\"" + UserDao.getEmail(incompleteEmail) + "\""+ "}";
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
+        }
+        return null;
     }
 
-    @POST
-    @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    public void login(UserAdministration loginAttempt){
-        boolean result = AuthenticationHandler.checkCredentials(loginAttempt.getUsername(), loginAttempt.getPassword());
-        if (result) {
-            HttpSession session = request.getSession(true);
-            session.setAttribute(AuthenticationFilter.principalName, loginAttempt.getUsername());
-        } else {
-            throw401("Incorrect login");
-        }
-    }
+    // This was used back when we had passwords
+//    @POST
+//    @Path("/login")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public void login(UserAdministration loginAttempt){
+//        boolean result = false;
+//        try {
+//            result = AuthenticationHandler.checkCredentials(loginAttempt.getUsername(), loginAttempt.getPassword());
+//        } catch (DAOException e) {
+//            throw500("Something went terribly wrong");
+//        }
+//        if (result) {
+//            HttpSession session = request.getSession(true);
+//            session.setAttribute(AuthenticationFilter.principalName, loginAttempt.getUsername());
+//        } else {
+//            throw401("Incorrect login");
+//        }
+//    }
 
     @POST
     @Path("/logout")
@@ -105,8 +122,12 @@ public class UserResource {
         EmailList returnList = new EmailList();
         List<String> invalidEmails = new ArrayList<>();
         for(String email : emails.getEmails()){
-            if (!UserDao.isValidEmail(email)){
-                invalidEmails.add(email);
+            try {
+                if (!UserDao.isValidEmail(email)){
+                    invalidEmails.add(email);
+                }
+            } catch (DAOException e) {
+                throw500("Something went terribly wrong");
             }
         }
         returnList.setEmails(invalidEmails);
@@ -117,7 +138,12 @@ public class UserResource {
     @Path("/validateEmail/{email}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getIsValidEmail(@PathParam("email") String email) {
-        boolean result = UserDao.isValidEmail(email);
+        boolean result = false;
+        try {
+            result = UserDao.isValidEmail(email);
+        } catch (DAOException e) {
+            throw500("Something went terribly wrong");
+        }
 
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode isValid = factory.objectNode();

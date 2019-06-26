@@ -54,10 +54,8 @@ body
     color: #CCC
     line-height: $height
 
-
   .book-room.taken
     opacity: 0.6
-
 
   .time-info
     text-align: center
@@ -189,6 +187,7 @@ $endcolor: white
   to
     background-color: $endbgcolor
     color: $endcolor
+    border-radius: 100px
 
 /* Standard syntax */
 @keyframes example
@@ -198,6 +197,7 @@ $endcolor: white
   to
     background-color: $endbgcolor
     color: $endcolor
+    border-radius: 100px
 
 .logo-container
   text-align: center
@@ -217,3 +217,65 @@ $endcolor: white
   padding: 25px
   text-align: center
   cursor: pointer
+
+.logintable
+  margin-left: calc(50% - 200px)
+  margin-top: 30vh
+  -webkit-border-radius: 15px
+  -moz-border-radius: 15px
+  border-radius: 15px
+
+.login-sqills-logo
+  width: 400px
+  margin-left: calc(50% - 200px)
+
+.filter-container
+  .text-input
+    width: 100%
+    outline: none
+    padding: 5px
+    border: 1px solid $sqills-purple
+    margin-left: 2px
+
+  .date-input
+    width: 100%
+    padding: 5px
+    text-align: center
+    border: 1px solid $sqills-purple
+    margin-left: 2px
+
+  .filter-header
+    font-size: 24px
+    //text-align: center
+
+  h1
+    text-align: center
+    font-weight: 300
+
+  button
+    margin-left: 2px
+    margin-top: 10px
+    width: 100%
+    padding: 10px
+    height: 70px
+    border-radius: 35px
+    color: $sqills-purple
+    border: 2px solid $sqills-purple
+    background-color: transparent
+    font-size: 30px
+    font-weight: 100
+    transition: background 0.25s linear 0s, color 0.25s linear 0s
+
+  button:hover
+    background-color: $sqills-purple
+    color: white
+
+.booking-row-clickable
+  cursor: pointer
+  transition: background 0.25s linear 0s
+
+  td
+    cursor: pointer
+
+.booking-row-clickable:hover
+  background-color: #CCC

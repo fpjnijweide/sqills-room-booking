@@ -18,11 +18,11 @@ import static nl.utwente.dao.BookingDao.isValidBookingID;
 import static nl.utwente.dao.UserDao.isValidEmail;
 
 public class ParticipantDao {
-    public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException {
+    public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         List<User> result = new ArrayList<>();
         try {
             String query = "select * from get_participants_of_booking(?)";
@@ -41,9 +41,10 @@ public class ParticipantDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -59,10 +60,10 @@ public class ParticipantDao {
             throw new InvalidUserIDException(userID);
         }
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
-            String query = "INSERT INTO sqills.participants (bookingid, userid) VALUES (?, ?);";
+            String query = "INSERT INTO sqills.participants (booking_id, user_id) VALUES (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
             preparedStatement.setInt(2, userID);
@@ -73,9 +74,10 @@ public class ParticipantDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -90,10 +92,10 @@ public class ParticipantDao {
         if ( !UserDao.isValidUserID(userID)) {
             throw new InvalidUserIDException(userID);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
-            String query = "DELETE FROM sqills.participants WHERE bookingid = ? AND userid = ?;";
+            String query = "DELETE FROM sqills.participants WHERE booking_id = ? AND user_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
             preparedStatement.setInt(2, userID);
@@ -104,9 +106,10 @@ public class ParticipantDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -124,7 +127,7 @@ public class ParticipantDao {
         }
 
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
             PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
@@ -144,9 +147,10 @@ public class ParticipantDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

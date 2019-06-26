@@ -36,7 +36,7 @@ public class ParticipantResource {
         } catch (InvalidEmailException e) {
             throw400(e.getMessage());
         } catch (DAOException e) {
-            throw500(e.getMessage());
+            throw500("Something went terribly wrong");
         }
         return null;
     }
@@ -52,8 +52,10 @@ public class ParticipantResource {
                 throw401("You are not logged in");
             }
             if ((!userParticipatesInBooking(securityContext, pair.getUserid()) &&
-                (!userOwnsBooking(securityContext,pair.getBookingid())))) { // If owner = logged in user
-                throw403("You do not own/participate in this booking");
+                (!userOwnsBooking(securityContext,pair.getBookingid()))) &&
+                (!userIsAdmin(securityContext)))
+            { // If owner = logged in user
+                throw403("You are not authorized to edit this booking");
             }
             ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
         } catch (InvalidBookingIDException e) {
@@ -61,7 +63,7 @@ public class ParticipantResource {
         } catch (InvalidUserIDException e) {
             throw400(e.getMessage());
         } catch (DAOException e) {
-            throw500(e.getMessage());
+            throw500("Something went terribly wrong");
         }
 
 

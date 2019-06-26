@@ -26,7 +26,7 @@ function displayMakeBooking() {
              
             </div>
             </div> 
-             <button onclick="makeBooking()" class="btn btn-primary"><i class="fas fa-rocket"></i></button> 
+             <button onclick="MakeTabletBooking()" class="btn btn-primary"><i class="fas fa-rocket"></i></button> 
         </div>
         <div id="emailerror"></div>
     `;
@@ -36,8 +36,8 @@ function selectHowLong(value) {
     document.getElementById("booking-duration-value").innerHTML = `<p>${value.toString()} m</p>`;
 }
 //Makes booked based upon selection
-function makeBooking() {
-    let private = document.getElementById(`private`).checked;
+function MakeTabletBooking() {
+    let private = document.getElementById("private").checked;
     let email = document.getElementById(`e-mail`).value;
     let title = document.getElementById("title").value;
     if (title === "Booking title (optional)") {
@@ -105,13 +105,14 @@ function invalidEmailMessage(){
     newDiv.innerHTML = `<b>invalid email</b>`
 }
 
-function autoComplete(){
-    let email = document.getElementById("e-mail").value;
+function autoComplete(input){
+    console.log(input)
+    let email = input;
     if (email.value != "") {
-        axios.get(`/api/user/` + email).then((response) => { // GET request
+        axios.get(`/api/user/` + email.value).then((response) => { // GET request
             let data = response.data;
             if (data.email != "null") {
-                document.getElementById("e-mail").value = data.email;
+                input.value = data.email;
                 emailIsInDatabase = true;
             } else {
                 emailIsInDatabase = false;

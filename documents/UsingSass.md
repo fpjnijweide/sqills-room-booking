@@ -7,12 +7,14 @@
 - Press the plus sign, and press SCSS
 - Change the "arguments" line to:
 $FileName$:../css/$FileNameWithoutExtension$.css
-
-###Use
-```
-cd src/main/webapp/
-sass --watch sass/desktop.sass:css/desktop.css
-
 - Press OK
 - Repeat the previous 3 steps, but then for Sass
 - Press apply
+
+###Alternatively, if not using IntelliJ
+```
+cd src/main/webapp/
+sass --watch sass/desktop.sass:css/desktop.css
+```
+Repeat the last commands for all .sass / .scss files in the sass/ folder
+

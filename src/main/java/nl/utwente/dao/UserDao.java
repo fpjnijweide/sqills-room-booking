@@ -2,21 +2,25 @@ package nl.utwente.dao;
 
 import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.db.DatabaseConnectionFactory;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
 import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
 
 public class UserDao {
-    public static boolean isValidUserID(int userID) {
-        Connection connection = DatabaseConnectionFactory.getConnection();
+    public static boolean isValidUserID(int userID) throws DAOException {
+        Connection connection = DatabaseConnectionFactory.conn;
         boolean isValid = false;
 
         try {
-            String query = "SELECT * FROM sqills.users WHERE userid = ?";
+            String query = "SELECT * FROM sqills.users WHERE user_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, userID);
 
@@ -24,22 +28,16 @@ public class UserDao {
             isValid = resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+throw new DAOException(e.getMessage());
         }
-
         return isValid;
     }
 
-    public static User getUserFromEmail(String email) throws InvalidEmailException {
+    public static User getUserFromEmail(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         boolean isValid = false;
         User user = null;
         try {
@@ -56,9 +54,10 @@ public class UserDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -67,10 +66,10 @@ public class UserDao {
         return user;
     }
 
-    public static String getEmail(String incompleteEmail) {
+    public static String getEmail(String incompleteEmail) throws DAOException {
         int count = 0;
         String email = null;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT email FROM sqills.users WHERE email LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -85,9 +84,10 @@ public class UserDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -98,11 +98,12 @@ public class UserDao {
         return null;
     }
 
-    public static byte[] getSalt(String email) throws InvalidEmailException {
+    @Deprecated
+    public static byte[] getSalt(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         int userCount = 1;
         byte[] salt = null;
         byte[] saltbyte = null;
@@ -118,9 +119,10 @@ public class UserDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -128,36 +130,34 @@ public class UserDao {
         return null;
     }
 
-    public static void insertUser(String name, String email, String password, boolean admin){
+    public static void insertUser(String name, String email, boolean admin) throws DAOException {
         Connection connection = DatabaseConnectionFactory.getConnection();
-        try{
-            byte[] salt = AuthenticationHandler.generateSalt();
-            String query = "INSERT INTO sqills.users(name, email, hash, administrator, salt) " +
-                    "VALUES(?,?,?,?,?);";
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, email);
-            statement.setString(2, email);
-            statement.setBytes(3, hashPassword(password, salt));
-            statement.setBoolean(4, admin);
-            statement.setBytes(5, salt);
-            int affectedRows = statement.executeUpdate();
-            System.out.println(affectedRows);
+        try {
+            String query = "INSERT INTO sqills.users (\"name\", email, administrator) VALUES (?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, email);
+            preparedStatement.setBoolean(3, admin);
+            preparedStatement.execute();
+            preparedStatement.close();
         } catch (SQLException sqle){
-            System.err.println(sqle);
+            sqle.printStackTrace();
+            throw new DAOException(sqle.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static byte[] getHash(String email) throws InvalidEmailException {
+    @Deprecated
+    public static byte[] getHash(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         int count = 0;
         try {
             String query = "SELECT hash FROM sqills.users WHERE email LIKE ?";
@@ -172,7 +172,7 @@ public class UserDao {
             System.err.println(sqle);
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -180,8 +180,8 @@ public class UserDao {
         return null;
     }
 
-
-    public static boolean checkCredentials(String email, String password){
+    @Deprecated
+    public static boolean checkCredentials(String email, String password) throws DAOException {
         try {
             return checkByteArrays(getHash(email), hashPassword(password, getSalt(email)));
         } catch (InvalidEmailException e) {
@@ -190,7 +190,7 @@ public class UserDao {
         return  false;
     }
 
-    public static boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) throws DAOException {
         if (email.contains("@") && email.contains(".")){
             return getEmail(email) != null;
         }
@@ -200,4 +200,15 @@ public class UserDao {
 //    public static boolean loggedIn(SecurityContext securityContext) {
 //        return securityContext.getUserPrincipal().
 //    }
+
+    public static void main(String[] args) {
+        String name = "Platon Frolov";
+        String email = "p.m.frolov@student.utwente.nl";
+        boolean admin = true;
+        try {
+            insertUser(name, email, admin);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
 }

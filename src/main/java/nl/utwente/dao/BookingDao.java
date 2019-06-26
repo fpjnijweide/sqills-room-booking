@@ -1,19 +1,21 @@
 package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
-import nl.utwente.exceptions.BookingException;
-import nl.utwente.exceptions.DAOException;
-import nl.utwente.exceptions.InvalidBookingIDException;
-import nl.utwente.exceptions.InvalidRoomNameException;
+import nl.utwente.exceptions.*;
 import nl.utwente.model.*;
 
+import javax.ws.rs.core.SecurityContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import static nl.utwente.authentication.AuthenticationHandler.userIsAdmin;
+import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
+import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
+import static nl.utwente.dao.UserDao.getUserFromEmail;
 import static nl.utwente.dao.UserDao.isValidEmail;
 
 public class BookingDao {
@@ -23,12 +25,12 @@ public class BookingDao {
      * @param bookingID booking ID of booking to be returned
      * @return returns booking with specified ID or null if the booking does not exist.
      */
-    public static OutputBooking getOutputBooking(int bookingID) throws InvalidBookingIDException {
+    public static OutputBooking getOutputBooking(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
         OutputBookingWithParticipants booking = new OutputBookingWithParticipants();
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT * from get_specific_booking(?)";
 
@@ -73,9 +75,10 @@ public class BookingDao {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -84,12 +87,12 @@ public class BookingDao {
         return booking;
     }
 
-    public static String getEmailOfBookingOwner(int bookingID) throws InvalidBookingIDException {
+    public static String getEmailOfBookingOwner(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
         String email = null;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "SELECT u.email " +
                 "FROM sqills.Booking b " +
@@ -109,9 +112,10 @@ public class BookingDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -125,11 +129,10 @@ public class BookingDao {
      *
      * @return id of booking
      */
-    public static int createBooking(SpecifiedBooking booking) throws BookingException {
+    public static int createBooking(SpecifiedBooking booking) throws BookingException, DAOException {
         int id = -1;
-        booking = prepareBooking(booking);
         throwSpecifiedBookingExceptions(booking);
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
             String query = "select * from create_booking(?,?,?,?,?,?,?)";
@@ -149,9 +152,10 @@ public class BookingDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -160,9 +164,14 @@ public class BookingDao {
         return id;
     }
 
-    private static SpecifiedBooking prepareBooking(SpecifiedBooking booking) {
-        if (Objects.equals(booking.getEmail(), "")) {
-            booking.setEmail("sqills_tablet@gmail.com");
+    public static SpecifiedBooking prepareBooking(SecurityContext securityContext, SpecifiedBooking booking) {
+        boolean loggedIn = securityContext.getUserPrincipal() != null;
+        if (Objects.equals(booking.getEmail(), "") || booking.getEmail()==null) {
+            if (loggedIn) {
+                booking.setEmail(securityContext.getUserPrincipal().getName());
+            } else {
+                booking.setEmail("sqills_tablet@gmail.com");
+            }
         }
         return booking;
     }
@@ -170,12 +179,12 @@ public class BookingDao {
     /**
      * Create a recurring specified booking
      */
-    public static int createRecurringBooking(RecurringBooking booking) throws BookingException {
+    public static int createRecurringBooking(RecurringBooking booking) throws BookingException, DAOException {
 
 
         throwSpecifiedBookingExceptions(booking);
         int id = -1;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select create_recurring_booking_parent(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -196,9 +205,10 @@ public class BookingDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -217,25 +227,23 @@ public class BookingDao {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
 
-            String query = "DELETE FROM sqills.participants WHERE bookingID = ?";
+            String query = "DELETE FROM sqills.participants WHERE booking_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setInt(1, bookingID);
 
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0){
-                throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
-            }
 
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -255,10 +263,10 @@ public class BookingDao {
             throw new InvalidBookingIDException(bookingID);
         }
         deleteParticipantsOfBooking(bookingID);
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
 
-            String query = "DELETE FROM sqills.Booking WHERE bookingID = ?";
+            String query = "DELETE FROM sqills.Booking WHERE booking_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
 
             statement.setInt(1, bookingID);
@@ -271,9 +279,10 @@ public class BookingDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -294,7 +303,7 @@ public class BookingDao {
 
         throwSpecifiedBookingExceptions(booking);
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
 
         try {
             String query = "select update_booking(?,?,?,?,?,?,?,?)";
@@ -318,9 +327,10 @@ public class BookingDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -334,12 +344,16 @@ public class BookingDao {
      * @param roomName of room whose bookings will be returned
      * @return Today's bookings for the specified room
      */
-    public static List<OutputBooking> getBookingsForRoomToday(String roomName) throws InvalidRoomNameException {
+    public static List<OutputBooking> getBookingsForRoomToday(String roomName) throws InvalidRoomNameException, DAOException {
+        return getBookingsForRoomToday(roomName, null);
+    }
+
+    public static List<OutputBooking> getBookingsForRoomToday(String roomName, String email) throws InvalidRoomNameException, DAOException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
         ArrayList<OutputBooking> result = new ArrayList<>();
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select * from booking_for_room_today(?)";
 
@@ -348,7 +362,7 @@ public class BookingDao {
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                OutputBooking booking = resultSetToBooking(roomName, resultSet);
+                OutputBooking booking = resultSetToBooking(roomName, resultSet, email);
                 result.add(booking);
             }
 
@@ -356,9 +370,10 @@ public class BookingDao {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
         } finally {
             try {
-                connection.close();
+                connection.commit();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -366,7 +381,11 @@ public class BookingDao {
         return result;
     }
 
-    public static OutputBooking resultSetToBooking(String roomName, ResultSet resultSet) throws SQLException {
+    public static OutputBooking resultSetToBooking(String roomName, ResultSet resultSet) throws SQLException, DAOException {
+        return resultSetToBooking(roomName, resultSet, null);
+    }
+
+    public static OutputBooking resultSetToBooking(String roomName, ResultSet resultSet, String email) throws SQLException, DAOException {
         Time startTime = resultSet.getTime("start_time");
         Time endTime = resultSet.getTime("end_time");
         Date date = resultSet.getDate("date");
@@ -374,20 +393,25 @@ public class BookingDao {
 
         boolean isPrivate = resultSet.getBoolean("is_private");
 
-        String userName;
-        String title;
-        if (isPrivate) {
-            userName = "PRIVATE";
-            title = "PRIVATE";
-        } else {
-            userName = resultSet.getString("name");
-            title = resultSet.getString("title");
+        String userName = "PRIVATE";
+        String title = "PRIVATE";
+
+        try {
+            if (!isPrivate || (Objects.equals(email, getEmailOfBookingOwner(bookingid))) ||
+                getParticipantsOfBooking(bookingid).contains(getUserFromEmail(email)) || getUserFromEmail(email).isAdministrator())  {
+                 // User owns booking, or participates in it, or it is not private
+
+                userName = resultSet.getString("name");
+                title = resultSet.getString("title");
+            }
+
+        } catch (InvalidBookingIDException | InvalidEmailException e) {
         }
         return new OutputBooking(startTime, endTime, userName, roomName, date, title, bookingid);
     }
 
 
-    public static int insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate, String title) throws BookingException {
+    public static int insertBookingToday(String roomName, Time startTime, Time endTime, String email, boolean isPrivate, String title) throws BookingException, DAOException {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate, title);
@@ -395,17 +419,17 @@ public class BookingDao {
         return bookingID;
     }
 
-    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) {
+    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) throws DAOException {
         return isValidBooking(booking, booking.getRoomName(), booking.getDate());
     }
 
-    public static boolean isValidBookingToday(Booking booking, String roomName) {
+    public static boolean isValidBookingToday(Booking booking, String roomName) throws DAOException {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         return isValidBooking(booking, roomName, sqlDate);
     }
 
-    public static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) {
+    private static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) throws DAOException {
         boolean validEmail = isValidEmail(booking.getEmail());
         boolean validTimeSlot = false;
         try {
@@ -416,17 +440,17 @@ public class BookingDao {
         return (validEmail && validTimeSlot);
     }
 
-    public static void throwSpecifiedBookingExceptions(SpecifiedBooking booking) throws BookingException {
+    private static void throwSpecifiedBookingExceptions(SpecifiedBooking booking) throws BookingException, DAOException {
         throwBookingExceptions(booking, booking.getRoomName(), booking.getDate());
     }
 
-    public static void throwBookingTodayExceptions(Booking booking, String roomName) throws BookingException {
+    public static void throwBookingTodayExceptions(Booking booking, String roomName) throws BookingException, DAOException {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         throwBookingExceptions(booking, roomName, sqlDate);
     }
 
-    public static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException {
+    private static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException, DAOException {
         ArrayList<String> errorMessages = new ArrayList<>();
 
         if (!isValidTitle(booking.getTitle())) {
@@ -452,12 +476,13 @@ public class BookingDao {
         }
     }
 
-    public static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException {
+    // Not meant to be called from endpoint
+    private static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
         boolean isValid = true;
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select * from is_valid_booking(?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -481,24 +506,18 @@ public class BookingDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return isValid;
     }
 
-    public static boolean isValidBooking(SpecifiedBooking booking) {
+    public static boolean isValidBooking(SpecifiedBooking booking) throws DAOException {
         return isValidBooking(booking,
             booking.getRoomName(),
             booking.getDate());
     }
 
-    public static boolean isValidBookingID(int bookingID) {
-        Connection connection = DatabaseConnectionFactory.getConnection();
+    public static boolean isValidBookingID(int bookingID) throws DAOException {
+        Connection connection = DatabaseConnectionFactory.conn;
         boolean isValid = false;
 
         try {
@@ -510,6 +529,47 @@ public class BookingDao {
             isValid = resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
+throw new DAOException(e.getMessage());
+        }
+
+        return isValid;
+    }
+
+    public static List<OutputBooking> getFilteredBookings(String email, String title, Date startDate, Date endDate) throws DAOException {
+        List<OutputBooking> bookings = new ArrayList<>();
+        String query = "SELECT b.booking_id, b.title, u.email, u.name, b.start_time, b.end_time, r.room_name, b.date " +
+            "FROM sqills.booking as b, sqills.users as u, sqills.room as r " +
+            "WHERE b.owner = u.user_id " +
+            "AND r.room_id = b.room_id " +
+            "AND b.title ILIKE CONCAT('%', ?, '%') " +
+            "AND u.email ILIKE CONCAT('%', ?, '%') " +
+            "AND b.date >= ? " +
+            "AND b.date <= ?";
+
+        Connection connection = DatabaseConnectionFactory.getConnection();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, email);
+            preparedStatement.setDate(3, startDate);
+            preparedStatement.setDate(4, endDate);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                OutputBooking booking = new OutputBooking();
+                booking.setTitle(resultSet.getString("title"));
+                booking.setBookingid(resultSet.getInt("booking_id"));
+                booking.setRoomName(resultSet.getString("room_name"));
+                booking.setDate(resultSet.getDate("date"));
+                booking.setStartTime(resultSet.getTime("start_time"));
+                booking.setEndTime(resultSet.getTime("end_time"));
+                booking.setUserName(resultSet.getString("name"));
+                bookings.add(booking);
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+            throw new DAOException("Internal server exceptions");
         } finally {
             try {
                 connection.close();
@@ -518,7 +578,7 @@ public class BookingDao {
             }
         }
 
-        return isValid;
+        return bookings;
     }
 
     public static boolean isValidTitle(String title) {
