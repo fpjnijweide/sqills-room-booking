@@ -1,6 +1,5 @@
 package nl.utwente.dao;
 
-import nl.utwente.authentication.AuthenticationHandler;
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
@@ -13,10 +12,11 @@ import java.sql.SQLException;
 
 import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
 import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
+import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 public class UserDao {
     public static boolean isValidUserID(int userID) throws DAOException {
-        Connection connection = DatabaseConnectionFactory.conn;
+
         boolean isValid = false;
 
         try {
@@ -37,7 +37,7 @@ throw new DAOException(e.getMessage());
         if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.conn;
+
         boolean isValid = false;
         User user = null;
         try {
@@ -69,7 +69,7 @@ throw new DAOException(e.getMessage());
     public static String getEmail(String incompleteEmail) throws DAOException {
         int count = 0;
         String email = null;
-        Connection connection = DatabaseConnectionFactory.conn;
+
         try {
             String query = "SELECT email FROM sqills.users WHERE email LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -103,7 +103,7 @@ throw new DAOException(e.getMessage());
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.conn;
+
         int userCount = 1;
         byte[] salt = null;
         byte[] saltbyte = null;
@@ -131,7 +131,7 @@ throw new DAOException(e.getMessage());
     }
 
     public static void insertUser(String name, String email, boolean admin) throws DAOException {
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = getConnection();
         try {
             String query = "INSERT INTO sqills.users (\"name\", email, administrator) VALUES (?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -157,7 +157,7 @@ throw new DAOException(e.getMessage());
         if (!isValidEmail(email)){
             throw new InvalidEmailException(email);
         }
-        Connection connection = DatabaseConnectionFactory.conn;
+
         int count = 0;
         try {
             String query = "SELECT hash FROM sqills.users WHERE email LIKE ?";

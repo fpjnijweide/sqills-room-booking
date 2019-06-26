@@ -49,9 +49,7 @@ public class AuthenticationHandler {
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             hash = factory.generateSecret(spec).getEncoded();
-        } catch(NoSuchAlgorithmException e){
-            System.err.println(e);
-        } catch (InvalidKeySpecException e){
+        } catch(NoSuchAlgorithmException | InvalidKeySpecException e){
             System.err.println(e);
         }
         return hash;

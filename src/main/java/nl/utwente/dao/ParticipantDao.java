@@ -16,13 +16,14 @@ import java.util.List;
 
 import static nl.utwente.dao.BookingDao.isValidBookingID;
 import static nl.utwente.dao.UserDao.isValidEmail;
+import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
             throw new InvalidBookingIDException(bookingID);
         }
-        Connection connection = DatabaseConnectionFactory.conn;
+
         List<User> result = new ArrayList<>();
         try {
             String query = "select * from get_participants_of_booking(?)";
@@ -60,7 +61,7 @@ throw new DAOException(e.getMessage());
             throw new InvalidUserIDException(userID);
         }
 
-        Connection connection = DatabaseConnectionFactory.conn;
+
 
         try {
             String query = "INSERT INTO sqills.participants (booking_id, user_id) VALUES (?, ?);";
@@ -92,7 +93,7 @@ throw new DAOException(e.getMessage());
         if ( !UserDao.isValidUserID(userID)) {
             throw new InvalidUserIDException(userID);
         }
-        Connection connection = DatabaseConnectionFactory.conn;
+
 
         try {
             String query = "DELETE FROM sqills.participants WHERE booking_id = ? AND user_id = ?;";
@@ -127,7 +128,7 @@ throw new DAOException(e.getMessage());
         }
 
 
-        Connection connection = DatabaseConnectionFactory.conn;
+
         try {
             String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
             PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
