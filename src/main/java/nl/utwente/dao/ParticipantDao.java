@@ -63,7 +63,7 @@ throw new DAOException(e.getMessage());
         Connection connection = DatabaseConnectionFactory.conn;
 
         try {
-            String query = "INSERT INTO sqills.participants (bookingid, userid) VALUES (?, ?);";
+            String query = "INSERT INTO sqills.participants (booking_id, user_id) VALUES (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
             preparedStatement.setInt(2, userID);
@@ -95,7 +95,7 @@ throw new DAOException(e.getMessage());
         Connection connection = DatabaseConnectionFactory.conn;
 
         try {
-            String query = "DELETE FROM sqills.participants WHERE bookingid = ? AND userid = ?;";
+            String query = "DELETE FROM sqills.participants WHERE booking_id = ? AND user_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
             preparedStatement.setInt(2, userID);

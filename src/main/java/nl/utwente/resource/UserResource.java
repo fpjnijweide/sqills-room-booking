@@ -44,6 +44,7 @@ public class UserResource {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public void createUser(InputUser user) {
+        // This method is no longer used as we use Google Authentication
         // TODO do input validation here
         if (!user.isAdmin() || securityContext.isUserInRole("ADMIN")) {
             try {
