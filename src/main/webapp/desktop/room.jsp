@@ -1,6 +1,7 @@
 <%@ page import="nl.utwente.model.Booking" %>
 <%@ page import="java.util.List" %>
 <%@ page import="nl.utwente.model.OutputBooking" %>
+<%@ page import="nl.utwente.authentication.AuthenticationFilter" %>
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="/css/specific-room.css">
@@ -53,7 +54,11 @@
                             addBooking("<%= bookings.get(i).getStartTime() %>", "<%= bookings.get(i).getEndTime() %>");
                         }
                     </script>
+                    <% if (!bookings.get(i).getUserName().equals("PRIVATE")) { %>
+                    <tr class="tablerow" onclick="window.location.href='/desktop/booking/<%= bookings.get(i).getBookingid()%>'">
+                    <% } else { %>
                     <tr>
+                    <% } %>
                         <td><%= bookings.get(i).getTitle() %></td>
                         <td><%= bookings.get(i).getUserName() %></td>
                         <td><%= bookings.get(i).getDate() %></td>

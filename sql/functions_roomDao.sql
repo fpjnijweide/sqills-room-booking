@@ -9,7 +9,6 @@ as $$
       where date = CURRENT_DATE
       and CURRENT_TIME  between start_time and end_time
     )
-    and room_id > 0;
   $$
   language sql;
 
