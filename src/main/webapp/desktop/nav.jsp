@@ -27,4 +27,5 @@
         </ul>
     </div>
 </nav>
+
 <jsp:include page="errorModal.jsp"/>

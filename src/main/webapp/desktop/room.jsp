@@ -20,17 +20,18 @@
 <body onload="positionTimeBars()">
     <jsp:include page="nav.jsp"/>
     <div id="footer">
+        <div class="footer-title">Bookings overview for today</div>
         <div class="bar">
             <div class="timestamps">
-                <div class="timestamp time-0" value="0"></div>
-                <div class="timestamp time-3" value="3"></div>
-                <div class="timestamp time-6" value="6"></div>
-                <div class="timestamp time-9" value="9"></div>
-                <div class="timestamp time-12" value="12"></div>
-                <div class="timestamp time-15" value="15"></div>
-                <div class="timestamp time-18" value="18"></div>
-                <div class="timestamp time-21" value="21"></div>
-                <div class="timestamp time-24" value="24"></div>
+                <div class="timestamp time-0" value="0"><p>00:00</p></div>
+                <div class="timestamp time-3" value="3"><p>03:00</p></div>
+                <div class="timestamp time-6" value="6"><p>06:00</p></div>
+                <div class="timestamp time-9" value="9"><p>09:00</p></div>
+                <div class="timestamp time-12" value="12"><p>12:00</p></div>
+                <div class="timestamp time-15" value="15"><p>15:00</p></div>
+                <div class="timestamp time-18" value="18"><p>18:00</p></div>
+                <div class="timestamp time-21" value="21"><p>21:00</p></div>
+                <div class="timestamp time-24" value="24"><p>23:59</p></div>
             </div>
         </div>
     </div>
@@ -70,8 +71,8 @@
 
             <div class="col-md-6">
                 <!-- Button trigger modal -->
-                <button type="button" class="make-booking-room-button" data-toggle="modal" data-target="#exampleModalLong">
-                    Launch demo modal
+                <button type="button" onclick="setRoom(<%= request.getAttribute("id") %>)" class="make-booking-room-button" data-toggle="modal" data-target="#exampleModalLong">
+                    Book this room
                 </button>
             </div>
         </div>
@@ -129,78 +130,23 @@
         <div style="z-index: 5" class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Create a booking</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="inner">
-                    <h1 class="create-booking-title">Create a booking</h1>
 
-                    <form class="create-booking-form">
-                        <label>Booking Title</label>
-                        <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
-
-
-                        <label>Date</label>
-                        <input type="date" id="booking-date" class="booking-date full-width">
-
-                        <label>Room ID</label>
-                        <input type="text" id="booking-roomid" class="full-width" value="<%= request.getAttribute("id") %>">
-
-                        <label>Time</label>
-                        <div class="time-container">
-                            <input type="time" class="start-time" id="booking-starttime">
-                            <input type="time" class="end-time" id="booking-endtime">
-                        </div>
-
-                        <label>Private meeting</label>
-                        <input type="checkbox" id="booking-isPrivate">
-                        <div class="participants-view">
-                            <table>
-                                <tr>
-                                    <td><label class="participants-title">Add participants</label></td>
-                                    <td><div class="add-participants" onclick="setParticipantsVisible()">+</div></td>
-                                </tr>
-
-                            </table>
-
-                        </div>
-                        <div id="participants-container">
-
-                            <div class="input-and-button">
-                                <input type="text" id="participant" placeholder="Participant name">
-                                <button type="button" onclick="addParticipantField()">+</button>
-                            </div>
-                            <div id="participants-list">
-                                Participants list
-                            </div>
-                        </div>
-                        <div class="recurring">
-                            <label>Recurring booking</label>
-                            <input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes
-                            <input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No
-                            <div id="recurring-info">I want a booking every
-                                <input id="time" type="number" oninput="checkRecurringDays()">
-                                <select id="choose-time-unit" class="choose-time-unit" onchange="checkRecurringDays()">
-                                    <option value="day">Days</option>
-                                    <option value="week">Weeks</option>
-                                    <option value="month">Months</option>
-                                    <option value="year">Years</option>
-                                </select>
-                                <br>
-                                ending at
-                                <input id="recurring-end-date" type="date">
-                                from now
-                            </div>
-                        </div>
-
-                        <button class="submit-button" type="button" onclick="checkFieldsAndBook()">Submit</button>
-                    </form>
+                    <jsp:include page="bookingForm.jsp"/>
                 </div>
             </div>
         </div>
     </div>
-
+    <script type="text/javascript">
+        $('.clockpicker').clockpicker();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
