@@ -20,9 +20,6 @@
                     <label>Booking Title</label>
                     <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
 
-                    <label>Your Email</label>
-                    <input id="booking-email" class="booking-email full-width" type="text" placeholder="Your Email">
-
                     <label>Date</label>
                     <input type="date" id="booking-date" class="booking-date full-width">
 
