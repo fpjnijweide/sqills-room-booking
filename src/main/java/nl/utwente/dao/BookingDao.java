@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
+import org.apache.poi.util.Internal;
 
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
@@ -403,7 +404,7 @@ throw new DAOException(e.getMessage());
                 title = resultSet.getString("title");
             }
 
-        } catch (InvalidBookingIDException | InvalidEmailException e) {
+        } catch (InvalidBookingIDException | InvalidEmailException ignored) {
         }
         return new OutputBooking(startTime, endTime, userName, roomName, date, title, bookingid);
     }
@@ -417,17 +418,20 @@ throw new DAOException(e.getMessage());
         return bookingID;
     }
 
-    public static boolean isValidSpecifiedBooking(SpecifiedBooking booking) throws DAOException {
+    @Internal
+    static boolean isValidSpecifiedBooking(SpecifiedBooking booking) throws DAOException {
         return isValidBooking(booking, booking.getRoomName(), booking.getDate());
     }
 
-    public static boolean isValidBookingToday(Booking booking, String roomName) throws DAOException {
+    @Internal
+    static boolean isValidBookingToday(Booking booking, String roomName) throws DAOException {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         return isValidBooking(booking, roomName, sqlDate);
     }
 
-    private static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) throws DAOException {
+    @Internal
+    static boolean isValidBooking(Booking booking, String roomName, Date sqlDate) throws DAOException {
         boolean validEmail = isValidEmail(booking.getEmail());
         boolean validTimeSlot = false;
         try {
@@ -438,17 +442,20 @@ throw new DAOException(e.getMessage());
         return (validEmail && validTimeSlot);
     }
 
-    private static void throwSpecifiedBookingExceptions(SpecifiedBooking booking) throws BookingException, DAOException {
+    @Internal
+    static void throwSpecifiedBookingExceptions(SpecifiedBooking booking) throws BookingException, DAOException {
         throwBookingExceptions(booking, booking.getRoomName(), booking.getDate());
     }
 
-    public static void throwBookingTodayExceptions(Booking booking, String roomName) throws BookingException, DAOException {
+    @Internal
+    static void throwBookingTodayExceptions(Booking booking, String roomName) throws BookingException, DAOException {
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         throwBookingExceptions(booking, roomName, sqlDate);
     }
 
-    private static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException, DAOException {
+    @Internal
+    static void throwBookingExceptions(Booking booking, String roomName, Date sqlDate) throws BookingException, DAOException {
         ArrayList<String> errorMessages = new ArrayList<>();
 
         if (!isValidTitle(booking.getTitle())) {
@@ -474,7 +481,7 @@ throw new DAOException(e.getMessage());
         }
     }
 
-    // Not meant to be called from endpoint
+    @Internal
     private static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
@@ -508,13 +515,15 @@ throw new DAOException(e.getMessage());
         return isValid;
     }
 
-    public static boolean isValidBooking(SpecifiedBooking booking) throws DAOException {
+    @Internal
+    static boolean isValidBooking(SpecifiedBooking booking) throws DAOException {
         return isValidBooking(booking,
             booking.getRoomName(),
             booking.getDate());
     }
 
-    public static boolean isValidBookingID(int bookingID) throws DAOException {
+    @Internal
+    static boolean isValidBookingID(int bookingID) throws DAOException {
 
         boolean isValid = false;
 

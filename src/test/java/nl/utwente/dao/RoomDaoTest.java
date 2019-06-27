@@ -39,7 +39,7 @@ public class RoomDaoTest {
         // This structure is not perfect. JUnit requires @Before methods to be non-static
         // But we need createRoom to be static so that we can easily access it from BookingDaoTest
         // This was the best solution
-        createRoom();
+        createRoom(roomID,roomName);
     }
 
     @Test
@@ -182,7 +182,7 @@ public class RoomDaoTest {
     public void afterEachTest() {
         try {
             connection.commit();
-            deleteRoom();
+            deleteRoom(roomID);
         } catch (SQLException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -190,7 +190,7 @@ public class RoomDaoTest {
     }
 
     private int makeBooking(Time startTime) throws BookingException, DAOException, SQLException {
-        Time endTime = new Time(23, 59, 59);
+        Time endTime = new Time(23, 59, 00);
         connection.commit();
         return insertBookingToday(roomName, startTime, endTime, email, false, bookingTitle);
     }
