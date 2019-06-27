@@ -76,7 +76,12 @@ public class BookingDaoTest {
 
     @BeforeClass
     public static void setup() {
-        connection = DatabaseConnectionFactory.connection;
+        try {
+            connection = DatabaseConnectionFactory.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @AfterClass
@@ -137,13 +142,13 @@ public class BookingDaoTest {
         createRoom(-101, "Test room 2");
 
         try {
-            boolean result1 = isValidBooking(OverlappingBooking);
-            boolean result2 = isValidBooking(bookingFrom10To11);
-            boolean result3 = isValidBooking(overlappingBooking2);
-            boolean result4 = isValidBooking(booking4);
-            boolean result5 = isValidBooking(otherRoomBooking);
-            boolean result6 = isValidBooking(endTimeBeforeStartTimeBooking);
-            boolean result7 = isValidBooking(earlyBooking);
+            boolean result1 = isValidBooking(OverlappingBooking,connection);
+            boolean result2 = isValidBooking(bookingFrom10To11,connection);
+            boolean result3 = isValidBooking(overlappingBooking2,connection);
+            boolean result4 = isValidBooking(booking4,connection);
+            boolean result5 = isValidBooking(otherRoomBooking,connection);
+            boolean result6 = isValidBooking(endTimeBeforeStartTimeBooking,connection);
+            boolean result7 = isValidBooking(earlyBooking,connection);
             assertFalse(result1);
             assertTrue(result2);
             assertFalse(result3);

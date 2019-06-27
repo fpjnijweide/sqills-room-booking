@@ -8,7 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class SpecificRoomServlet extends HttpServlet {
@@ -17,20 +19,19 @@ public class SpecificRoomServlet extends HttpServlet {
         String uri = req.getRequestURI();
         String[] splitUri = uri.split("/");
         String roomName = splitUri[3];
+        Connection connection = null;
         try {
-            if (!RoomDao.isValidRoomName(roomName)) {
-                try {
-                    DatabaseConnectionFactory.connection.commit();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            connection =DatabaseConnectionFactory.getConnection();
+            if (!RoomDao.isValidRoomName(roomName,connection)) {
+                connection.commit();
+                connection.close();
                 res.setStatus(404);
                 res.getWriter().write("404");
             } else {
                 req.setAttribute("roomName", roomName); // TODO maybe change "id" thing
                 req.getRequestDispatcher("/tablet/specific-room.jsp").forward(req, res);
             }
-        } catch (DAOException e) {
+        } catch (DAOException | SQLException e) {
             res.setStatus(500);
             res.getWriter().write("Something went terribly wrong");;
         }
