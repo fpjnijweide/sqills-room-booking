@@ -70,14 +70,16 @@ throw new DAOException(e.getMessage());
     }
 
     @Internal
-    public static boolean isValidRoomName(String roomName) throws DAOException {
+    static boolean isValidRoomName(String roomName) throws DAOException {
         return getRoomID(roomName) != -1;
     }
 
     public static List<Integer> getAllRoomsIDs() throws DAOException {
         ArrayList<Integer> result = new ArrayList<>();
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
 
             String query = "SELECT room_id FROM sqills.room";
             Statement statement = connection.createStatement();
@@ -106,7 +108,9 @@ throw new DAOException(e.getMessage());
     public static List<String> getAllRoomNames() throws DAOException {
         ArrayList<String> result = new ArrayList<>();
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
 
             String query = "SELECT room_name FROM sqills.room";
             Statement statement = connection.createStatement();
@@ -135,7 +139,9 @@ throw new DAOException(e.getMessage());
     public static List<String> getCurrentlyAvailableRooms() throws DAOException {
         List<String> rooms = new ArrayList<>();
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "select * from get_currently_available_rooms()";
 
             Statement statement = connection.createStatement();
@@ -163,7 +169,9 @@ throw new DAOException(e.getMessage());
         }
         Time result = null;
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * from get_free_until(?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -202,7 +210,9 @@ throw new DAOException(e.getMessage());
         String query = "SELECT * from get_booking_for_this_week(?)";
 
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
                 ResultSet resultSet = statement.executeQuery();

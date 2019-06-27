@@ -31,7 +31,9 @@ public class BookingDao {
         }
         OutputBookingWithParticipants booking = new OutputBookingWithParticipants();
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * from get_specific_booking(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -93,7 +95,9 @@ throw new DAOException(e.getMessage());
         }
         String email = null;
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT u.email " +
                 "FROM sqills.Booking b " +
                 "    JOIN sqills.users u ON u.user_id = b.owner " +
@@ -134,7 +138,9 @@ throw new DAOException(e.getMessage());
         throwSpecifiedBookingExceptions(booking);
 
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "select * from create_booking(?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
@@ -185,7 +191,9 @@ throw new DAOException(e.getMessage());
         throwSpecifiedBookingExceptions(booking);
         int id = -1;
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "select create_recurring_booking_parent(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setTime(1, booking.getStartTime());
@@ -228,7 +236,9 @@ throw new DAOException(e.getMessage());
             throw new InvalidBookingIDException(bookingID);
         }
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
 
             String query = "DELETE FROM sqills.participants WHERE booking_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -263,7 +273,9 @@ throw new DAOException(e.getMessage());
             throw new InvalidBookingIDException(bookingID);
         }
         deleteParticipantsOfBooking(bookingID);
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
 
             String query = "DELETE FROM sqills.Booking WHERE booking_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -304,7 +316,9 @@ throw new DAOException(e.getMessage());
 
 
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "select update_booking(?,?,?,?,?,?,?,?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -353,7 +367,9 @@ throw new DAOException(e.getMessage());
         }
         ArrayList<OutputBooking> result = new ArrayList<>();
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "select * from booking_for_room_today(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -482,7 +498,7 @@ throw new DAOException(e.getMessage());
     }
 
     @Internal
-    private static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
+    static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
@@ -553,9 +569,11 @@ throw new DAOException(e.getMessage());
             "AND b.date >= ? " +
             "AND b.date <= ?";
 
-        Connection connection = getConnection();
 
+
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, email);

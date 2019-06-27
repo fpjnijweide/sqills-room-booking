@@ -21,7 +21,9 @@ public class UserDao {
 
         boolean isValid = false;
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * FROM sqills.users WHERE user_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, userID);
@@ -42,7 +44,9 @@ throw new DAOException(e.getMessage());
 
         boolean isValid = false;
         User user = null;
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * FROM sqills.users WHERE email = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, email);
@@ -72,7 +76,9 @@ throw new DAOException(e.getMessage());
         int count = 0;
         String email = null;
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT email FROM sqills.users WHERE email LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, incompleteEmail + "%");
@@ -109,7 +115,9 @@ throw new DAOException(e.getMessage());
         int userCount = 1;
         byte[] salt = null;
         byte[] saltbyte = null;
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT salt FROM sqills.users WHERE email LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, email);
@@ -133,8 +141,9 @@ throw new DAOException(e.getMessage());
     }
 
     public static void insertUser(String name, String email, boolean admin) throws DAOException {
-        Connection connection = getConnection();
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "INSERT INTO sqills.users (\"name\", email, administrator) VALUES (?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, name);
@@ -161,7 +170,9 @@ throw new DAOException(e.getMessage());
         }
 
         int count = 0;
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT hash FROM sqills.users WHERE email LIKE ?";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, email);
