@@ -6,6 +6,7 @@ import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -290,6 +291,7 @@ throw new DAOException(e.getMessage());
             preparedStatement.setInt(1, userID);
 
             preparedStatement.execute();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -299,5 +301,67 @@ throw new DAOException(e.getMessage());
                 e.printStackTrace();
             }
         }
+    }
+
+    public static User updateUser(User user) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+
+        try {
+            String query = "UPDATE sqills.users " +
+                "SET name = ?," +
+                "email = ?," +
+                "administrator = ?" +
+                "WHERE user_id = ?";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setBoolean(3, user.isAdministrator());
+            preparedStatement.setInt(4, user.getUserid());
+
+            preparedStatement.execute();
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return user;
+    }
+
+    public static int createUser(User user) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        int userID = -1;
+
+        try {
+            String query = "INSERT INTO sqills.users (name, email, administrator)" +
+                " VALUES (?, ?, ?) RETURNING user_id";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setBoolean(3, user.isAdministrator());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                userID = resultSet.getInt(1);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return userID;
     }
 }

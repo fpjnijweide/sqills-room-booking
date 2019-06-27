@@ -180,6 +180,35 @@ public class UserResource {
     @DELETE
     @Path("/{userID}")
     public void deleteUser(@PathParam("userID") int userID) {
-        UserDao.deleteUser(userID);
+        if (AuthenticationHandler.userIsAdmin(securityContext)) {
+            UserDao.deleteUser(userID);
+        } else {
+            throw403("Only admins can update users.");
+        }
+    }
+
+    @PUT
+    @Path("/{userID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public User updateUser(User user) {
+        if (AuthenticationHandler.userIsAdmin(securityContext)) {
+            return UserDao.updateUser(user);
+        } else {
+            throw403("Only admins can update users.");
+        }
+        return null;
+    }
+
+    @POST
+    @Path("/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public int createUser(User user) {
+        if (AuthenticationHandler.userIsAdmin(securityContext)) {
+            return UserDao.createUser(user);
+        } else {
+            throw403("Only admins can update users.");
+        }
+        return -1;
     }
 }

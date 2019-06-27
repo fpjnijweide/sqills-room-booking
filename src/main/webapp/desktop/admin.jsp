@@ -75,8 +75,9 @@
                 <div class="label">Administrator <input type="checkbox" id="user-admin"></div>
 
                 <div class="button-container">
-                    <button>Edit</button>
+                    <button onclick="updateUser()">Edit</button>
                     <button onclick="deleteUser()">Delete</button>
+                    <button onclick="createUser()">Create</button>
                 </div>
             </div>
         </div>
