@@ -14,6 +14,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 
 <body onload="disableButtonsBasedOnPermissions()">
@@ -45,7 +47,12 @@
                 <% } %>
                 <ul>
                 <% for (User user : booking.getParticipants()) {%>
-                    <li><%= user.getName() %></li>
+                    <li>
+                        <%= user.getName() %>
+                        <span onclick="removeParticipant(<%=booking.getBookingid()%>, <%=user.getUserid()%>)" class="fa-span remove-participant">
+                            <i class="fa fa-close"></i>
+                        </span>
+                    </li>
                 <% } %>
                 </ul>
             </div>
@@ -167,6 +174,41 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="location.reload()" type="button" class="btn btn-primary">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="participant-success-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content alert alert-success">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Successfully Removed Participant</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="location.reload()" type="button" class="btn btn-primary">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="participant-failure-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content alert alert-danger">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Could Not Remove Participant</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="participant-error-container">
+
                     </div>
                     <div class="modal-footer">
                         <button onclick="location.reload()" type="button" class="btn btn-primary">Close</button>
