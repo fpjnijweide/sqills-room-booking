@@ -157,4 +157,30 @@ throw new DAOException(e.getMessage());
         }
 
     }
+
+    public static boolean userParticipatesInBooking(int bookingID, int userID) {
+        boolean result = false;
+        Connection connection = DatabaseConnectionFactory.getConnection();
+
+        try {
+            String query = "SELECT * FROM sqills.participants " +
+                "WHERE booking_id = ? AND user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, bookingID);
+            preparedStatement.setInt(2, userID);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            result = resultSet.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
 }

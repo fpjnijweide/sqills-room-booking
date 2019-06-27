@@ -52,3 +52,19 @@ function editBooking() {
             $("#edit-failure-modal").modal();
         })
 }
+
+function removeParticipant(bookingID, userID) {
+    axios.delete('/api/participant/delete', {"params" : {
+            "userid": userID,
+            "bookingid": bookingID
+        }
+    })
+        .then(response => {
+            $("#participant-success-modal").modal();
+        })
+        .catch(error => {
+                document.getElementById("participant-error-container").innertText = error.response.data;
+                $("#participant-failure-modal-modal").modal();
+            }
+        );
+}
