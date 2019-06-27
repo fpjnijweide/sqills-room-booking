@@ -23,8 +23,8 @@ public class DaoTestUtils {
         return new Time(cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),0);
     }
 
-    public static void createRoom() {
-        String query = "INSERT INTO sqills.room (room_id, room_name) VALUES (" + roomID + ", '" + roomName + "')";
+    public static void createRoom(int id, String name) {
+        String query = "INSERT INTO sqills.room (room_id, room_name) VALUES (" + id + ", '" + name + "')";
         try {
             connection.createStatement().execute(query);
             connection.commit();
@@ -34,8 +34,8 @@ public class DaoTestUtils {
         }
     }
 
-    public static void deleteRoom() throws SQLException {
-        String query = "DELETE FROM sqills.room WHERE room_id = " + roomID;
+    public static void deleteRoom(int id) throws SQLException {
+        String query = "DELETE FROM sqills.room WHERE room_id = " + id;
         connection.createStatement().execute(query);
         connection.commit();
     }

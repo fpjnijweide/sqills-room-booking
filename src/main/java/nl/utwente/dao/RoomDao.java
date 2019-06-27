@@ -4,6 +4,7 @@ import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.OutputBooking;
+import org.apache.poi.util.Internal;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,12 +20,13 @@ public class RoomDao {
      * @param roomID The roomID which validity will be checked
      * @return Whether the provided roomID is valid
      */
-    public static boolean isValidRoomID(int roomID) throws DAOException {
+    @Internal
+    static boolean isValidRoomID(int roomID) throws DAOException {
         return getRoomName(roomID) != null;
     }
 
-    // Not meant to be called from a resource
-    public static String getRoomName(int roomID) throws DAOException {
+    @Internal
+    static String getRoomName(int roomID) throws DAOException {
         String result = null;
 
         try {
@@ -44,7 +46,8 @@ throw new DAOException(e.getMessage());
         return result;
     }
 
-    public static int getRoomID(String roomName) throws DAOException {
+    @Internal
+    static int getRoomID(String roomName) throws DAOException {
         int result = -1;
 
         try {
@@ -66,6 +69,7 @@ throw new DAOException(e.getMessage());
         return result;
     }
 
+    @Internal
     public static boolean isValidRoomName(String roomName) throws DAOException {
         return getRoomID(roomName) != -1;
     }
