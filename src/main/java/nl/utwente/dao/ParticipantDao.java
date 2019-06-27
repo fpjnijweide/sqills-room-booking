@@ -20,14 +20,17 @@ import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
-        if (!isValidBookingID(bookingID)){
-            throw new InvalidBookingIDException(bookingID);
-        }
+
 
         List<User> result = new ArrayList<>();
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
+
+            if (!isValidBookingID(bookingID, connection)){
+                throw new InvalidBookingIDException(bookingID);
+            }
+
             String query = "select * from get_participants_of_booking(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -56,18 +59,17 @@ throw new DAOException(e.getMessage());
     }
 
     public static void addParticipantToBooking(int bookingID, int userID) throws InvalidBookingIDException, InvalidUserIDException, DAOException {
-        if (!isValidBookingID(bookingID)){
-            throw new InvalidBookingIDException(bookingID);
-        }
-        if ( !UserDao.isValidUserID(userID)) {
-            throw new InvalidUserIDException(userID);
-        }
-
-
-
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
+
+            if (!isValidBookingID(bookingID, connection)){
+                throw new InvalidBookingIDException(bookingID);
+            }
+            if ( !UserDao.isValidUserID(userID, connection)) {
+                throw new InvalidUserIDException(userID);
+            }
+
             String query = "INSERT INTO sqills.participants (booking_id, user_id) VALUES (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
@@ -91,17 +93,20 @@ throw new DAOException(e.getMessage());
     }
 
     public static void removeParticipant(int bookingID, int userID) throws InvalidBookingIDException, InvalidUserIDException, DAOException {
-        if (!isValidBookingID(bookingID)){
-            throw new InvalidBookingIDException(bookingID);
-        }
-        if ( !UserDao.isValidUserID(userID)) {
-            throw new InvalidUserIDException(userID);
-        }
+
 
 
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
+
+            if (!isValidBookingID(bookingID, connection)){
+                throw new InvalidBookingIDException(bookingID);
+            }
+            if ( !UserDao.isValidUserID(userID, connection)) {
+                throw new InvalidUserIDException(userID);
+            }
+
             String query = "DELETE FROM sqills.participants WHERE booking_id = ? AND user_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
@@ -125,9 +130,7 @@ throw new DAOException(e.getMessage());
 
     // Todo: @Andrew Make into single query
     public static void addParticipantEmailToBooking(int bookingID, String email) throws InvalidBookingIDException, InvalidEmailException, DAOException {
-        if (!isValidBookingID(bookingID)){
-            throw new InvalidBookingIDException(bookingID);
-        }
+
 
         if ( !isValidEmail(email)) {
             throw new InvalidEmailException(email);
@@ -138,6 +141,9 @@ throw new DAOException(e.getMessage());
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
+            if (!isValidBookingID(bookingID, connection)){
+                throw new InvalidBookingIDException(bookingID);
+            }
             String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
             PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
             userIDStatement.setString(1, email);

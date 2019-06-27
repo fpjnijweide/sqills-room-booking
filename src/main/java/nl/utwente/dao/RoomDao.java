@@ -21,12 +21,12 @@ public class RoomDao {
      * @return Whether the provided roomID is valid
      */
     @Internal
-    static boolean isValidRoomID(int roomID) throws DAOException {
-        return getRoomName(roomID) != null;
+    static boolean isValidRoomID(int roomID, Connection connection) throws DAOException {
+        return getRoomName(roomID, connection) != null;
     }
 
     @Internal
-    static String getRoomName(int roomID) throws DAOException {
+    static String getRoomName(int roomID, Connection connection) throws DAOException {
         String result = null;
 
         try {
@@ -47,7 +47,7 @@ throw new DAOException(e.getMessage());
     }
 
     @Internal
-    static int getRoomID(String roomName) throws DAOException {
+    static int getRoomID(String roomName, Connection connection) throws DAOException {
         int result = -1;
 
         try {
@@ -70,8 +70,8 @@ throw new DAOException(e.getMessage());
     }
 
     @Internal
-    static boolean isValidRoomName(String roomName) throws DAOException {
-        return getRoomID(roomName) != -1;
+    static boolean isValidRoomName(String roomName, Connection connection) throws DAOException {
+        return getRoomID(roomName, connection) != -1;
     }
 
     public static List<Integer> getAllRoomsIDs() throws DAOException {
@@ -164,14 +164,15 @@ throw new DAOException(e.getMessage());
     }
 
     public static Time getFreeUntil(String roomName) throws InvalidRoomNameException, DAOException {
-        if (!isValidRoomName(roomName)){
-            throw new InvalidRoomNameException(roomName);
-        }
+
         Time result = null;
 
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
+            if (!isValidRoomName(roomName, connection)){
+                throw new InvalidRoomNameException(roomName);
+            }
             String query = "SELECT * from get_free_until(?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
@@ -202,9 +203,7 @@ throw new DAOException(e.getMessage());
     }
 
     public static List<OutputBooking> getBookingsForThisWeek(String roomName, String email) throws InvalidRoomNameException, DAOException {
-        if (!isValidRoomName(roomName)){
-            throw new InvalidRoomNameException(roomName);
-        }
+
 
         List<OutputBooking> result = new ArrayList<>();
         String query = "SELECT * from get_booking_for_this_week(?)";
@@ -213,6 +212,9 @@ throw new DAOException(e.getMessage());
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
+            if (!isValidRoomName(roomName, connection)){
+                throw new InvalidRoomNameException(roomName);
+            }
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
                 ResultSet resultSet = statement.executeQuery();

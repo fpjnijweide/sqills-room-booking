@@ -5,6 +5,7 @@ import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
+import org.apache.poi.util.Internal;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import java.sql.Connection;
@@ -17,13 +18,13 @@ import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
 import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 public class UserDao {
-    public static boolean isValidUserID(int userID) throws DAOException {
+
+    @Internal
+    static boolean isValidUserID(int userID, Connection connection) throws DAOException {
 
         boolean isValid = false;
 
-        Connection connection = null;
         try {
-            connection = DatabaseConnectionFactory.getConnection();
             String query = "SELECT * FROM sqills.users WHERE user_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, userID);
