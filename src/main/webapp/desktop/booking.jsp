@@ -9,7 +9,7 @@
     <title>Booking <%= booking.getTitle() %></title>
     <jsp:include page="head.jsp"/>
     <script>const bookingID = <%= booking.getBookingid() %></script>
-    <script>const EMAIL = <%= request.getAttribute("email") %></script>
+    <script>const EMAIL = "<%= request.getAttribute("email") %>"</script>
     <script src="/scripts/booking-page.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <h1 class="booking-information-header">Booking <%= booking.getTitle() %></h1>
+            <h1 class="booking-information-header"><%= booking.getTitle() %></h1>
             <div class="booking-information-field">
                 <span class="highlight"><%= booking.getStartTime()%></span>
                 -
@@ -135,6 +135,41 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button onclick="editBooking()" type="button" class="btn btn-primary">Edit Booking</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-failure-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header alert alert-danger">
+                        <h5 class="modal-title">Could Not Edit Booking Booking</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="edit-error-container">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-success-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content alert alert-success">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Successfully Edited Booking</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button onclick="location.reload()" type="button" class="btn btn-primary">Close</button>
                     </div>
                 </div>
             </div>

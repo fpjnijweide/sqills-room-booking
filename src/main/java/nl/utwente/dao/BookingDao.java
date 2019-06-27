@@ -295,13 +295,69 @@ throw new DAOException(e.getMessage());
      * @param bookingID specifies the booking to be updated
      * @return whether the update was successful
      */
-    public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
+//    public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
+//
+//        if (!isValidBookingID(bookingID)){
+//            throw new InvalidBookingIDException(bookingID);
+//        }
+//
+//        throwSpecifiedBookingExceptions(booking);
+//
+//        Connection connection = DatabaseConnectionFactory.getConnection();
+//
+//        try {
+//            String query = "select update_booking(?,?,?,?,?,?,?,?)";
+//
+//            PreparedStatement statement = connection.prepareStatement(query);
+//
+//            statement.setTime(1, booking.getStartTime());
+//            statement.setTime(2, booking.getEndTime());
+//            statement.setDate(3, booking.getDate());
+//            statement.setString(4, booking.getRoomName());
+//            statement.setString(5, booking.getEmail());
+//            statement.setBoolean(6, booking.getIsPrivate());
+//            statement.setString(7, booking.getTitle());
+//            statement.setInt(8, bookingID);
+//
+//            int updatedRows = statement.executeUpdate();
+//            if (updatedRows == 0){
+//                throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
+//            }
+//
+//            statement.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//throw new DAOException(e.getMessage());
+//        } finally {
+//            try {
+//                connection.commit();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
 
-        if (!isValidBookingID(bookingID)){
+    public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
+        if (!isValidBookingID(bookingID)) {
             throw new InvalidBookingIDException(bookingID);
         }
 
-        throwSpecifiedBookingExceptions(booking);
+        if (!UserDao.isValidEmail(booking.getEmail())) {
+            throw new BookingException("Invalid email: " + booking.getEmail());
+        }
+
+        if (!isValidTitle(booking.getTitle())) {
+            throw new BookingException("Invalid Title");
+        }
+
+        try {
+            if (!isValidTimeSlotUpdate(bookingID, booking.getRoomName(), booking.getStartTime(), booking.getEndTime(), booking.getDate())) {
+                throw new BookingException("Illegal Timeslot");
+            }
+        } catch (InvalidRoomNameException e) {
+            throw new BookingException("Invalid room name");
+        }
 
         Connection connection = DatabaseConnectionFactory.getConnection();
 
@@ -319,15 +375,15 @@ throw new DAOException(e.getMessage());
             statement.setString(7, booking.getTitle());
             statement.setInt(8, bookingID);
 
-            int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0){
+            ResultSet resultSet = statement.executeQuery();
+            if (!resultSet.next()) {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
 
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
@@ -335,7 +391,6 @@ throw new DAOException(e.getMessage());
                 e.printStackTrace();
             }
         }
-
     }
 
     /**
@@ -510,7 +565,42 @@ throw new DAOException(e.getMessage());
         return isValid;
     }
 
-    public static boolean isValidBooking(SpecifiedBooking booking) throws DAOException {
+    private static boolean isValidTimeSlotUpdate(int bookingID, String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
+        if (!isValidRoomName(roomName)) {
+            throw new InvalidRoomNameException(roomName);
+        }
+        boolean isValid = true;
+        Connection connection = DatabaseConnectionFactory.conn;
+        try {
+            String query = "select * from is_valid_booking_booking_id(?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, roomName);
+            statement.setDate(2, date);
+            statement.setInt(3, bookingID);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                Time bookingStart = Time.valueOf(result.getString("start_time"));
+                Time bookingEnd = Time.valueOf(result.getString("end_time"));
+//                Time wantedStart = Time.valueOf(startTime);
+//                Time wantedEnd = Time.valueOf(endTime);
+                if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
+                    || wantedEnd.compareTo(bookingStart) > 0 && wantedEnd.compareTo(bookingEnd) < 0
+                    || wantedStart.compareTo(bookingStart) <= 0 && wantedEnd.compareTo(bookingEnd) >= 0
+                ) {
+                    isValid = false;
+                }
+            }
+            result.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return isValid;
+    }
+
+        public static boolean isValidBooking(SpecifiedBooking booking) throws DAOException {
         return isValidBooking(booking,
             booking.getRoomName(),
             booking.getDate());

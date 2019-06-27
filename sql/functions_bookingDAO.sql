@@ -142,3 +142,14 @@ as $$
   where r.room_name = p_room_name and b.date = booking_date;
   $$
   language sql;
+
+drop function if exists is_valid_booking_booking_id(p_room_name text, booking_date date, p_booking_id int);
+create or replace function is_valid_booking_booking_id(p_room_name text, booking_date date, p_booking_id int) returns table(start_time time, end_time time, date date)
+as $$
+  select b.start_time, b.end_time, b.date
+  from sqills.booking b
+         join sqills.room r on b.room_id = r.room_id
+  where r.room_name = p_room_name and b.date = booking_date
+  and b.booking_id != p_booking_id;
+  $$
+  language sql;

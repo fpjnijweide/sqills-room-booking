@@ -202,7 +202,7 @@ throw new DAOException(e.getMessage());
         Connection connection = DatabaseConnectionFactory.getConnection();
 
         try {
-            String query = "SELECT email FROM sqills.users WHERE user_name = ?";
+            String query = "SELECT email FROM sqills.users WHERE name = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
 
