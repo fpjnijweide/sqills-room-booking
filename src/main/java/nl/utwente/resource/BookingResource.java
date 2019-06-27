@@ -1,8 +1,8 @@
 package nl.utwente.resource;
 
-import nl.utwente.authentication.BasicSecurityContext;
+import com.google.inject.Provides;
+import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
-import nl.utwente.dao.ParticipantDao;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
@@ -12,30 +12,36 @@ import nl.utwente.exceptions.InvalidEmailException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.*;
+import javax.ws.rs.ext.Provider;
+import javax.xml.ws.WebServiceProvider;
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static nl.utwente.authentication.AuthenticationHandler.*;
 import static nl.utwente.dao.BookingDao.prepareBooking;
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
+import static nl.utwente.dao.UserDao.getUserFromContext;
 import static nl.utwente.dao.UserDao.getUserFromEmail;
 import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
 import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
-import static nl.utwente.authentication.AuthenticationHandler.userParticipatesInBooking;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/booking")
 public class BookingResource {
     @Context HttpServletResponse response;
+
     @Context
     SecurityContext securityContext;
+
+    @Context
+    AuthenticationFilter authenticationFilter;
+
+    @Context
+    ContainerRequestContext context;
 
 
     /**
@@ -192,12 +198,10 @@ public class BookingResource {
                 return true;
             }
             List<User> participantsList = getParticipantsOfBooking(bookingID);
-            User user = getUserFromEmail(securityContext.getUserPrincipal().getName());
+            User user = getUserFromContext(context); // TODO Freek check if this owrks
             userInParticipants = participantsList.contains(user);
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
-        } catch (InvalidEmailException e) {
-            throw400(e.getMessage());
         } catch (NullPointerException e) {
             throw401("User is not logged in");
         } catch (DAOException e) {

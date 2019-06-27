@@ -1,6 +1,5 @@
 package nl.utwente.resource;
 
-import nl.utwente.authentication.BasicSecurityContext;
 import nl.utwente.dao.ParticipantDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
@@ -11,9 +10,9 @@ import nl.utwente.model.UserIDEmailPair;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import static nl.utwente.authentication.AuthenticationHandler.*;
@@ -23,6 +22,10 @@ import static nl.utwente.exceptions.ExceptionHandling.*;
 public class ParticipantResource {
     @Context
     SecurityContext securityContext;
+
+    @Context
+    ContainerRequestContext context;
+
 
     @POST
     @Path("/add")
@@ -51,14 +54,14 @@ public class ParticipantResource {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
             }
-            if ((!userParticipatesInBooking(securityContext, pair.getUserid()) &&
+            if ((!userParticipatesInBooking(context, pair) &&
                 (!userOwnsBooking(securityContext,pair.getBookingid()))) &&
                 (!userIsAdmin(securityContext)))
             { // If owner = logged in user
                 throw403("You are not authorized to edit this booking");
             }
             ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
-        } catch (InvalidBookingIDException e) {
+        } catch (InvalidBookingIDException | InvalidEmailException e) {
             throw404(e.getMessage());
         } catch (InvalidUserIDException e) {
             throw400(e.getMessage());

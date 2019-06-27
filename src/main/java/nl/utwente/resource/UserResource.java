@@ -5,17 +5,22 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.authentication.AuthenticationHandler;
+import nl.utwente.authentication.BasicSecurityContext;
 import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.google.GoogleAuth;
 import nl.utwente.model.EmailList;
+import nl.utwente.model.User;
 import nl.utwente.model.UserAdministration;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -32,12 +37,12 @@ public class UserResource {
     @Context
     HttpServletRequest request;
     @Context HttpServletResponse response;
+
     @Context
     SecurityContext securityContext;
 
-    public UserResource(){
-
-    }
+    @Context
+    ContainerRequestContext context;
 
     // This code was used back when we had passwords
 //    @POST

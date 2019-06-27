@@ -14,11 +14,11 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 @Provider
-@PreMatching
 @Priority(Priorities.AUTHENTICATION)  // needs to happen before authorization
 public class AuthenticationFilter implements ContainerRequestFilter {
     @Context
@@ -34,10 +34,13 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             User user = null;
             try {
                 user = UserDao.getUserFromEmail(email);
+                requestContext.setProperty("user",user);
                 requestContext.setSecurityContext(new BasicSecurityContext(user, false));
-            } catch (InvalidEmailException | DAOException e) {
-                // Todo: Show the user that they are not in the system.
-                throw new IOException(e.getMessage());
+            } catch (InvalidEmailException e) {
+                requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+            } catch (DAOException e) {
+                requestContext.abortWith(Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
+
             }
 
         }

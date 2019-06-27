@@ -40,8 +40,8 @@ public class BasicSecurityContext implements SecurityContext {
     @Override
     public boolean isSecure() { return secure; }
 
-    public int getUserID(){
-        return user.getUserid();
+    public User getUser(){
+        return user;
     }
 
     @Override

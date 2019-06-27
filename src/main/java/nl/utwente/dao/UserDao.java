@@ -1,10 +1,12 @@
 package nl.utwente.dao;
 
+import nl.utwente.authentication.BasicSecurityContext;
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
+import javax.ws.rs.container.ContainerRequestContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -200,6 +202,19 @@ throw new DAOException(e.getMessage());
 //    public static boolean loggedIn(SecurityContext securityContext) {
 //        return securityContext.getUserPrincipal().
 //    }
+
+    public static User getUserFromContext(ContainerRequestContext context) {
+        User user = null;
+        try {
+            user = (User) context.getProperty("user");
+        } catch (NullPointerException ignored) {}
+        if (user==null){
+            try {
+                user = ((BasicSecurityContext)context.getSecurityContext()).getUser();
+            } catch (ClassCastException | NullPointerException ignored) {}
+        }
+        return user;
+    }
 
     public static void main(String[] args) {
         String name = "Platon Frolov";
