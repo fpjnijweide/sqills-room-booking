@@ -6,15 +6,73 @@ import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
 import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
 
 public class UserDao {
+    public static List<User> getAllUsers() {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        List<User> users = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM sqills.users";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+
+            while (resultSet.next()) {
+                User user = new User();
+                user.setAdministrator(resultSet.getBoolean("administrator"));
+                user.setEmail(resultSet.getString("email"));
+                user.setName(resultSet.getString("name"));
+                user.setUserid(resultSet.getInt("user_id"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return users;
+    }
+
+    // TODO error handlign
+    public static User getUser(int userID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        User user = null;
+        try {
+            String query = "SELECT * FROM sqills.users WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = new User();
+                user.setUserid(resultSet.getInt("user_id"));
+                user.setName(resultSet.getString("name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setAdministrator(resultSet.getBoolean("administrator"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return user;
+    }
+
     public static boolean isValidUserID(int userID) throws DAOException {
         Connection connection = DatabaseConnectionFactory.conn;
         boolean isValid = false;
@@ -221,5 +279,25 @@ throw new DAOException(e.getMessage());
         }
 
         return result;
+    }
+
+    public static void deleteUser(int userID) {
+        Connection connection = DatabaseConnectionFactory.getConnection();
+
+        try {
+            String query = "DELETE FROM sqills.users WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, userID);
+
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
