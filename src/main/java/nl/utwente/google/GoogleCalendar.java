@@ -168,16 +168,9 @@ public class GoogleCalendar {
                 System.out.println("No new events to sync.");
             } else {
                 for (Event event : items) {
-                    System.out.println("Event with title: "+event.getSummary()+" found");
-                    SpecifiedBooking specifiedBooking = new SpecifiedBooking();
-                    specifiedBooking.setEmail(event.getCreator().getEmail());
-                    specifiedBooking.setDate(new java.sql.Date(event.getStart().getDateTime().getValue()));
-                    specifiedBooking.setEndTime(removeDateFromTime(event.getEnd()));
-                    specifiedBooking.setStartTime(removeDateFromTime(event.getStart()));
-                    specifiedBooking.setRoomName(calendarName);
-                    specifiedBooking.setTitle(event.getSummary());
-                    specifiedBooking.setIsPrivate(false);
                     if(!event.getStatus().equals("cancelled")) {
+                        System.out.println("Event with title: "+event.getSummary()+" found");
+                        SpecifiedBooking specifiedBooking = eventToBooking(calendarName, event);
                         try {
                             BookingDao.createBooking(specifiedBooking);
                             System.out.println("Event added to DB");
@@ -191,7 +184,9 @@ public class GoogleCalendar {
                             }
                         }
                     }else{
-                        System.out.println("Delete a booking");
+                        Event cancelledEvent = this.getEvent(calendarId, event.getId());
+                        SpecifiedBooking specifiedBooking =   eventToBooking(calendarName, cancelledEvent);
+                        System.out.println("Deleteing a booking");
                         BookingDao.deleteBooking(specifiedBooking);
                     }
                 }
@@ -201,6 +196,18 @@ public class GoogleCalendar {
         } while (pageToken != null);
         BookingDao.setGoogleCalendarSyncToken(events.getNextSyncToken());
         return events;
+    }
+
+    private SpecifiedBooking eventToBooking(String calendarName, Event event) {
+        SpecifiedBooking specifiedBooking = new SpecifiedBooking();
+        specifiedBooking.setEmail(event.getCreator().getEmail());
+        specifiedBooking.setDate(new java.sql.Date(event.getStart().getDateTime().getValue()));
+        specifiedBooking.setEndTime(removeDateFromTime(event.getEnd()));
+        specifiedBooking.setStartTime(removeDateFromTime(event.getStart()));
+        specifiedBooking.setRoomName(calendarName);
+        specifiedBooking.setTitle(event.getSummary());
+        specifiedBooking.setIsPrivate(false);
+        return specifiedBooking;
     }
 
 

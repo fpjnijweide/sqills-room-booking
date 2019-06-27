@@ -258,7 +258,6 @@ public class BookingDao {
             ps.setDate(3, booking.getDate());
             ps.setString(4, booking.getRoomName());
             ps.execute();
-            connection.commit();
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
