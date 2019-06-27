@@ -258,12 +258,6 @@ throw new DAOException(e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
 throw new DAOException(e.getMessage());
-        } finally {
-            try {
-                connection.commit();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
     }
