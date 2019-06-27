@@ -9,6 +9,7 @@ import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.google.GoogleAuth;
 import nl.utwente.model.EmailList;
+import nl.utwente.model.User;
 import nl.utwente.model.UserAdministration;
 
 import javax.annotation.Priority;
@@ -167,5 +168,18 @@ public class UserResource {
         HttpSession session = request.getSession(true);
         session.setAttribute(AuthenticationFilter.principalName, email);
         return "Token Received";
+    }
+    // TODO ERROR HANDLING
+    @GET
+    @Path("/u/{userID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public User getUserFromID(@PathParam("userID") int userID) {
+        return UserDao.getUser(userID);
+    }
+
+    @DELETE
+    @Path("/{userID}")
+    public void deleteUser(@PathParam("userID") int userID) {
+        UserDao.deleteUser(userID);
     }
 }

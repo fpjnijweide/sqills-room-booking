@@ -52,6 +52,10 @@
         <servlet-name>Booking View Servlet</servlet-name>
         <servlet-class>nl.utwente.servlet.desktopInterface.BookingViewServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Admin Servlet</servlet-name>
+        <servlet-class>nl.utwente.servlet.desktopInterface.AdminServlet</servlet-class>
+    </servlet>
 
 	<servlet-mapping>
 		<servlet-name>javax.ws.rs.core.Application</servlet-name>
@@ -92,6 +96,10 @@
     <servlet-mapping>
         <servlet-name>Booking View Servlet</servlet-name>
         <url-pattern>/desktop/booking/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Admin Servlet</servlet-name>
+        <url-pattern>/desktop/admin</url-pattern>
     </servlet-mapping>
     <error-page>
         <error-code>500</error-code>
