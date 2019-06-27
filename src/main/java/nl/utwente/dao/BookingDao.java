@@ -519,7 +519,7 @@ connection.close();
         boolean isValid = true;
 
         try {
-            String query = "select * from is_valid_booking(?, ?)";
+            String query = "select * from get_bookings_on_date_in_room(?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
             statement.setDate(2, date);
