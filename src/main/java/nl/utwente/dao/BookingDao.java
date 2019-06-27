@@ -84,6 +84,7 @@ throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
+connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -125,6 +126,7 @@ throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
+connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -168,6 +170,7 @@ throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
+connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -224,6 +227,7 @@ throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
+connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -298,6 +302,7 @@ throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
+connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -348,6 +353,7 @@ throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
+connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -396,6 +402,7 @@ throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
+connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
