@@ -532,6 +532,7 @@ connection.close();
                 if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
                     || wantedEnd.compareTo(bookingStart) > 0 && wantedEnd.compareTo(bookingEnd) < 0
                     || wantedStart.compareTo(bookingStart) <= 0 && wantedEnd.compareTo(bookingEnd) >= 0
+                    || wantedStart.compareTo(wantedEnd) >= 0
                 ) {
                     isValid = false;
                 }

@@ -181,6 +181,7 @@ public class BookingDaoTest {
 
     @Test
     public void testUpdateBooking() {
+        // TODO Marten fixed this on his branch
         assertDoesNotThrow(() -> {
             updateBooking(bookingID, createdBooking);
         });

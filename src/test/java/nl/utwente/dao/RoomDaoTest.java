@@ -171,6 +171,7 @@ public class RoomDaoTest {
     public void testBookingsForThisWeek() {
         try {
             List<OutputBooking> bookings = getBookingsForThisWeek(roomName);
+            // TODO why does this fail?
             assertTrue(bookings.isEmpty());
             Time startTime = currentTimePlusMinutes(2);
             int bookingID = makeBooking(startTime);
