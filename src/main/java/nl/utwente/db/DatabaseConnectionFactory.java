@@ -19,8 +19,8 @@ public class DatabaseConnectionFactory {
     static final String url = "jdbc:postgresql://" + host + ":5432/" + dbName;
     static final String username = "di125";
     static final String password = "E9+gNMnM";
+    static {
 
-    public DatabaseConnectionFactory() {
         // We actually use a connection pool of 100 instead of randomly assigning connections
         // (which can lead to problems when there are many users (or a DDOS attack or such)
         // But this is better than using just one connection
@@ -46,7 +46,7 @@ public class DatabaseConnectionFactory {
         poolProperties.setRemoveAbandoned(true);
         poolProperties.setDefaultAutoCommit(false);
         poolProperties.setJdbcInterceptors(
-            "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"+
+            "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;" +
                 "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");
         datasource = new DataSource();
         datasource.setPoolProperties(poolProperties);
