@@ -26,7 +26,7 @@ create or replace function create_booking(p_start_time time, p_end_time time, p_
                 RETURNING booking_id;
     $booking_id$
     LANGUAGE SQL;
-select * from sqills.booking;
+
 drop function if exists delete_booking(p_start_time time, p_end_time time, p_date date ,p_room_name text);
 create or replace function delete_booking(p_start_time time, p_end_time time, p_date date ,p_room_name text)
 RETURNS boolean as $$
@@ -35,10 +35,11 @@ declare
   begin
      select b.booking_id
      from sqills.booking b
+     join sqills.room r on r.room_id = b.room_id
      where b.start_time = p_start_time and
            b.end_time = p_end_time and
            b.date = p_date and
-           b.room_id = p_room_name
+           r.room_name = p_room_name
      into f_booking_id;
 
      delete from sqills.participants p where f_booking_id = p.booking_id;
