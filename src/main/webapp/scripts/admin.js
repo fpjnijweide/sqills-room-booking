@@ -74,9 +74,44 @@ function deleteUser() {
     console.log(userID);
     axios.delete(`/api/user/${userID}`)
         .then(response => {
-            alert("Deleted User");
+            location.reload();
         })
         .catch(error => {
             alert(error);
         })
+}
+
+function updateUser() {
+    let userID = document.getElementById("user-id").innerText;
+
+    let requestBody = {
+        "userid": document.getElementById("user-id").innerText,
+        "name": document.getElementById("user-name").value,
+        "email": document.getElementById("user-email").value,
+        "administrator": document.getElementById("user-admin").checked
+    };
+
+    axios.put(`/api/user/${userID}`, requestBody)
+        .then(response => {
+            location.reload();
+        })
+        .catch(error => {
+            alert(error.response.data);
+        });
+}
+
+function createUser() {
+    let requestBody = {
+        "name": document.getElementById("user-name").value,
+        "email": document.getElementById("user-email").value,
+        "administrator": document.getElementById("user-admin").checked
+    };
+
+    axios.post(`/api/user/`, requestBody)
+        .then(response => {
+            location.reload();
+        })
+        .catch(error => {
+            alert(error.response.data);
+        });
 }
