@@ -243,7 +243,28 @@ public class BookingDao {
 
     }
 
+    /**
+     * Delete a booking using a composite key
+     */
 
+    public static void deleteBooking(SpecifiedBooking booking){
+        System.out.println("Delete booking");
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "select delete_booking(?,?,?,?)";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setTime(1, booking.getStartTime());
+            ps.setTime(2, booking.getEndTime());
+            ps.setDate(3, booking.getDate());
+            ps.setString(4, booking.getRoomName());
+            ps.execute();
+            connection.commit();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
     /**
      * Deletes a booking with a specified bookingID
      *
@@ -453,13 +474,15 @@ public class BookingDao {
     }
 
     public static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException {
+
         if (!isValidRoomName(roomName)){
             throw new InvalidRoomNameException(roomName);
         }
+        System.out.println(roomName+" "+wantedEnd+" "+wantedStart+" "+date);
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.getConnection();
         try {
-            String query = "select * from is_valid_booking(?, ?)";
+            String query = "select * from get_bookings_on_date_in_room(?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
             statement.setDate(2, date);
@@ -467,8 +490,6 @@ public class BookingDao {
             while (result.next()) {
                 Time bookingStart = Time.valueOf(result.getString("start_time"));
                 Time bookingEnd = Time.valueOf(result.getString("end_time"));
-//                Time wantedStart = Time.valueOf(startTime);
-//                Time wantedEnd = Time.valueOf(endTime);
                 if (wantedStart.compareTo(bookingStart) > 0 && wantedStart.compareTo(bookingEnd) < 0
                     || wantedEnd.compareTo(bookingStart) > 0 && wantedEnd.compareTo(bookingEnd) < 0
                     || wantedStart.compareTo(bookingStart) <= 0 && wantedEnd.compareTo(bookingEnd) >= 0
@@ -533,5 +554,44 @@ public class BookingDao {
         }
 
         return true;
+    }
+
+    public static String getLatestGoogleCalendarSyncToken(){
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "select sync_token from sqills.google_calendar_sync order by date_time desc limit 1";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getString("sync_token");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public static void setGoogleCalendarSyncToken(String syncToken){
+        Connection connection = DatabaseConnectionFactory.getConnection();
+        try {
+            String query = "insert into   sqills.google_calendar_sync(sync_token) values(?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, syncToken);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
