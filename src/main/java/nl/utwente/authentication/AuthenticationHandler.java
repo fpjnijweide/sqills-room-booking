@@ -4,9 +4,12 @@ import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidEmailException;
+import nl.utwente.model.User;
+import nl.utwente.model.UserIDBookingIDPair;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.SecurityContext;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -16,6 +19,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static nl.utwente.dao.BookingDao.getEmailOfBookingOwner;
+import static nl.utwente.dao.UserDao.getUserFromEmail;
 
 public class AuthenticationHandler {
 
@@ -35,8 +39,9 @@ public class AuthenticationHandler {
 
     }
 
-    public static boolean userParticipatesInBooking(SecurityContext securityContext, int userID) {
-        return (((BasicSecurityContext) securityContext).getUserID() == userID);
+
+    public static boolean userParticipatesInBooking(ContainerRequestContext context, UserIDBookingIDPair pair) throws InvalidEmailException, DAOException {
+        return ((User) context.getProperty("user")).getUserid() == pair.getUserid();
     }
 
     public static boolean userIsAdmin(SecurityContext securityContext) {

@@ -8,8 +8,10 @@ import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.Booking;
 import nl.utwente.model.OutputBooking;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -22,10 +24,13 @@ import static nl.utwente.exceptions.ExceptionHandling.*;
 @Path("/room")
 public class RoomResource {
     @Context
+    HttpServletRequest req;
+
+    @Context
     SecurityContext securityContext;
 
-    public RoomResource(){ }
-
+    @Context
+    ContainerRequestContext context;
 
     @GET
     @Path("/list")
