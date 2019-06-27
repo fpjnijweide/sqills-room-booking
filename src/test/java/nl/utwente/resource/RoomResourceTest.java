@@ -1,7 +1,6 @@
  package nl.utwente.resource;
 
  import com.google.gson.Gson;
- import manifold.ext.api.Jailbreak;
  import nl.utwente.dao.BookingDao;
  import nl.utwente.dao.RoomDao;
  import nl.utwente.exceptions.DAOException;
