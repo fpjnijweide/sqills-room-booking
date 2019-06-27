@@ -26,9 +26,29 @@ create or replace function create_booking(p_start_time time, p_end_time time, p_
                 RETURNING booking_id;
     $booking_id$
     LANGUAGE SQL;
+select * from sqills.booking;
+drop function if exists delete_booking(p_start_time time, p_end_time time, p_date date ,p_room_name text);
+create or replace function delete_booking(p_start_time time, p_end_time time, p_date date ,p_room_name text)
+RETURNS boolean as $$
+declare
+  f_booking_id integer;
+  begin
+     select b.booking_id
+     from sqills.booking b
+     where b.start_time = p_start_time and
+           b.end_time = p_end_time and
+           b.date = p_date and
+           b.room_id = p_room_name
+     into f_booking_id;
 
-select * from sqills.room;
-select * from sqills.users;
+     delete from sqills.participants p where f_booking_id = p.booking_id;
+     delete from sqills.booking b where f_booking_id = b.booking_id;
+     return true;
+  end;
+
+$$
+  LANGUAGE plpgsql;
+
 
 drop function if exists create_recurring_booking_parent(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text, repeat_every_type repeat_type, repeat_every int, ending_at date);
 create or replace function create_recurring_booking_parent(start_time time, end_time time, date date ,room_name text, owner text, is_private boolean, title text, repeat_every_type repeat_type, repeat_every int, ending_at date)
@@ -49,7 +69,7 @@ BEGIN
   end;
     $$
   LANGUAGE plpgsql;
-
+select * from sqills.booking where title = 'Test4';
 drop function if exists create_recurring_pattern(p_repeat_every_type repeat_type, p_repeat_every int, p_starting_from date, p_ending_at date);
 create or replace function create_recurring_pattern(p_repeat_every_type repeat_type, p_repeat_every int, p_starting_from date, p_ending_at date)
   RETURNS integer as $$
@@ -132,12 +152,12 @@ as $$
   $$
   language sql;
 
-drop function if exists is_valid_booking(p_room_name text, booking_date date);
-create or replace function is_valid_booking(p_room_name text, booking_date date) returns table(start_time time, end_time time, date date)
+drop function if exists get_bookings_on_date_in_room(p_room_name text, p_booking_date date);
+create or replace function get_bookings_on_date_in_room(p_room_name text, p_booking_date date) returns table(start_time time, end_time time, date date)
 as $$
   select b.start_time, b.end_time, b.date
   from sqills.booking b
   join sqills.room r on b.room_id = r.room_id
-  where r.room_name = p_room_name and b.date = booking_date;
+  where r.room_name = p_room_name and b.date = p_booking_date;
   $$
   language sql;

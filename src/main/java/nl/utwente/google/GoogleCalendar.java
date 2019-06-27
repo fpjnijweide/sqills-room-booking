@@ -2,16 +2,17 @@ package nl.utwente.google;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.CalendarListEntry;
-import com.google.api.services.calendar.model.Channel;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.*;
+import nl.utwente.dao.BookingDao;
+import nl.utwente.exceptions.BookingException;
+import nl.utwente.model.SpecifiedBooking;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -117,6 +118,91 @@ public class GoogleCalendar {
 
         return event;
     }
+
+    private static Time removeDateFromTime(EventDateTime eventDateTime){
+        try{
+            Time time = new Time(eventDateTime.getDateTime().getValue());
+            time.toString();
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
+            cal.set(java.util.Calendar.YEAR, 1970);
+            cal.set(java.util.Calendar.MONTH, 0);
+            cal.set(java.util.Calendar.HOUR_OF_DAY,time.getHours());
+            cal.set(java.util.Calendar.MINUTE,time.getMinutes());
+            cal.set(java.util.Calendar.SECOND,0);
+            cal.set(java.util.Calendar.MILLISECOND,0);
+            Date d = cal.getTime();
+            return new Time(d.getTime());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Events getLatestEvents(String calendarId) throws IOException {
+        String calendarName = this.calendar.calendars().get(calendarId).execute().getSummary();
+        Calendar.Events.List request = this.calendar.events().list(calendarId);
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(java.util.Calendar.YEAR, 1);
+        DateTime max = new DateTime(c.getTime());
+        String pageToken = null;
+        Events events = null;
+        String syncToken = BookingDao.getLatestGoogleCalendarSyncToken();
+        System.out.println(syncToken);
+        if(syncToken != null){
+            request.setSyncToken(syncToken);
+        }
+        do {
+            request.setPageToken(pageToken);
+
+            try {
+                events = request.execute();
+            } catch (GoogleJsonResponseException e) {
+                e.printStackTrace();
+            }
+
+            List<Event> items = events.getItems();
+            System.out.println(items);
+            if (items.size() == 0) {
+                System.out.println("No new events to sync.");
+            } else {
+                for (Event event : items) {
+                    System.out.println("Event with title: "+event.getSummary()+" found");
+                    SpecifiedBooking specifiedBooking = new SpecifiedBooking();
+                    specifiedBooking.setEmail(event.getCreator().getEmail());
+                    specifiedBooking.setDate(new java.sql.Date(event.getStart().getDateTime().getValue()));
+                    specifiedBooking.setEndTime(removeDateFromTime(event.getEnd()));
+                    specifiedBooking.setStartTime(removeDateFromTime(event.getStart()));
+                    specifiedBooking.setRoomName(calendarName);
+                    specifiedBooking.setTitle(event.getSummary());
+                    specifiedBooking.setIsPrivate(false);
+                    if(!event.getStatus().equals("cancelled")) {
+                        try {
+                            BookingDao.createBooking(specifiedBooking);
+                            System.out.println("Event added to DB");
+                        } catch (BookingException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("Invalid booking removed");
+                            try {
+                                this.calendar.events().delete(calendarId, event.getId()).execute();
+                            } catch (GoogleJsonResponseException ex) {
+                                System.out.println("Event Already Removed");
+                            }
+                        }
+                    }else{
+                        System.out.println("Delete a booking");
+                        BookingDao.deleteBooking(specifiedBooking);
+                    }
+                }
+            }
+
+            pageToken = events.getNextPageToken();
+        } while (pageToken != null);
+        BookingDao.setGoogleCalendarSyncToken(events.getNextSyncToken());
+        return events;
+    }
+
 
     public Event getEvent(String calendarId, String eventResourceId) throws IOException {
         this.calendar.calendarList().get(calendarId).execute();

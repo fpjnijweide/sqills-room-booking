@@ -162,14 +162,13 @@ public class BookingResource {
     @Path("/google-calendar/push-notification-events")
     public void googleCalendarPushNotification(@HeaderParam("X-Goog-Channel-ID")String channelID, @HeaderParam("X-Goog-Resource-ID")String resourceID, @HeaderParam("X-Goog-Resource-URI") String resourceURI, @HeaderParam("X-Goog-Channel-Token") String token ){
         System.out.println("Change detected");
-        System.out.println("ChannelID: "+channelID+ " Resource ID: "+resourceID+ " Token: "+token + " Resource URI");
         GoogleCalendar gc = new GoogleCalendar();
         Event e  = null;
         try {
-            e = gc.getEvent("tudent.utwente.nl_rubdfd2mejlmk77obth2qcb910@group.calendar.google.com", "DV2YOcFLYivvkNUeGel5y1eu6T0");
+            gc.getLatestEvents(token);
         } catch (IOException e1) {
             e1.printStackTrace();
-            System.out.println("event not found");
+            System.out.println("Event not found");
         }
         System.out.println(e.getSummary());
     }
