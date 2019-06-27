@@ -43,10 +43,12 @@ function editBooking() {
 
     axios.put(`/api/booking/${bookingID}`, requestBody)
         .then(response => {
-            console.log(response)
+            $("#edit-modal").modal("hide");
+            $("#edit-success-modal").modal();
         })
         .catch(error => {
-            console.log(error);
-            console.log(error.response.data);
+            $("#edit-modal").modal("hide");
+            document.getElementById("edit-error-container").innerText = error.data.response;
+            $("#edit-failure-modal").modal();
         })
 }
