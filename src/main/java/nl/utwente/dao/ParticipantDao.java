@@ -25,7 +25,9 @@ public class ParticipantDao {
         }
 
         List<User> result = new ArrayList<>();
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "select * from get_participants_of_booking(?)";
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -63,7 +65,9 @@ throw new DAOException(e.getMessage());
 
 
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "INSERT INTO sqills.participants (booking_id, user_id) VALUES (?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
@@ -95,7 +99,9 @@ throw new DAOException(e.getMessage());
         }
 
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "DELETE FROM sqills.participants WHERE booking_id = ? AND user_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setInt(1, bookingID);
@@ -129,7 +135,9 @@ throw new DAOException(e.getMessage());
 
 
 
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
             PreparedStatement userIDStatement = connection.prepareStatement(useridQuery);
             userIDStatement.setString(1, email);
