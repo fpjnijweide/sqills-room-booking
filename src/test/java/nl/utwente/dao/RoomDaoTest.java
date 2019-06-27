@@ -22,7 +22,12 @@ import static org.junit.Assert.assertFalse;
 public class RoomDaoTest {
     @BeforeClass
     public static void setup() {
-        connection = DatabaseConnectionFactory.connection;
+        try {
+            connection = DatabaseConnectionFactory.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @AfterClass
@@ -45,8 +50,8 @@ public class RoomDaoTest {
     @Test
     public void testThatInvalidRoomsAreInvalid() {
         try {
-            assertFalse(isValidRoomID(-2));
-            assertFalse(isValidRoomName("Some invalid room name"));
+            assertFalse(isValidRoomID(-2,connection));
+            assertFalse(isValidRoomName("Some invalid room name",connection));
         } catch (DAOException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -56,8 +61,8 @@ public class RoomDaoTest {
     @Test
     public void testThatValidRoomsAreValid() {
         try {
-            assertTrue(isValidRoomID(roomID));
-            assertTrue(isValidRoomName(roomName));
+            assertTrue(isValidRoomID(roomID,connection));
+            assertTrue(isValidRoomName(roomName,connection));
         } catch (DAOException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -92,10 +97,10 @@ public class RoomDaoTest {
             List<String> roomNames = getAllRoomNames();
             List<Integer> roomIDs = getAllRoomsIDs();
             for (int id : roomIDs) {
-                assertEquals(id, getRoomID(getRoomName(id)));
+                assertEquals(id, getRoomID(getRoomName(id,connection),connection));
             }
             for (String name : roomNames) {
-                assertEquals(name, getRoomName(getRoomID(name)));
+                assertEquals(name, getRoomName(getRoomID(name,connection),connection));
             }
         } catch (DAOException e) {
             e.printStackTrace();
@@ -106,8 +111,8 @@ public class RoomDaoTest {
     @Test
     public void testThatRoomIDMatchesRoomName() {
         try {
-            assertEquals(roomID, getRoomID(roomName));
-            assertEquals(roomName, getRoomName(roomID));
+            assertEquals(roomID, getRoomID(roomName,connection));
+            assertEquals(roomName, getRoomName(roomID,connection));
         } catch (DAOException e) {
             e.printStackTrace();
             fail(e.getMessage());

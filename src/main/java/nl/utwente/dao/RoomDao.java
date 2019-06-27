@@ -70,7 +70,7 @@ throw new DAOException(e.getMessage());
     }
 
     @Internal
-    static boolean isValidRoomName(String roomName, Connection connection) throws DAOException {
+    public static boolean isValidRoomName(String roomName, Connection connection) throws DAOException {
         return getRoomID(roomName, connection) != -1;
     }
 
