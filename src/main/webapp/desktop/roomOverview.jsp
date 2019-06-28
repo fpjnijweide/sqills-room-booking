@@ -16,13 +16,13 @@
                     <div class="room-title">Room <%= id %></div>
                     <% if (availableRoomIDs.contains(id)) { %>
                         <div class="room-state free"></div>
-                        <a href="/desktop/room/<%= id %>" class="room-card-link">
-                            <div class="book-room free">Book this room</div>
-                        </a>
+
                     <% } else { %>
                         <div class="room-state taken"></div>
-                        <div class="book-room taken">Book this room</div>
                     <% } %>
+                    <a href="/desktop/room/<%= id %>" class="room-card-link">
+                        <div class="book-room free">View this room</div>
+                    </a>
                     <%-- Todo: Implement --%>
                     <%--<div class="time-info">Free for the entire day</div>--%>
                 </div>

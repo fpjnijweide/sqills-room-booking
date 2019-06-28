@@ -24,15 +24,15 @@ as $$
   $$
   language sql;
 
-drop function if exists get_booking_for_this_week(room_name text);
-create function get_booking_for_this_week(room_name text) returns table(booking_id int,start_time time, end_time time, date date, name text, is_private boolean, title text)
+drop function if exists get_booking_for_this_week(p_room_name text);
+create function get_booking_for_this_week(p_room_name text) returns table(booking_id int,start_time time, end_time time, date date, name text, is_private boolean, title text)
 as $$
   select b.booking_id, b.start_time, b.end_time, b.date, u.name, b.is_private, b.title
   from sqills.booking b
   join sqills.room r on b.room_id = r.room_id
   join sqills.users u on b.owner = u.user_id
   where EXTRACT(WEEK FROM date) = EXTRACT(WEEK FROM CURRENT_DATE)
-  and r.room_name = room_name
+  and r.room_name = p_room_name
   order by b.date asc;
   $$
   language sql;
