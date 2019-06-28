@@ -19,6 +19,18 @@ public class User implements Serializable, Principal {
         this.administrator = administrator;
     }
 
+    @Override
+    public boolean equals(Object otherObject)
+    {
+        if (otherObject instanceof User)
+        {
+            User otherUser = (User) otherObject;
+            if ( this.userid == otherUser.userid)
+                return true;
+        }
+        return false;
+    }
+
     public int getUserid() {
         return userid;
     }

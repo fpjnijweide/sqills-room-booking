@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
+import static nl.utwente.dao.RoomDao.getRoomName;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
-import static nl.utwente.dao.UserDao.getUserFromEmail;
-import static nl.utwente.dao.UserDao.isValidEmail;
+import static nl.utwente.dao.UserDao.*;
 
 public class BookingDao {
     /**
@@ -91,6 +91,45 @@ public class BookingDao {
 
         return booking;
     }
+
+    public static boolean isBookingPrivate(int bookingID) throws InvalidBookingIDException, DAOException {
+        boolean result = false;
+        Connection connection = null;
+        try {
+            connection = DatabaseConnectionFactory.getConnection();
+            if (!isValidBookingID(bookingID, connection)) {
+                throw new InvalidBookingIDException(bookingID);
+            }
+            String query = "SELECT is_private " +
+                "FROM sqills.Booking b " +
+                "WHERE b.booking_id = ?";
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, bookingID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                result = resultSet.getBoolean("is_private");
+            }
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DAOException(e.getMessage());
+        } finally {
+            try {
+                connection.commit();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
 
     public static String getEmailOfBookingOwner(int bookingID) throws InvalidBookingIDException, DAOException {
         String email = null;
@@ -504,8 +543,7 @@ public class BookingDao {
         String title = "PRIVATE";
 
         try {
-            if (!isPrivate || (Objects.equals(email, getEmailOfBookingOwner(bookingid))) ||
-                getParticipantsOfBooking(bookingid).contains(getUserFromEmail(email)) || getUserFromEmail(email).isAdministrator()) {
+            if (userHasAccess(getUserFromEmail(email),bookingid)) {
                 // User owns booking, or participates in it, or it is not private
 
                 userName = resultSet.getString("name");
@@ -686,9 +724,9 @@ public class BookingDao {
         return isValid;
     }
 
-    public static List<OutputBooking> getFilteredBookings(String email, String title, Date startDate, Date endDate) throws DAOException {
+    public static List<OutputBooking> getFilteredBookings(String userEmail, String email, String title, Date startDate, Date endDate) throws DAOException {
         List<OutputBooking> bookings = new ArrayList<>();
-        String query = "SELECT b.booking_id, b.title, u.email, u.name, b.start_time, b.end_time, r.room_name, b.date " +
+        String query = "SELECT b.booking_id, b.title, u.email, u.name, b.start_time, b.end_time, r.room_name, b.date, b.is_private " +
             "FROM sqills.booking as b, sqills.users as u, sqills.room as r " +
             "WHERE b.owner = u.user_id " +
             "AND r.room_id = b.room_id " +
@@ -708,14 +746,8 @@ public class BookingDao {
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                OutputBooking booking = new OutputBooking();
-                booking.setTitle(resultSet.getString("title"));
-                booking.setBookingid(resultSet.getInt("booking_id"));
-                booking.setRoomName(resultSet.getString("room_name"));
-                booking.setDate(resultSet.getDate("date"));
-                booking.setStartTime(resultSet.getTime("start_time"));
-                booking.setEndTime(resultSet.getTime("end_time"));
-                booking.setUserName(resultSet.getString("name"));
+                String roomName = resultSet.getString("room_name");
+                OutputBooking booking = resultSetToBooking(roomName,resultSet,userEmail);
                 bookings.add(booking);
             }
         } catch (SQLException e) {

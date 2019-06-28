@@ -3,7 +3,9 @@ package nl.utwente.dao;
 import nl.utwente.authentication.BasicSecurityContext;
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.DAOException;
+import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidEmailException;
+import nl.utwente.model.OutputBooking;
 import nl.utwente.model.User;
 import org.apache.poi.util.Internal;
 
@@ -11,9 +13,13 @@ import javax.ws.rs.container.ContainerRequestContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
-import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
+import static nl.utwente.authentication.AuthenticationHandler.*;
+import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
+import static nl.utwente.dao.BookingDao.*;
+import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
+import static nl.utwente.exceptions.ExceptionHandling.*;
 
 public class UserDao {
     public static List<User> getAllUsers() {
@@ -402,5 +408,20 @@ public class UserDao {
         }
 
         return result;
+    }
+
+    public static boolean userHasAccess(User user, int bookingID) throws DAOException, InvalidBookingIDException {
+        boolean userInParticipants = false;
+        if (!isBookingPrivate(bookingID)){
+            return true;
+        }
+        if (user.isAdministrator()) {
+            return true;
+        } else if (Objects.equals(getEmailOfBookingOwner(bookingID), user.getEmail())) {
+            return true;
+        }
+        List<User> participantsList = getParticipantsOfBooking(bookingID);
+        userInParticipants = participantsList.contains(user);
+        return userInParticipants;
     }
 }

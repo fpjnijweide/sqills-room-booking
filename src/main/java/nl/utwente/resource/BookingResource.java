@@ -3,6 +3,7 @@ package nl.utwente.resource;
 import com.google.api.services.calendar.model.Event;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
+import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
@@ -194,24 +195,14 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{bookingID}/access")
     public boolean userHasAccess(@PathParam("bookingID") int bookingID) {
-        boolean userInParticipants = false;
         try {
-            if (userIsAdmin(securityContext)) {
-                return true;
-            } else if (userOwnsBooking(securityContext, bookingID)) {
-                return true;
-            }
-            List<User> participantsList = getParticipantsOfBooking(bookingID);
-            User user = getUserFromContext(context); // TODO Freek check if this owrks
-            userInParticipants = participantsList.contains(user);
-        } catch (InvalidBookingIDException e) {
-            throw404(e.getMessage());
-        } catch (NullPointerException e) {
-            throw401("User is not logged in");
+            return UserDao.userHasAccess(getUserFromContext(context),bookingID);
         } catch (DAOException e) {
             throw500("Something went terribly wrong");
+        } catch (InvalidBookingIDException e) {
+            throw404(e.getMessage());
         }
-        return userInParticipants;
+        return false;
     }
 
     @GET
@@ -237,6 +228,7 @@ public class BookingResource {
 //
         try {
             return BookingDao.getFilteredBookings(
+                getUserFromContext(context).getEmail(),
                 email,
                 title,
                 startDate,
