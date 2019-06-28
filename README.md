@@ -1,25 +1,22 @@
-MOD 4 project Group 37 setup guide
+### How to deploy locally
 
-HOW TO SETUP DB: 
-Run all the files in the sql folder on the database being used
+Install 
+- Java 8
+- Maven
+- Tomcat
+- SASS 
+- Git
+- IntelliJ
+- JDBC Postgresql Driver
 
-CREATING A USER WITH YOUR OWN EMAIL
-In order to have access to our system, you need to have a google
-account and that email should be in the DB
-In order to put your email in the DB, follow the following steps
-    - Go to /src/main/java/dao/userdao
-    - uncomment the main method
-    - fill in your name, e-mail(the one you want to login with) 
-      and true or false for whether the account should have admin rights
-Example: 
-String name = "Platon Frolov"
-String email = "pl.frolov99@gmail.com"
-boolean admin = true
-    -Run the main method
-    -Your email is now in the DB, you can login to our system now through google
-
-You can run the server by compiling the .war file and deploying with tomcat
-
-Make sure to include the appropriate postgresql .jar file that was provided on canvas for the JDBC driver if you want to compile the code
-
-We use SASS / SCSS and bootstrap for styling. Please look at documents/UsingSass.md to see how to compile this to CSS.
+Run locally
+1. Clone the entire repository
+2. `cd src/main/webapp`
+3. `sass sass/desktop.sass:css/desktop.css`
+4. `sass sass/tablet-design.sass:css/tablet-design.css`
+5. `sass sass/book.sass:css/book.css`
+6. `sass sass/specific-room.sass:css/specific-room.css`
+7. Import JDBC jar to the project (just like in the tutorials)
+8. Import maven dependencies
+9. Run tomcat server (see tutorial instructions)
+10. Go to localhost:8080
