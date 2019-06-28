@@ -18,19 +18,26 @@
 
 
     <label>Start Time</label>
-    <div class="input-group clockpicker" onclick="adaptTimeText()">
-        <input type="text" class="form-control" value="09:30" id="booking-starttime">
-        <%--                            <span class="input-group-addon">--%>
-        <%--                                <span class="glyphicon glyphicon-time"></span>--%>
-        <%--                            </span>--%>
+    <div>
+        <input type="time" id="booking-start-time">
     </div>
+<%--    <div class="input-group clockpicker" onclick="adaptTimeText()">--%>
+<%--        <input type="text" class="form-control" value="09:30" id="booking-starttime">--%>
+<%--        &lt;%&ndash;                            <span class="input-group-addon">&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                                <span class="glyphicon glyphicon-time"></span>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                            </span>&ndash;%&gt;--%>
+<%--    </div>--%>
     <label>End Time</label>
-    <div class="input-group clockpicker" onclick="adaptTimeText()">
-        <input type="text" class="form-control" value="09:30" id="booking-endtime">
-        <%--                            <span class="input-group-addon">--%>
-        <%--                                <span class="glyphicon glyphicon-time"></span>--%>
-        <%--                            </span>--%>
+    <div>
+        <input type="time" id="booking-end-time">
     </div>
+
+<%--    <div class="input-group clockpicker" onclick="adaptTimeText()">--%>
+<%--        <input type="text" class="form-control" value="09:30" id="booking-endtime">--%>
+<%--        &lt;%&ndash;                            <span class="input-group-addon">&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                                <span class="glyphicon glyphicon-time"></span>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                            </span>&ndash;%&gt;--%>
+<%--    </div>--%>
 
     <label>Private meeting</label>
     <input type="checkbox" id="booking-isPrivate">
@@ -69,7 +76,6 @@
             <br>
             ending at
             <input id="recurring-end-date" type="date">
-            from now
         </div>
     </div>
 
