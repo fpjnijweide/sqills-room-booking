@@ -648,12 +648,11 @@ throw new DAOException(e.getMessage());
 
         try {
             String query = "SELECT * FROM sqills.booking WHERE booking_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, bookingID);
+            PreparedStatement statement = connection.prepareStatement(query);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            System.out.println(bookingID);
-            System.out.println(resultSet.next());
+            statement.setInt(1, bookingID);
+
+            ResultSet resultSet = statement.executeQuery();
             isValid = resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
