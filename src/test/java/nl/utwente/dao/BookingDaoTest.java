@@ -9,7 +9,9 @@ import org.junit.*;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static junit.framework.TestCase.fail;
@@ -198,6 +200,7 @@ public class BookingDaoTest {
 
     @Test
     public void testGetBookingsForRoomToday() {
+
         List<OutputBooking> bookings = null;
         try {
             // TODO the booking I made is not acutally today lmao
@@ -207,7 +210,19 @@ public class BookingDaoTest {
             fail(e.getMessage());
         }
 
-        assertEquals(bookings.size(), 1);
+        assertEquals(bookings.size(), 0);
+        AtomicInteger tempID = new AtomicInteger();
+        assertDoesNotThrow(() -> {
+            tempID.set(insertBookingToday(roomName, startTime, endTime, email, false, bookingTitle));
+        });
+
+        try {
+            bookings = BookingDao.getBookingsForRoomToday(roomName);
+        } catch (InvalidRoomNameException | DAOException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
 
         for (OutputBooking booking : bookings) {
             try {
@@ -216,14 +231,16 @@ public class BookingDaoTest {
                 e.printStackTrace();
                 fail(e.getMessage());
             }
-            assertEquals(booking.getBookingid(), bookingID);
+            assertEquals(booking.getBookingid(), tempID.intValue());
             assertEquals(booking.getTitle(), bookingTitle);
             assertEquals(booking.getRoomName(), roomName);
-            assertEquals(booking.getDate(), date);
+            Calendar currentTime = Calendar.getInstance();
+            Date sqlDate = new Date((currentTime.getTime()).getTime());
+            assertEquals(booking.getDate(), sqlDate); // TODO ASSERT TODAY
         }
 
         try {
-            deleteBooking(bookingID);
+            deleteBooking(tempID.intValue());
             bookings = BookingDao.getBookingsForRoomToday(roomName);
         } catch (InvalidRoomNameException | DAOException | InvalidBookingIDException e) {
             e.printStackTrace();
@@ -231,59 +248,51 @@ public class BookingDaoTest {
         }
         assertEquals(bookings.size(), 0);
 
+    }
+
+    @Test
+    public void testInsertBookingToday() {
         try {
-            createBooking(createdBooking);
-        } catch (BookingException | DAOException e) {
+            int tempID = BookingDao.insertBookingToday(roomName, startTime, endTime, email, false,bookingTitle);
+            List<OutputBooking> bookings = BookingDao.getBookingsForRoomToday(roomName);
+            assertEquals(bookings.get(0).getStartTime(), startTime);
+            assertEquals(bookings.get(0).getEndTime(), endTime);
+            deleteBooking(tempID);
+        } catch (BookingException | DAOException | InvalidRoomNameException | InvalidBookingIDException e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
     }
 
-//    @Test
-//    public void testInsertBookingToday() {
-//        try {
-//            Time startTime = Time.valueOf("01:00:00");
-//            Time endTime = Time.valueOf("02:00:00");
-//
-//            BookingDao.insertBookingToday(-1, startTime, endTime, "antoniaheath@gmail.com", false);
-//
-//            List<Booking> bookings = BookingDao.getBookingsForRoomToday(-1);
-//            assertEquals(bookings.get(0).getStartTime(), startTime);
-//            assertEquals(bookings.get(0).getEndTime(), endTime);
-//
-//            String deleteQuery = "DELETE FROM sqills.booking WHERE roomid < 0";
-//            Statement statement3 = connection.createStatement();
-//            statement3.execute(deleteQuery);
-//            statement3.close();
-//        } catch (SQLException e) {
-//            fail();
-//        }
-//    }
-//
-//    @Test
-//    public void testInsertBookingTodayInvalidBooking() {
-//        try {
-//            Time startTime0 = Time.valueOf("00:30:00");
-//            Time endTime0 = Time.valueOf("01:30:00");
-//            BookingDao.insertBookingToday(-1, startTime0, endTime0, "antoniaheath@gmail.com", false);
-//
-//            Time startTime = Time.valueOf("01:00:00");
-//            Time endTime = Time.valueOf("02:00:00");
-//            BookingDao.insertBookingToday(-1, startTime, endTime, "antoniaheath@gmail.com", false);
-//
-//            List<Booking> bookings = BookingDao.getBookingsForRoomToday(-1);
-//            assertEquals(bookings.get(0).getStartTime(), startTime0);
-//            assertEquals(bookings.get(0).getEndTime(), endTime0);
-//            assertEquals(bookings.size(), 1);
-//
-//            String deleteQuery = "DELETE FROM sqills.booking WHERE roomid < 0";
-//            Statement statement3 = connection.createStatement();
-//            statement3.execute(deleteQuery);
-//            statement3.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @Test
+    public void testInsertBookingTodayInvalidBooking() {
+        try {
+            Time startTime1 = Time.valueOf("00:30:00");
+            Time endTime1 = Time.valueOf("01:30:00");
+            int tempID1 = BookingDao.insertBookingToday(roomName, startTime1, endTime1, email, false,bookingTitle);
+
+
+
+            Time startTime2 = Time.valueOf("01:00:00");
+            Time endTime2 = Time.valueOf("02:00:00");
+
+            assertThrows(BookingException.class, () -> {
+                int tempID2 = BookingDao.insertBookingToday(roomName, startTime2, endTime2, email, false, bookingTitle);
+            });
+
+            List<OutputBooking> bookings = BookingDao.getBookingsForRoomToday(roomName);
+            assertEquals(bookings.get(0).getStartTime(), startTime1);
+            assertEquals(bookings.get(0).getEndTime(), endTime1);
+            assertEquals(bookings.size(), 1);
+
+            deleteBooking(tempID1);
+        } catch (InvalidBookingIDException | DAOException | BookingException | InvalidRoomNameException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+    }
+
+    // TODO rest of methods
 
     @After
     public void afterEachTest() {
