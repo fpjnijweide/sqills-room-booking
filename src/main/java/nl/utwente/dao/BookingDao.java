@@ -261,8 +261,9 @@ throw new DAOException(e.getMessage());
      * Delete a booking using a composite key
      */
 
-    public static void deleteBooking(SpecifiedBooking booking){
+    public static void deleteBooking(SpecifiedBooking booking) throws DAOException {
         System.out.println("Delete booking");
+
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
@@ -277,7 +278,19 @@ throw new DAOException(e.getMessage());
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new DAOException(e.getMessage());
+        } finally {
+            try {
+                connection.commit();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+
+
+
+
 
     }
     /**

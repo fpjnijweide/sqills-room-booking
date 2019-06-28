@@ -191,7 +191,11 @@ public class GoogleCalendar {
                         Event cancelledEvent = this.getEvent(calendarId, event.getId());
                         SpecifiedBooking specifiedBooking =   eventToBooking(calendarName, cancelledEvent);
                         System.out.println("Deleteing a booking");
-                        BookingDao.deleteBooking(specifiedBooking);
+                        try {
+                            BookingDao.deleteBooking(specifiedBooking);
+                        } catch (DAOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
