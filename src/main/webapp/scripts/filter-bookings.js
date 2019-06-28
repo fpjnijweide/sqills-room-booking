@@ -31,9 +31,9 @@ function filterBookings() {
                     <td>${booking.startTime}</td>
                     <td>${booking.endTime}</td>
                 </tr>
-                `
+                `;
             }
-        })
+        });
 }
 
 function redirectToBookingPage(bookingID) {

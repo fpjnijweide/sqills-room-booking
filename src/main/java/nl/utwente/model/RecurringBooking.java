@@ -1,7 +1,14 @@
 package nl.utwente.model;
 
-import java.sql.Time;
 import java.sql.Date;
+import java.sql.Time;
+
+enum RepeatUnits {
+    day,//0
+    week,//1
+    month,//2
+    year//3
+}
 
 public class RecurringBooking extends SpecifiedBooking {
 
@@ -9,14 +16,14 @@ public class RecurringBooking extends SpecifiedBooking {
     private int repeatEvery;
     private Date endingAt;
 
-    public RecurringBooking(Time startTime, Time endTime, String roomName, java.sql.Date date, String email, boolean isPrivate, String title, String repeatEveryType, int repeatEvery, Date endingAt){
-        super( startTime,  endTime,  roomName,  date,  email,  isPrivate,  title);
+    public RecurringBooking(Time startTime, Time endTime, String roomName, java.sql.Date date, String email, boolean isPrivate, String title, String repeatEveryType, int repeatEvery, Date endingAt) {
+        super(startTime, endTime, roomName, date, email, isPrivate, title);
         this.repeatEvery = repeatEvery;
         this.repeatEveryType = repeatEveryType;
         this.endingAt = endingAt;
     }
 
-    public RecurringBooking(){
+    public RecurringBooking() {
     }
 
     public int getRepeatEvery() {
@@ -47,12 +54,6 @@ public class RecurringBooking extends SpecifiedBooking {
 
     @Override
     public String toString() {
-        return "Repeat type: "+ this.repeatEveryType + "Repeat type: " + this.repeatEvery;
+        return "Repeat type: " + this.repeatEveryType + "Repeat type: " + this.repeatEvery;
     }
-}
- enum RepeatUnits {
-    day,//0
-    week,//1
-    month,//2
-    year//3
 }

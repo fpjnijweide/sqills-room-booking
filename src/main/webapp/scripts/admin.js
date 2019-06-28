@@ -26,7 +26,7 @@ function hideUsersBasedOnEmail(email) {
         let element = elements[i];
 
         if (element.getAttribute("email") !== email) {
-            element.classList.add("hide")
+            element.classList.add("hide");
         }
     }
 }
@@ -36,19 +36,19 @@ function hideUsersBasedOnAdmin(adminFilter) {
     let elements = document.getElementsByClassName("user-row");
 
     if (adminFilter === 'admin-and-non-admin') {
-        return
+        return;
     } else if (adminFilter === 'only-admin') {
         for (let i = 0; i < elements.length; i++) {
             let element = elements[i];
             if (!element.hasAttribute("data-admin")) {
-                element.classList.add("hide")
+                element.classList.add("hide");
             }
         }
     } else if (adminFilter === 'only-non-admin') {
         for (let i = 0; i < elements.length; i++) {
             let element = elements[i];
             if (element.hasAttribute("data-admin")) {
-                element.classList.add("hide")
+                element.classList.add("hide");
             }
         }
     }
@@ -78,7 +78,7 @@ function deleteUser() {
         })
         .catch(error => {
             alert(error);
-        })
+        });
 }
 
 function updateUser() {

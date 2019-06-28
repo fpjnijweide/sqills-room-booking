@@ -14,7 +14,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.sql.Time;
 import java.util.List;
@@ -40,7 +39,7 @@ public class RoomResource {
      * @param roomID Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<String> getRoomList () {
+    public List<String> getRoomList() {
         try {
             return RoomDao.getAllRoomNames();
         } catch (DAOException e) {
@@ -57,15 +56,15 @@ public class RoomResource {
      * @param roomID Number specifying the room
      * @return JSON object containing all of today's bookings for a specific room
      */
-    public List<OutputBooking> getBookingsForSpecificRoomToday (
+    public List<OutputBooking> getBookingsForSpecificRoomToday(
         @PathParam("roomName") String roomName
     ) {
         String userEmail = null;
-        if (securityContext.getUserPrincipal()!=null) {
+        if (securityContext.getUserPrincipal() != null) {
             userEmail = securityContext.getUserPrincipal().getName();
         }
         try {
-            return BookingDao.getBookingsForRoomToday(roomName,userEmail);
+            return BookingDao.getBookingsForRoomToday(roomName, userEmail);
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
         } catch (DAOException e) {
@@ -85,13 +84,13 @@ public class RoomResource {
      * @param specifiedBooking startTime and endTime specifying the times of the booking
      * @return JSON object containing a "success" boolean value
      */
-    public int createBookingForSpecificRoom (
+    public int createBookingForSpecificRoom(
         @PathParam("roomName") String roomName,
         @Valid Booking booking
     ) {
         try {
             return BookingDao.insertBookingToday(roomName, booking.getStartTime(), booking.getEndTime(),
-                    booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
+                booking.getEmail(), booking.getIsPrivate(), booking.getTitle());
         } catch (BookingException e) {
             throw400(e.getMessage());
         } catch (DAOException e) {
@@ -134,11 +133,11 @@ public class RoomResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<OutputBooking> getBookingsForThisWeek(@PathParam("roomName") String roomName) {
         String userEmail = null;
-        if (securityContext.getUserPrincipal()!=null) {
+        if (securityContext.getUserPrincipal() != null) {
             userEmail = securityContext.getUserPrincipal().getName();
         }
         try {
-            return RoomDao.getBookingsForThisWeek(roomName,userEmail);
+            return RoomDao.getBookingsForThisWeek(roomName, userEmail);
         } catch (InvalidRoomNameException e) {
             throw404(e.getMessage());
         } catch (DAOException e) {

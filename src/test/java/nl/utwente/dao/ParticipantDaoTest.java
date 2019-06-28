@@ -19,7 +19,7 @@ public class ParticipantDaoTest {
     private static String email = "sqills_tablet@gmail.com";
     private static int roomID = -12120;
     private static String roomName = "test_room";
-    private static Time end = new Time(23,59,59);
+    private static Time end = new Time(23, 59, 59);
     private static int bookingID;
     private static String participantEmail = "pl.frolov99@gmail.com";
 
@@ -42,22 +42,6 @@ public class ParticipantDaoTest {
         }
     }
 
-    @Before
-    public void beforeEachTest() throws BookingException, DAOException, SQLException {
-        // This structure is not perfect. JUnit requires @Before methods to be non-static
-        // But we need createRoom to be static so that we can easily access it from BookingDaoTest
-        // This was the best solution
-        createRoom();
-        makeBooking(new Time(23,59,58));
-    }
-
-    private int makeBooking(Time startTime) throws BookingException, DAOException, SQLException {
-        Time endTime = new Time(23, 59, 59);
-        connection.commit();
-        bookingID = insertBookingToday(roomName, startTime, endTime, email, false, bookingTitle);
-        return bookingID;
-    }
-
     public static void createRoom() {
         String query = "INSERT INTO sqills.room (room_id, room_name) VALUES (" + roomID + ", '" + roomName + "')";
         try {
@@ -67,6 +51,22 @@ public class ParticipantDaoTest {
             e.printStackTrace();
             fail(e.getMessage());
         }
+    }
+
+    @Before
+    public void beforeEachTest() throws BookingException, DAOException, SQLException {
+        // This structure is not perfect. JUnit requires @Before methods to be non-static
+        // But we need createRoom to be static so that we can easily access it from BookingDaoTest
+        // This was the best solution
+        createRoom();
+        makeBooking(new Time(23, 59, 58));
+    }
+
+    private int makeBooking(Time startTime) throws BookingException, DAOException, SQLException {
+        Time endTime = new Time(23, 59, 59);
+        connection.commit();
+        bookingID = insertBookingToday(roomName, startTime, endTime, email, false, bookingTitle);
+        return bookingID;
     }
 
     @Test

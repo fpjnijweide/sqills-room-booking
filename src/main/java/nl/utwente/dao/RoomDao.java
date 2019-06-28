@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static nl.utwente.dao.BookingDao.resultSetToBooking;
-import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 public class RoomDao {
     /**
@@ -41,7 +40,7 @@ public class RoomDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         }
         return result;
     }
@@ -64,7 +63,7 @@ throw new DAOException(e.getMessage());
 
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         }
         return result;
     }
@@ -94,11 +93,11 @@ throw new DAOException(e.getMessage());
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -126,11 +125,11 @@ connection.close();
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -154,11 +153,11 @@ connection.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -173,7 +172,7 @@ connection.close();
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
-            if (!isValidRoomName(roomName, connection)){
+            if (!isValidRoomName(roomName, connection)) {
                 throw new InvalidRoomNameException(roomName);
             }
             String query = "SELECT * from get_free_until(?)";
@@ -190,11 +189,11 @@ connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -216,24 +215,24 @@ connection.close();
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
-            if (!isValidRoomName(roomName, connection)){
+            if (!isValidRoomName(roomName, connection)) {
                 throw new InvalidRoomNameException(roomName);
             }
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
-                ResultSet resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                OutputBooking booking = resultSetToBooking(roomName, resultSet,email);
+                OutputBooking booking = resultSetToBooking(roomName, resultSet, email);
                 result.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

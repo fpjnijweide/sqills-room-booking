@@ -16,69 +16,73 @@
 
 </head>
 <body>
-    <jsp:include page="nav.jsp"/>
+<jsp:include page="nav.jsp"/>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="filter">
-                <div class="label">Admin or Non-Admin</div>
-                <select class="custom-select" id="filter-admin">
-                    <option value="admin-and-non-admin">Admin And Non-Admin</option>
-                    <option value="only-admin">Admin Only</option>
-                    <option value="only-non-admin">Non-Admin Only</option>
-                </select>
+<div class="row">
+    <div class="col-md-6">
+        <div class="filter">
+            <div class="label">Admin or Non-Admin</div>
+            <select class="custom-select" id="filter-admin">
+                <option value="admin-and-non-admin">Admin And Non-Admin</option>
+                <option value="only-admin">Admin Only</option>
+                <option value="only-non-admin">Non-Admin Only</option>
+            </select>
 
-                <div class="label">Email</div>
-                <input class="form-control" type="text" id="filter-email">
+            <div class="label">Email</div>
+            <input class="form-control" type="text" id="filter-email">
 
-                <button onclick="filterUsers()" class="purple-button">Filter Users</button>
-                <button onclick="showAllUsers()" class="purple-button">Remove Filter</button>
-            </div>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Is Admin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <% for (User user : (List<User>) request.getAttribute("users")) { %>
-                    <% if (user.isAdministrator()) { %>
-                    <tr data-admin email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
-                    <% } else { %>
-                    <tr data-email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
-                    <% } %>
-                        <td><%= user.getUserid() %></td>
-                        <td><%= user.getName() %></td>
-                        <td><%= user.getEmail() %></td>
-                        <td><%= user.isAdministrator() %></td>
-                    </tr>
-                <% } %>
-                </tbody>
-            </table>
+            <button onclick="filterUsers()" class="purple-button">Filter Users</button>
+            <button onclick="showAllUsers()" class="purple-button">Remove Filter</button>
         </div>
 
-        <div class="col-md-6">
-            <div class="user-data">
-                <div class="label">Name</div>
-                <div style="display: none" id="user-id"></div>
-                <input class="form-control" type="text" id="user-name">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Is Admin</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for (User user : (List<User>) request.getAttribute("users")) { %>
+            <% if (user.isAdministrator()) { %>
+            <tr data-admin email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
+                    <% } else { %>
+            <tr data-email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
+                <% } %>
+                <td><%= user.getUserid() %>
+                </td>
+                <td><%= user.getName() %>
+                </td>
+                <td><%= user.getEmail() %>
+                </td>
+                <td><%= user.isAdministrator() %>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
 
-                <div class="label">Email</div>
-                <input class="form-control" type="text" id="user-email">
+    <div class="col-md-6">
+        <div class="user-data">
+            <div class="label">Name</div>
+            <div style="display: none" id="user-id"></div>
+            <input class="form-control" type="text" id="user-name">
 
-                <div class="label">Administrator <input type="checkbox" id="user-admin"></div>
+            <div class="label">Email</div>
+            <input class="form-control" type="text" id="user-email">
 
-                <div class="button-container">
-                    <button onclick="updateUser()">Edit</button>
-                    <button onclick="deleteUser()">Delete</button>
-                    <button onclick="createUser()">Create</button>
-                </div>
+            <div class="label">Administrator <input type="checkbox" id="user-admin"></div>
+
+            <div class="button-container">
+                <button onclick="updateUser()">Edit</button>
+                <button onclick="deleteUser()">Delete</button>
+                <button onclick="createUser()">Create</button>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -2,14 +2,10 @@ package nl.utwente.servlet.desktopInterface;
 
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
-import nl.utwente.dao.RoomDao;
 import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
-import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.OutputBooking;
-import nl.utwente.model.OutputBookingWithParticipants;
-import nl.utwente.model.SpecifiedBooking;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +18,7 @@ public class BookingViewServlet extends HttpServlet {
     @Override
     // Todo: @Marten Refactor names of variables.
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        if (req.getSession().getAttribute(AuthenticationFilter.principalName)==null){
+        if (req.getSession().getAttribute(AuthenticationFilter.principalName) == null) {
             req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
         } else {
 //            if (BookingDao.)

@@ -2,15 +2,18 @@ package nl.utwente.model;
 
 public class InputUser extends UserAdministration {
 
-    public InputUser(String username, String password, String fullName, boolean admin){
+    // Used for registering / creating users
+    private String fullName;
+    private boolean admin;
+    public InputUser(String username, String password, String fullName, boolean admin) {
         super(username, password);
         this.fullName = fullName;
         this.admin = admin;
     }
 
-    // Used for registering / creating users
-    private String fullName;
-    private  boolean admin;
+    public InputUser() {
+        super();
+    }
 
     /**
      * Gets admin
@@ -29,12 +32,6 @@ public class InputUser extends UserAdministration {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
-
-    public InputUser(){
-        super();
-    }
-
-
 
     /**
      * Gets fullName

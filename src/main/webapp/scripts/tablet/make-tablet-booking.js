@@ -1,4 +1,5 @@
 let emailIsInDatabase = false;
+
 function displayMakeBooking() {
     document.getElementById(`content`).innerHTML = `
         <div class="row">
@@ -31,10 +32,12 @@ function displayMakeBooking() {
         <div id="emailerror"></div>
     `;
 }
+
 //Shows the currently selected duration of the meeting to be booked
 function selectHowLong(value) {
     document.getElementById("booking-duration-value").innerHTML = `<p>${value.toString()} m</p>`;
 }
+
 //Makes booked based upon selection
 function MakeTabletBooking() {
     let private = document.getElementById("private").checked;
@@ -43,13 +46,19 @@ function MakeTabletBooking() {
     if (title === "Booking title (optional)") {
         title = "";
     }
-   let duration = document.getElementById(`booking-duration`).value;
+    let duration = document.getElementById(`booking-duration`).value;
     let endTime = addMinutes(new Date(), duration);
-    if (email == ""){
-        email ="sqills_tablet@gmail.com";
+    if (email == "") {
+        email = "sqills_tablet@gmail.com";
     }
-    if (validEmail(email)){
-        let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private, "title" : title};
+    if (validEmail(email)) {
+        let jsonBody = {
+            "startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
+            "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`,
+            "email": email,
+            "isPrivate": private,
+            "title": title
+        };
         axios.post(`/api/room/` + currentRoomName + `/book`, jsonBody).then((response) => {
             displayBooked(response.data);
         }).catch((error) => {
@@ -76,10 +85,11 @@ function MakeTabletBooking() {
 
 }
 
-function validEmail(emailParam){
+function validEmail(emailParam) {
     let email = emailParam;
     return email.length != 0 && email.includes("@") && email.includes(".");
 }
+
 //Add the duration to the current time
 function addMinutes(date, minutes) {
     return new Date(date.getTime() + minutes * 60000);
@@ -88,7 +98,7 @@ function addMinutes(date, minutes) {
 
 //display that the booking is complete
 function displayBooked(data) {
-    if (data.success){
+    if (data.success) {
         document.getElementById(`book-now`).innerHTML = `<h3> Booking complete </h3>`;
     } else {
         document.getElementById(`book-now`).innerHTML = `<h3> Booking failed </h3>`;
@@ -100,13 +110,13 @@ function displayBooked(data) {
     }, 5000);
 }
 
-function invalidEmailMessage(){
+function invalidEmailMessage() {
     let newDiv = document.getElementById("emailerror");
-    newDiv.innerHTML = `<b>invalid email</b>`
+    newDiv.innerHTML = `<b>invalid email</b>`;
 }
 
-function autoComplete(input){
-    console.log(input)
+function autoComplete(input) {
+    console.log(input);
     let email = input;
     if (email.value != "") {
         axios.get(`/api/user/` + email.value).then((response) => { // GET request

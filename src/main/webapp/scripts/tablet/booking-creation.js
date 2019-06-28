@@ -116,7 +116,7 @@ function validateEmail(email) {
                 } else {
                     emailInputElement.classList.add("invalid");
                 }
-            })
+            });
     }
 }
 
@@ -175,11 +175,11 @@ function validateDuration(duration) {
                 if (availableValue < currentValue) {
                     document.getElementById("booking-duration").classList.add("invalid");
                     warningElement.classList.remove("hidden");
-                    warningElement.innerText = "Booking overlaps with future booking"
+                    warningElement.innerText = "Booking overlaps with future booking";
                 } else {
                     warningElement.classList.add("hidden");
                     document.getElementById("booking-duration").classList.remove("invalid");
                 }
             }
-        })
+        });
 }

@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,8 +20,8 @@ public class SpecificRoomServlet extends HttpServlet {
         String roomName = splitUri[3];
         Connection connection = null;
         try {
-            connection =DatabaseConnectionFactory.getConnection();
-            if (!RoomDao.isValidRoomName(roomName,connection)) {
+            connection = DatabaseConnectionFactory.getConnection();
+            if (!RoomDao.isValidRoomName(roomName, connection)) {
                 connection.commit();
                 connection.close();
                 res.setStatus(404);
@@ -33,7 +32,8 @@ public class SpecificRoomServlet extends HttpServlet {
             }
         } catch (DAOException | SQLException e) {
             res.setStatus(500);
-            res.getWriter().write("Something went terribly wrong");;
+            res.getWriter().write("Something went terribly wrong");
+            ;
         }
     }
 }

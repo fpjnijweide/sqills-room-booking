@@ -5,11 +5,11 @@ import java.util.List;
 public class EmailList {
     private List<String> emails;
 
-    public List<String> getEmails(){
+    public List<String> getEmails() {
         return this.emails;
     }
 
-    public void setEmails(List<String> emails){
+    public void setEmails(List<String> emails) {
         this.emails = emails;
     }
 }

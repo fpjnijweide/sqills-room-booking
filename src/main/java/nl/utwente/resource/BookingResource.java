@@ -1,7 +1,6 @@
 package nl.utwente.resource;
 
 import com.google.api.services.calendar.model.Event;
-import com.google.inject.Provides;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.exceptions.BookingException;
@@ -12,8 +11,6 @@ import nl.utwente.model.OutputBooking;
 import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
-import nl.utwente.model.*;
-import nl.utwente.exceptions.InvalidEmailException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -23,9 +20,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
-import javax.ws.rs.core.*;
-import javax.ws.rs.ext.Provider;
-import javax.xml.ws.WebServiceProvider;
 import java.sql.Date;
 import java.util.List;
 
@@ -33,14 +27,12 @@ import static nl.utwente.authentication.AuthenticationHandler.*;
 import static nl.utwente.dao.BookingDao.prepareBooking;
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.UserDao.getUserFromContext;
-import static nl.utwente.dao.UserDao.getUserFromEmail;
-import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
-import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/booking")
 public class BookingResource {
-    @Context HttpServletResponse response;
+    @Context
+    HttpServletResponse response;
 
     @Context
     SecurityContext securityContext;
@@ -54,6 +46,7 @@ public class BookingResource {
 
     /**
      * Returns a specific booking from the database.
+     *
      * @param bookingID ID of booking to be returned
      * @return JSON Object for the requested booking
      */
@@ -72,16 +65,16 @@ public class BookingResource {
     }
 
 
-
     /**
      * Creates a booking.
+     *
      * @return Booking ID
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create")
     public int createBooking(@Valid SpecifiedBooking booking) {
-        booking = prepareBooking(securityContext,booking);
+        booking = prepareBooking(securityContext, booking);
         try {
             return BookingDao.createBooking(booking);
         } catch (BookingException e) {
@@ -94,14 +87,15 @@ public class BookingResource {
 
     /**
      * Create recurring booking
-     *  @return JSON object containing a "success" boolean field specifying whether the booking was
-     *  successfully created
+     *
+     * @return JSON object containing a "success" boolean field specifying whether the booking was
+     * successfully created
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/create/recurring")
     public int createRecurringBooking(RecurringBooking booking) {
-        booking = (RecurringBooking) prepareBooking(securityContext,booking);
+        booking = (RecurringBooking) prepareBooking(securityContext, booking);
         try {
             return BookingDao.createRecurringBooking(booking);
         } catch (BookingException e) {
@@ -129,9 +123,10 @@ public class BookingResource {
 
     /**
      * Updates a specified booking.
+     *
      * @param bookingID ID specifying the booking to be updated
      * @return JSON object containing a "success" boolean field specifying whether the booking was
-     *         successfully updated
+     * successfully updated
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -140,7 +135,7 @@ public class BookingResource {
         @PathParam("bookingID") int bookingID,
         @Valid SpecifiedBooking booking
     ) {
-        booking = prepareBooking(securityContext,booking);
+        booking = prepareBooking(securityContext, booking);
         try {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
@@ -164,9 +159,10 @@ public class BookingResource {
 
     /**
      * Deletes a specific booking
+     *
      * @param bookingID Path parameter specifying the booking to be deleted
      * @return JSON object containing a "success" boolean field specifying whether the booking was
-     *         successfully deleted
+     * successfully deleted
      */
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -190,6 +186,7 @@ public class BookingResource {
     /**
      * Checks if a user participates in / owns booking, or is admin
      * Which means the user is allowed to edit the booking (up to a certain point)
+     *
      * @param bookingID
      * @return
      */
@@ -245,9 +242,9 @@ public class BookingResource {
                 startDate,
                 endDate
             );
-            } catch (DAOException e) {
-                throw400(e.getMessage());
-            }
+        } catch (DAOException e) {
+            throw400(e.getMessage());
+        }
 
         return null;
     }
@@ -257,10 +254,10 @@ public class BookingResource {
      */
     @POST
     @Path("/google-calendar/push-notification-events")
-    public void googleCalendarPushNotification(@HeaderParam("X-Goog-Channel-ID")String channelID, @HeaderParam("X-Goog-Resource-ID")String resourceID, @HeaderParam("X-Goog-Resource-URI") String resourceURI, @HeaderParam("X-Goog-Channel-Token") String token ){
+    public void googleCalendarPushNotification(@HeaderParam("X-Goog-Channel-ID") String channelID, @HeaderParam("X-Goog-Resource-ID") String resourceID, @HeaderParam("X-Goog-Resource-URI") String resourceURI, @HeaderParam("X-Goog-Channel-Token") String token) {
         System.out.println("Change detected");
         GoogleCalendar gc = new GoogleCalendar();
-        Event e  = null;
+        Event e = null;
         try {
             gc.getLatestEvents(token);
         } catch (IOException e1) {
@@ -277,7 +274,7 @@ public class BookingResource {
     @Deprecated
     @GET
     @Path("/google-calendar/test/add-watchers")
-    public void googleCalendarTestAddWatchers(){
+    public void googleCalendarTestAddWatchers() {
         GoogleCalendar gc = new GoogleCalendar();
         try {
             gc.setUpWatchers();
@@ -292,7 +289,7 @@ public class BookingResource {
     @Deprecated
     @GET
     @Path("/google-calendar/test/stop-watchers")
-    public void googleCalendarTestCallRemoveWatchers(@HeaderParam("channelID")String channelID, @HeaderParam("resourceID") String resourceID){
+    public void googleCalendarTestCallRemoveWatchers(@HeaderParam("channelID") String channelID, @HeaderParam("resourceID") String resourceID) {
         GoogleCalendar gc = new GoogleCalendar();
         try {
             gc.removeWatchChannel(channelID, resourceID);

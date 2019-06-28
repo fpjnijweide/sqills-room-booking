@@ -16,36 +16,37 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <meta name="google-site-verification" content="v8KQE2-q2JQIaBlDYcxO433s395Be6OR7dAT0_Cinao" />
+    <meta name="google-site-verification" content="v8KQE2-q2JQIaBlDYcxO433s395Be6OR7dAT0_Cinao"/>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+          integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/desktop.css">
     <script src="/scripts/index-redirect.js"></script>
 </head>
 
 <body>
-    <div class="row">
-        <div class="col-4"></div>
-        <div class="col-4">
-            <div class="logo-container">
-                <img src="/assets/sqills-logo.svg">
-            </div>
-
-            <div class="desktop-link" onclick="redirectToDesktopInterface()">Go To Desktop Interface</div>
-
-            <div class="room-link-containers">
-            <% for (String roomName : (List<String>) request.getAttribute("roomNames")) { %>
-                <div class="room-link" onclick="redirectToRoomPage('<%= roomName %>')">
-                    <%= roomName %>
-                </div>
-            <% } %>
-            </div>
+<div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <div class="logo-container">
+            <img src="/assets/sqills-logo.svg">
         </div>
-        <div class="col-4"></div>
+
+        <div class="desktop-link" onclick="redirectToDesktopInterface()">Go To Desktop Interface</div>
+
+        <div class="room-link-containers">
+            <% for (String roomName : (List<String>) request.getAttribute("roomNames")) { %>
+            <div class="room-link" onclick="redirectToRoomPage('<%= roomName %>')">
+                <%= roomName %>
+            </div>
+            <% } %>
+        </div>
     </div>
+    <div class="col-4"></div>
+</div>
 </body>
 
 </html>

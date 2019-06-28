@@ -6,7 +6,7 @@ public class InvalidUserIDException extends Exception {
 
     public InvalidUserIDException(int id) {
         super("Invalid user id: " + String.valueOf(id));
-        this.id=id;
+        this.id = id;
 
     }
 

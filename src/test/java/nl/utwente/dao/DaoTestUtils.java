@@ -19,8 +19,8 @@ public class DaoTestUtils {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.MINUTE,offset);
-        return new Time(cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),0);
+        cal.add(Calendar.MINUTE, offset);
+        return new Time(cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), 0);
     }
 
     public static void createRoom(int id, String name) {

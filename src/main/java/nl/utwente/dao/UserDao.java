@@ -7,19 +7,13 @@ import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.model.User;
 import org.apache.poi.util.Internal;
 
-import javax.xml.crypto.Data;
+import javax.ws.rs.container.ContainerRequestContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.ws.rs.container.ContainerRequestContext;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import static nl.utwente.authentication.AuthenticationHandler.checkByteArrays;
 import static nl.utwente.authentication.AuthenticationHandler.hashPassword;
-import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 public class UserDao {
     public static List<User> getAllUsers() {
@@ -88,7 +82,7 @@ public class UserDao {
 
 
     @Internal
-    static boolean isValidUserID ( int userID, Connection connection) throws DAOException {
+    static boolean isValidUserID(int userID, Connection connection) throws DAOException {
 
         boolean isValid = false;
 
@@ -106,8 +100,8 @@ public class UserDao {
         return isValid;
     }
 
-    public static User getUserFromEmail (String email) throws
-    InvalidEmailException, DAOException {
+    public static User getUserFromEmail(String email) throws
+        InvalidEmailException, DAOException {
         if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
@@ -143,7 +137,7 @@ public class UserDao {
         return user;
     }
 
-    public static String getEmail (String incompleteEmail) throws DAOException {
+    public static String getEmail(String incompleteEmail) throws DAOException {
         int count = 0;
         String email = null;
 
@@ -179,7 +173,7 @@ public class UserDao {
     }
 
     @Deprecated
-    public static byte[] getSalt (String email) throws InvalidEmailException, DAOException {
+    public static byte[] getSalt(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
@@ -213,8 +207,7 @@ public class UserDao {
         return null;
     }
 
-    public static void insertUser (String name, String email,boolean admin) throws DAOException
-    {
+    public static void insertUser(String name, String email, boolean admin) throws DAOException {
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
@@ -239,7 +232,7 @@ public class UserDao {
     }
 
     @Deprecated
-    public static byte[] getHash (String email) throws InvalidEmailException, DAOException {
+    public static byte[] getHash(String email) throws InvalidEmailException, DAOException {
         if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
@@ -270,7 +263,7 @@ public class UserDao {
     }
 
     @Deprecated
-    public static boolean checkCredentials (String email, String password) throws DAOException {
+    public static boolean checkCredentials(String email, String password) throws DAOException {
         try {
             return checkByteArrays(getHash(email), hashPassword(password, getSalt(email)));
         } catch (InvalidEmailException e) {
@@ -279,14 +272,14 @@ public class UserDao {
         return false;
     }
 
-    public static boolean isValidEmail(String email)  throws DAOException {
-        if (email.contains("@") && email.contains(".")){
+    public static boolean isValidEmail(String email) throws DAOException {
+        if (email.contains("@") && email.contains(".")) {
             return getEmail(email.trim()) != null;
         }
         return false;
     }
 
-    public static User getUserFromContext (ContainerRequestContext context){
+    public static User getUserFromContext(ContainerRequestContext context) {
         User user = null;
         try {
             user = (User) context.getProperty("user");
@@ -301,11 +294,11 @@ public class UserDao {
         return user;
     }
 
-    public static int createUser (User user){
+    public static int createUser(User user) {
         int userID = -1;
         Connection connection = null;
         try {
-             connection = DatabaseConnectionFactory.getConnection();
+            connection = DatabaseConnectionFactory.getConnection();
 
             String query = "INSERT INTO sqills.users (name, email, administrator)" +
                 " VALUES (?, ?, ?) RETURNING user_id";
@@ -333,7 +326,7 @@ public class UserDao {
         return userID;
     }
 
-    public static void deleteUser ( int userID){
+    public static void deleteUser(int userID) {
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
@@ -354,7 +347,7 @@ public class UserDao {
         }
     }
 
-    public static User updateUser (User user){
+    public static User updateUser(User user) {
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();

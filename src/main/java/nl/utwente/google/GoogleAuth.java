@@ -17,20 +17,19 @@ public class GoogleAuth {
     private static final String CLIENT_ID = "347026751328-n650qv0b0v1qjmmnk16vddsae05rqp4v.apps.googleusercontent.com";
 
     public static GoogleIdTokenVerifier getVerifier() throws GeneralSecurityException, IOException {
-        HttpTransport  httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         return new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
-                .setAudience(Collections.singletonList(CLIENT_ID)).build();
+            .setAudience(Collections.singletonList(CLIENT_ID)).build();
     }
 
 
-
-    public static String getUser(GoogleIdToken idToken){
+    public static String getUser(GoogleIdToken idToken) {
         return idToken.getPayload().getEmail();
     }
 
     public static GoogleIdToken getToken(String tokenString) throws GeneralSecurityException, IOException {
-            return  getVerifier().verify(tokenString);
+        return getVerifier().verify(tokenString);
     }
 
 

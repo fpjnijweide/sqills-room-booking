@@ -1,38 +1,35 @@
- package nl.utwente.resource;
+package nl.utwente.resource;
 
- import com.google.gson.Gson;
- import nl.utwente.dao.BookingDao;
- import nl.utwente.dao.RoomDao;
- import nl.utwente.exceptions.DAOException;
- import nl.utwente.exceptions.InvalidRoomNameException;
- import org.glassfish.jersey.server.ResourceConfig;
- import org.glassfish.jersey.test.JerseyTest;
- import org.junit.Test;
+import nl.utwente.dao.RoomDao;
+import nl.utwente.exceptions.DAOException;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
+import org.junit.Test;
 
- import javax.ws.rs.core.Application;
- import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Response;
 
- import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
- public class RoomResourceTest extends JerseyTest {
+public class RoomResourceTest extends JerseyTest {
 
-     @Override
-     public Application configure() {
-         return new ResourceConfig(RoomResource.class);
-     }
+    @Override
+    public Application configure() {
+        return new ResourceConfig(RoomResource.class);
+    }
 
-     @Test
-     public void listRoom() {
-         Response res = target().path("/room/list").request().get();
-         assertEquals("Should return status 200", 200, res.getStatus());
-         assertNotNull(res);
-         try {
-             assertEquals(RoomDao.getAllRoomsIDs().toString().replaceAll("\\s", ""), res.readEntity(String.class));
-         } catch (DAOException e) {
-             fail();
-         }
-     }
- }
+    @Test
+    public void listRoom() {
+        Response res = target().path("/room/list").request().get();
+        assertEquals("Should return status 200", 200, res.getStatus());
+        assertNotNull(res);
+        try {
+            assertEquals(RoomDao.getAllRoomsIDs().toString().replaceAll("\\s", ""), res.readEntity(String.class));
+        } catch (DAOException e) {
+            fail();
+        }
+    }
+}
 
 //    @Test
 //    public void getBookingsForSpecificRoomToday(){

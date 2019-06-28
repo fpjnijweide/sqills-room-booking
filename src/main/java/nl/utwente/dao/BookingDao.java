@@ -32,7 +32,7 @@ public class BookingDao {
         try {
             connection = DatabaseConnectionFactory.getConnection();
 
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
 
@@ -79,7 +79,7 @@ public class BookingDao {
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
@@ -97,7 +97,7 @@ throw new DAOException(e.getMessage());
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
             String query = "SELECT u.email " +
@@ -118,7 +118,7 @@ throw new DAOException(e.getMessage());
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
@@ -160,7 +160,7 @@ throw new DAOException(e.getMessage());
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
@@ -174,7 +174,7 @@ throw new DAOException(e.getMessage());
 
     public static SpecifiedBooking prepareBooking(SecurityContext securityContext, SpecifiedBooking booking) {
         boolean loggedIn = securityContext.getUserPrincipal() != null;
-        if (Objects.equals(booking.getEmail(), "") || booking.getEmail()==null) {
+        if (Objects.equals(booking.getEmail(), "") || booking.getEmail() == null) {
             if (loggedIn) {
                 booking.setEmail(securityContext.getUserPrincipal().getName());
             } else {
@@ -205,8 +205,8 @@ throw new DAOException(e.getMessage());
             statement.setBoolean(6, booking.getIsPrivate());
             statement.setString(7, booking.getTitle());
             statement.setObject(8, booking.getRepeatEveryType(), java.sql.Types.OTHER);
-            statement.setInt(9,booking.getRepeatEvery());
-            statement.setDate(10,booking.getEndingAt());
+            statement.setInt(9, booking.getRepeatEvery());
+            statement.setDate(10, booking.getEndingAt());
 
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -214,7 +214,7 @@ throw new DAOException(e.getMessage());
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
@@ -227,6 +227,7 @@ throw new DAOException(e.getMessage());
         return id;
 
     }
+
     /**
      * Deletes particiapnts of booking with a specified bookingID
      *
@@ -237,7 +238,7 @@ throw new DAOException(e.getMessage());
     // Package Private
     static void deleteParticipantsOfBooking(int bookingID, Connection connection) throws InvalidBookingIDException, DAOException {
         try {
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
 
@@ -251,7 +252,7 @@ throw new DAOException(e.getMessage());
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         }
 
     }
@@ -289,10 +290,8 @@ throw new DAOException(e.getMessage());
         }
 
 
-
-
-
     }
+
     /**
      * Deletes a booking with a specified bookingID
      *
@@ -305,7 +304,7 @@ throw new DAOException(e.getMessage());
         try {
             connection = DatabaseConnectionFactory.getConnection();
 
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
 
@@ -317,24 +316,25 @@ throw new DAOException(e.getMessage());
             statement.setInt(1, bookingID);
 
             int updatedRows = statement.executeUpdate();
-            if (updatedRows == 0){
+            if (updatedRows == 0) {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
 
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
     }
+
     /**
      * Updates a specific booking.
      *
@@ -383,7 +383,6 @@ connection.close();
 //        }
 //
 //    }
-
     public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
         if (!UserDao.isValidEmail(booking.getEmail())) {
             throw new BookingException("Invalid email: " + booking.getEmail());
@@ -397,7 +396,7 @@ connection.close();
         try {
             connection = DatabaseConnectionFactory.getConnection();
 
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
             try {
@@ -458,7 +457,7 @@ connection.close();
         try {
             connection = DatabaseConnectionFactory.getConnection();
 
-            if (!isValidRoomName(roomName, connection)){
+            if (!isValidRoomName(roomName, connection)) {
                 throw new InvalidRoomNameException(roomName);
             }
 
@@ -477,7 +476,7 @@ connection.close();
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
@@ -506,8 +505,8 @@ throw new DAOException(e.getMessage());
 
         try {
             if (!isPrivate || (Objects.equals(email, getEmailOfBookingOwner(bookingid))) ||
-                getParticipantsOfBooking(bookingid).contains(getUserFromEmail(email)) || getUserFromEmail(email).isAdministrator())  {
-                 // User owns booking, or participates in it, or it is not private
+                getParticipantsOfBooking(bookingid).contains(getUserFromEmail(email)) || getUserFromEmail(email).isAdministrator()) {
+                // User owns booking, or participates in it, or it is not private
 
                 userName = resultSet.getString("name");
                 title = resultSet.getString("title");
@@ -523,7 +522,7 @@ throw new DAOException(e.getMessage());
         Calendar currentTime = Calendar.getInstance();
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate, title);
-        int bookingID= createBooking(booking);
+        int bookingID = createBooking(booking);
         System.out.println("here");
         return bookingID;
     }
@@ -585,15 +584,15 @@ throw new DAOException(e.getMessage());
             errorMessages.add("Invalid room name");
         }
 
-        if (!errorMessages.isEmpty()){
-            String errorString = String.join("\n",errorMessages);
+        if (!errorMessages.isEmpty()) {
+            String errorString = String.join("\n", errorMessages);
             throw new BookingException(errorString);
         }
     }
 
     @Internal
     static boolean isValidTimeSlot(String roomName, Time wantedStart, Time wantedEnd, Date date, Connection connection) throws InvalidRoomNameException, DAOException {
-        if (!isValidRoomName(roomName, connection)){
+        if (!isValidRoomName(roomName, connection)) {
             throw new InvalidRoomNameException(roomName);
         }
         boolean isValid = true;
@@ -681,7 +680,7 @@ throw new DAOException(e.getMessage());
             isValid = resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         }
 
         return isValid;
@@ -719,7 +718,7 @@ throw new DAOException(e.getMessage());
                 booking.setUserName(resultSet.getString("name"));
                 bookings.add(booking);
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new DAOException("Internal server exceptions");
         } finally {
@@ -736,7 +735,7 @@ throw new DAOException(e.getMessage());
     public static boolean isValidTitle(String title) {
         final String ALLOWED_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. -_";
 
-        for (int i = 0; i < title.length(); i++){
+        for (int i = 0; i < title.length(); i++) {
             char c = title.charAt(i);
 
             if (ALLOWED_CHARS.indexOf(c) == -1) {
@@ -747,7 +746,7 @@ throw new DAOException(e.getMessage());
         return true;
     }
 
-    public static String getLatestGoogleCalendarSyncToken(){
+    public static String getLatestGoogleCalendarSyncToken() {
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
@@ -768,7 +767,7 @@ throw new DAOException(e.getMessage());
         return null;
     }
 
-    public static void setGoogleCalendarSyncToken(String syncToken){
+    public static void setGoogleCalendarSyncToken(String syncToken) {
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();

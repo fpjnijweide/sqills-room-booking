@@ -21,6 +21,6 @@ function updatePage(bookings) {
             `<div class=\"booking\" onclick=\"openDetailsPopUp(${bookings[i].bookingid})\">\n` +
             `<div class=\"title\">${bookings[i].title}</div>` +
             `<div class=\"time\">${bookings[i].startTime} - ${bookings[i].endTime}</div>` +
-            `</div>`
+            `</div>`;
     }
 }

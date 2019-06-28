@@ -5,16 +5,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.authentication.AuthenticationHandler;
-import nl.utwente.authentication.BasicSecurityContext;
 import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.google.GoogleAuth;
 import nl.utwente.model.EmailList;
 import nl.utwente.model.User;
-import nl.utwente.model.UserAdministration;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +24,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static nl.utwente.dao.UserDao.insertUser;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/user")
@@ -36,7 +31,8 @@ import static nl.utwente.exceptions.ExceptionHandling.*;
 public class UserResource {
     @Context
     HttpServletRequest request;
-    @Context HttpServletResponse response;
+    @Context
+    HttpServletResponse response;
 
     @Context
     SecurityContext securityContext;
@@ -67,9 +63,9 @@ public class UserResource {
     @GET
     @Path("/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getUserList (@PathParam("email") String incompleteEmail) {
+    public String getUserList(@PathParam("email") String incompleteEmail) {
         try {
-            return "{ \"email\":" + "\"" + UserDao.getEmail(incompleteEmail) + "\""+ "}";
+            return "{ \"email\":" + "\"" + UserDao.getEmail(incompleteEmail) + "\"" + "}";
         } catch (DAOException e) {
             throw500("Something went terribly wrong");
         }
@@ -123,12 +119,12 @@ public class UserResource {
     @POST
     @Path("/email/check")
     @Produces(MediaType.APPLICATION_JSON)
-    public EmailList getInvalidEmails(EmailList emails){
+    public EmailList getInvalidEmails(EmailList emails) {
         EmailList returnList = new EmailList();
         List<String> invalidEmails = new ArrayList<>();
-        for(String email : emails.getEmails()){
+        for (String email : emails.getEmails()) {
             try {
-                if (!UserDao.isValidEmail(email)){
+                if (!UserDao.isValidEmail(email)) {
                     invalidEmails.add(email);
                 }
             } catch (DAOException e) {
@@ -160,7 +156,7 @@ public class UserResource {
     @POST
     @Path("/googleauth")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getGoogleAuthToken(String gAuthToken){
+    public String getGoogleAuthToken(String gAuthToken) {
         GoogleIdToken googleIdToken = null;
         try {
             googleIdToken = GoogleAuth.getToken(gAuthToken);
@@ -173,6 +169,7 @@ public class UserResource {
         session.setAttribute(AuthenticationFilter.principalName, email);
         return "Token Received";
     }
+
     // TODO ERROR HANDLING
     @GET
     @Path("/u/{userID}")

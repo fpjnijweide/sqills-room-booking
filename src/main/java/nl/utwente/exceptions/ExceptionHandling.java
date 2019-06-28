@@ -6,11 +6,11 @@ import javax.ws.rs.core.Response;
 
 public class ExceptionHandling {
     public static void throw404(String message) {
-        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).type( MediaType.TEXT_PLAIN ).entity(message).build());
+        throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND).type(MediaType.TEXT_PLAIN).entity(message).build());
     }
 
     public static void throw400(String message) {
-        throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).type( MediaType.TEXT_PLAIN ).entity(message).build());
+        throw new WebApplicationException(Response.status(Response.Status.BAD_REQUEST).type(MediaType.TEXT_PLAIN).entity(message).build());
     }
 
     public static void throw401(String message) {
