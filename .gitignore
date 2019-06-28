@@ -350,3 +350,4 @@ typings/
 
 src/main/webapp/css/
 src/main/webapp/.sass-cache
+src/main/webapp/scripts/test/node_modules

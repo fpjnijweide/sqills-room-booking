@@ -17,6 +17,7 @@ import java.util.List;
 import static nl.utwente.dao.BookingDao.isValidBookingID;
 import static nl.utwente.dao.UserDao.isValidEmail;
 
+
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
         if (!isValidBookingID(bookingID)){
@@ -155,6 +156,5 @@ throw new DAOException(e.getMessage());
                 e.printStackTrace();
             }
         }
-
     }
 }
