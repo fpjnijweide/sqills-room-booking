@@ -19,6 +19,7 @@ import static nl.utwente.dao.DaoTestUtils.*;
 import static nl.utwente.dao.RoomDao.*;
 import static org.junit.Assert.assertFalse;
 
+
 public class RoomDaoTest {
     @BeforeClass
     public static void setup() {

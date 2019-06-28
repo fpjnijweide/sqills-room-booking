@@ -7,7 +7,6 @@ function positionTimeBars(){
         let margin = time / 24 * 100;
         timeBar.style.left = "calc((" + margin + "%) - 1px)";
     }
-
 }
 
 function addBooking(startTime, endTime, date){
@@ -49,15 +48,19 @@ function checkIsFromPastDays(date){
     let today = new Date();
     today.setHours(0,0,0,0);
     if (thedate >= today) {
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
 function checkIfFormAndOpen(){
     if ($("#exampleModalLong").length > 0) {
         $("#exampleModalLong").modal('show');
-
     }
+}
+
+module.exports = {
+    checkIsFromPastDays: checkIsFromPastDays,
+    checkIfBookingToday: checkIfBookingToday
 }

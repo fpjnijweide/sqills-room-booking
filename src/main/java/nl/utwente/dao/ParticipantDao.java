@@ -18,6 +18,7 @@ import static nl.utwente.dao.BookingDao.isValidBookingID;
 import static nl.utwente.dao.UserDao.isValidEmail;
 import static nl.utwente.db.DatabaseConnectionFactory.*;
 
+
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
 
@@ -174,7 +175,6 @@ connection.close();
                 e.printStackTrace();
             }
         }
-
     }
 
     public static boolean userParticipatesInBooking(int bookingID, int userID) {

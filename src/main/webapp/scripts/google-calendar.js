@@ -41,3 +41,6 @@ async function insertGCalendarEvent(event){
 
 }
 
+module.exports = {
+    createGCalendarEvent: createGCalendarEvent
+}
