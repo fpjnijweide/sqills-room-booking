@@ -263,8 +263,10 @@ throw new DAOException(e.getMessage());
 
     public static void deleteBooking(SpecifiedBooking booking){
         System.out.println("Delete booking");
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
+
             String query = "select delete_booking(?,?,?,?)";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setTime(1, booking.getStartTime());
@@ -741,8 +743,9 @@ throw new DAOException(e.getMessage());
     }
 
     public static String getLatestGoogleCalendarSyncToken(){
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "select sync_token from sqills.google_calendar_sync order by date_time desc limit 1";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -761,8 +764,9 @@ throw new DAOException(e.getMessage());
     }
 
     public static void setGoogleCalendarSyncToken(String syncToken){
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
             String query = "insert into   sqills.google_calendar_sync(sync_token) values(?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, syncToken);
