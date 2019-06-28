@@ -7,5 +7,9 @@ as $$
   where p.booking_id = booking_id;
   $$
   language sql;
+delete from sqills.participants;
+  delete from sqills.booking_recurring;
+                delete from sqills.booking;
 
 
+select * from sqills.google_calendar_sync

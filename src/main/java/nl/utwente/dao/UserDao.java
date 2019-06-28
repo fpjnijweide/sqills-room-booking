@@ -279,9 +279,9 @@ public class UserDao {
         return false;
     }
 
-    public static boolean isValidEmail (String email) throws DAOException {
-        if (email.contains("@") && email.contains(".")) {
-            return getEmail(email) != null;
+    public static boolean isValidEmail(String email)  throws DAOException {
+        if (email.contains("@") && email.contains(".")){
+            return getEmail(email.trim()) != null;
         }
         return false;
     }

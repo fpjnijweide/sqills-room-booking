@@ -3,7 +3,7 @@ create table sqills.users
 (
     user_id        serial not null unique,
     name          varchar,
-    email         varchar,
+    email         varchar unique,
     administrator boolean
 );
 drop  table if exists sqills.room CASCADE;
@@ -57,6 +57,14 @@ drop  table if exists sqills.participants CASCADE;
 CREATE TABLE sqills.participants (
   user_id integer REFERENCES sqills.users(user_id),
   booking_id integer REFERENCES sqills.booking(booking_id)
+);
+
+
+drop table if exists sqills.google_calendar_sync;
+create table sqills.google_calendar_sync (
+  sync_id serial,
+  date_time timestamp DEFAULT CURRENT_TIMESTAMP,
+  sync_token varchar
 );
 
 INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (1, 'admin', 'sqills_tablet@gmail.com', true);

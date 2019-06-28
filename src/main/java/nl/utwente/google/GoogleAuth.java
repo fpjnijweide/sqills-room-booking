@@ -24,6 +24,7 @@ public class GoogleAuth {
     }
 
 
+
     public static String getUser(GoogleIdToken idToken){
         return idToken.getPayload().getEmail();
     }

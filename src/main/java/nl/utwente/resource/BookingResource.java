@@ -1,11 +1,17 @@
 package nl.utwente.resource;
 
+import com.google.api.services.calendar.model.Event;
 import com.google.inject.Provides;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
+import nl.utwente.google.GoogleCalendar;
+import nl.utwente.model.OutputBooking;
+import nl.utwente.model.RecurringBooking;
+import nl.utwente.model.SpecifiedBooking;
+import nl.utwente.model.User;
 import nl.utwente.model.*;
 import nl.utwente.exceptions.InvalidEmailException;
 
@@ -15,6 +21,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+import java.io.IOException;
 import javax.ws.rs.core.*;
 import javax.ws.rs.ext.Provider;
 import javax.xml.ws.WebServiceProvider;
@@ -60,7 +68,6 @@ public class BookingResource {
         } catch (DAOException e) {
             throw500("Something went terribly wrong");
         }
-
         return null;
     }
 
@@ -245,4 +252,52 @@ public class BookingResource {
         return null;
     }
 
+    /**
+     *
+     */
+    @POST
+    @Path("/google-calendar/push-notification-events")
+    public void googleCalendarPushNotification(@HeaderParam("X-Goog-Channel-ID")String channelID, @HeaderParam("X-Goog-Resource-ID")String resourceID, @HeaderParam("X-Goog-Resource-URI") String resourceURI, @HeaderParam("X-Goog-Channel-Token") String token ){
+        System.out.println("Change detected");
+        GoogleCalendar gc = new GoogleCalendar();
+        Event e  = null;
+        try {
+            gc.getLatestEvents(token);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println("Event not found");
+        }
+        System.out.println(e.getSummary());
+    }
+
+
+    /**
+     *
+     */
+    @Deprecated
+    @GET
+    @Path("/google-calendar/test/add-watchers")
+    public void googleCalendarTestAddWatchers(){
+        GoogleCalendar gc = new GoogleCalendar();
+        try {
+            gc.setUpWatchers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     */
+    @Deprecated
+    @GET
+    @Path("/google-calendar/test/stop-watchers")
+    public void googleCalendarTestCallRemoveWatchers(@HeaderParam("channelID")String channelID, @HeaderParam("resourceID") String resourceID){
+        GoogleCalendar gc = new GoogleCalendar();
+        try {
+            gc.removeWatchChannel(channelID, resourceID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
