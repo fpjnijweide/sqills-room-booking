@@ -20,3 +20,18 @@ Run locally
 8. Import maven dependencies
 9. Run tomcat server (see tutorial instructions)
 10. Go to localhost:8080
+11. When you got to desktop interface and google wants you to authenticate:
+username: sqillsroombookinggroup37
+password: SqillsProject!
+
+PLEASE NOTE: we tried to deploy our system in the deplpoyment environment, 
+but because google authentication and calendar integration 
+requires an SSL certificate, which the deployment environment doesn't have, 
+the desktop interface doesn't work on the deployment server, because you can't 
+autheniticate through google which means pages are not accessible/working.
+
+Due to the lack of a real domain on the local version of the web app
+the google intergtaion does not work as it requires a real domain, 
+we had previously used a tunneling service during development to get around this,
+the system will work as intended without google intergration (although we have not fully tested this).
+We hope to soon have the project delpoyed a (private) server with SSL. Until then locally is the best we can provide, which doesnt have calendar integration
