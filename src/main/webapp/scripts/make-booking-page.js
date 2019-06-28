@@ -48,11 +48,11 @@ function makeBooking(){
     let title = document.getElementById("booking-title").value
     , email = "" // document.getElementById("booking-email").value
     , date = document.getElementById("booking-date").value
-    , startTime = document.getElementById("booking-starttime").value + ":00"
-    , endTime = document.getElementById("booking-endtime").value + ":00"
+    , startTime = document.getElementById("booking-start-time").value + ":00"
+    , endTime = document.getElementById("booking-end-time").value + ":00"
     , roomName = selectRoom.options[selectRoom.selectedIndex].value
     , isPrivate = document.getElementById("booking-isPrivate").checked
-    , participantElements = extractParticpants(document.getElementsByClassName("participant-in-list"))
+    , participants = extractParticpants(document.getElementsByClassName("booking-participant"))
     , requestBody = {
         "title": title,
         "email": email,
@@ -69,6 +69,7 @@ function makeBooking(){
             addParticipantsToBooking(id);
             // initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
             window.location.href="/desktop/booking/" + id;
+            initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participants, isPrivate, null)));
             // document.location.replace(`/api/booking/${id}`);
         }).catch((response) => {
             showError(response.response.data)
@@ -78,6 +79,8 @@ function makeBooking(){
 function makeRecurringBooking(){
     let selectRoom = document.getElementById("room-select");
     let elem = document.getElementById("choose-time-unit");
+    let participants = extractParticpants(document.getElementsByClassName("booking-participant"))
+
     let requestBody = {
         "title": document.getElementById("booking-title").value,
         "email": "", // document.getElementById("booking-email").value,
@@ -88,39 +91,32 @@ function makeRecurringBooking(){
         "isPrivate": document.getElementById("booking-isPrivate").checked,
         "repeatEveryType": elem.options[elem.selectedIndex].value,
         "repeatEvery": document.getElementById("time").value,
-        "endingAt": document.getElementById("recurring-end-date").value
+        "endingAt": document.getElementById("recurring-end-date").value,
     };
-    console.log(requestBody)
     axios.post("/api/booking/create/recurring", requestBody)
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
-            document.location.replace(`/api/booking/${id}`);
+            initGCalendar(insertGCalendarEvent(createGCalendarEvent(requestBody.roomName, requestBody.date, requestBody.startTime, requestBody.endTime, requestBody.title, participants, requestBody.isPrivate, createRecurrence(requestBody.repeatEveryType, requestBody.repeatEvery, requestBody.endingAt))));
+
         });
 }
 
 function extractParticpants(participantElements){
     let participants = [];
-
     for (let i = 0; i < participantElements.length; i++) {
-        participants[i] = participantElements[i].textContent.slice(0,-6);
+        participants[i] = {email: participantElements[i].innerText};
     }
-    return participantElements;
+    return participants;
 }
-
 function addParticipantsToBooking(bookingID) {
-    let participantElements = document.getElementsByClassName("participant-in-list");
-    for (let i = 0; i < participantElements.length; i++) {
-        let email = participantElements[i].textContent.slice(0,-6);
+    let participantsElements = document.getElementsByClassName("booking-participant");
+    for (let i = 0; i < participantsElements.length; i++) {
         let requestObject = {
-            "email": email,
+            "email": participantsElements[i].innerText,
             "bookingid": bookingID
         };
-
-        axios.post("/api/participant/add", requestObject)
-            .then(response => {
-                console.log(response);
-            })
+        axios.post("/api/participant/add", requestObject);
     }
 }
 
@@ -128,8 +124,8 @@ function addParticipantField() {
     let input = document.getElementById("participant").value;
     if(input != "") {
         let element = document.getElementById("participants-list");
-        element.innerHTML += "<div class='participant-in-list'>" +
-            input + "<div class='delete' onclick='removeParticipant(this.parentElement)'>delete</div>"
+        element.innerHTML += "<div class='participant-in-list'> <span class='booking-participant'>" +
+            input + "</span><div class='delete' onclick='removeParticipant(this.parentElement)'>delete</div>"
             + "</div>"
         document.getElementById("participant").value = "";
         console.log()
