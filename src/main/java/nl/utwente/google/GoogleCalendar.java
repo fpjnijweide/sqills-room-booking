@@ -12,6 +12,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.exceptions.BookingException;
+import nl.utwente.exceptions.DAOException;
 import nl.utwente.model.SpecifiedBooking;
 
 import java.io.ByteArrayInputStream;
@@ -182,6 +183,9 @@ public class GoogleCalendar {
                             } catch (GoogleJsonResponseException ex) {
                                 System.out.println("Event Already Removed");
                             }
+                        } catch (DAOException e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("SQL failed");
                         }
                     }else{
                         Event cancelledEvent = this.getEvent(calendarId, event.getId());
