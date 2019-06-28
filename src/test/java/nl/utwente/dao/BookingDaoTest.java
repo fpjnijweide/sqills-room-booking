@@ -283,7 +283,21 @@ public class BookingDaoTest {
         }
     }
 
-    // TODO rest of methods
+    // TODO rest of methods:
+    // create recurring booking
+    // deletebooking(specifiedBooking)
+    // deleteparticipantsofbooking
+    // get bookings for room today: make private meeting, call getBookingsForRoomToday with that email. It should show the info!
+    // getEmailOfBookingOwner
+    // getFilteredBookings
+    // GetLatestGoogleCalendarS..
+    // isValidBooking and isValidBookingToday and IsvalidTimeslot and isvalidTitle
+    // preparebooking
+    // resultSetToBooking
+    // setgoogleCalendarSync..
+    // throwbookingexceptions
+    // throwbookingtodayexceptions
+    // throwspecifiedbookingexceptions
 
     @After
     public void afterEachTest() {
