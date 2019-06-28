@@ -16,48 +16,45 @@ import java.util.List;
 
 import static nl.utwente.dao.BookingDao.isValidBookingID;
 import static nl.utwente.dao.UserDao.isValidEmail;
-import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
-
-
-        List<User> result = new ArrayList<>();
+        List<User> participants = new ArrayList<>();
         Connection connection = null;
-        try {
+        try{
             connection = DatabaseConnectionFactory.getConnection();
+        String participantQuery = "SELECT u.user_id, u.name, u.email, u.administrator " +
+            "FROM sqills.users AS u, sqills.participants AS p " +
+            "WHERE p.booking_id = ? " +
+            "AND u.user_id = p.user_id";
+        PreparedStatement preparedStatement = connection.prepareStatement(participantQuery);
+        preparedStatement.setInt(1, bookingID);
+        ResultSet resultSetParticipants = preparedStatement.executeQuery();
 
-            if (!isValidBookingID(bookingID, connection)){
-                throw new InvalidBookingIDException(bookingID);
-            }
+        while (resultSetParticipants.next()) {
+            User user = new User();
+            user.setUserid(resultSetParticipants.getInt("user_id"));
+            user.setName(resultSetParticipants.getString("name"));
+            user.setEmail(resultSetParticipants.getString("email"));
+            user.setAdministrator(resultSetParticipants.getBoolean("administrator"));
+            participants.add(user);
+        }
 
-            String query = "select * from get_participants_of_booking(?)";
-
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, bookingID);
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                User user = new User();
-                user.setUserid(resultSet.getInt("user_id"));
-                user.setName(resultSet.getString("name"));
-                user.setEmail(resultSet.getString("email"));
-                user.setAdministrator(resultSet.getBoolean("administrator"));
-                result.add(user);
-            }
+        resultSetParticipants.close();
+        preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return result;
+        return participants;
     }
 
     public static void addParticipantToBooking(int bookingID, int userID) throws InvalidBookingIDException, InvalidUserIDException, DAOException {
@@ -65,10 +62,10 @@ connection.close();
         try {
             connection = DatabaseConnectionFactory.getConnection();
 
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
-            if ( !UserDao.isValidUserID(userID, connection)) {
+            if (!UserDao.isValidUserID(userID, connection)) {
                 throw new InvalidUserIDException(userID);
             }
 
@@ -78,16 +75,16 @@ connection.close();
             preparedStatement.setInt(2, userID);
 
             int updatedRows = preparedStatement.executeUpdate();
-            if (updatedRows == 0){
+            if (updatedRows == 0) {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -98,15 +95,14 @@ connection.close();
     public static void removeParticipant(int bookingID, int userID) throws InvalidBookingIDException, InvalidUserIDException, DAOException {
 
 
-
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
 
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
-            if ( !UserDao.isValidUserID(userID, connection)) {
+            if (!UserDao.isValidUserID(userID, connection)) {
                 throw new InvalidUserIDException(userID);
             }
 
@@ -116,16 +112,16 @@ connection.close();
             preparedStatement.setInt(2, userID);
 
             int updatedRows = preparedStatement.executeUpdate();
-            if (updatedRows == 0){
+            if (updatedRows == 0) {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -136,16 +132,15 @@ connection.close();
     public static void addParticipantEmailToBooking(int bookingID, String email) throws InvalidBookingIDException, InvalidEmailException, DAOException {
 
 
-        if ( !isValidEmail(email)) {
+        if (!isValidEmail(email)) {
             throw new InvalidEmailException(email);
         }
-
 
 
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
-            if (!isValidBookingID(bookingID, connection)){
+            if (!isValidBookingID(bookingID, connection)) {
                 throw new InvalidBookingIDException(bookingID);
             }
             String useridQuery = "SELECT user_id FROM sqills.users WHERE email = ?;";
@@ -161,16 +156,16 @@ connection.close();
             insertStatement.setInt(1, bookingID);
             insertStatement.setInt(2, userID);
             int updatedRows = insertStatement.executeUpdate();
-            if (updatedRows == 0){
+            if (updatedRows == 0) {
                 throw new DAOException("Somehing went wrong in deleteParticipantsOfBooking()");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-throw new DAOException(e.getMessage());
+            throw new DAOException(e.getMessage());
         } finally {
             try {
                 connection.commit();
-connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

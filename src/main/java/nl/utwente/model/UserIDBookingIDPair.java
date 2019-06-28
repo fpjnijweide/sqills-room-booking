@@ -8,12 +8,12 @@ public class UserIDBookingIDPair {
         return userid;
     }
 
-    public int getBookingid() {
-        return bookingid;
-    }
-
     public void setUserid(int userid) {
         this.userid = userid;
+    }
+
+    public int getBookingid() {
+        return bookingid;
     }
 
     public void setBookingid(int bookingid) {

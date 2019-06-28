@@ -12,7 +12,7 @@ function updateTime() {
     }
 
     if (minutes < 10) {
-        minuteString = "0" + minuteString
+        minuteString = "0" + minuteString;
     }
     element.innerHTML = hourString + ":" + minuteString;
 

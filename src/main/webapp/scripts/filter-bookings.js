@@ -23,17 +23,21 @@ function filterBookings() {
             tableBodyContainer.innerHTML = "";
             for (let i = 0; i < bookings.length; i++) {
                 let booking = bookings[i];
+                let rowAttributes = "";
+                if (booking.userName != "PRIVATE"){
+                    rowAttributes = `onclick="redirectToBookingPage(${booking.bookingid})" class="booking-row-clickable"`
+                }
                 tableBodyContainer.innerHTML += `
-                <tr onclick="redirectToBookingPage(${booking.bookingid})" class="booking-row-clickable">
+                <tr ${rowAttributes}>
                     <td>${booking.title}</td>
                     <td>${booking.userName}</td>
                     <td>${booking.date}</td>
                     <td>${booking.startTime}</td>
                     <td>${booking.endTime}</td>
                 </tr>
-                `
+                `;
             }
-        })
+        });
 }
 
 function redirectToBookingPage(bookingID) {

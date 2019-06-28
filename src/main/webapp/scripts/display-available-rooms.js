@@ -1,4 +1,4 @@
-    window.onload = () => {
+window.onload = () => {
     axios.get('/api/room/available')
         .then(response => {
             displayAvailableRooms(response.data);
@@ -22,12 +22,12 @@ function setAvailableTimes(IDs) {
     for (let i = 0; i < IDs.length; i++) {
         axios.get('/api/room/' + IDs[i] + '/availableUntil')
             .then(response => {
-               let elem = document.getElementById('time-' + IDs[i]);
-               if (!response.data) {
-                   elem.innerHTML = "Entire Day"
-               } else {
-                   elem.innerHTML = response.data;
-               }
+                let elem = document.getElementById('time-' + IDs[i]);
+                if (!response.data) {
+                    elem.innerHTML = "Entire Day";
+                } else {
+                    elem.innerHTML = response.data;
+                }
             });
     }
 }

@@ -38,9 +38,11 @@ public class BasicSecurityContext implements SecurityContext {
     }
 
     @Override
-    public boolean isSecure() { return secure; }
+    public boolean isSecure() {
+        return secure;
+    }
 
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 
@@ -49,8 +51,10 @@ public class BasicSecurityContext implements SecurityContext {
         // This method is completely awful. However, it needs to work this way
         // because otherwise, Jersey will complain. Don't question it.
         if (Objects.equals(role, "ADMIN") || Objects.equals(role, "admin") ||
-            Objects.equals(role, "administrator") || Objects.equals(role, "ADMINISTRATOR")){
+            Objects.equals(role, "administrator") || Objects.equals(role, "ADMINISTRATOR")) {
             return user.isAdministrator();
-        } else return Objects.equals(role, "USER") || Objects.equals(role, "user");
+        } else {
+            return Objects.equals(role, "USER") || Objects.equals(role, "user");
+        }
     }
 }

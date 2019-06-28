@@ -1,7 +1,7 @@
-function positionTimeBars(){
+function positionTimeBars() {
     let timeBars = document.getElementsByClassName("timestamp");
-    console.log(timeBars)
-    for (let i = 0; i < timeBars.length; i++){
+    console.log(timeBars);
+    for (let i = 0; i < timeBars.length; i++) {
         let timeBar = timeBars[i];
         let time = timeBar.getAttribute("value");
         let margin = time / 24 * 100;
@@ -9,7 +9,7 @@ function positionTimeBars(){
     }
 }
 
-function addBooking(startTime, endTime, date){
+function addBooking(startTime, endTime, date) {
     let startHours = parseInt(startTime.split(":")[0]);
     let startMinutes = parseInt(startTime.split(":")[1]);
     let endHours = parseInt(endTime.split(":")[0]);
@@ -17,7 +17,7 @@ function addBooking(startTime, endTime, date){
     let start = startHours + (startMinutes / 60);
     let end = endHours + (endMinutes / 60);
     let duration = end - start;
-    let parent= document.getElementsByClassName("bar")[0];
+    let parent = document.getElementsByClassName("bar")[0];
     let booking = document.createElement("div");
     booking.className = "booking";
     booking.style.position = "absolute";
@@ -27,14 +27,14 @@ function addBooking(startTime, endTime, date){
     booking.style.backgroundColor = "#FF7212";
     booking.style.display = "block";
     booking.style.height = "100%";
-    parent.appendChild(booking)
+    parent.appendChild(booking);
 }
 
 function checkIfBookingToday(date) {
     let parts = date.split("-");
     let thedate = new Date(parts[0], parts[1] - 1, parts[2]);
     let today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
     if (thedate > today || thedate < today) {
         return false;
     } else {
@@ -42,11 +42,11 @@ function checkIfBookingToday(date) {
     }
 }
 
-function checkIsFromPastDays(date){
+function checkIsFromPastDays(date) {
     let parts = date.split("-");
     let thedate = new Date(parts[0], parts[1] - 1, parts[2]);
     let today = new Date();
-    today.setHours(0,0,0,0);
+    today.setHours(0, 0, 0, 0);
     if (thedate >= today) {
         return false;
     } else {
@@ -54,7 +54,7 @@ function checkIsFromPastDays(date){
     }
 }
 
-function checkIfFormAndOpen(){
+function checkIfFormAndOpen() {
     if ($("#exampleModalLong").length > 0) {
         $("#exampleModalLong").modal('show');
     }
@@ -63,4 +63,4 @@ function checkIfFormAndOpen(){
 module.exports = {
     checkIsFromPastDays: checkIsFromPastDays,
     checkIfBookingToday: checkIfBookingToday
-}
+};

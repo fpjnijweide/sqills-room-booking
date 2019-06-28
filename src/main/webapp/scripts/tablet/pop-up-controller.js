@@ -24,14 +24,14 @@ function openDetailsPopUp(bookingID) {
             let participants = response.data.participants;
             if (participants.length !== 0) {
                 let participantElement = document.getElementById("participants");
-                participantElement.innerHTML = "<h4>Participants</h4>"
+                participantElement.innerHTML = "<h4>Participants</h4>";
 
                 for (let i = 0; i < participants.length; i++) {
                     participantElement.innerHTML += `<li>${participants[i].name}</li>`;
                 }
-           }
+            }
         })
-        .finally( () => {
+        .finally(() => {
             document.getElementById("booking-details-overlay").classList.remove("hidden");
             blurBackground();
         });

@@ -1,14 +1,14 @@
 function disableButtonsBasedOnPermissions() {
     axios.get(`/api/booking/${bookingID}/access`)
         .then(response => {
-            if(response.data) {
+            if (response.data) {
                 let elements = document.getElementsByClassName("booking-information-button");
                 for (let i = 0; i < elements.length; i++) {
                     elements[i].classList.remove("disabled");
-                    elements[i].removeAttribute("disabled")
+                    elements[i].removeAttribute("disabled");
                 }
             }
-        })
+        });
 }
 
 function redirectToAllBookings() {
@@ -39,7 +39,7 @@ function editBooking() {
         "endTime": document.getElementById("edit-booking-end-time").value,
         "isPrivate": document.getElementById("edit-booking-is-private").checked,
         "email": EMAIL
-    }
+    };
 
     axios.put(`/api/booking/${bookingID}`, requestBody)
         .then(response => {
@@ -50,11 +50,12 @@ function editBooking() {
             $("#edit-modal").modal("hide");
             document.getElementById("edit-error-container").innerText = error.data.response;
             $("#edit-failure-modal").modal();
-        })
+        });
 }
 
 function removeParticipant(bookingID, userID) {
-    axios.delete('/api/participant/delete', {"params" : {
+    axios.delete('/api/participant/delete', {
+        "params": {
             "userid": userID,
             "bookingid": bookingID
         }

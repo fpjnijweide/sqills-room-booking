@@ -1,10 +1,9 @@
 package nl.utwente.model;
 
-import javax.annotation.MatchesPattern;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Time;
-import javax.validation.constraints.Pattern;
 
 @XmlRootElement
 public class Booking extends TimeSlot {

@@ -5,7 +5,6 @@ import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.exceptions.InvalidEmailException;
 import nl.utwente.exceptions.InvalidUserIDException;
-import nl.utwente.model.UserIDBookingIDPair;
 import nl.utwente.model.UserIDEmailPair;
 
 import javax.validation.Valid;
@@ -57,13 +56,12 @@ public class ParticipantResource {
 //            if ((!userParticipatesInBooking(context, pair) &&
 //                (!userOwnsBooking(securityContext,pair.getBookingid()))) &&
 ////            if ((!userParticipatesInBooking(securityContext, userID) &&
-            if (!   ParticipantDao.userParticipatesInBooking(bookingID, userID) &&
-            (!userOwnsBooking(securityContext,bookingID)) &&
-                (!userIsAdmin(securityContext)))
-            { // If owner = logged in user
+            if (!ParticipantDao.userParticipatesInBooking(bookingID, userID) &&
+                (!userOwnsBooking(securityContext, bookingID)) &&
+                (!userIsAdmin(securityContext))) { // If owner = logged in user
                 throw403("You are not authorized to edit this booking");
             }
-            ParticipantDao.removeParticipant(bookingID, userID  );
+            ParticipantDao.removeParticipant(bookingID, userID);
         } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
         } catch (InvalidUserIDException e) {

@@ -12,21 +12,23 @@
 <%--<jsp:include page="nav.jsp"/>--%>
 <div class="loginform">
     <table class="logintable">
-<tr>
-    <td><div class="g-signin2" data-width="400" data-height="75" data-onsuccess="onSignIn"></div></td>
-</tr>
+        <tr>
+            <td>
+                <div class="g-signin2" data-width="400" data-height="75" data-onsuccess="onSignIn"></div>
+            </td>
+        </tr>
         <img class="login-sqills-logo" src="/assets/sqills-logo.svg">
         <%--<tr>--%>
-            <%--<td>Username</td>--%>
-            <%--<td><input type="username" id="username"></td>--%>
+        <%--<td>Username</td>--%>
+        <%--<td><input type="username" id="username"></td>--%>
         <%--</tr>--%>
         <%--<tr>--%>
-            <%--<td>Password</td>--%>
-            <%--<td><input type="password" id="password"></td>--%>
+        <%--<td>Password</td>--%>
+        <%--<td><input type="password" id="password"></td>--%>
         <%--</tr>--%>
         </tr>
         <%--<tr>--%>
-            <%--<td><button onclick="login()">Login</button> </td>--%>
+        <%--<td><button onclick="login()">Login</button> </td>--%>
         <%--</tr>--%>
     </table>
 </div>

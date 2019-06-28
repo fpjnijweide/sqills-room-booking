@@ -4,7 +4,6 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
@@ -12,13 +11,14 @@ import java.sql.SQLException;
  */
 public class DatabaseConnectionFactory {
 
-    static DataSource datasource;
-    static PoolProperties poolProperties;
     static final String host = "castle.ewi.utwente.nl";
     static final String dbName = "di125";
     static final String url = "jdbc:postgresql://" + host + ":5432/" + dbName;
     static final String username = "di125";
     static final String password = "E9+gNMnM";
+    static DataSource datasource;
+    static PoolProperties poolProperties;
+
     static {
 
         // We actually use a connection pool of 100 instead of randomly assigning connections
@@ -54,8 +54,9 @@ public class DatabaseConnectionFactory {
 
     /**
      * Returns a connection to the SQL database.
+     *
      * @return connection object to the database
-     *         null if no connection could be established
+     * null if no connection could be established
      */
     public static Connection getConnection() throws SQLException {
         return datasource.getConnection();

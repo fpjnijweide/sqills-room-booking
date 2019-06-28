@@ -2,9 +2,9 @@
 
 module('DATA-API');
 
-test('data-default="20:48" on input', function(){
+test('data-default="20:48" on input', function () {
     var input = $('<input data-default="20:48" />')
-                .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
 
     input.clockpicker();
     var picker = input.data('clockpicker');
@@ -16,22 +16,22 @@ test('data-default="20:48" on input', function(){
 
     picker.hide();
     input.blur()
-         .val('10:24')
-         .triggerHandler('focus');
+        .val('10:24')
+        .triggerHandler('focus');
     strictEqual(picker.hours, 10, 'hours changed');
     strictEqual(picker.minutes, 24, 'minutes changed');
 
     picker.hide();
     input.blur()
-         .val('')
-         .triggerHandler('focus');
+        .val('')
+        .triggerHandler('focus');
     strictEqual(picker.hours, 20, 'hours reset');
     strictEqual(picker.minutes, 48, 'minutes reset');
 });
 
-test('data-default="20:48" on input-group', function(){
+test('data-default="20:48" on input-group', function () {
     var group = $('<div class="input-group" data-default="20:48"><input /></div>')
-                .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
     var input = group.find('input');
 
     group.clockpicker();
@@ -44,24 +44,24 @@ test('data-default="20:48" on input-group', function(){
 
     picker.hide();
     input.blur()
-         .val('10:24')
-         .triggerHandler('focus');
+        .val('10:24')
+        .triggerHandler('focus');
     strictEqual(picker.hours, 10, 'hours changed');
     strictEqual(picker.minutes, 24, 'minutes changed');
 
     picker.hide();
     input.blur()
-         .val('')
-         .triggerHandler('focus');
+        .val('')
+        .triggerHandler('focus');
     strictEqual(picker.hours, 20, 'hours reset');
     strictEqual(picker.minutes, 48, 'minutes reset');
 });
 
-test('data-placement="bottom|left|right|top" on input', function(){
+test('data-placement="bottom|left|right|top" on input', function () {
     var input, picker;
 
     input = $('<input />')
-                .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
     input.clockpicker();
     picker = input.data('clockpicker');
     ok(picker, 'clockpicker is initialized');
@@ -75,7 +75,7 @@ test('data-placement="bottom|left|right|top" on input', function(){
         var place = placements[i];
         var align = aligns[i];
         input = $('<input data-placement="' + place + '" data-align="' + align + '" />')
-                    .appendTo('#qunit-fixture');
+            .appendTo('#qunit-fixture');
         input.clockpicker();
         picker = input.data('clockpicker');
         ok(picker, 'clockpicker is initialized');
@@ -85,11 +85,11 @@ test('data-placement="bottom|left|right|top" on input', function(){
     }
 });
 
-test('data-align="bottom|left|right|top" on input', function(){
+test('data-align="bottom|left|right|top" on input', function () {
     var input, picker;
 
     input = $('<input />')
-                .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
     input.clockpicker();
     picker = input.data('clockpicker');
     ok(picker, 'clockpicker is initialized');
@@ -103,7 +103,7 @@ test('data-align="bottom|left|right|top" on input', function(){
         var align = aligns[i];
         var place = placements[i];
         input = $('<input data-align="' + align + '" data-placement="' + place + '" />')
-                    .appendTo('#qunit-fixture');
+            .appendTo('#qunit-fixture');
         input.clockpicker();
         picker = input.data('clockpicker');
         ok(picker, 'clockpicker is initialized');

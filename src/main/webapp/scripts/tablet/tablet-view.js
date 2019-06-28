@@ -5,18 +5,18 @@ function displayRoomIsFree(roomStartTime) {
     if (currentTime.getHours() <= roomStartTime.getHours() && currentTime.getMinutes() < roomStartTime.getMinutes()) {
         // If the booking time is not now, print until when room is free
         roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is free until " +
-            roomStartTime.getHours() + ":" + roomStartTime.getMinutes() + "!</h3>"
+            roomStartTime.getHours() + ":" + roomStartTime.getMinutes() + "!</h3>";
     } else {
         // If booking time is now, earliestStartTime wasn't reset in getEarliestStartTime()
         // This means that there are no bookings for today. Print this fact.
-        roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is free for the whole day!</h3>"
+        roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is free for the whole day!</h3>";
     }
 }
 
 function displayRoomIsBooked() {
     // Prints the fact that room is booked
     let roomStatus = document.getElementById("room-status");
-    roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is booked right now</h3>"
+    roomStatus.innerHTML = "<h3>Room " + currentRoomName + " is booked right now</h3>";
 }
 
 function displayTableOfBookings(tableData) {
@@ -28,14 +28,14 @@ function displayTableOfBookings(tableData) {
                          <th>End Time</th>  
                          <th>Booked by</th> 
                          <th>Booking title</th>
-                        </tr>`
+                        </tr>`;
     for (let x in tableData) {
         tableContent += `<tr> 
             <td> ${tableData[x].startTime} </td> 
             <td> ${tableData[x].endTime} </td>
             <td> ${tableData[x].userName}</td>
             <td> ${tableData[x].title} </td>
-        </tr>`
+        </tr>`;
     }
     tableContent += `</table>`;
     content.innerHTML = tableContent;
@@ -60,15 +60,15 @@ function displayOtherFreeRooms(roomStartTime, roomNumberInput) {
     }
 }
 
-function autoCompleteRoomName(){
+function autoCompleteRoomName() {
     let candidates = [];
     let currentvalue = document.getElementById("room-input").value;
-    for(let i = 0; i < rooms.length; i++){
-        if (rooms[i].includes(currentvalue) && rooms[i].indexOf(currentvalue) == 0){
+    for (let i = 0; i < rooms.length; i++) {
+        if (rooms[i].includes(currentvalue) && rooms[i].indexOf(currentvalue) == 0) {
             candidates.push(rooms[i]);
         }
     }
-    if (candidates.length == 1){
+    if (candidates.length == 1) {
         document.getElementById("room-input").value = candidates[0];
     }
 

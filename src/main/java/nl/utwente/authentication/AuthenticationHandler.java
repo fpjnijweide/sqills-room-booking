@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static nl.utwente.dao.BookingDao.getEmailOfBookingOwner;
-import static nl.utwente.dao.UserDao.getUserFromEmail;
 
 public class AuthenticationHandler {
 
@@ -29,7 +28,7 @@ public class AuthenticationHandler {
 
     public static boolean userOwnsBooking(SecurityContext securityContext, int bookingID) throws InvalidBookingIDException, DAOException {
         String userEmail = null;
-        if (securityContext.getUserPrincipal()!=null) {
+        if (securityContext.getUserPrincipal() != null) {
             userEmail = securityContext.getUserPrincipal().getName();
         } else {
             return false;
@@ -54,7 +53,7 @@ public class AuthenticationHandler {
             KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             hash = factory.generateSecret(spec).getEncoded();
-        } catch(NoSuchAlgorithmException | InvalidKeySpecException e){
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             System.err.println(e);
         }
         return hash;
@@ -75,7 +74,7 @@ public class AuthenticationHandler {
         }
     }
 
-    public static boolean checkByteArrays(byte[] firstArray, byte[] secondArray){
+    public static boolean checkByteArrays(byte[] firstArray, byte[] secondArray) {
         return Arrays.equals(firstArray, secondArray);
     }
 }

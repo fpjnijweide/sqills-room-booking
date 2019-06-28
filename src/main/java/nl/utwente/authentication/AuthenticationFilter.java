@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -21,9 +20,9 @@ import java.io.IOException;
 @Provider
 @Priority(Priorities.AUTHENTICATION)  // needs to happen before authorization
 public class AuthenticationFilter implements ContainerRequestFilter {
+    public static String principalName = "principalName";
     @Context
     HttpServletRequest httpRequest;
-    public static String principalName = "principalName";
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -34,7 +33,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             User user = null;
             try {
                 user = UserDao.getUserFromEmail(email);
-                requestContext.setProperty("user",user);
+                requestContext.setProperty("user", user);
                 requestContext.setSecurityContext(new BasicSecurityContext(user, false));
             } catch (InvalidEmailException e) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
@@ -44,7 +43,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             }
 
         }
-
 
 
     }

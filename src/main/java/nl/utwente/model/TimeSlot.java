@@ -9,7 +9,7 @@ public class TimeSlot {
     @NotNull
     protected Time endTime;
 
-    public TimeSlot(Time startTime, Time endTime){
+    public TimeSlot(Time startTime, Time endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }

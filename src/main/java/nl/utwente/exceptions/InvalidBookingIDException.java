@@ -6,7 +6,7 @@ public class InvalidBookingIDException extends Exception {
 
     public InvalidBookingIDException(int id) {
         super("Invalid booking id: " + String.valueOf(id));
-        this.id=id;
+        this.id = id;
 
     }
 

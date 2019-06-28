@@ -11,9 +11,9 @@ function CustomEvent(type, options) {
         if (eventMap[type]) {
             type = eventMap[type];
             if (type === 'touchend') {
-                options = { originalEvent: { changedTouches: [options] } };
+                options = {originalEvent: {changedTouches: [options]}};
             } else {
-                options = { originalEvent: { touches: [options] } };
+                options = {originalEvent: {touches: [options]}};
             }
         }
     }

@@ -16,9 +16,9 @@ function updateAvailabilityInterval() {
 function setAvailableRoomsAndUpdatePage() {
     axios.get("/api/room/available")
         .then(response => {
-            available_rooms = response.data
+            available_rooms = response.data;
         })
-        .finally( () => {
+        .finally(() => {
                 updateAvailabilityDisplay();
             }
         );

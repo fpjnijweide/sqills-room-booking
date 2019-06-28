@@ -2,15 +2,15 @@
 
 module('BASIC');
 
-test('clockpicker on input', function(){
+test('clockpicker on input', function () {
     var input = $('<input />')
-                .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
 
     // Initialize
     input.clockpicker();
     var picker = input.data('clockpicker');
     ok(picker, 'clockpicker is initialized on input');
-    ok(! picker.isAppended, 'clockpicker is not appended to body when initialized');
+    ok(!picker.isAppended, 'clockpicker is not appended to body when initialized');
 
     // First shown
     // Using triggerHandler('focus') instead of focus(), since invisible element can not be focused in IE.
@@ -63,11 +63,11 @@ test('clockpicker on input', function(){
 
     ok(picker.isShown, 'clockpicker is still shown');
     changed = 0;
-    input.on('change', function(){
+    input.on('change', function () {
         changed += 1;
     });
     picker.popover.find('button').click();
-    ok(! picker.isShown, 'clockpicker is hidden after clicked on done button');
+    ok(!picker.isShown, 'clockpicker is hidden after clicked on done button');
     strictEqual(changed, 1, 'input triggerred a change event');
     strictEqual(input.val(), '01:05', 'input value is changed to "01:05"');
 
@@ -79,38 +79,38 @@ test('clockpicker on input', function(){
 
     // Hide
     $(document.body).click();
-    ok(! picker.isShown, 'clockpicker is hidden');
+    ok(!picker.isShown, 'clockpicker is hidden');
 
     // Show again
     input.triggerHandler('focus');
     ok(picker.isShown, 'clockpicker is shown again');
 
     // Press ESC to hide
-    $(document).triggerHandler($.Event('keyup', { keyCode: 27 }));
-    ok(! picker.isShown, 'clockpicker is hidden when ESC is pressed');
+    $(document).triggerHandler($.Event('keyup', {keyCode: 27}));
+    ok(!picker.isShown, 'clockpicker is hidden when ESC is pressed');
 });
 
-test('clockpicker on input-group', function(){
+test('clockpicker on input-group', function () {
     var group = $('<div class="input-group" data-default="20:48"><input /></div>')
-                .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
     var input = group.find('input');
 
     group.clockpicker();
     var picker = group.data('clockpicker');
     ok(picker, 'clockpicker is initialized on input-group');
-    ok(! picker.isAppended, 'clockpicker is not appended to body when initialized');
+    ok(!picker.isAppended, 'clockpicker is not appended to body when initialized');
 
     input.triggerHandler('focus');
     ok(picker.isShown, 'clockpicker is shown');
     ok(picker.isAppended, 'clockpicker is appended to body before first shown');
 
     $(document.body).click();
-    ok(! picker.isShown, 'clockpicker is hidden');
+    ok(!picker.isShown, 'clockpicker is hidden');
 });
 
-test('clockpicker on input-group with addon', function(){
+test('clockpicker on input-group with addon', function () {
     var group = $('<div class="input-group" data-default="20:48"><input /><span class="input-group-addon">addon</span></div>')
-                .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
     var input = group.find('input');
     var addon = group.find('.input-group-addon');
 
@@ -122,23 +122,23 @@ test('clockpicker on input-group with addon', function(){
     ok(picker.isShown, 'clockpicker is shown by focus');
 
     $(document.body).click();
-    ok(! picker.isShown, 'clockpicker is hidden by click on body');
+    ok(!picker.isShown, 'clockpicker is hidden by click on body');
 
     addon.click();
     ok(picker.isShown, 'clockpicker is shown by click on addon');
 
     addon.click();
-    ok(! picker.isShown, 'clockpicker is hidden by click on addon again');
+    ok(!picker.isShown, 'clockpicker is hidden by click on addon again');
 });
 
-test('clockpicker manual operations', function(){
+test('clockpicker manual operations', function () {
     var input = $('<input />')
-            .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
 
     // Initialize
     input.clockpicker();
     var picker = input.data('clockpicker');
-    ok(! picker.isShown, 'clockpicker is not shown');
+    ok(!picker.isShown, 'clockpicker is not shown');
 
     input.clockpicker('show');
     ok(picker.isShown, 'clockpicker is shown manually');
@@ -148,16 +148,16 @@ test('clockpicker manual operations', function(){
     strictEqual(picker.currentView, 'minutes', 'current view is toggled to minutes');
 
     input.clockpicker('hide');
-    ok(! picker.isShown, 'clockpicker is hidden manually');
+    ok(!picker.isShown, 'clockpicker is hidden manually');
 
     input.clockpicker('remove');
     ok(picker.popover.parent().length === 0, 'clockpicker popover is removed');
-    ok(! input.data('clockpicker'), 'clockpicker is removed manually');
+    ok(!input.data('clockpicker'), 'clockpicker is removed manually');
 });
 
-test('clockpicker default time is now', function(){
+test('clockpicker default time is now', function () {
     var input = $('<input />')
-            .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
 
     input.clockpicker({
         'default': 'now'
@@ -170,14 +170,14 @@ test('clockpicker default time is now', function(){
 
     input.remove();
     input = $('<input />')
-            .appendTo('#qunit-fixture');
+        .appendTo('#qunit-fixture');
 
     var fromnow = 9e4;
     input.clockpicker({
         'default': 'now',
         fromnow: fromnow
     });
-    now = new Date(+ new Date() + fromnow);
+    now = new Date(+new Date() + fromnow);
     picker = input.data('clockpicker');
     input.clockpicker('show');
     strictEqual(picker.hours, now.getHours(), 'hours is setted to now');

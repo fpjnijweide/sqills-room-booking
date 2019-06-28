@@ -45,14 +45,14 @@ public class RoomDaoTest {
         // This structure is not perfect. JUnit requires @Before methods to be non-static
         // But we need createRoom to be static so that we can easily access it from BookingDaoTest
         // This was the best solution
-        createRoom(roomID,roomName);
+        createRoom(roomID, roomName);
     }
 
     @Test
     public void testThatInvalidRoomsAreInvalid() {
         try {
-            assertFalse(isValidRoomID(-2,connection));
-            assertFalse(isValidRoomName("Some invalid room name",connection));
+            assertFalse(isValidRoomID(-2, connection));
+            assertFalse(isValidRoomName("Some invalid room name", connection));
         } catch (DAOException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -62,8 +62,8 @@ public class RoomDaoTest {
     @Test
     public void testThatValidRoomsAreValid() {
         try {
-            assertTrue(isValidRoomID(roomID,connection));
-            assertTrue(isValidRoomName(roomName,connection));
+            assertTrue(isValidRoomID(roomID, connection));
+            assertTrue(isValidRoomName(roomName, connection));
         } catch (DAOException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -71,7 +71,7 @@ public class RoomDaoTest {
     }
 
     @Test
-    public void testGetAllRoomNames(){
+    public void testGetAllRoomNames() {
         try {
             assertTrue(getAllRoomNames().contains(roomName));
             assertFalse(getAllRoomNames().contains("Invalid room name"));
@@ -98,10 +98,10 @@ public class RoomDaoTest {
             List<String> roomNames = getAllRoomNames();
             List<Integer> roomIDs = getAllRoomsIDs();
             for (int id : roomIDs) {
-                assertEquals(id, getRoomID(getRoomName(id,connection),connection));
+                assertEquals(id, getRoomID(getRoomName(id, connection), connection));
             }
             for (String name : roomNames) {
-                assertEquals(name, getRoomName(getRoomID(name,connection),connection));
+                assertEquals(name, getRoomName(getRoomID(name, connection), connection));
             }
         } catch (DAOException e) {
             e.printStackTrace();
@@ -112,8 +112,8 @@ public class RoomDaoTest {
     @Test
     public void testThatRoomIDMatchesRoomName() {
         try {
-            assertEquals(roomID, getRoomID(roomName,connection));
-            assertEquals(roomName, getRoomName(roomID,connection));
+            assertEquals(roomID, getRoomID(roomName, connection));
+            assertEquals(roomName, getRoomName(roomID, connection));
         } catch (DAOException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -160,7 +160,7 @@ public class RoomDaoTest {
         try {
             Time startTime = currentTimePlusMinutes(2);
             int bookingId = makeBooking(startTime); // Creates booking for 2 mins from now
-            assertEquals(getFreeUntil(roomName),startTime);
+            assertEquals(getFreeUntil(roomName), startTime);
             deleteBooking(bookingId);
         } catch (DAOException | BookingException | SQLException | InvalidBookingIDException | InvalidRoomNameException e) {
             e.printStackTrace();

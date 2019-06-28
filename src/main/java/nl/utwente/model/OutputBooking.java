@@ -8,15 +8,6 @@ public class OutputBooking extends TimeSlot {
     protected String roomName;
     protected Date date;
     protected String title;
-
-    public int getBookingid() {
-        return bookingid;
-    }
-
-    public void setBookingid(int bookingid) {
-        this.bookingid = bookingid;
-    }
-
     protected int bookingid;
 
     public OutputBooking(Time startTime, Time endTime, String userName, String roomName, Date date, String title, int bookingid) {
@@ -30,6 +21,14 @@ public class OutputBooking extends TimeSlot {
 
     public OutputBooking() {
 
+    }
+
+    public int getBookingid() {
+        return bookingid;
+    }
+
+    public void setBookingid(int bookingid) {
+        this.bookingid = bookingid;
     }
 
     /**

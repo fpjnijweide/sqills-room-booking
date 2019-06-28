@@ -11,7 +11,7 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        if (req.getSession().getAttribute(AuthenticationFilter.principalName)==null){
+        if (req.getSession().getAttribute(AuthenticationFilter.principalName) == null) {
             req.getRequestDispatcher("/desktop/login.jsp").forward(req, res);
         } else {
             req.getRequestDispatcher("/desktop/index.jsp").forward(req, res);

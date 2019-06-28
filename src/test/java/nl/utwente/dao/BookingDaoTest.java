@@ -24,49 +24,41 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BookingDaoTest {
 
 
-    private Date date = Date.valueOf("2030-12-12");
-    private Time startTime = Time.valueOf("9:00:00");
-    private Time endTime = Time.valueOf("10:00:00");
-    private int bookingID = -1;
-
-    SpecifiedBooking createdBooking = new SpecifiedBooking(startTime,
-        endTime, roomName, date, email,
-        false, bookingTitle);
-
     //booking for same time, date room: should not be accepted
     SpecifiedBooking OverlappingBooking = new SpecifiedBooking(Time.valueOf("9:00:00"),
         Time.valueOf("10:00:00"), roomName, Date.valueOf("2030-12-12"), email,
         false, bookingTitle);
-
     //valid booking with startime just after endtime current booking: should be accepted
     SpecifiedBooking bookingFrom10To11 = new SpecifiedBooking(Time.valueOf("10:00:00"),
         Time.valueOf("11:00:00"), roomName, Date.valueOf("2030-12-12"), email,
         false, bookingTitle);
-
     //booking with the current booking in between: should not be accepted
     SpecifiedBooking overlappingBooking2 = new SpecifiedBooking(Time.valueOf("9:00:00"),
         Time.valueOf("11:00:00"), roomName, Date.valueOf("2030-12-12"), email,
         false, bookingTitle);
-
     //other date same time same room: should be accepted
     SpecifiedBooking booking4 = new SpecifiedBooking(Time.valueOf("9:00:00"),
         Time.valueOf("11:00:00"), roomName, Date.valueOf("2030-12-13"), email,
         false, bookingTitle);
-
     //other room booking for same time: should be accepted
     SpecifiedBooking otherRoomBooking = new SpecifiedBooking(Time.valueOf("9:00:00"),
         Time.valueOf("11:00:00"), "Test room 2", Date.valueOf("2030-12-12"), email,
         false, bookingTitle);
-
     //endtime before startime: should not be accepted
     SpecifiedBooking endTimeBeforeStartTimeBooking = new SpecifiedBooking(Time.valueOf("13:00:00"),
         Time.valueOf("12:00:00"), roomName, Date.valueOf("2030-12-12"), email,
         false, bookingTitle);
-
     //booking with endtime just before current booking starttime: should be accepted
     SpecifiedBooking earlyBooking = new SpecifiedBooking(Time.valueOf("8:00:00"),
         Time.valueOf("9:00:00"), roomName, Date.valueOf("2030-12-12"), email,
         false, bookingTitle);
+    private Date date = Date.valueOf("2030-12-12");
+    private Time startTime = Time.valueOf("9:00:00");
+    private Time endTime = Time.valueOf("10:00:00");
+    SpecifiedBooking createdBooking = new SpecifiedBooking(startTime,
+        endTime, roomName, date, email,
+        false, bookingTitle);
+    private int bookingID = -1;
 
 //    private Time startTime = currentTimePlusMinutes(2);
 //    private Time endTime = new Time(23, 59, 00);
@@ -144,13 +136,13 @@ public class BookingDaoTest {
         createRoom(-101, "Test room 2");
 
         try {
-            boolean result1 = isValidBooking(OverlappingBooking,connection);
-            boolean result2 = isValidBooking(bookingFrom10To11,connection);
-            boolean result3 = isValidBooking(overlappingBooking2,connection);
-            boolean result4 = isValidBooking(booking4,connection);
-            boolean result5 = isValidBooking(otherRoomBooking,connection);
-            boolean result6 = isValidBooking(endTimeBeforeStartTimeBooking,connection);
-            boolean result7 = isValidBooking(earlyBooking,connection);
+            boolean result1 = isValidBooking(OverlappingBooking, connection);
+            boolean result2 = isValidBooking(bookingFrom10To11, connection);
+            boolean result3 = isValidBooking(overlappingBooking2, connection);
+            boolean result4 = isValidBooking(booking4, connection);
+            boolean result5 = isValidBooking(otherRoomBooking, connection);
+            boolean result6 = isValidBooking(endTimeBeforeStartTimeBooking, connection);
+            boolean result7 = isValidBooking(earlyBooking, connection);
             assertFalse(result1);
             assertTrue(result2);
             assertFalse(result3);
@@ -177,7 +169,7 @@ public class BookingDaoTest {
     public void testCreateBookingInvalidBooking() {
         // Creates a duplicate booking
         assertThrows(BookingException.class, () -> {
-           createBooking(createdBooking);
+            createBooking(createdBooking);
         });
     }
 
@@ -253,7 +245,7 @@ public class BookingDaoTest {
     @Test
     public void testInsertBookingToday() {
         try {
-            int tempID = BookingDao.insertBookingToday(roomName, startTime, endTime, email, false,bookingTitle);
+            int tempID = BookingDao.insertBookingToday(roomName, startTime, endTime, email, false, bookingTitle);
             List<OutputBooking> bookings = BookingDao.getBookingsForRoomToday(roomName);
             assertEquals(bookings.get(0).getStartTime(), startTime);
             assertEquals(bookings.get(0).getEndTime(), endTime);
@@ -269,8 +261,7 @@ public class BookingDaoTest {
         try {
             Time startTime1 = Time.valueOf("00:30:00");
             Time endTime1 = Time.valueOf("01:30:00");
-            int tempID1 = BookingDao.insertBookingToday(roomName, startTime1, endTime1, email, false,bookingTitle);
-
+            int tempID1 = BookingDao.insertBookingToday(roomName, startTime1, endTime1, email, false, bookingTitle);
 
 
             Time startTime2 = Time.valueOf("01:00:00");
@@ -292,7 +283,21 @@ public class BookingDaoTest {
         }
     }
 
-    // TODO rest of methods
+    // TODO rest of methods:
+    // create recurring booking
+    // deletebooking(specifiedBooking)
+    // deleteparticipantsofbooking
+    // get bookings for room today: make private meeting, call getBookingsForRoomToday with that email. It should show the info!
+    // getEmailOfBookingOwner
+    // getFilteredBookings
+    // GetLatestGoogleCalendarS..
+    // isValidBooking and isValidBookingToday and IsvalidTimeslot and isvalidTitle
+    // preparebooking
+    // resultSetToBooking
+    // setgoogleCalendarSync..
+    // throwbookingexceptions
+    // throwbookingtodayexceptions
+    // throwspecifiedbookingexceptions
 
     @After
     public void afterEachTest() {

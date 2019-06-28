@@ -6,7 +6,7 @@ public class InvalidEmailException extends Exception {
 
     public InvalidEmailException(String email) {
         super("Invalid email: " + email);
-        this.email=email;
+        this.email = email;
 
     }
 
