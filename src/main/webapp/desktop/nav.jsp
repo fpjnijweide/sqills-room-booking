@@ -16,6 +16,9 @@
                 <a class="nav-link" href="/desktop/book">Book a Room</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/desktop/bookings">Bookings</a>
+            </li>
+            <li class="nav-item">
 
                 <% if (session.getAttribute(AuthenticationFilter.principalName)==null){ %>
                 <a class="nav-link" href="/desktop/login">Log in</a>
