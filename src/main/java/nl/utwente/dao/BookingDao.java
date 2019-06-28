@@ -3,6 +3,7 @@ package nl.utwente.dao;
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.*;
 import nl.utwente.model.*;
+import org.apache.poi.util.Internal;
 
 import javax.ws.rs.core.SecurityContext;
 import java.sql.*;
@@ -10,13 +11,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-import org.apache.poi.util.Internal;
 
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
 import static nl.utwente.dao.UserDao.getUserFromEmail;
 import static nl.utwente.dao.UserDao.isValidEmail;
-import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 public class BookingDao {
     /**
@@ -275,6 +274,7 @@ throw new DAOException(e.getMessage());
             ps.setString(4, booking.getRoomName());
             ps.execute();
             ps.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
