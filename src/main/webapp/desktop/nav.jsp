@@ -7,9 +7,6 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="/desktop/">Home<span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/desktop/rooms">Rooms</a>
             </li>
             <li class="nav-item">
@@ -17,6 +14,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/desktop/bookings">Bookings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/desktop/admin">Admin</a>
             </li>
             <li class="nav-item">
 
