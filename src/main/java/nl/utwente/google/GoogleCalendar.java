@@ -212,7 +212,8 @@ public class GoogleCalendar {
         specifiedBooking.setDate(new java.sql.Date(event.getStart().getDateTime().getValue()));
         specifiedBooking.setEndTime(removeDateFromTime(event.getEnd()));
         specifiedBooking.setStartTime(removeDateFromTime(event.getStart()));
-        specifiedBooking.setRoomName(calendarName);
+
+        specifiedBooking.setRoomName("1");
         specifiedBooking.setTitle(event.getSummary());
         specifiedBooking.setIsPrivate(false);
         return specifiedBooking;
