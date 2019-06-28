@@ -352,9 +352,7 @@ connection.close();
 
     public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
 
-        if (!isValidBookingID(bookingID)) {
-            throw new InvalidBookingIDException(bookingID);
-        }
+
 
         if (!UserDao.isValidEmail(booking.getEmail())) {
             throw new BookingException("Invalid email: " + booking.getEmail());
@@ -364,22 +362,24 @@ connection.close();
             throw new BookingException("Invalid Title");
         }
 
-        Connection connection = null;
-        try {
-            if (!isValidTimeSlotUpdate(bookingID, booking.getRoomName(), booking.getStartTime(), booking.getEndTime(), booking.getDate())) {
-                throw new BookingException("Illegal Timeslot");
-            }
-        } catch (InvalidRoomNameException e) {
-            throw new BookingException("Invalid room name");
-        }
 
-        Connection connection = DatabaseConnectionFactory.getConnection();
+        Connection connection = null;
+
 
         try {
             connection = DatabaseConnectionFactory.getConnection();
 
+
+
             if (!isValidBookingID(bookingID, connection)){
                 throw new InvalidBookingIDException(bookingID);
+            }
+            try {
+                if (!isValidTimeSlotUpdate(bookingID, booking.getRoomName(), booking.getStartTime(), booking.getEndTime(), booking.getDate(), connection)) {
+                    throw new BookingException("Illegal Timeslot");
+                }
+            } catch (InvalidRoomNameException e) {
+                throw new BookingException("Invalid room name");
             }
 
             throwSpecifiedBookingExceptions(booking, connection);
@@ -599,12 +599,12 @@ throw new DAOException(e.getMessage());
         return isValid;
     }
 
-    private static boolean isValidTimeSlotUpdate(int bookingID, String roomName, Time wantedStart, Time wantedEnd, Date date) throws InvalidRoomNameException, DAOException {
-        if (!isValidRoomName(roomName)) {
+    @Internal
+    private static boolean isValidTimeSlotUpdate(int bookingID, String roomName, Time wantedStart, Time wantedEnd, Date date, Connection connection) throws InvalidRoomNameException, DAOException {
+        if (!isValidRoomName(roomName, connection)) {
             throw new InvalidRoomNameException(roomName);
         }
         boolean isValid = true;
-        Connection connection = DatabaseConnectionFactory.conn;
         try {
             String query = "select * from is_valid_booking_booking_id(?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
