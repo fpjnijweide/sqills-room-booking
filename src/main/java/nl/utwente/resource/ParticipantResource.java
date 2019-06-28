@@ -47,21 +47,24 @@ public class ParticipantResource {
     @DELETE
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void removeParticipant(@Valid UserIDBookingIDPair pair) {
+    public void removeParticipant(@QueryParam("userid") int userID, @QueryParam("bookingid") int bookingID) {
         // admin
         // participants or owner
         try {
             if (!userIsLoggedIn(securityContext)) {
                 throw401("You are not logged in");
             }
-            if ((!userParticipatesInBooking(context, pair) &&
-                (!userOwnsBooking(securityContext,pair.getBookingid()))) &&
+//            if ((!userParticipatesInBooking(context, pair) &&
+//                (!userOwnsBooking(securityContext,pair.getBookingid()))) &&
+////            if ((!userParticipatesInBooking(securityContext, userID) &&
+            if (!   ParticipantDao.userParticipatesInBooking(bookingID, userID) &&
+            (!userOwnsBooking(securityContext,bookingID)) &&
                 (!userIsAdmin(securityContext)))
             { // If owner = logged in user
                 throw403("You are not authorized to edit this booking");
             }
-            ParticipantDao.removeParticipant(pair.getBookingid(), pair.getUserid());
-        } catch (InvalidBookingIDException | InvalidEmailException e) {
+            ParticipantDao.removeParticipant(bookingID, userID  );
+        } catch (InvalidBookingIDException e) {
             throw404(e.getMessage());
         } catch (InvalidUserIDException e) {
             throw400(e.getMessage());
