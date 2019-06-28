@@ -25,7 +25,12 @@ public class ParticipantDaoTest {
 
     @BeforeClass
     public static void setup() throws BookingException, DAOException {
-        connection = DatabaseConnectionFactory.conn;
+        try {
+            connection = DatabaseConnectionFactory.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
     }
 
     @AfterClass
