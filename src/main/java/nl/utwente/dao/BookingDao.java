@@ -351,9 +351,6 @@ connection.close();
 //    }
 
     public static void updateBooking(int bookingID, SpecifiedBooking booking) throws BookingException, InvalidBookingIDException, DAOException {
-
-
-
         if (!UserDao.isValidEmail(booking.getEmail())) {
             throw new BookingException("Invalid email: " + booking.getEmail());
         }
@@ -362,14 +359,9 @@ connection.close();
             throw new BookingException("Invalid Title");
         }
 
-
         Connection connection = null;
-
-
         try {
             connection = DatabaseConnectionFactory.getConnection();
-
-
 
             if (!isValidBookingID(bookingID, connection)){
                 throw new InvalidBookingIDException(bookingID);
