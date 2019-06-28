@@ -20,31 +20,29 @@ import static nl.utwente.dao.UserDao.isValidEmail;
 
 public class ParticipantDao {
     public static List<User> getParticipantsOfBooking(int bookingID) throws InvalidBookingIDException, DAOException {
-
-
-        List<User> result = new ArrayList<>();
+        List<User> participants = new ArrayList<>();
         Connection connection = null;
-        try {
+        try{
             connection = DatabaseConnectionFactory.getConnection();
+        String participantQuery = "SELECT u.user_id, u.name, u.email, u.administrator " +
+            "FROM sqills.users AS u, sqills.participants AS p " +
+            "WHERE p.booking_id = ? " +
+            "AND u.user_id = p.user_id";
+        PreparedStatement preparedStatement = connection.prepareStatement(participantQuery);
+        preparedStatement.setInt(1, bookingID);
+        ResultSet resultSetParticipants = preparedStatement.executeQuery();
 
-            if (!isValidBookingID(bookingID, connection)) {
-                throw new InvalidBookingIDException(bookingID);
-            }
+        while (resultSetParticipants.next()) {
+            User user = new User();
+            user.setUserid(resultSetParticipants.getInt("user_id"));
+            user.setName(resultSetParticipants.getString("name"));
+            user.setEmail(resultSetParticipants.getString("email"));
+            user.setAdministrator(resultSetParticipants.getBoolean("administrator"));
+            participants.add(user);
+        }
 
-            String query = "select * from get_participants_of_booking(?)";
-
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, bookingID);
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                User user = new User();
-                user.setUserid(resultSet.getInt("user_id"));
-                user.setName(resultSet.getString("name"));
-                user.setEmail(resultSet.getString("email"));
-                user.setAdministrator(resultSet.getBoolean("administrator"));
-                result.add(user);
-            }
+        resultSetParticipants.close();
+        preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DAOException(e.getMessage());
@@ -56,7 +54,7 @@ public class ParticipantDao {
                 e.printStackTrace();
             }
         }
-        return result;
+        return participants;
     }
 
     public static void addParticipantToBooking(int bookingID, int userID) throws InvalidBookingIDException, InvalidUserIDException, DAOException {
