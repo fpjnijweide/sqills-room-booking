@@ -179,9 +179,10 @@ connection.close();
 
     public static boolean userParticipatesInBooking(int bookingID, int userID) {
         boolean result = false;
-        Connection connection = DatabaseConnectionFactory.getConnection();
-
+        Connection connection = null;
         try {
+            connection = DatabaseConnectionFactory.getConnection();
+
             String query = "SELECT * FROM sqills.participants " +
                 "WHERE booking_id = ? AND user_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
