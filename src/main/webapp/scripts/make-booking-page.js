@@ -29,8 +29,7 @@ function bookRoom() {
     } else if (checkRecurringFields()){
         makeRecurringBooking()
     } else {
-        //todo show proper error that recurring fields have to be filled in
-        console.log("fill in all recurring booking fields")
+        showError("fill in all the fields for recurring bookings")
     }
 }
 
@@ -108,6 +107,7 @@ function extractParticpants(participantElements){
     }
     return participantElements;
 }
+
 function addParticipantsToBooking(bookingID) {
     let participantElements = document.getElementsByClassName("participant-in-list");
     for (let i = 0; i < participantElements.length; i++) {
@@ -206,3 +206,6 @@ function setRoom(number){
 }
 
 //todo throw nicer errors instead of console.logs
+module.exports = {
+
+}

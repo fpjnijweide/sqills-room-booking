@@ -170,7 +170,6 @@ throw new DAOException(e.getMessage());
                 e.printStackTrace();
             }
         }
-
         return id;
     }
 
@@ -498,6 +497,7 @@ throw new DAOException(e.getMessage());
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate, title);
         int bookingID= createBooking(booking);
+        System.out.println("here");
         return bookingID;
     }
 
@@ -652,6 +652,8 @@ throw new DAOException(e.getMessage());
             preparedStatement.setInt(1, bookingID);
 
             ResultSet resultSet = preparedStatement.executeQuery();
+            System.out.println(bookingID);
+            System.out.println(resultSet.next());
             isValid = resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
