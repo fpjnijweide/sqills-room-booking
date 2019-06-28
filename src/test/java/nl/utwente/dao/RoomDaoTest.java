@@ -21,6 +21,7 @@ import static nl.utwente.dao.BookingDao.insertBookingToday;
 import static nl.utwente.dao.RoomDao.*;
 import static org.junit.Assert.assertFalse;
 
+
 public class RoomDaoTest {
 
     private static Connection connection;

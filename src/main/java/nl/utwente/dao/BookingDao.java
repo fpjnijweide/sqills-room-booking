@@ -11,8 +11,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-import static nl.utwente.authentication.AuthenticationHandler.userIsAdmin;
-import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.RoomDao.isValidRoomName;
 import static nl.utwente.dao.UserDao.getUserFromEmail;
@@ -160,7 +158,6 @@ throw new DAOException(e.getMessage());
                 e.printStackTrace();
             }
         }
-
         return id;
     }
 
@@ -416,6 +413,7 @@ throw new DAOException(e.getMessage());
         Date sqlDate = new Date((currentTime.getTime()).getTime());
         SpecifiedBooking booking = new SpecifiedBooking(startTime, endTime, roomName, sqlDate, email, isPrivate, title);
         int bookingID= createBooking(booking);
+        System.out.println("here");
         return bookingID;
     }
 
@@ -484,7 +482,7 @@ throw new DAOException(e.getMessage());
         boolean isValid = true;
         Connection connection = DatabaseConnectionFactory.conn;
         try {
-            String query = "select * from is_valid_booking(?, ?)";
+            String query = "select * from get_bookings_on_date_in_room(?, ?)";
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, roomName);
             statement.setDate(2, date);
@@ -526,6 +524,8 @@ throw new DAOException(e.getMessage());
             preparedStatement.setInt(1, bookingID);
 
             ResultSet resultSet = preparedStatement.executeQuery();
+            System.out.println(bookingID);
+            System.out.println(resultSet.next());
             isValid = resultSet.next();
         } catch (SQLException e) {
             e.printStackTrace();
