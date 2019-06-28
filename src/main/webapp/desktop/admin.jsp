@@ -33,8 +33,6 @@
 
                 <button onclick="filterUsers()" class="purple-button">Filter Users</button>
                 <button onclick="showAllUsers()" class="purple-button">Remove Filter</button>
-                <button class="purple-button">Add New User</button>
-
             </div>
 
             <table class="table">
