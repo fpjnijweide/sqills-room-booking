@@ -1,4 +1,30 @@
-### How to deploy locally
+
+
+
+###Update Using custom remote ### 
+
+We have now set up our own deployment server, which can be found at: 
+https://bookroom.nl/sqillsRoomBooking/
+
+in order to long into desktop interface please use the following google account:
+username: sqillsroombookinggroup37
+password: SqillsProject!
+
+If you would like to the google calendar intergration please send you email address too: 
+a.j.heath@student.utwente.nl so that I add you to the calendar, there is no better way too do this as we cannot share calendars 
+with account like the one given above as they are no apart of the utwente google suite.
+In the case of real deployment at sqills this would not be a problem as all users would be in the same g suite.
+
+
+You may need to use an incognito window, as you are likley already signed into 
+google.
+
+
+
+
+
+
+### How to deploy locally (see above)
 
 Install 
 - Java 8
