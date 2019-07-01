@@ -1,29 +1,31 @@
+@import 'styleguide'
+
 .inner
   display: block
   width: 75%
   margin-left: 12.5%
 
 .outer
-  background-color: #73007A
+  background-color: $sqills-purple
   margin-bottom: 20px
 
 form.create-booking-form
   box-sizing: border-box
-  color: #FF7212
+  color: $sqills-orange
 
   button
     width: 100%
-    background-color: #73007A
+    background-color: $sqills-purple
     border-radius: 25px
-    border: 2px solid #FF7212
-    color: #FF7212
+    border: 2px solid $sqills-orange
+    color: $sqills-orange
     opacity: 0.5
 
   input
     font-size: 16px
     padding: 5px
     margin: 0px
-    background-color: #96007a
+    background-color: lighten($sqills-purple, 10%)
     color: white
     border: none
 
@@ -94,10 +96,10 @@ form.create-booking-form
 
 
 .create-booking-title
-  color: #FF7212
+  color: $sqills-orange
 
 #participants-container
-  border: 1px solid #FF7212
+  border: 1px solid $sqills-orange
   min-height: 150px
   display: none
   margin-top: 10px
@@ -117,7 +119,7 @@ form.create-booking-form
   font-size: $size - 0.2*$size
   color: white
   display: block
-  border: 1px solid #FF7212
+  border: 1px solid $sqills-orange
   text-align: center
   cursor: pointer
 
@@ -133,13 +135,13 @@ form.create-booking-form
 .participants-title
   $size: 20px
   height: $size
-  color: #FF7212 !important
+  color: $sqills-orange !important
   line-height: $size
   font-weight: bold
 
 #recurring-info
   font-size: 20px
-  border: 1px solid #FF7212
+  border: 1px solid $sqills-orange
   padding: 20px
   display: none
 
@@ -147,8 +149,8 @@ input[type=number]
   width: 50px
 
 .choose-time-unit
-  background-color: #73007A
-  border: 1px solid #FF7212
+  background-color: $sqills-purple
+  border: 1px solid $sqills-orange
   color: white
 
 .delete
