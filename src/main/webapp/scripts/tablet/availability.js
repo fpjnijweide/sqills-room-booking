@@ -14,7 +14,7 @@ function updateAvailabilityInterval() {
 }
 
 function setAvailableRoomsAndUpdatePage() {
-    axios.get("/api/room/available")
+    axios.get("/sqillsRoomBooking/api/room/available")
         .then(response => {
             available_rooms = response.data
         })

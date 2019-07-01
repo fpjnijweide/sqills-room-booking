@@ -15,7 +15,7 @@ function hideCreationPopUp() {
 }
 
 function openDetailsPopUp(bookingID) {
-    axios.get(`/api/booking/${bookingID}`)
+    axios.get(`/sqillsRoomBooking/api/booking/${bookingID}`)
         .then(response => {
             document.getElementById("pop-up-title").innerText = response.data.title;
             document.getElementById("pop-up-owner").innerHTML = `<span class="booked-by">Booked by ${response.data.userName}`;

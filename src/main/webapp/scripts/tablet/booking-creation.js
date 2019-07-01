@@ -33,7 +33,7 @@ function book15() {
     requestBody.startTime = startTimeString;
     requestBody.endTime = endTimeString;
 
-    axios.post("/api/booking/create", requestBody)
+    axios.post("/sqillsRoomBooking/api/booking/create", requestBody)
         .then(response => {
             $("#success-modal").modal();
         })
@@ -90,7 +90,7 @@ function bookRoom() {
     requestBody.startTime = startTimeString;
     requestBody.endTime = endTimeString;
 
-    axios.post("/api/booking/create", requestBody)
+    axios.post("/sqillsRoomBooking/api/booking/create", requestBody)
         .then(response => {
             $("#success-modal").modal();
         })
@@ -108,7 +108,7 @@ function bookRoom() {
 
 function validateEmail(email) {
     if (email !== "Email (Optional)") {
-        axios.get(`/api/user/validateEmail/${email}`)
+        axios.get(`/sqillsRoomBooking/api/user/validateEmail/${email}`)
             .then(response => {
                 let emailInputElement = document.getElementById("booking-email");
                 if (response.data.valid) {
@@ -149,7 +149,7 @@ function isValidTitle(title) {
 }
 
 function validateDuration(duration) {
-    axios.get(`/api/room/${ROOM_NAME}/availableUntil`)
+    axios.get(`/sqillsRoomBooking/api/room/${ROOM_NAME}/availableUntil`)
         .then(response => {
             if (response.data !== "") {
                 let availableUntilTime = response.data;

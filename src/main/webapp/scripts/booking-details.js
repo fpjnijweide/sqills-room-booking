@@ -11,7 +11,7 @@ function showDetails(bookingID) {
 }
 
 function populateDetails(){
-    axios.get(`/api/booking/${ROOM_ID}`).then((response)=>
+    axios.get(`/sqillsRoomBooking/api/booking/${ROOM_ID}`).then((response)=>
         {
         document.getElementById(`selected-booking-date`).innerText = `Date: ${response.data.date}`;
         document.getElementById(`selected-booking-time`).innerText = `Time: ${response.data.startTime}`;

@@ -30,6 +30,11 @@ import java.util.UUID;
 //Test calendar ID: student.utwente.nl_cq0u4f1tg89j5j8701qpj8bpec@group.calendar.google.com
 //https://developers.google.com/calendar/quickstart/java
 public class GoogleCalendar {
+
+
+    private static final String PUSH_NOTIFICATION_END_POINT_DEV = "https://booking.webrelay.io/api/booking/google-calendar/push-notification-events";
+    private static final String PUSH_NOTIFICATION_END_POINT_PROD =  "http://bookroom.nl/sqillsRoomBooking/";
+
     private static final String APPLICATION_NAME = "sqills-room-booking";
     private static final String gcred = "{\n"+
             "  \"type\": \"service_account\",\n"+
@@ -140,6 +145,12 @@ public class GoogleCalendar {
         return null;
     }
 
+    /**
+     * TODO refactor !!
+     * @param calendarId
+     * @return
+     * @throws IOException
+     */
     public Events getLatestEvents(String calendarId) throws IOException {
         String calendarName = this.calendar.calendars().get(calendarId).execute().getSummary();
         Calendar.Events.List request = this.calendar.events().list(calendarId);
@@ -174,6 +185,7 @@ public class GoogleCalendar {
                         SpecifiedBooking specifiedBooking = eventToBooking(calendarName, event);
                         try {
                             BookingDao.createBooking(specifiedBooking);
+                            BookingDao.
                             System.out.println("Event added to DB");
                         } catch (BookingException e) {
                             System.out.println(e.getMessage());
@@ -181,6 +193,7 @@ public class GoogleCalendar {
                             try {
                                 this.calendar.events().delete(calendarId, event.getId()).execute();
                             } catch (GoogleJsonResponseException ex) {
+                                System.out.println(e.getMessage());
                                 System.out.println("Event Already Removed");
                             }
                         } catch (DAOException e) {
@@ -212,7 +225,6 @@ public class GoogleCalendar {
         specifiedBooking.setDate(new java.sql.Date(event.getStart().getDateTime().getValue()));
         specifiedBooking.setEndTime(removeDateFromTime(event.getEnd()));
         specifiedBooking.setStartTime(removeDateFromTime(event.getStart()));
-
         specifiedBooking.setRoomName("1");
         specifiedBooking.setTitle(event.getSummary());
         specifiedBooking.setIsPrivate(false);
@@ -224,12 +236,18 @@ public class GoogleCalendar {
         this.calendar.calendarList().get(calendarId).execute();
         return this.calendar.events().get(calendarId, eventResourceId).execute();
     }
+
+
+
+    /*
+    Watcher set up not called by proper program
+     */
     private void setupWatchChannel(String calendarID) throws IOException {
         Channel channel = new Channel();
         channel.setId(UUID.randomUUID().toString());
         channel.setType("web_hook");
         channel.setToken(calendarID);
-        channel.setAddress("https://booking.webrelay.io/api/booking/google-calendar/push-notification-events");
+        channel.setAddress(PUSH_NOTIFICATION_END_POINT_PROD);
         Channel response =  this.calendar.events().watch(calendarID, channel).execute();
         System.out.println("Set up for id: "+calendarID);
         System.out.println(response);

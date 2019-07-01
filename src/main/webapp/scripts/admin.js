@@ -55,7 +55,7 @@ function hideUsersBasedOnAdmin(adminFilter) {
 }
 
 function showUser(userID) {
-    axios.get(`/api/user/u/${userID}`)
+    axios.get(`/sqillsRoomBooking/api/user/u/${userID}`)
         .then(response => {
             document.getElementById("user-id").innerText = response.data.userid;
             document.getElementById("user-name").value = response.data.name;
@@ -72,7 +72,7 @@ function showUser(userID) {
 function deleteUser() {
     let userID = document.getElementById("user-id").innerText;
     console.log(userID);
-    axios.delete(`/api/user/${userID}`)
+    axios.delete(`/sqillsRoomBooking/api/user/${userID}`)
         .then(response => {
             location.reload();
         })
@@ -91,7 +91,7 @@ function updateUser() {
         "administrator": document.getElementById("user-admin").checked
     };
 
-    axios.put(`/api/user/${userID}`, requestBody)
+    axios.put(`/sqillsRoomBooking/api/user/${userID}`, requestBody)
         .then(response => {
             location.reload();
         })
@@ -107,7 +107,7 @@ function createUser() {
         "administrator": document.getElementById("user-admin").checked
     };
 
-    axios.post(`/api/user/`, requestBody)
+    axios.post(`/sqillsRoomBooking/api/user/`, requestBody)
         .then(response => {
             location.reload();
         })

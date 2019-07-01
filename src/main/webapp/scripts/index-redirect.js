@@ -1,7 +1,7 @@
 function redirectToRoomPage(roomName) {
-    window.location = `/tablet/room/${roomName}`;
+    window.location = `tablet/room/${roomName}`;
 }
 
 function redirectToDesktopInterface() {
-    window.location = `/desktop/rooms`;
+    window.location = `desktop/rooms`;
 }

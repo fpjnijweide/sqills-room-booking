@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,7 +17,7 @@ public class SpecificRoomServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String uri = req.getRequestURI();
         String[] splitUri = uri.split("/");
-        String roomName = splitUri[3];
+        String roomName = splitUri[splitUri.length - 1];
         Connection connection = null;
         try {
             connection =DatabaseConnectionFactory.getConnection();
@@ -26,7 +25,7 @@ public class SpecificRoomServlet extends HttpServlet {
                 connection.commit();
                 connection.close();
                 res.setStatus(404);
-                res.getWriter().write("404");
+                res.getWriter().write("404 The room name could not be found.");
             } else {
                 req.setAttribute("roomName", roomName); // TODO maybe change "id" thing
                 req.getRequestDispatcher("/tablet/specific-room.jsp").forward(req, res);

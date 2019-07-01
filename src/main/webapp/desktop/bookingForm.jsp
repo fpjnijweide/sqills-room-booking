@@ -1,4 +1,4 @@
-<script src="/scripts/tablet/make-tablet-booking.js"></script>
+<script src="/sqillsRoomBooking/scripts/tablet/make-tablet-booking.js"></script>
 <form class="create-booking-form">
     <label>Booking Title</label>
     <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
@@ -85,7 +85,7 @@
     $(document).ready(function(){
 
 //init data
-        axios.get(`/api/room/list`).then((response) => { // GET request
+        axios.get(`/sqillsRoomBooking/api/room/list`).then((response) => { // GET request
             rooms = response.data;
             for (let i = 0; i <= rooms.length; i++) {
                 if (rooms[i] != undefined) {

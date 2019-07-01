@@ -2,14 +2,10 @@ package nl.utwente.servlet.desktopInterface;
 
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
-import nl.utwente.dao.RoomDao;
 import nl.utwente.dao.UserDao;
 import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
-import nl.utwente.exceptions.InvalidRoomNameException;
 import nl.utwente.model.OutputBooking;
-import nl.utwente.model.OutputBookingWithParticipants;
-import nl.utwente.model.SpecifiedBooking;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +24,7 @@ public class BookingViewServlet extends HttpServlet {
 //            if (BookingDao.)
             String uri = req.getRequestURI();
             String[] splitUri = uri.split("/");
-            String bookingID = splitUri[3];
+            String bookingID = splitUri[splitUri.length - 1];
             req.setAttribute("id", bookingID); // TODO maybe change "id" thing
             try {
                 OutputBooking booking = BookingDao.getOutputBooking(Integer.valueOf(bookingID));

@@ -4,7 +4,7 @@ function checkFieldsAndBook(){
         "emails": emails
     }
     if (emails.length > 0) {
-        axios.post("/api/user/email/check", requestBody)
+        axios.post("/sqillsRoomBooking/api/user/email/check", requestBody)
             .then(response => {
                 let data= response.data;
                 if (data.emails.length == 0 && checkAllFieldsFilledIn()){
@@ -63,14 +63,14 @@ function makeBooking(){
         "isPrivate": isPrivate
     };
 
-    axios.post("/api/booking/create", requestBody)
+    axios.post("/sqillsRoomBooking/api/booking/create", requestBody)
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
             // initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
-            window.location.href="/desktop/booking/" + id;
+            window.location.href="/sqillsRoomBooking/desktop/booking/" + id;
             initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participants, isPrivate, null)));
-            // document.location.replace(`/api/booking/${id}`);
+            // document.location.replace(`/sqillsRoomBooking/api/booking/${id}`);
         }).catch((response) => {
             showError(response.response.data)
     });
@@ -93,7 +93,7 @@ function makeRecurringBooking(){
         "repeatEvery": document.getElementById("time").value,
         "endingAt": document.getElementById("recurring-end-date").value,
     };
-    axios.post("/api/booking/create/recurring", requestBody)
+    axios.post("/sqillsRoomBooking/api/booking/create/recurring", requestBody)
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
@@ -116,7 +116,7 @@ function addParticipantsToBooking(bookingID) {
             "email": participantsElements[i].innerText,
             "bookingid": bookingID
         };
-        axios.post("/api/participant/add", requestObject);
+        axios.post("/sqillsRoomBooking/api/participant/add", requestObject);
     }
 }
 
@@ -201,7 +201,3 @@ function setRoom(number){
     document.getElementById("room-select").value = number;
 }
 
-//todo throw nicer errors instead of console.logs
-module.exports = {
-
-}

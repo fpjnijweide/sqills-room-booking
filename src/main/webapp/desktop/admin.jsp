@@ -11,7 +11,7 @@
 <head>
     <title>Admin Page</title>
     <jsp:include page="head.jsp"/>
-    <script src="/scripts/admin.js"></script>
+    <script src="/sqillsRoomBooking/scripts/admin.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>

@@ -1,4 +1,5 @@
 
+
 drop function if exists get_specific_booking(p_booking_id int);
 CREATE or replace FUNCTION get_specific_booking(p_booking_id int) RETURNS TABLE(booking_id int, start_time time, end_time time, name text, room_name text, date date, is_private boolean, title text)
     AS $$

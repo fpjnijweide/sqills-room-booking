@@ -1,4 +1,4 @@
-GET /api/booking/{bookingID}
+GET /sqillsRoomBooking/api/booking/{bookingID}
 Returns a booking with a specified bookingID
 {
     "bookingID": {bookingID}
@@ -8,7 +8,7 @@ Returns a booking with a specified bookingID
     "date": {date}
 }
 
-POST /api/booking/create
+POST /sqillsRoomBooking/api/booking/create
 Creates a booking with for a specified room
 BODY:
 {
@@ -25,7 +25,7 @@ Returns
     "bookingID": {bookingID},
 }
 
-PUT /api/booking/{bookingID}/update
+PUT /sqillsRoomBooking/api/booking/{bookingID}/update
 Updates a specific booking
 BODY:
 {
@@ -40,7 +40,7 @@ Returns:
     "success": [true|false],
 }
 
-DELETE /api/booking/{bookingID}/delete
+DELETE /sqillsRoomBooking/api/booking/{bookingID}/delete
 Deletes a specific booking
 Returns:
 {

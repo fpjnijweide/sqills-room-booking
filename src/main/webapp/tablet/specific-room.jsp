@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>jTemp</title>
-    <link rel="stylesheet" href="/css/tablet-design.css">
+    <link rel="stylesheet" href="/sqillsRoomBooking/css/tablet-design.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -24,11 +24,11 @@
         }
     </script>
 
-    <script src="/scripts/tablet/booking-creation.js"></script>
-    <script src="/scripts/tablet/time.js"></script>
-    <script src="/scripts/tablet/availability.js"></script>
-    <script src="/scripts/tablet/pop-up-controller.js"></script>
-    <script src="/scripts/tablet/bookings-overview.js"></script>
+    <script src="/sqillsRoomBooking/scripts/tablet/booking-creation.js"></script>
+    <script src="/sqillsRoomBooking/scripts/tablet/time.js"></script>
+    <script src="/sqillsRoomBooking/scripts/tablet/availability.js"></script>
+    <script src="/sqillsRoomBooking/scripts/tablet/pop-up-controller.js"></script>
+    <script src="/sqillsRoomBooking/scripts/tablet/bookings-overview.js"></script>
 </head>
 <body onload="updateTime(); updateAvailabilityInterval(); updateBookingsOverviewInterval();">
     <div class="blur-container">

@@ -14,18 +14,18 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
       integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="/timepicker/clockpicker-gh-pages/dist/bootstrap-clockpicker.min.css">
-<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" type="text/css" href="/sqillsRoomBooking/timepicker/clockpicker-gh-pages/dist/bootstrap-clockpicker.min.css">
+<link rel="stylesheet" href="/sqillsRoomBooking/css/desktop.css">
 <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap" rel="stylesheet">
-<script src="/scripts/clickable-row.js"></script>
-<script src="/scripts/error-handling.js"></script>
+<script src="/sqillsRoomBooking/scripts/clickable-row.js"></script>
+<script src="/sqillsRoomBooking/scripts/error-handling.js"></script>
 <%--TODO remove--%>
 <meta name="google-site-verification" content="jefKHpiLHqUKSsbBFoXqdaEe1vT0oj4wFWnUB9LshvE" />
 <%--Google Auth and Calendar API --%>
-<script src="/scripts/google-calendar.js"></script>
+<script src="/sqillsRoomBooking/scripts/google-calendar.js"></script>
 <script src="https://apis.google.com/js/platform.js?onload=onLoad" async></script>
 <script src="https://apis.google.com/js/api.js" async></script>
-<script type="text/javascript" src="/timepicker/clockpicker-gh-pages/dist/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript" src="/sqillsRoomBooking/timepicker/clockpicker-gh-pages/dist/bootstrap-clockpicker.min.js"></script>
 
 <script src="https://apis.google.com/js/platform.js?" async></script>
 <script async defer src="https://apis.google.com/js/api.js?" onload="onLoadGAPI()" ></script>

@@ -3,7 +3,7 @@ function login(){
     let username = document.getElementById("username").value;
     if (validInput(password) && validInput(username)){
         let jsonBody = {"username":  username,  "password": password};
-        axios.post(`/api/user/login`, jsonBody).then((response) => {
+        axios.post(`/sqillsRoomBooking/api/user/login`, jsonBody).then((response) => {
             window.location="/desktop";
 
 
@@ -24,9 +24,9 @@ function onSignIn(googleUser){
         function(fail){
             alert(JSON.stringify({message: "fail", value: fail}));
         });
-    axios.post('/api/user/googleauth',googleUser.getAuthResponse().id_token).then((response
+    axios.post('/sqillsRoomBooking/api/user/googleauth',googleUser.getAuthResponse().id_token).then((response
     )=>{
-        window.location="/desktop";
+        window.location="/sqillsRoomBooking/desktop";
     })
 
 }

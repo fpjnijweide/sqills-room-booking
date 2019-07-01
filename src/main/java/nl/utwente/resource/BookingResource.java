@@ -1,7 +1,6 @@
 package nl.utwente.resource;
 
 import com.google.api.services.calendar.model.Event;
-import com.google.inject.Provides;
 import nl.utwente.authentication.AuthenticationFilter;
 import nl.utwente.dao.BookingDao;
 import nl.utwente.exceptions.BookingException;
@@ -12,8 +11,6 @@ import nl.utwente.model.OutputBooking;
 import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
-import nl.utwente.model.*;
-import nl.utwente.exceptions.InvalidEmailException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -23,9 +20,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
-import javax.ws.rs.core.*;
-import javax.ws.rs.ext.Provider;
-import javax.xml.ws.WebServiceProvider;
 import java.sql.Date;
 import java.util.List;
 
@@ -33,9 +27,6 @@ import static nl.utwente.authentication.AuthenticationHandler.*;
 import static nl.utwente.dao.BookingDao.prepareBooking;
 import static nl.utwente.dao.ParticipantDao.getParticipantsOfBooking;
 import static nl.utwente.dao.UserDao.getUserFromContext;
-import static nl.utwente.dao.UserDao.getUserFromEmail;
-import static nl.utwente.authentication.AuthenticationHandler.userIsLoggedIn;
-import static nl.utwente.authentication.AuthenticationHandler.userOwnsBooking;
 import static nl.utwente.exceptions.ExceptionHandling.*;
 
 @Path("/booking")
@@ -226,18 +217,6 @@ public class BookingResource {
         @QueryParam("startDate") Date startDate,
         @QueryParam("endDate") Date endDate
     ) {
-        System.out.println(title);
-        System.out.println(email);
-        System.out.println(startDate);
-        System.out.println(endDate);
-//        if (startDate == null) {
-//            startDate = new Date(0);
-//        }
-//
-//        if (endDate == null) {
-//            endDate = new Date(2050, 1, 1);
-//        }
-//
         try {
             return BookingDao.getFilteredBookings(
                 email,

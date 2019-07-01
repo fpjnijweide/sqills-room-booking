@@ -20,7 +20,7 @@
                     <% } else { %>
                         <div class="room-state taken"></div>
                     <% } %>
-                    <a href="/desktop/room/<%= id %>" class="room-card-link">
+                    <a href="/sqillsRoomBooking/desktop/room/<%= id %>" class="room-card-link">
                         <div class="book-room free">View this room</div>
                     </a>
                     <%-- Todo: Implement --%>
