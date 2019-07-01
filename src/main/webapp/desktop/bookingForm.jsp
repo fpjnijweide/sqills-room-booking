@@ -3,41 +3,24 @@
     <label>Booking Title</label>
     <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
 
-<%--    <label>Your Email</label>--%>
-<%--    <input id="booking-email" class="booking-email full-width" type="text" placeholder="Your Email" onkeyup="autoComplete(this)">--%>
-
     <label>Date</label>
     <input type="date" id="booking-date" class="booking-date full-width">
 
     <label>Room ID</label>
-<%--    <input type="text" id="booking-roomid" class="full-width" placeholder="Room-ID">--%>
     <div class="choose-room-for-booking">
         <select id="room-select" class="choose-time-unit">
         </select>
     </div>
 
-
     <label>Start Time</label>
     <div>
         <input type="time" id="booking-start-time">
     </div>
-<%--    <div class="input-group clockpicker" onclick="adaptTimeText()">--%>
-<%--        <input type="text" class="form-control" value="09:30" id="booking-starttime">--%>
-<%--        &lt;%&ndash;                            <span class="input-group-addon">&ndash;%&gt;--%>
-<%--        &lt;%&ndash;                                <span class="glyphicon glyphicon-time"></span>&ndash;%&gt;--%>
-<%--        &lt;%&ndash;                            </span>&ndash;%&gt;--%>
-<%--    </div>--%>
+
     <label>End Time</label>
     <div>
         <input type="time" id="booking-end-time">
     </div>
-
-<%--    <div class="input-group clockpicker" onclick="adaptTimeText()">--%>
-<%--        <input type="text" class="form-control" value="09:30" id="booking-endtime">--%>
-<%--        &lt;%&ndash;                            <span class="input-group-addon">&ndash;%&gt;--%>
-<%--        &lt;%&ndash;                                <span class="glyphicon glyphicon-time"></span>&ndash;%&gt;--%>
-<%--        &lt;%&ndash;                            </span>&ndash;%&gt;--%>
-<%--    </div>--%>
 
     <label>Private meeting</label>
     <input type="checkbox" id="booking-isPrivate">

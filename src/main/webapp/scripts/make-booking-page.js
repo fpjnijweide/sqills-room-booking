@@ -197,7 +197,6 @@ function adaptTimeText(){
 }
 
 function setRoom(number){
-    console.log(number)
     document.getElementById("room-select").value = number;
 }
 
