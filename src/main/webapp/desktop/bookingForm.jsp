@@ -1,29 +1,49 @@
 <script src="/sqillsRoomBooking/scripts/tablet/make-tablet-booking.js"></script>
 <form class="create-booking-form">
-    <label>Booking Title</label>
-    <input id="booking-title" class="booking-title full-width" type="text" placeholder="Booking Title">
-
-    <label>Date</label>
-    <input type="date" id="booking-date" class="booking-date full-width">
-
-    <label>Room ID</label>
-    <div class="choose-room-for-booking">
-        <select id="room-select" class="choose-time-unit">
-        </select>
+    <div class="booking-form-group">
+        <label>Booking Title</label>
+        <input id="booking-title" class="booking-title full-width" type="text" >
     </div>
 
-    <label>Start Time</label>
-    <div>
+    <div class="booking-form-group">
+        <label>Date</label>
+        <input type="date" id="booking-date" class="booking-date full-width">
+    </div>
+
+    <div class="booking-form-group time-group">
+        <label>Time</label>
         <input type="time" id="booking-start-time">
-    </div>
-
-    <label>End Time</label>
-    <div>
+        <span class="time-separator"> - </span>
         <input type="time" id="booking-end-time">
     </div>
 
-    <label>Private meeting</label>
-    <input type="checkbox" id="booking-isPrivate">
+    <div class="booking-form-group">
+        <label>Room ID</label>
+        <div class="choose-room-for-booking">
+            <select class="selectpicker" id="room-select" class="choose-time-unit"></select>
+        </div>
+    </div>
+
+    <div class="booking-form-group">
+        <label>Private meeting</label>
+        <input type="checkbox" id="booking-isPrivate">
+    </div>
+
+    <div class="booking-form-group">
+        <label>Recurring Booking</label>
+        <div class="radio-container">
+            <input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)">
+        </div>
+        <div class="radio-text">Yes</div>
+        <div class="radio-container">
+            <input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)">
+        </div>
+        <div class="radio-text">No</div>
+    </div>
+
+
+
+
     <div class="participants-view">
         <table>
             <tr>
@@ -46,8 +66,8 @@
     </div>
     <div class="recurring">
         <label>Recurring booking</label>
-        <input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes
-        <input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No
+        <%--<input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes--%>
+        <%--<input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No--%>
         <div id="recurring-info">I want a booking every
             <input id="time" type="number" oninput="checkRecurringDays()">
             <select id="choose-time-unit" class="choose-time-unit" onchange="checkRecurringDays()">

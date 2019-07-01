@@ -1,64 +1,141 @@
 @import 'styleguide'
 
-.inner
-  display: block
-  width: 75%
-  margin-left: 12.5%
+$booking-group-height: 50px
 
-.outer
-  background-color: $sqills-purple
-  margin-bottom: 20px
+.create-booking-form
+  ::placeholder
+    color: $sqills-grey
 
-form.create-booking-form
-  box-sizing: border-box
-  color: $sqills-orange
-
-  button
-    width: 100%
-    background-color: $sqills-purple
-    border-radius: 25px
-    border: 2px solid $sqills-orange
-    color: $sqills-orange
-    opacity: 0.5
+  label
+    color: $sqills-grey
 
   input
-    font-size: 16px
-    padding: 5px
-    margin: 0px
     background-color: lighten($sqills-purple, 10%)
-    color: white
+    outline: none
     border: none
+    color: $sqills-grey
+    transition: color 0.25s linear 0s
+    margin-right: 10px
 
-  input::placeholder
-    color: white
-    opacity: 1
-
-  input::-ms-input-placeholder
-    color: white
-
-  input.full-width
-    width: 100%
-
-
-  .booking-date::-webkit-input-placeholder
+  input:hover, input:focus
     color: white
 
-  .booking-date:-moz-placeholder
-    color: white
-    opacity: 1
+  .booking-form-group
+    margin-top: 10px
+    margin-bottom: 10px
+    display: flex
+    height: $booking-group-height
 
-  .booking-date::-moz-placeholder
-    color: white
-    opacity: 1
+    label
+      height: $booking-group-height
+      font-size: 20px
+      line-height: $booking-group-height
+      width: 200px
+      text-align: right
+      margin-right: 10px
 
-  .booking-date:-ms-input-placeholder
-    color: white
+    input
+      height: $booking-group-height
+      flex-grow: 1
+      font-size: 20px
+      padding: 10px
+
+    input[type="checkbox"]
+      flex-grow: 0
+
+    .choose-room-for-booking
+      flex-grow: 1
+      margin-right: 10px
+
+      select
+        width: 100%
+        height: $booking-group-height
+        background-color: lighten($sqills-purple, 10%)
+        border: none
+        color: $sqills-grey
+        font-size: 20px
+
+      select:active
+        outline: 0
+
+    .radio-container
+      height: $booking-group-height
+
+    .radio-text
+      color: $sqills-grey
+      height: $booking-group-height
+      line-height: $booking-group-height
+      font-size: 20px
+      margin-right: 10px
+
+  .time-group
+    span.time-separator
+      width: 10px
+      height: $booking-group-height
+      line-height: $booking-group-height
+      color: $sqills-grey
+      font-size: 30px
+      margin-right: 10px
+
+//.inner
+//  display: block
+//  width: 75%
+//  margin-left: 12.5%
+//
+//.outer
+//  background-color: $sqills-purple
+//  margin-bottom: 20px
+//
+//form.create-booking-form
+//  box-sizing: border-box
+//  color: $sqills-orange
+//
+//  button
+//    width: 100%
+//    background-color: $sqills-purple
+//    border-radius: 25px
+//    border: 2px solid $sqills-orange
+//    color: $sqills-orange
+//    opacity: 0.5
+
+  //input
+  //  font-size: 16px
+  //  padding: 5px
+  //  margin: 0px
+  //  background-color: lighten($sqills-purple, 10%)
+  //  color: white
+  //  border: none
+
+  //input::placeholder
+  //  color: white
+  //  opacity: 1
+  //
+  //input::-ms-input-placeholder
+  //  color: white
+  //
+  //input.full-width
+  //  width: 100%
+  //
+  //
+  //.booking-date::-webkit-input-placeholder
+  //  color: white
+  //
+  //.booking-date:-moz-placeholder
+  //  color: white
+  //  opacity: 1
+  //
+  //.booking-date::-moz-placeholder
+  //  color: white
+  //  opacity: 1
+  //
+  //.booking-date:-ms-input-placeholder
+  //  color: white
 
 
   label
-    margin: 0px
-    font-size: 20px
-    font-weight: lighter
+    //margin: 0px
+    //font-size: 20px
+    //font-weight: lighter
 
   .time-container
     input.start-time[time]
@@ -84,78 +161,78 @@ form.create-booking-form
       width: 50%
       margin-left: 25%
 
-  #participants-list
-    width: 50%
-    margin-left: 50%
-    text-align: center
-    margin-top: 20px
-    margin-bottom: 20px
+//  #participants-list
+//    width: 50%
+//    margin-left: 50%
+//    text-align: center
+//    margin-top: 20px
+//    margin-bottom: 20px
+//
+//
+//
+//
+//
+//.create-booking-title
+//  color: $sqills-orange
+//
+//#participants-container
+//  border: 1px solid $sqills-orange
+//  min-height: 150px
+//  display: none
+//  margin-top: 10px
+//
+//  .participants-view
+//    text-align: center
+//    font-size: 25px
+//    width: 100%
 
 
-
-
-
-.create-booking-title
-  color: $sqills-orange
-
-#participants-container
-  border: 1px solid $sqills-orange
-  min-height: 150px
-  display: none
-  margin-top: 10px
-
-  .participants-view
-    text-align: center
-    font-size: 25px
-    width: 100%
-
-
-
-.add-participants
-  $size: 20px
-  width: $size
-  height: $size
-  line-height: $size
-  font-size: $size - 0.2*$size
-  color: white
-  display: block
-  border: 1px solid $sqills-orange
-  text-align: center
-  cursor: pointer
-
-.submit-button
-  margin-top: 20px
-
-.participant-in-list
-  padding: 0
-  margin: 0
-  width: 70%
-  font-style: italic
-
-.participants-title
-  $size: 20px
-  height: $size
-  color: $sqills-orange !important
-  line-height: $size
-  font-weight: bold
-
-#recurring-info
-  font-size: 20px
-  border: 1px solid $sqills-orange
-  padding: 20px
-  display: none
-
-input[type=number]
-  width: 50px
-
-.choose-time-unit
-  background-color: $sqills-purple
-  border: 1px solid $sqills-orange
-  color: white
-
-.delete
-  color: red
-  font-weight: bolder
-  cursor: pointer
-  float: right
+//
+//.add-participants
+//  $size: 20px
+//  width: $size
+//  height: $size
+//  line-height: $size
+//  font-size: $size - 0.2*$size
+//  color: white
+//  display: block
+//  border: 1px solid $sqills-orange
+//  text-align: center
+//  cursor: pointer
+//
+//.submit-button
+//  margin-top: 20px
+//
+//.participant-in-list
+//  padding: 0
+//  margin: 0
+//  width: 70%
+//  font-style: italic
+//
+//.participants-title
+//  $size: 20px
+//  height: $size
+//  color: $sqills-orange !important
+//  line-height: $size
+//  font-weight: bold
+//
+//#recurring-info
+//  font-size: 20px
+//  border: 1px solid $sqills-orange
+//  padding: 20px
+//  display: none
+//
+//input[type=number]
+//  width: 50px
+//
+//.choose-time-unit
+//  background-color: $sqills-purple
+//  border: 1px solid $sqills-orange
+//  color: white
+//
+//.delete
+//  color: red
+//  font-weight: bolder
+//  cursor: pointer
+//  float: right
 
