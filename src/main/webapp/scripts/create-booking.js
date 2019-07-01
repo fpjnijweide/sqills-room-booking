@@ -11,7 +11,7 @@
 //         "isPrivate": isPrivate,
 //         "title": title
 //     };
-//     axios.post("/api/booking/create", requestBody)
+//     axios.post("/sqillsRoomBooking/api/booking/create", requestBody)
 //         .then(response => {
 //             $("#success-modal").modal();
 //             insertGCalendarEvent(createGCalendarEvent(ROOM_ID,date, startTime, endTime, title, null, isPrivate, null));
@@ -33,7 +33,7 @@
 //     // POST create request is sent. We have to delay this GET request to make sure the
 //     // database is actually updated.
 //     await sleep(2000);
-//     axios.get(`/api/room/${ROOM_ID}/week`)
+//     axios.get(`/sqillsRoomBooking/api/room/${ROOM_ID}/week`)
 //         .then(response => {
 //             let element = document.getElementById("bookings-table");
 //             element.innerHTML = "<tr>" +

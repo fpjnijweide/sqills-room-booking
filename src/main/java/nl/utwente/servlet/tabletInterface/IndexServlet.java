@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class IndexServlet extends HttpServlet {
     @Override
@@ -18,7 +16,7 @@ public class IndexServlet extends HttpServlet {
         try {
             req.setAttribute("roomNames", RoomDao.getAllRoomNames());
             System.out.println(RoomDao.getAllRoomNames());
-            req.getRequestDispatcher("/tablet/index.jsp").forward(req, res);
+            req.getRequestDispatcher("tablet/index.jsp").forward(req, res);
         } catch (DAOException e) {
             res.setStatus(500);
             res.getWriter().write("Something went terribly wrong");

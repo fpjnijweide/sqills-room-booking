@@ -5,7 +5,7 @@ function updateBookingsOverviewInterval() {
 }
 
 function getBookingsAndUpdatePage() {
-    axios.get('/api/room/' + ROOM_NAME)
+    axios.get('/sqillsRoomBooking/api/room/' + ROOM_NAME)
         .then(response => {
             updatePage(response.data);
         });

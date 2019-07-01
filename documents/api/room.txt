@@ -1,4 +1,4 @@
-GET /api/room/{roomID}
+GET /sqillsRoomBooking/api/room/{roomID}
 Returns all the bookings for this specific room for today. The room is specified by a room number.
 [
     {
@@ -13,7 +13,7 @@ Returns all the bookings for this specific room for today. The room is specified
     }
 ]
 
-POST /api/room/{roomID}/book
+POST /sqillsRoomBooking/api/room/{roomID}/book
 BODY:
 {
     "startTime": {startTime},

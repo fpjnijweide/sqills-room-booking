@@ -21,7 +21,7 @@ public class RoomServlet extends HttpServlet {
         } else {
             String uri = req.getRequestURI();
             String[] splitUri = uri.split("/");
-            String roomName = splitUri[3];
+            String roomName = splitUri[splitUri.length - 1];
             req.setAttribute("id", roomName); // TODO maybe change "id" thing
             try {
                 req.setAttribute("bookings", RoomDao.getBookingsForThisWeek(roomName,email));

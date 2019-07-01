@@ -59,6 +59,3 @@ function changeRepeatTypeToGoogleApi(repeatEveryType){
 
 }
 
-module.exports = {
-    createGCalendarEvent: createGCalendarEvent
-}

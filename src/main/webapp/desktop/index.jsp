@@ -2,7 +2,7 @@
 <head>
     <title>Desktop Interface</title>
     <jsp:include page="head.jsp"/>
-    <script src="/scripts/display-available-rooms.js"></script>
+    <script src="/sqillsRoomBooking/scripts/display-available-rooms.js"></script>
 </head>
 <body>
     <jsp:include page="nav.jsp"/>

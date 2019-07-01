@@ -4,14 +4,14 @@
 <%@ page import="nl.utwente.authentication.AuthenticationFilter" %>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/specific-room.css">
-    <link rel="stylesheet" type="text/css" href="/css/book.css">
+    <link rel="stylesheet" type="text/css" href="/sqillsRoomBooking/css/specific-room.css">
+    <link rel="stylesheet" type="text/css" href="/sqillsRoomBooking/css/book.css">
     <title>Room <%= request.getAttribute("id") %></title>
     <jsp:include page="head.jsp"/>
-    <script src="/scripts/create-booking.js"></script>
-    <script src="/scripts/booking-details.js"></script>
-    <script src="/scripts/specific-room.js"></script>
-    <script src="/scripts/make-booking-page.js"></script>
+    <script src="/sqillsRoomBooking/scripts/create-booking.js"></script>
+    <script src="/sqillsRoomBooking/scripts/booking-details.js"></script>
+    <script src="/sqillsRoomBooking/scripts/specific-room.js"></script>
+    <script src="/sqillsRoomBooking/scripts/make-booking-page.js"></script>
 
     <script>
         const ROOM_ID = "<%= request.getAttribute("id") %>";
@@ -55,7 +55,7 @@
                         }
                     </script>
                     <% if (!bookings.get(i).getUserName().equals("PRIVATE")) { %>
-                    <tr class="tablerow" onclick="window.location.href='/desktop/booking/<%= bookings.get(i).getBookingid()%>'">
+                    <tr class="tablerow" onclick="window.location.href='/sqillsRoomBooking/desktop/booking/<%= bookings.get(i).getBookingid()%>'">
                     <% } else { %>
                     <tr>
                     <% } %>

@@ -10,7 +10,7 @@
 <head>
     <title>Bookings</title>
     <jsp:include page="head.jsp"/>
-    <script src="/scripts/filter-bookings.js"></script>
+    <script src="/sqillsRoomBooking/scripts/filter-bookings.js"></script>
 </head>
 <body onload="filterBookings();">
     <jsp:include page="nav.jsp"/>

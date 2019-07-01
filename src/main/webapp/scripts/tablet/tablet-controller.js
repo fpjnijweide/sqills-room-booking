@@ -9,7 +9,7 @@ function enterPressed(event) {
 }
 
 function getRooms(){
-    axios.get(`/api/room/list`).then((response) => { // GET request
+    axios.get(`/sqillsRoomBooking/api/room/list`).then((response) => { // GET request
         rooms = response.data;
     }).catch((error) => {
         if (error.response) {
@@ -59,7 +59,7 @@ function checkIfRoomTaken(data) {
 }
 
 function updatePage(roomNumberInput, update) {
-    axios.get(`/api/room/${roomNumberInput}`).then((response) => { // GET request
+    axios.get(`/sqillsRoomBooking/api/room/${roomNumberInput}`).then((response) => { // GET request
         let data = response.data;
         if(!checkIfRoomTaken(data)){
             showing = false;
@@ -94,7 +94,7 @@ function updatePage(roomNumberInput, update) {
 }
 
 function callDisplayFreeRooms(id){
-    axios.get(`/api/room/${id}`).then(response => { // GET request
+    axios.get(`/sqillsRoomBooking/api/room/${id}`).then(response => { // GET request
         let roomStartTime = getEarliestStartTime(response.data); // Check if room is free, and get the time of the next booking
         displayOtherFreeRooms(roomStartTime, id);
     }).catch((error) => {
@@ -117,7 +117,7 @@ function callDisplayFreeRooms(id){
     });
 }
 function checkIfOtherRoomsAreBooked() {
-    axios.get(`/api/room/list`).then((response) => { // GET request
+    axios.get(`/sqillsRoomBooking/api/room/list`).then((response) => { // GET request
         let listOfRoomIDs = response.data
         for(let id of listOfRoomIDs) {
             if (id != currentRoomName) { // Don't check for current room, obviously

@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <jsp:include page="head.jsp"/>
-    <script src="/scripts/login.js"></script>
+    <script src="/sqillsRoomBooking/scripts/login.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/desktop.css">
+    <link rel="stylesheet" type="text/css" href="/sqillsRoomBooking/css/desktop.css">
 </head>
 <body>
 <%--<jsp:include page="nav.jsp"/>--%>
@@ -15,7 +15,7 @@
 <tr>
     <td><div class="g-signin2" data-width="400" data-height="75" data-onsuccess="onSignIn"></div></td>
 </tr>
-        <img class="login-sqills-logo" src="/assets/sqills-logo.svg">
+        <img class="login-sqills-logo" src="/sqillsRoomBooking/assets/sqills-logo.svg">
         <%--<tr>--%>
             <%--<td>Username</td>--%>
             <%--<td><input type="username" id="username"></td>--%>

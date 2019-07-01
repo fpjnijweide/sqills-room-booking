@@ -50,7 +50,7 @@ function MakeTabletBooking() {
     }
     if (validEmail(email)){
         let jsonBody = {"startTime": `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`, "endTime": `${endTime.getHours()}:${endTime.getMinutes()}:${new Date().getSeconds()}`, "email": email, "isPrivate": private, "title" : title};
-        axios.post(`/api/room/` + currentRoomName + `/book`, jsonBody).then((response) => {
+        axios.post(`/sqillsRoomBooking/api/room/` + currentRoomName + `/book`, jsonBody).then((response) => {
             displayBooked(response.data);
         }).catch((error) => {
             if (error.response) {
@@ -109,7 +109,7 @@ function autoComplete(input){
     console.log(input)
     let email = input;
     if (email.value != "") {
-        axios.get(`/api/user/` + email.value).then((response) => { // GET request
+        axios.get(`/sqillsRoomBooking/api/user/` + email.value).then((response) => { // GET request
             let data = response.data;
             if (data.email != "null") {
                 input.value = data.email;

@@ -16,7 +16,6 @@ import java.util.List;
 
 import static nl.utwente.dao.BookingDao.isValidBookingID;
 import static nl.utwente.dao.UserDao.isValidEmail;
-import static nl.utwente.db.DatabaseConnectionFactory.*;
 
 
 public class ParticipantDao {
@@ -96,9 +95,6 @@ connection.close();
     }
 
     public static void removeParticipant(int bookingID, int userID) throws InvalidBookingIDException, InvalidUserIDException, DAOException {
-
-
-
         Connection connection = null;
         try {
             connection = DatabaseConnectionFactory.getConnection();
@@ -132,7 +128,6 @@ connection.close();
         }
     }
 
-    // Todo: @Andrew Make into single query
     public static void addParticipantEmailToBooking(int bookingID, String email) throws InvalidBookingIDException, InvalidEmailException, DAOException {
 
 

@@ -1,5 +1,5 @@
 function disableButtonsBasedOnPermissions() {
-    axios.get(`/api/booking/${bookingID}/access`)
+    axios.get(`/sqillsRoomBooking/api/booking/${bookingID}/access`)
         .then(response => {
             if(response.data) {
                 let elements = document.getElementsByClassName("booking-information-button");
@@ -12,11 +12,11 @@ function disableButtonsBasedOnPermissions() {
 }
 
 function redirectToAllBookings() {
-    window.location = '/desktop/bookings';
+    window.location = '/sqillsRoomBooking/desktop/bookings';
 }
 
 function deleteBooking() {
-    axios.delete(`/api/booking/${bookingID}`)
+    axios.delete(`/sqillsRoomBooking/api/booking/${bookingID}`)
         .then(response => {
             $('#deletion-success-modal').modal();
         })
@@ -39,9 +39,9 @@ function editBooking() {
         "endTime": document.getElementById("edit-booking-end-time").value,
         "isPrivate": document.getElementById("edit-booking-is-private").checked,
         "email": EMAIL
-    }
+    };
 
-    axios.put(`/api/booking/${bookingID}`, requestBody)
+    axios.put(`/sqillsRoomBooking/api/booking/${bookingID}`, requestBody)
         .then(response => {
             $("#edit-modal").modal("hide");
             $("#edit-success-modal").modal();
@@ -54,7 +54,7 @@ function editBooking() {
 }
 
 function removeParticipant(bookingID, userID) {
-    axios.delete('/api/participant/delete', {"params" : {
+    axios.delete('/sqillsRoomBooking/api/participant/delete', {"params" : {
             "userid": userID,
             "bookingid": bookingID
         }
