@@ -785,6 +785,31 @@ throw new DAOException(e.getMessage());
                 e.printStackTrace();
             }
         }
+    }
 
+    public static int getBookingId(SpecifiedBooking booking) {
+
+        Connection connection = null;
+        try {
+            connection = DatabaseConnectionFactory.getConnection();
+            String query = "select * from get_booking_id(?, ? , ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, booking.getRoomName());
+            preparedStatement.setDate(2, booking.getDate());
+            preparedStatement.setTime(3, booking.getStartTime());
+            preparedStatement.setTime(4, booking.getEndTime());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return -1;
     }
 }

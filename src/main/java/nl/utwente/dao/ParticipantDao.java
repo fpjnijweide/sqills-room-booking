@@ -128,6 +128,36 @@ connection.close();
         }
     }
 
+    public static void removeAllParticipants(int bookingID) throws DAOException, InvalidBookingIDException {
+        Connection connection = null;
+        try {
+            connection = DatabaseConnectionFactory.getConnection();
+
+            if (!isValidBookingID(bookingID, connection)){
+                throw new InvalidBookingIDException(bookingID);
+            }
+
+            String query = "DELETE FROM sqills.participants WHERE booking_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, bookingID);
+
+            int updatedRows = preparedStatement.executeUpdate();
+            if (updatedRows == 0){
+                throw new DAOException("Somehing went wrong in removeAllParticipants");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DAOException(e.getMessage());
+        } finally {
+            try {
+                connection.commit();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void addParticipantEmailToBooking(int bookingID, String email) throws InvalidBookingIDException, InvalidEmailException, DAOException {
 
 

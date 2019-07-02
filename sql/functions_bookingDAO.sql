@@ -174,3 +174,21 @@ as $$
   and b.booking_id != p_booking_id;
   $$
   language sql;
+
+
+drop function if exists get_booking_id(p_room_name text, p_booking_date date, p_start_time time, p_end_time time);
+create or replace function get_booking_id(p_room_name text, p_booking_date date, p_start_time time, p_end_time time) returns integer
+as $$
+    select b.booking_id
+    from sqills.booking b
+    join sqills.room r on r.room_name = p_room_name
+    where b.start_time = p_start_time and b.end_time = p_end_time and b.date = p_booking_date
+    limit 1
+  $$
+  language sql;
+select * from sqills.booking;
+select * from sqills.google_calendar_sync;
+
+delete from sqills.booking_recurring;
+delete from sqills.participants;
+delete from sqills.booking;

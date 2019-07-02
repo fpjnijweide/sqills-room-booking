@@ -50,9 +50,3 @@ public class RecurringBooking extends SpecifiedBooking {
         return "Repeat type: "+ this.repeatEveryType + "Repeat type: " + this.repeatEvery;
     }
 }
- enum RepeatUnits {
-    day,//0
-    week,//1
-    month,//2
-    year//3
-}
