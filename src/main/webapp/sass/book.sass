@@ -3,6 +3,61 @@
 $booking-group-height: 50px
 
 .create-booking-form
+  .submit-button
+    $button-width: 400px
+    $button-height: 50px
+
+    width: $button-width
+    height: $button-height
+    border-radius: $button-height / 2
+
+    margin-top: 20px
+    margin-left: calc(50% - 200px)
+    margin-right: calc(50% - 200px)
+
+    outline: none
+
+    border: 3px solid $sqills-orange
+    background-color: transparent
+    color: $sqills-orange
+    font-size: 26px
+    line-height: $button-height - 6px
+    font-weight: 100
+
+    transition: color 0.25s linear 0s, background 0.25s linear 0s
+
+  .submit-button:hover
+    color: white
+    background-color: $sqills-orange
+
+
+  .add-participant-container
+    button
+      width: $booking-group-height
+      border-radius: $booking-group-height / 2
+      height: $booking-group-height
+      line-height: $booking-group-height - 6px
+      border: 3px solid $sqills-orange
+      color: $sqills-orange
+      transition: color 0.25s linear 0s, background 0.25s linear 0s
+      margin-right: 10px
+      font-size: 30px
+      font-weight: 600
+      background-color: transparent
+      padding: 0
+
+    button:hover
+      background-color: $sqills-orange
+      color: white
+
+  #recurring-container.hidden
+    height: 0
+    overflow: hidden
+
+  #recurring-container
+    height: 170px
+    transition: height 0.25s linear 0s
+
   ::placeholder
     color: $sqills-grey
 
@@ -76,6 +131,26 @@ $booking-group-height: 50px
       color: $sqills-grey
       font-size: 30px
       margin-right: 10px
+
+#choose-time-unit
+  height: $booking-group-height
+  background-color: lighten($sqills-purple, 10%)
+  border: none
+  color: $sqills-grey
+  font-size: 20px
+  flex-grow: 1
+  margin-right: 10px
+
+.participant-in-list
+  font-size: 20px
+  line-height: 50px
+
+  .booking-participant
+    color: $sqills-grey
+
+  .delete
+    color: #ff5f42
+    cursor: pointer
 
 //.inner
 //  display: block

@@ -122,27 +122,31 @@ function addParticipantsToBooking(bookingID) {
 
 function addParticipantField() {
     let input = document.getElementById("participant").value;
-    if(input != "") {
-        let element = document.getElementById("participants-list");
-        element.innerHTML += "<div class='participant-in-list'> <span class='booking-participant'>" +
-            input + "</span><div class='delete' onclick='removeParticipant(this.parentElement)'>delete</div>"
-            + "</div>"
+    if(input !== "") {
+        let element = document.getElementById("participant-form-group-container");
+        element.innerHTML += `
+            <div class="booking-form-group">
+                <label>Participant</label>
+                <div class='participant-in-list'>
+                    <span class='booking-participant'>${input}</span>
+                    <span class='delete' onclick='removeParticipant(this.parentElement.parentElement)'><i class="fa fa-trash" aria-hidden="false"></i></span>
+                </div>
+            </div>`;
         document.getElementById("participant").value = "";
-        console.log()
     }
 }
 
-function setParticipantsVisible(){
-    let elem = document.getElementById("participants-container")
+function setParticipantsVisible() {
+    let elem = document.getElementById("participants-container");
     elem.style.display = "block";
 }
 
 function setRecurringVisible(invisible){
-    let elem = document.getElementById("recurring-info")
+    let elem = document.getElementById("recurring-container");
     if (invisible){
-        elem.style.display = "block";
+        elem.classList.remove('hidden');
     } else {
-        elem.style.display = "none";
+        elem.classList.add('hidden');
     }
 }
 
@@ -163,13 +167,13 @@ function checkRecurringDays(){
     let value = unit.options[unit.selectedIndex].value;
     console.log(value);
     let number = document.getElementById("time").value;
-    if (number > 7 && value == "days"){
+    if (number > 7 && value === "days"){
         document.getElementById("time").value = Math.floor(number / 7);
         document.getElementById("choose-time-unit").value = "weeks";
-    } else if (number > 4 && value == "weeks") {
+    } else if (number > 4 && value === "weeks") {
         document.getElementById("time").value = Math.floor(number / 4);
         document.getElementById("choose-time-unit").value = "months";
-    } else if (number > 12 && value == "months") {
+    } else if (number > 12 && value === "months") {
         document.getElementById("time").value = Math.floor(number / 12);
         document.getElementById("choose-time-unit").value = "years";
     } else if (number <= 0){

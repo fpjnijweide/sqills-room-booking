@@ -41,46 +41,35 @@
         <div class="radio-text">No</div>
     </div>
 
-
-
-
-    <div class="participants-view">
-        <table>
-            <tr>
-                <td><label class="participants-title">Add participants</label></td>
-                <td><div class="add-participants" onclick="setParticipantsVisible()">+</div></td>
-            </tr>
-
-        </table>
-
-    </div>
-    <div id="participants-container">
-
-        <div class="input-and-button">
-            <input type="text" id="participant" onkeyup="autoComplete(this)" placeholder="Participant name">
-            <button type="button" onclick="addParticipantField()">+</button>
-        </div>
-        <div id="participants-list">
-            Participants list
-        </div>
-    </div>
-    <div class="recurring">
-        <label>Recurring booking</label>
-        <%--<input type="radio" name="recurring" id="yes" value="yes" onclick="setRecurringVisible(true)"> Yes--%>
-        <%--<input type="radio" name="recurring" id="no" value="no" checked="checked" onclick="setRecurringVisible(false)"> No--%>
-        <div id="recurring-info">I want a booking every
+    <div id="recurring-container" class="hidden">
+        <div class="booking-form-group">
+            <label>Booking Interval</label>
             <input id="time" type="number" oninput="checkRecurringDays()">
+        </div>
+
+        <div class="booking-form-group">
+            <label>Interval Type</label>
             <select id="choose-time-unit" class="choose-time-unit" onchange="checkRecurringDays()">
                 <option value="day">Days</option>
                 <option value="week">Weeks</option>
                 <option value="month">Months</option>
                 <option value="year">Years</option>
             </select>
-            <br>
-            ending at
+        </div>
+
+        <div class="booking-form-group">
+            <label>Recurring Booking End Date</label>
             <input id="recurring-end-date" type="date">
         </div>
     </div>
+
+    <div class="booking-form-group add-participant-container">
+        <label>Add Particpant</label>
+        <input type="text" id="participant" onkeyup="autoComplete(this)">
+        <button type="button" onclick="addParticipantField()">+</button>
+    </div>
+
+    <div id="participant-form-group-container"></div>
 
     <button class="submit-button" type="button" onclick="checkFieldsAndBook()">Submit</button>
 </form>
