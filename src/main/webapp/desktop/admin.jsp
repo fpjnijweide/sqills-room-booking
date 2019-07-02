@@ -19,7 +19,8 @@
     <jsp:include page="nav.jsp"/>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
             <div class="filter">
                 <div class="label">Admin or Non-Admin</div>
                 <select class="custom-select" id="filter-admin">
@@ -31,37 +32,14 @@
                 <div class="label">Email</div>
                 <input class="form-control" type="text" id="filter-email">
 
-                <button onclick="filterUsers()" class="purple-button">Filter Users</button>
-                <button onclick="showAllUsers()" class="purple-button">Remove Filter</button>
+                <div style="display: flex">
+                    <button style="flex-grow: 1; margin-right: 5px" onclick="filterUsers()" class="purple-button">Filter Users</button>
+                    <button style="flex-grow: 1; margin-left: 5px" onclick="showAllUsers()" class="purple-button">Remove Filter</button>
+                </div>
             </div>
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Is Admin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <% for (User user : (List<User>) request.getAttribute("users")) { %>
-                    <% if (user.isAdministrator()) { %>
-                    <tr data-admin email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
-                    <% } else { %>
-                    <tr data-email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
-                    <% } %>
-                        <td><%= user.getUserid() %></td>
-                        <td><%= user.getName() %></td>
-                        <td><%= user.getEmail() %></td>
-                        <td><%= user.isAdministrator() %></td>
-                    </tr>
-                <% } %>
-                </tbody>
-            </table>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="user-data">
                 <div class="label">Name</div>
                 <div style="display: none" id="user-id"></div>
@@ -78,6 +56,36 @@
                     <button onclick="createUser()">Create</button>
                 </div>
             </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Is Admin</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% for (User user : (List<User>) request.getAttribute("users")) { %>
+                <% if (user.isAdministrator()) { %>
+                <tr data-admin email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
+                        <% } else { %>
+                <tr data-email="<%= user.getEmail() %>" class="user-row" onclick="showUser(<%=user.getUserid()%>)">
+                    <% } %>
+                    <td><%= user.getUserid() %></td>
+                    <td><%= user.getName() %></td>
+                    <td><%= user.getEmail() %></td>
+                    <td><%= user.isAdministrator() %></td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
