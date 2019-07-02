@@ -1,4 +1,5 @@
 
+
 ### Update Using custom remote 
 
 We have now set up our own deployment server, which can be found at: 
@@ -57,3 +58,11 @@ the google intergtaion does not work as it requires a real domain,
 we had previously used a tunneling service during development to get around this,
 the system will work as intended without google intergration (although we have not fully tested this).
 We hope to soon have the project delpoyed a (private) server with SSL. Until then locally is the best we can provide, which doesnt have calendar integration
+
+### Technical aspects we're proud of
+Technical aspects we’re proud  We are proud of the structure of our project. We feel that all code is there were you expect it to be  and is in conformity
+with conventions. Separation of concerns is also something that was taken to  heart and implemented well.  Almost all classes and methods do their task, no more,
+no less.     Great use was also made of stored procedures. Almost all of the access through the database was  done through stored procedures.    We also feel our 
+error handling is quite elegant. Is is done in a structured way by throwing  exceptions. This allows us to easily relay the correct information to the user in 
+case of an error.     Lastly we also did not forget that Java is an object oriented language. Where possible, we tried to  take the concepts and conventions of 
+object oriented programming to heart. Good examples of  this are our model classes. These make use of inheritance to prevent code duplication. 
