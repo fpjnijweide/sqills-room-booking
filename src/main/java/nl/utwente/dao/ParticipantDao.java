@@ -142,9 +142,6 @@ connection.close();
             preparedStatement.setInt(1, bookingID);
 
             int updatedRows = preparedStatement.executeUpdate();
-            if (updatedRows == 0){
-                throw new DAOException("Somehing went wrong in removeAllParticipants");
-            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DAOException(e.getMessage());

@@ -2,6 +2,7 @@ package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.*;
+import nl.utwente.google.GoogleCalendar;
 import nl.utwente.model.*;
 import org.apache.poi.util.Internal;
 
@@ -169,6 +170,8 @@ throw new DAOException(e.getMessage());
                 e.printStackTrace();
             }
         }
+        GoogleCalendar gc = new GoogleCalendar();
+        gc.addEvent(booking.getRoomName(),booking.getTitle(),booking.getDate(),booking.getStartTime(),booking.getEndTime(),booking.getRoomName());
         return id;
     }
 
@@ -754,8 +757,10 @@ throw new DAOException(e.getMessage());
             String query = "select sync_token from sqills.google_calendar_sync order by date_time desc limit 1";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            return resultSet.getString("sync_token");
+            while (resultSet.next()) {
+                return resultSet.getString("sync_token");
+            }
+            return null;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

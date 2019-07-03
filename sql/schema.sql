@@ -74,11 +74,19 @@ INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (4, 'Freek
 INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (5, 'Andrew 2', 'andrewideaheath@gmail.com', false);
 INSERT INTO sqills.users (user_id, name, email, administrator) VALUES (6, 'Platon Frolov', 'p.m.frolov@student.utwente.nl', true);
 
-INSERT INTO sqills.room (room_id, room_name) VALUES (1, '1');
-INSERT INTO sqills.room (room_id, room_name) VALUES (2, '2');
-INSERT INTO sqills.room (room_id, room_name) VALUES (3, '3');
-INSERT INTO sqills.room (room_id, room_name) VALUES (4, '4');
-INSERT INTO sqills.room (room_id, room_name) VALUES (5, '5');
-INSERT INTO sqills.room (room_id, room_name) VALUES (6, '6');
+INSERT INTO sqills.room ( room_name) VALUES ( 'Lion');
+INSERT INTO sqills.room ( room_name) VALUES ('Buffalo');
+INSERT INTO sqills.room ( room_name) VALUES ('Elephant');
+INSERT INTO sqills.room ( room_name) VALUES ('Rhino');
+INSERT INTO sqills.room ( room_name) VALUES ('Jaguar');
 
+delete from sqills.room;
+delete from sqills.booking;
+delete from sqills.participants;
+delete  from sqills.booking_recurring;
+select * from sqills.room;
 
+select * from sqills.google_calendar_sync;
+select * from sqills.booking;
+
+delete from sqills.google_calendar_sync;
