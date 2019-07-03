@@ -246,9 +246,7 @@ public class BookingResource {
             e1.printStackTrace();
             System.out.println("Event not found");
         }
-        System.out.println(e.getSummary());
     }
-
 
     /**
      *
@@ -264,6 +262,7 @@ public class BookingResource {
             e.printStackTrace();
         }
     }
+
 
     /**
      *

@@ -39,8 +39,8 @@ import java.util.regex.Pattern;
 public class GoogleCalendar {
 
 
-    private static final String PUSH_NOTIFICATION_END_POINT_DEV = "https://booking.webrelay.io/api/booking/google-calendar/push-notification-events";
-    private static final String PUSH_NOTIFICATION_END_POINT_PROD = "http://bookroom.nl/sqillsRoomBooking/";
+    private static final String PUSH_NOTIFICATION_END_POINT_DEV = "https://booking.webrelay.io/sqillsRoomBooking/api/booking/google-calendar/push-notification-events";
+    private static final String PUSH_NOTIFICATION_END_POINT_PROD = "https://bookroom.nl/sqillsRoomBooking/";
 
     private static final String APPLICATION_NAME = "sqills-room-booking";
     private static final String gcred = "{\n" +
@@ -120,14 +120,32 @@ public class GoogleCalendar {
 //        this.calendar.calendars().insert(new com.google.api.services.calendar.model.Calendar(roomID));
 //    }
 
-//    public void addEvent(String calendarID, String title, Date date, Time startTime, Time endTime, String location) throws IOException {
-//        if(!calendarExist(calendarID){
-//            createCalendar();
-//        }
-//        this.calendar.events().insert(calendarID, this.getEvent(title, date, startTime, endTime, location));
-//    }
+    public void addEvent(String calendarName, String title, Date date, Time startTime, Time endTime, String location)  {
+        String calendarId = getCalendarIDFromSummary(calendarName);
+        if(calendarId != null){
+            try {
+                this.calendar.events().insert(calendarId,formatEvent(title,date,startTime,endTime,location)).execute();
+            } catch (IOException e) {
+                System.out.println("Failed to create google event: "+e.getMessage());
+            }
+
+        }
+    }
 
     public void getResource(String resourceID) {
+    }
+
+    private String getCalendarIDFromSummary(String calendarSummary){
+        try {
+            for (CalendarListEntry calendar : this.calendar.calendarList().list().execute().getItems()) {
+                if(calendar.getSummary().equals(calendarSummary)){
+                    return calendar.getId();
+                }
+            }
+        } catch (IOException e) {
+            return null;
+        }
+        return null;
     }
 
     public boolean calendarExist(String calendarName) {
@@ -169,7 +187,6 @@ public class GoogleCalendar {
         String pageToken = null;
         Events events = null;
         String syncToken = BookingDao.getLatestGoogleCalendarSyncToken();
-        System.out.println(syncToken);
         if (syncToken != null) {
             request.setSyncToken(syncToken);
         }
@@ -189,7 +206,7 @@ public class GoogleCalendar {
             } else {
                 for (Event event : items) {
                     try {
-                        if (!event.getStatus().equals("Cancelled")) {
+                        if (!event.getStatus().equals("cancelled")) {
                             SpecifiedBooking specifiedBooking = eventToBooking(calendarName, event);
                             try {
                                 newBooking(event, specifiedBooking);
@@ -239,7 +256,7 @@ public class GoogleCalendar {
 
     private void newBooking(Event event, SpecifiedBooking specifiedBooking) throws ParseException, BookingException, DAOException, InvalidBookingIDException, InvalidEmailException {
         int createdBookingId = -1;
-        if (event.getRecurrence().get(0) != null) {
+        if (event.getRecurrence() != null) {
             System.out.println("Recurring booking found");
             RecurringBooking recurringBooking = recPatternToRecurringBooking(event.getRecurrence().get(0));
             recurringBooking.setRoomName(specifiedBooking.getRoomName());
@@ -256,10 +273,13 @@ public class GoogleCalendar {
             createdBookingId = BookingDao.createBooking(specifiedBooking);
             System.out.println("Event added to DB");
         }
-        for (int i = 0; i < event.getAttendees().size(); i++) {
-            ParticipantDao.addParticipantEmailToBooking(createdBookingId, event.getAttendees().get(i).getEmail());
+        if( event.getAttendees() != null){
+            for (int i = 0; i < event.getAttendees().size(); i++) {
+                ParticipantDao.addParticipantEmailToBooking(createdBookingId, event.getAttendees().get(i).getEmail());
+            }
         }
     }
+
 
 
     private RecurringBooking recPatternToRecurringBooking(String recurrenceString) throws ParseException {
@@ -334,7 +354,7 @@ public class GoogleCalendar {
         specifiedBooking.setDate(new java.sql.Date(event.getStart().getDateTime().getValue()));
         specifiedBooking.setEndTime(removeDateFromTime(event.getEnd()));
         specifiedBooking.setStartTime(removeDateFromTime(event.getStart()));
-        specifiedBooking.setRoomName("1");
+        specifiedBooking.setRoomName(calendarName);
         specifiedBooking.setTitle(event.getSummary());
         specifiedBooking.setIsPrivate(false);
         return specifiedBooking;
@@ -377,6 +397,7 @@ public class GoogleCalendar {
             String id = allCalendars.get(i).getId();
             setupWatchChannel(id);
         }
+        System.out.println("Google Calendar Resource watchers set up");
     }
 
 
@@ -387,5 +408,12 @@ public class GoogleCalendar {
         }
     }
 
-
+    public static void main(String[] args) {
+        GoogleCalendar gc = new GoogleCalendar();
+        try {
+            gc.setUpWatchers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
