@@ -1,6 +1,9 @@
 package nl.utwente.dao;
 
+import org.postgresql.core.SqlCommand;
+
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Calendar;
@@ -35,8 +38,10 @@ public class DaoTestUtils {
     }
 
     public static void deleteRoom(int id) throws SQLException {
-        String query = "DELETE FROM sqills.room WHERE room_id = " + id;
-        connection.createStatement().execute(query);
+        String query = "DELETE FROM sqills.room WHERE room_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.execute();
         connection.commit();
     }
 }

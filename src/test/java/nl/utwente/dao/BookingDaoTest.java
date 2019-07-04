@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BookingDaoTest {
-
-
     private Date date = Date.valueOf("2030-12-12");
     private Time startTime = Time.valueOf("9:00:00");
     private Time endTime = Time.valueOf("10:00:00");
@@ -106,6 +104,8 @@ public class BookingDaoTest {
         }
     }
 
+
+    // fixed
     @Test
     public void testGetOutputBooking() {
         try {
@@ -123,6 +123,7 @@ public class BookingDaoTest {
         }
     }
 
+    // fixed
     @Test
     public void testGetSpecificBookingNonExistingBooking() {
         AtomicReference<OutputBooking> booking = null;
@@ -132,6 +133,7 @@ public class BookingDaoTest {
         assertNull(booking);
     }
 
+    // fixed
     @Test
     public void testDeleteBookingNonExisting() {
         assertThrows(InvalidBookingIDException.class, () -> {
@@ -139,6 +141,7 @@ public class BookingDaoTest {
         });
     }
 
+    // fixed
     @Test
     public void testValidBooking() {
         createRoom(-101, "Test room 2");
@@ -172,82 +175,13 @@ public class BookingDaoTest {
         }
     }
 
-
+    // fixed
     @Test
     public void testCreateBookingInvalidBooking() {
         // Creates a duplicate booking
         assertThrows(BookingException.class, () -> {
            createBooking(createdBooking);
         });
-    }
-
-    @Test
-    public void testUpdateBooking() {
-        // TODO Marten fixed this on his branch
-        assertDoesNotThrow(() -> {
-            updateBooking(bookingID, createdBooking);
-        });
-
-        assertThrows(BookingException.class, () -> {
-            updateBooking(bookingID, endTimeBeforeStartTimeBooking);
-        });
-
-        assertThrows(InvalidBookingIDException.class, () -> {
-            updateBooking(-100, earlyBooking);
-        });
-
-    }
-
-    @Test
-    public void testGetBookingsForRoomToday() {
-
-        List<OutputBooking> bookings = null;
-        try {
-            // TODO the booking I made is not acutally today lmao
-            bookings = BookingDao.getBookingsForRoomToday(roomName);
-        } catch (InvalidRoomNameException | DAOException e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-
-        assertEquals(bookings.size(), 0);
-        AtomicInteger tempID = new AtomicInteger();
-        assertDoesNotThrow(() -> {
-            tempID.set(insertBookingToday(roomName, startTime, endTime, email, false, bookingTitle));
-        });
-
-        try {
-            bookings = BookingDao.getBookingsForRoomToday(roomName);
-        } catch (InvalidRoomNameException | DAOException e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-
-
-        for (OutputBooking booking : bookings) {
-            try {
-                assertEquals(booking.getUserName(), UserDao.getUserFromEmail(email).getName());
-            } catch (InvalidEmailException | DAOException e) {
-                e.printStackTrace();
-                fail(e.getMessage());
-            }
-            assertEquals(booking.getBookingid(), tempID.intValue());
-            assertEquals(booking.getTitle(), bookingTitle);
-            assertEquals(booking.getRoomName(), roomName);
-            Calendar currentTime = Calendar.getInstance();
-            Date sqlDate = new Date((currentTime.getTime()).getTime());
-            assertEquals(booking.getDate(), sqlDate); // TODO ASSERT TODAY
-        }
-
-        try {
-            deleteBooking(tempID.intValue());
-            bookings = BookingDao.getBookingsForRoomToday(roomName);
-        } catch (InvalidRoomNameException | DAOException | InvalidBookingIDException e) {
-            e.printStackTrace();
-            fail(e.getMessage());
-        }
-        assertEquals(bookings.size(), 0);
-
     }
 
     @Test
@@ -297,7 +231,6 @@ public class BookingDaoTest {
     @After
     public void afterEachTest() {
         try {
-            connection.commit();
             deleteBooking(bookingID);
             deleteRoom(roomID);
         } catch (SQLException | InvalidBookingIDException | DAOException e) {
