@@ -1,16 +1,17 @@
 function bookingValidityChecks(){
-    if (!checkCorrectEmails()){
-        showError("not all emails are valid");
-        return false;
-    } else if (!checkIfEverythingFilledIn()){
-        showError("not all fields are filled in");
-        return false;
-    } else if (!checkStartAfterEndTime()){
-        showError("The end time should be after the start time");
-        return false;
-    } else {
-        return true;
-    }
+    return true
+    // if (checkCorrectEmails()){
+    //     showError("not all emails are valid");
+    //     return false;
+    // } else if (!checkIfEverythingFilledIn()){
+    //     showError("not all fields are filled in");
+    //     return false;
+    // } else if (!checkStartAfterEndTime()){
+    //     showError("The end time should be after the start time");
+    //     return false;
+    // } else {
+    //     return true;
+    // }
 
 }
 
@@ -35,11 +36,11 @@ function checkCorrectEmails(){
             .then(response => {
                 let data= response.data;
                 if (data.emails.length != 0){
-                    return false
+                    return true
                 }
             });
     } else {
-        return true;
+        return false;
     }
 }
 
@@ -101,11 +102,8 @@ function makeBooking(){
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
-          //  setTimeout(function(){ window.location.href="/sqillsRoomBooking/desktop/booking/" + id; }, 200);
-            // initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
-
             initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participants, isPrivate, null)));
-            // document.location.replace(`/sqillsRoomBooking/api/booking/${id}`);
+            setTimeout(function(){ window.location.href="/sqillsRoomBooking/desktop/booking/" + id; }, 200);
         }).catch((response) => {
             showError(response.response.data)
     });

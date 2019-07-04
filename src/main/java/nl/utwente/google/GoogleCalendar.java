@@ -356,7 +356,7 @@ public class GoogleCalendar {
 
 
 
-    /*
+    /*PUSH_NOTIFICATION_END_POINT_PROD
     Watcher set up not called by proper program
      */
     private void setupWatchChannel(String calendarID) throws IOException {

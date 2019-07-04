@@ -1,6 +1,5 @@
 package nl.utwente.dao;
 
-import org.postgresql.core.SqlCommand;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
