@@ -26,7 +26,7 @@
 <script src="https://apis.google.com/js/platform.js?onload=onLoad" async></script>
 <script src="https://apis.google.com/js/api.js" async></script>
 <script type="text/javascript" src="/sqillsRoomBooking/timepicker/clockpicker-gh-pages/dist/bootstrap-clockpicker.min.js"></script>
-
+<script src="/sqillsRoomBooking/scripts/specific-room.js"></script>
 <script src="https://apis.google.com/js/platform.js?" async></script>
 <script async defer src="https://apis.google.com/js/api.js?" onload="onLoadGAPI()" ></script>
 <meta name="google-site-verification" content="v8KQE2-q2JQIaBlDYcxO433s395Be6OR7dAT0_Cinao" />
