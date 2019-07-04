@@ -1,35 +1,69 @@
-function checkFieldsAndBook(){
-    let emails = getAllEmails();
-    let requestBody = {
-        "emails": emails
-    }
-    if (emails.length > 0) {
-        axios.post("/sqillsRoomBooking/api/user/email/check", requestBody)
-            .then(response => {
-                let data= response.data;
-                if (data.emails.length == 0 && checkAllFieldsFilledIn()){
-                    bookRoom()
-                } else if(!checkAllFieldsFilledIn()) {
-                    showError("Please fill in all fields")
-                } else {
-                    showError("one of the emails is invalid")
-                }
-            });
-    } else if (checkAllFieldsFilledIn()){
-        bookRoom()
+function bookingValidityChecks(){
+    if (!checkCorrectEmails()){
+        showError("not all emails are valid");
+        return false;
+    } else if (!checkIfEverythingFilledIn()){
+        showError("not all fields are filled in");
+        return false;
+    } else if (!checkStartAfterEndTime()){
+        showError("The end time should be after the start time");
+        return false;
     } else {
-        showError("Please fill in all fields")
+        return true;
     }
 
 }
 
-function bookRoom() {
-    if (document.getElementById("no").checked){
-        makeBooking()
-    } else if (checkRecurringFields()){
-        makeRecurringBooking()
+function checkStartAfterEndTime(){
+    let start = document.getElementById("booking-start-time").value;
+    let end  = document.getElementById("booking-end-time").value;
+    if (end <= start ){
+        return false
     } else {
-        showError("fill in all the fields for recurring bookings")
+        return true
+    }
+
+}
+
+function checkCorrectEmails(){
+    let emails = getAllEmails();
+    let requestBody = {
+        "emails": emails
+    };
+    if (emails.length > 0) {
+        axios.post("/sqillsRoomBooking/api/user/email/check", requestBody)
+            .then(response => {
+                let data= response.data;
+                if (data.emails.length != 0){
+                    return false
+                }
+            });
+    } else {
+        return true;
+    }
+}
+
+function checkIfEverythingFilledIn(){
+    let title = document.getElementById("booking-title").value;
+    let date = document.getElementById("booking-date").value;
+    let end = document.getElementById("booking-start-time").value + ":00";
+    let start = document.getElementById("booking-end-time").value + ":00";
+    if (title == "" || date == "" || end == ":00" || start == ":00"){
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function bookRoom() {
+    if (bookingValidityChecks()) {
+        if (document.getElementById("no").checked) {
+            makeBooking()
+        } else if (checkRecurringFields()) {
+            makeRecurringBooking()
+        } else {
+            showError("fill in all the fields for recurring bookings")
+        }
     }
 }
 
@@ -67,8 +101,9 @@ function makeBooking(){
         .then(response => {
             let id = response.data;
             addParticipantsToBooking(id);
+          //  setTimeout(function(){ window.location.href="/sqillsRoomBooking/desktop/booking/" + id; }, 200);
             // initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participantElements, isPrivate, null)));
-            window.location.href="/sqillsRoomBooking/desktop/booking/" + id;
+
             initGCalendar(insertGCalendarEvent(createGCalendarEvent(roomName,date, startTime, endTime, title, participants, isPrivate, null)));
             // document.location.replace(`/sqillsRoomBooking/api/booking/${id}`);
         }).catch((response) => {
@@ -185,20 +220,11 @@ function removeParticipant(element){
     element.parentNode.removeChild(element);
 }
 
-function checkAllFieldsFilledIn(){
-    let empty = $(this).parent().find("input").filter(function() {
-        return this.value === "";
-    });
-    if(empty.length) {
-        return false;
-    }
-    return true;
-}
 
 
-function adaptTimeText(){
-    $('.btn.btn-sm.btn-default.btn-block.clockpicker-button').text("Select")
-}
+// function adaptTimeText(){
+//     $('.btn.btn-sm.btn-default.btn-block.clockpicker-button').text("Select")
+// }
 
 function setRoom(number){
     document.getElementById("room-select").value = number;
