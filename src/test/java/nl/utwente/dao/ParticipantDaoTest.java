@@ -2,6 +2,7 @@ package nl.utwente.dao;
 
 import nl.utwente.db.DatabaseConnectionFactory;
 import nl.utwente.exceptions.*;
+import nl.utwente.model.User;
 import org.junit.*;
 
 import java.sql.Connection;
@@ -75,10 +76,10 @@ public class ParticipantDaoTest {
         addParticipantEmailToBooking(bookingID, participantEmail);
         assertEquals(getParticipantsOfBooking(bookingID).get(0).getEmail(), "pl.frolov99@gmail.com");
         assertEquals(getParticipantsOfBooking(bookingID).size(), 1);
-        removeParticipant(bookingID, 10000);
+        removeParticipant(bookingID, UserDao.getUserFromEmail(email).getUserid());
         assertEquals(getParticipantsOfBooking(bookingID).size(), 1);
         //3 is id of pl.frolov99@gmail.com
-        removeParticipant(bookingID, 3);
+        removeParticipant(bookingID, UserDao.getUserFromEmail(participantEmail).getUserid());
         assertEquals(getParticipantsOfBooking(bookingID).size(), 1);
     }
 
