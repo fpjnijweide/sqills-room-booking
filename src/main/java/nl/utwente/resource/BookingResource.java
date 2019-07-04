@@ -8,7 +8,6 @@ import nl.utwente.exceptions.DAOException;
 import nl.utwente.exceptions.InvalidBookingIDException;
 import nl.utwente.google.GoogleCalendar;
 import nl.utwente.model.OutputBooking;
-import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 import nl.utwente.model.User;
 
@@ -83,25 +82,28 @@ public class BookingResource {
         return 0;
     }
 
-    /**
-     * Create recurring booking
-     *  @return JSON object containing a "success" boolean field specifying whether the booking was
-     *  successfully created
-     */
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/create/recurring")
-    public int createRecurringBooking(RecurringBooking booking) {
-        booking = (RecurringBooking) prepareBooking(securityContext,booking);
-        try {
-            return BookingDao.createRecurringBooking(booking);
-        } catch (BookingException e) {
-            throw400(e.getMessage());
-        } catch (DAOException e) {
-            throw500("Something went terribly wrong");
-        }
-        return 0;
-    }
+//    /**
+//     * Create recurring booking
+//     *  @return JSON object containing a "success" boolean field specifying whether the booking was
+//     *  successfully created
+//     */
+//    @POST
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Path("/create/recurring")
+//    public int createRecurringBooking(RecurringBooking booking) {
+//        if (BookingDao.validRecurringBooking(booking)) {
+//            booking = (RecurringBooking) prepareBooking(securityContext, booking);
+//            try {
+//                return BookingDao.createRecurringBooking(booking);
+//            } catch (BookingException e) {
+//                throw400(e.getMessage());
+//            } catch (DAOException e) {
+//                throw500("Something went terribly wrong");
+//            }
+//        }
+//
+//        return 0;
+//    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

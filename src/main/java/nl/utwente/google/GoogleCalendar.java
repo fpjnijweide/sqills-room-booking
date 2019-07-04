@@ -185,7 +185,6 @@ public class GoogleCalendar {
                         SpecifiedBooking specifiedBooking = eventToBooking(calendarName, event);
                         try {
                             BookingDao.createBooking(specifiedBooking);
-                            BookingDao.
                             System.out.println("Event added to DB");
                         } catch (BookingException e) {
                             System.out.println(e.getMessage());

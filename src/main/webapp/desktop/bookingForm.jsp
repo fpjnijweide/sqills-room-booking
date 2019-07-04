@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <button class="submit-button" type="button" onclick="checkFieldsAndBook()">Submit</button>
+    <button class="submit-button" type="button" onclick="bookRoom()">Submit</button>
 </form>
 <script>
     $(document).ready(function(){
