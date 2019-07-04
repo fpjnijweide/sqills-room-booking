@@ -11,12 +11,8 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
 import nl.utwente.dao.BookingDao;
-import nl.utwente.dao.ParticipantDao;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
-import nl.utwente.exceptions.InvalidBookingIDException;
-import nl.utwente.exceptions.InvalidEmailException;
-import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 
 import java.io.ByteArrayInputStream;
@@ -24,7 +20,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -168,6 +163,26 @@ public class GoogleCalendar {
         event.setLocation(location);
 
         return event;
+    }
+
+    private static Time removeDateFromTime(EventDateTime eventDateTime){
+        try{
+            Time time = new Time(eventDateTime.getDateTime().getValue());
+            time.toString();
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
+            cal.set(java.util.Calendar.YEAR, 1970);
+            cal.set(java.util.Calendar.MONTH, 0);
+            cal.set(java.util.Calendar.HOUR_OF_DAY,time.getHours());
+            cal.set(java.util.Calendar.MINUTE,time.getMinutes());
+            cal.set(java.util.Calendar.SECOND,0);
+            cal.set(java.util.Calendar.MILLISECOND,0);
+            Date d = cal.getTime();
+            return new Time(d.getTime());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -367,6 +382,7 @@ public class GoogleCalendar {
     }
 
 
+
     /*
     Watcher set up not called by proper program
      */
@@ -397,7 +413,6 @@ public class GoogleCalendar {
             String id = allCalendars.get(i).getId();
             setupWatchChannel(id);
         }
-        System.out.println("Google Calendar Resource watchers set up");
     }
 
 

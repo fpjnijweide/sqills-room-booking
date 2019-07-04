@@ -20,7 +20,7 @@
 <body onload="positionTimeBars()">
     <jsp:include page="nav.jsp"/>
     <div id="footer">
-        <div class="footer-title">Bookings overview for today</div>
+        <div class="footer-title">Bookings Overview For Today</div>
         <div class="bar">
             <div class="timestamps">
                 <div class="timestamp time-0" value="0"><p>00:00</p></div>
@@ -37,44 +37,55 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
-                <h2>Bookings for room <%= request.getAttribute("id") %></h2>
-                <table class="table" id="bookings-table">
-                    <tr>
-                        <th>Title</th>
-                        <th>Name</th>
-                        <th>Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                    </tr>
-                    <% List<OutputBooking> bookings = (List<OutputBooking>) request.getAttribute("bookings"); %>
-                    <% for (int i = 0; i < bookings.size(); i++) { %>
-                    <script>
-                        if (checkIfBookingToday("<%= bookings.get(i).getDate() %>")){
-                            addBooking("<%= bookings.get(i).getStartTime() %>", "<%= bookings.get(i).getEndTime() %>");
-                        }
-                    </script>
-                    <% if (!bookings.get(i).getUserName().equals("PRIVATE")) { %>
-                    <tr class="tablerow" onclick="window.location.href='/sqillsRoomBooking/desktop/booking/<%= bookings.get(i).getBookingid()%>'">
-                    <% } else { %>
-                    <tr>
-                    <% } %>
-                        <td><%= bookings.get(i).getTitle() %></td>
-                        <td><%= bookings.get(i).getUserName() %></td>
-                        <td><%= bookings.get(i).getDate() %></td>
-                        <td><%= bookings.get(i).getStartTime() %></td>
-                        <td><%= bookings.get(i).getEndTime() %></td>
-                    </tr>
-                    <% } %>
-                </table>
-            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div>
+                    <h2 class="specific-room-header">Bookings For Room <%= request.getAttribute("id") %></h2>
+                    <table class="table" id="bookings-table">
+                        <tr>
+                            <th>Title</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                        </tr>
+                        <% List<OutputBooking> bookings = (List<OutputBooking>) request.getAttribute("bookings"); %>
+                        <% for (int i = 0; i < bookings.size(); i++) { %>
+                        <script>
+                            if (checkIfBookingToday("<%= bookings.get(i).getDate() %>")){
+                                addBooking("<%= bookings.get(i).getStartTime() %>", "<%= bookings.get(i).getEndTime() %>");
+                            }
+                        </script>
+                        <% if (!bookings.get(i).getUserName().equals("PRIVATE")) { %>
+                        <tr class="tablerow" onclick="window.location.href='/sqillsRoomBooking/desktop/booking/<%= bookings.get(i).getBookingid()%>'">
+                        <% } else { %>
+                        <tr>
+                        <% } %>
+                            <td><%= bookings.get(i).getTitle() %></td>
+                            <td><%= bookings.get(i).getUserName() %></td>
+                            <td><%= bookings.get(i).getDate() %></td>
+                            <td><%= bookings.get(i).getStartTime() %></td>
+                            <td><%= bookings.get(i).getEndTime() %></td>
+                        </tr>
+                        <% } %>
+                    </table>
+                </div>
 
-            <div class="col-md-6">
-                <!-- Button trigger modal -->
-                <button type="button" onclick="setRoom(<%= request.getAttribute("id") %>)" class="make-booking-room-button" data-toggle="modal" data-target="#exampleModalLong">
-                    Book this room
-                </button>
+
+                <div>
+                    <!-- Button trigger modal -->
+                    <div class="flex-center-container">
+                        <div>
+                            <button type="button" onclick="setRoom(<%= request.getAttribute("id") %>)" class="make-booking-room-button" data-toggle="modal" data-target="#exampleModalLong">
+                                Book This Room
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="col-md-2"></div>
+
+
         </div>
     </div>
 
@@ -126,17 +137,16 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="specific-room-modal modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div style="z-index: 5" class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Create a booking</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Create a Booking</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="inner">
-
                     <jsp:include page="bookingForm.jsp"/>
                 </div>
             </div>
