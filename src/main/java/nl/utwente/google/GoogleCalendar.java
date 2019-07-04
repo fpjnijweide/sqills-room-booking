@@ -11,8 +11,12 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
 import nl.utwente.dao.BookingDao;
+import nl.utwente.dao.ParticipantDao;
 import nl.utwente.exceptions.BookingException;
 import nl.utwente.exceptions.DAOException;
+import nl.utwente.exceptions.InvalidBookingIDException;
+import nl.utwente.exceptions.InvalidEmailException;
+import nl.utwente.model.RecurringBooking;
 import nl.utwente.model.SpecifiedBooking;
 
 import java.io.ByteArrayInputStream;
@@ -20,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -111,10 +116,6 @@ public class GoogleCalendar {
         return null;
     }
 
-//    public void createCalendar(String roomID){
-//        this.calendar.calendars().insert(new com.google.api.services.calendar.model.Calendar(roomID));
-//    }
-
     public void addEvent(String calendarName, String title, Date date, Time startTime, Time endTime, String location)  {
         String calendarId = getCalendarIDFromSummary(calendarName);
         if(calendarId != null){
@@ -127,8 +128,6 @@ public class GoogleCalendar {
         }
     }
 
-    public void getResource(String resourceID) {
-    }
 
     private String getCalendarIDFromSummary(String calendarSummary){
         try {
@@ -143,17 +142,6 @@ public class GoogleCalendar {
         return null;
     }
 
-    public boolean calendarExist(String calendarName) {
-        try {
-            Calendar.CalendarList.Get result = this.calendar.calendarList().get(calendarName);
-            if (result.getLastStatusCode() != 200) {
-                return false;
-            }
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
 
     public Event formatEvent(String title, Date date, Time startTime, Time endTime, String location) {
         Event event = new Event();
@@ -163,26 +151,6 @@ public class GoogleCalendar {
         event.setLocation(location);
 
         return event;
-    }
-
-    private static Time removeDateFromTime(EventDateTime eventDateTime){
-        try{
-            Time time = new Time(eventDateTime.getDateTime().getValue());
-            time.toString();
-            java.util.Calendar cal = java.util.Calendar.getInstance();
-            cal.set(java.util.Calendar.DAY_OF_MONTH, 1);
-            cal.set(java.util.Calendar.YEAR, 1970);
-            cal.set(java.util.Calendar.MONTH, 0);
-            cal.set(java.util.Calendar.HOUR_OF_DAY,time.getHours());
-            cal.set(java.util.Calendar.MINUTE,time.getMinutes());
-            cal.set(java.util.Calendar.SECOND,0);
-            cal.set(java.util.Calendar.MILLISECOND,0);
-            Date d = cal.getTime();
-            return new Time(d.getTime());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**
@@ -219,40 +187,45 @@ public class GoogleCalendar {
             if (items.size() == 0) {
                 System.out.println("No new events to sync.");
             } else {
-                for (Event event : items) {
-                    try {
-                        if (!event.getStatus().equals("cancelled")) {
-                            SpecifiedBooking specifiedBooking = eventToBooking(calendarName, event);
-                            try {
-                                newBooking(event, specifiedBooking);
-                            } catch (BookingException e) {
-                                System.out.println(e.getMessage());
-                                System.out.println("Invalid booking removed");
-                                removeEvent(calendarId, event, e);
-                            } catch (DAOException | InvalidBookingIDException | InvalidEmailException | ParseException e){
-                                System.out.println(e.getMessage());
-                            }
-                        } else{
-                            cancelledBooking(calendarId, calendarName, event);
-                        }
-                    }catch(Exception e ){
-                        System.out.println(e.getMessage());
-                    }
-                }
+                GetNewEvents(calendarId, calendarName, items);
             }
-
             pageToken = events.getNextPageToken();
         } while (pageToken != null);
         BookingDao.setGoogleCalendarSyncToken(events.getNextSyncToken());
         return events;
     }
 
-    private void removeEvent(String calendarId, Event event, BookingException e) throws IOException {
+    private void GetNewEvents(String calendarId, String calendarName, List<Event> items) {
+        for (Event event : items) {
+            try {
+                if (!event.getStatus().equals("cancelled")) {
+                    SpecifiedBooking specifiedBooking = eventToBooking(calendarName, event);
+                    try {
+                        newBooking(event, specifiedBooking);
+                    } catch (BookingException | DAOException | InvalidBookingIDException | InvalidEmailException | ParseException e){
+                        System.out.println(e.getMessage());
+                        System.out.println("Invalid booking removed");
+                        removeEvent(calendarId, event);
+                    }
+                } else{
+                    try {
+                        cancelledBooking(calendarId, calendarName, event);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+        }
+    }
+
+    private void removeEvent(String calendarId, Event event) throws IOException {
         try {
             this.calendar.events().delete(calendarId, event.getId()).execute();
         } catch (GoogleJsonResponseException ex) {
-            System.out.println(e.getMessage());
-            System.out.println("Event Already Removed");
+            System.out.println("Event Already Removed: "+ ex.getMessage());
         }
     }
 
