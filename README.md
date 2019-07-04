@@ -1,5 +1,4 @@
-
-### Update Using custom remote 
+### Sqills Room Booking Group 37
 
 We have now set up our own deployment server, which can be found at: 
 https://bookroom.nl/sqillsRoomBooking/
