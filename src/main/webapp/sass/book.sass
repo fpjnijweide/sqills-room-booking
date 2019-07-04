@@ -1,159 +1,162 @@
-.inner
-  display: block
-  width: 75%
-  margin-left: 12.5%
+@import 'styleguide'
 
-.outer
-  background-color: #73007A
-  margin-bottom: 20px
+$booking-group-height: 50px
 
-form.create-booking-form
-  box-sizing: border-box
-  color: #FF7212
+.create-booking-form
+  .submit-button
+    $button-width: 400px
+    $button-height: 50px
 
-  button
-    width: 100%
-    background-color: #73007A
-    border-radius: 25px
-    border: 2px solid #FF7212
-    color: #FF7212
-    opacity: 0.5
+    width: $button-width
+    height: $button-height
+    border-radius: $button-height / 2
 
-  input
-    font-size: 16px
-    padding: 5px
-    margin: 0px
-    background-color: #96007a
+    margin-top: 20px
+    margin-left: calc(50% - 200px)
+    margin-right: calc(50% - 200px)
+
+    outline: none
+
+    border: 3px solid $sqills-orange
+    background-color: transparent
+    color: $sqills-orange
+    font-size: 26px
+    line-height: $button-height - 6px
+    font-weight: 100
+
+    transition: color 0.25s linear 0s, background 0.25s linear 0s
+
+  .submit-button:hover
     color: white
-    border: none
-
-  input::placeholder
-    color: white
-    opacity: 1
-
-  input::-ms-input-placeholder
-    color: white
-
-  input.full-width
-    width: 100%
+    background-color: $sqills-orange
 
 
-  .booking-date::-webkit-input-placeholder
-    color: white
+  .add-participant-container
+    button
+      width: $booking-group-height
+      border-radius: $booking-group-height / 2
+      height: $booking-group-height
+      line-height: $booking-group-height - 6px
+      border: 3px solid $sqills-orange
+      color: $sqills-orange
+      transition: color 0.25s linear 0s, background 0.25s linear 0s
+      margin-right: 10px
+      font-size: 30px
+      font-weight: 600
+      background-color: transparent
+      padding: 0
 
-  .booking-date:-moz-placeholder
-    color: white
-    opacity: 1
+    button:hover
+      background-color: $sqills-orange
+      color: white
 
-  .booking-date::-moz-placeholder
-    color: white
-    opacity: 1
+  #recurring-container.hidden
+    height: 0
+    overflow: hidden
 
-  .booking-date:-ms-input-placeholder
-    color: white
+  #recurring-container
+    height: 170px
+    transition: height 0.25s linear 0s
 
+  ::placeholder
+    color: $sqills-grey
 
   label
-    margin: 0px
-    font-size: 20px
-    font-weight: lighter
+    color: $sqills-grey
 
-  .time-container
-    input.start-time[time]
-      width: 50%
+  input
+    background-color: lighten($sqills-purple, 10%)
+    outline: none
+    border: none
+    color: $sqills-grey
+    transition: color 0.25s linear 0s
+    margin-right: 10px
 
-    input.end-time[time]
-      width: 50%
+  input:hover, input:focus
+    color: white
 
-  .input-and-button
-    width: 50%
-    margin-left: 0%
-    float: left
-    margin-top: 20px
+  .booking-form-group
+    margin-top: 10px
+    margin-bottom: 10px
+    display: flex
+    height: $booking-group-height
 
-    button
-      width: 50%
-      margin-top: 20px
-      height: 30px
-      margin-left: 25%
-
+    label
+      height: $booking-group-height
+      font-size: 20px
+      line-height: $booking-group-height
+      width: 200px
+      text-align: right
+      margin-right: 10px
 
     input
-      width: 50%
-      margin-left: 25%
+      height: $booking-group-height
+      flex-grow: 1
+      font-size: 20px
+      padding: 10px
 
-  #participants-list
-    width: 50%
-    margin-left: 50%
-    text-align: center
-    margin-top: 20px
-    margin-bottom: 20px
+    input[type="checkbox"]
+      flex-grow: 0
 
+    .choose-room-for-booking
+      flex-grow: 1
+      margin-right: 10px
 
+      select
+        width: 100%
+        height: $booking-group-height
+        background-color: lighten($sqills-purple, 10%)
+        border: none
+        color: $sqills-grey
+        font-size: 20px
 
+      select:active
+        outline: 0
 
+    .radio-container
+      height: $booking-group-height
 
-.create-booking-title
-  color: #FF7212
+    .radio-text
+      color: $sqills-grey
+      height: $booking-group-height
+      line-height: $booking-group-height
+      font-size: 20px
+      margin-right: 10px
 
-#participants-container
-  border: 1px solid #FF7212
-  min-height: 150px
-  display: none
-  margin-top: 10px
+  .time-group
+    span.time-separator
+      width: 10px
+      height: $booking-group-height
+      line-height: $booking-group-height
+      color: $sqills-grey
+      font-size: 30px
+      margin-right: 10px
 
-  .participants-view
-    text-align: center
-    font-size: 25px
-    width: 100%
-
-
-
-.add-participants
-  $size: 20px
-  width: $size
-  height: $size
-  line-height: $size
-  font-size: $size - 0.2*$size
-  color: white
-  display: block
-  border: 1px solid #FF7212
-  text-align: center
-  cursor: pointer
-
-.submit-button
-  margin-top: 20px
+#choose-time-unit
+  height: $booking-group-height
+  background-color: lighten($sqills-purple, 10%)
+  border: none
+  color: $sqills-grey
+  font-size: 20px
+  flex-grow: 1
+  margin-right: 10px
 
 .participant-in-list
-  padding: 0
-  margin: 0
-  width: 70%
-  font-style: italic
-
-.participants-title
-  $size: 20px
-  height: $size
-  color: #FF7212 !important
-  line-height: $size
-  font-weight: bold
-
-#recurring-info
   font-size: 20px
-  border: 1px solid #FF7212
-  padding: 20px
-  display: none
+  line-height: 50px
 
-input[type=number]
-  width: 50px
+  .booking-participant
+    color: $sqills-grey
 
-.choose-time-unit
-  background-color: #73007A
-  border: 1px solid #FF7212
-  color: white
+  .delete
+    color: #ff5f42
+    cursor: pointer
 
-.delete
-  color: red
-  font-weight: bolder
-  cursor: pointer
-  float: right
+.inner
+  background-color: $sqills-purple
+  padding: 25px
+  box-shadow: darken($sqills-purple, 5%) 3px 3px 3px
 
+  h1
+    color: white
+    font-weight: 100
