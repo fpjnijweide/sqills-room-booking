@@ -23,3 +23,10 @@ You can run the server by compiling the .war file and deploying with tomcat
 Make sure to include the appropriate postgresql .jar file that was provided on canvas for the JDBC driver if you want to compile the code
 
 We use SASS / SCSS and bootstrap for styling. Please look at documents/UsingSass.md to see how to compile this to CSS.
+
+Database credentials on castle.ewi.utwente.n/phppgadmin:
+
+username: di125
+password: E9+gNMnM
+
+We did not deploy the database on the deployment environment, because it did not work for us
