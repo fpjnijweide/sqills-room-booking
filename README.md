@@ -1,4 +1,6 @@
-### Example web app for room booking, in the corporate style of Sqills
+### Java/PostgreSQL and JavaScript-based room-booking web app, in the corporate style of Sqills
+
+Made for a hackathon that a local company (Sqills) organised for CS students.
 
 In the case of real deployment at all users would need to be in the same g suite so that Google Calendar integration can be used.
 
